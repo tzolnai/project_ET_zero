@@ -33,7 +33,7 @@ def read_instructions(inst_feedback_path):
     feedback_imp = []
     feedback_speed = []
     feedback_accuracy = []
-    ende = []
+    ending = []
     unexp_quit = []
 
     for all in all_inst_feedback:
@@ -49,8 +49,8 @@ def read_instructions(inst_feedback_path):
         elif 'accuracy' in all[0]:
             feedback_accuracy.append(all[1])
         elif 'ending' in all[0]:
-            ende.append(all[1])
+            ending.append(all[1])
         elif 'unexpected quit' in all[0]:
             unexp_quit.append(all[1])
 
-    return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit
+    return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit

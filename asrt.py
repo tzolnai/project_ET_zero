@@ -619,7 +619,7 @@ def instructions():
             core.quit() 
 
 def ending():
-    for l in ende:
+    for l in ending:
         print_to_screen(l)
         mywindow.flip()
         tempkey = event.waitKeys(keyList= [key1, key2, key3, key4, key_quit])
@@ -2419,7 +2419,7 @@ colors = { 'wincolor' : asrt_background, 'linecolor':'black', 'stimp':asrt_pcolo
 
 
 inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
-insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt_functions.read_instructions(inst_feedback_path)
+insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt_functions.read_instructions(inst_feedback_path)
  
 thisperson_settings, group, subject_nr, identif = participant_id()
 nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()

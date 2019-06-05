@@ -36,13 +36,13 @@ class readInstructionsTest(unittest.TestCase):
     def testDefaultInstructionSet(self):
         inst_feedback_path = self.constructFilePath("default.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 3)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 1)
         self.assertEqual(len(feedback_speed), 1)
         self.assertEqual(len(feedback_accuracy), 1)
-        self.assertEqual(len(ende), 1)
+        self.assertEqual(len(ending), 1)
         self.assertEqual(len(unexp_quit), 1)
 
         self.assertEqual(insts[0], "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
@@ -72,97 +72,97 @@ class readInstructionsTest(unittest.TestCase):
     def testOneInstruction(self):
         inst_feedback_path = self.constructFilePath("one_instruction.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 1)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
     def testTypoInInstructionName(self):
         inst_feedback_path = self.constructFilePath("typo_in_instruction_name.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 0)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
     def testWeirdButWorkingInstruction(self):
         inst_feedback_path = self.constructFilePath("weird_but_working_instruction.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 1) # instagram is recognized as an 'inst'
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
     def testMissingFile(self):
         inst_feedback_path = self.constructFilePath("missing_file.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 0)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
     def testMoreInstructionsWithTheSameType(self):
         inst_feedback_path = self.constructFilePath("more_instructions_with_the_same_type.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 2)
         self.assertEqual(len(feedback_exp), 2)
         self.assertEqual(len(feedback_imp), 2)
         self.assertEqual(len(feedback_speed), 3)
         self.assertEqual(len(feedback_accuracy), 3)
-        self.assertEqual(len(ende), 3)
+        self.assertEqual(len(ending), 3)
         self.assertEqual(len(unexp_quit), 4)
 
     def testEmptyFile(self):
         inst_feedback_path = self.constructFilePath("empty.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 0)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
     def testInvalidFile(self):
         inst_feedback_path = self.constructFilePath("invalid.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 0)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
     def testNoLineEnding(self):
         inst_feedback_path = self.constructFilePath("no_line_ending.txt")
 
-        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
         self.assertEqual(len(insts), 1)
         self.assertEqual(len(feedback_exp), 0)
         self.assertEqual(len(feedback_imp), 0)
         self.assertEqual(len(feedback_speed), 0)
         self.assertEqual(len(feedback_accuracy), 0)
-        self.assertEqual(len(ende), 0)
+        self.assertEqual(len(ending), 0)
         self.assertEqual(len(unexp_quit), 0)
 
         self.assertEqual(insts[0], "Üdvözlünk a feladatban!")
