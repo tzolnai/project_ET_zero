@@ -97,6 +97,6 @@ def show_group_settings_dialog(numgroups, dict_accents):
         else:
             core.quit()
     else:
-            groups = ['nincsenek csoportok']
+        groups = ['nincsenek csoportok']
 
     return groups
