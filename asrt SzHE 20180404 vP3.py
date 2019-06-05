@@ -21,6 +21,7 @@
 
 from psychopy import visual, core, event, gui, monitors, sound, prefs
 import shelve, random, codecs, os, time, matplotlib
+import pyglet
 
 from os import listdir
 from os.path import isfile, join
@@ -603,9 +604,9 @@ def participant_id():
     return thisperson_settings, group, subject_nr, identif
 
 def monitor_settings():
-    from win32api import GetSystemMetrics
-    dimension_x = GetSystemMetrics(0)
-    dimension_y = GetSystemMetrics(1)
+    screen = pyglet.window.get_platform().get_default_display().get_default_screen()
+    dimension_x = screen.width
+    dimension_y = screen.height
 
     ## Monitor beállítása
     my_monitor = monitors.Monitor('myMon')
