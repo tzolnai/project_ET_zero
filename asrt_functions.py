@@ -20,6 +20,8 @@
 
 import codecs
 
+from psychopy import gui, core
+
 # Be aware of that line endings are preserved during reading instructions
 def read_instructions(inst_feedback_path):
     try:
@@ -55,3 +57,20 @@ def read_instructions(inst_feedback_path):
                 unexp_quit.append(all[1])
 
     return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit
+
+
+### Settings dialogs
+
+# Ask the user to specify the number of groups and the number of sessions
+def show_basic_settings_dialog():
+    expstart0=gui.Dlg(title=u'Beállítások')
+    expstart0.addText(u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
+    expstart0.addText(u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
+    expstart0.addField(u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
+    expstart0.addText(u'Hány ülés (session) lesz a kísérletben?')
+    expstart0.addField(u'Ulesek szama', 2)
+    returned_data = expstart0.show()
+    if expstart0.OK:
+        return (returned_data[0], returned_data[1])
+    else:
+        core.quit()
