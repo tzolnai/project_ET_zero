@@ -38,19 +38,20 @@ def read_instructions(inst_feedback_path):
 
     for all in all_inst_feedback:
         all = all.split('#')
-        if 'inst' in all[0]:
-            insts.append(all[1])
-        elif 'feedback explicit' in all[0]:
-            feedback_exp.append(all[1])
-        elif 'feedback implicit' in all[0]:
-            feedback_imp.append(all[1])
-        elif 'speed' in all[0]:
-            feedback_speed.append(all[1])
-        elif 'accuracy' in all[0]:
-            feedback_accuracy.append(all[1])
-        elif 'ending' in all[0]:
-            ending.append(all[1])
-        elif 'unexpected quit' in all[0]:
-            unexp_quit.append(all[1])
+        if len(all) >= 2:
+            if 'inst' in all[0]:
+                insts.append(all[1])
+            elif 'feedback explicit' in all[0]:
+                feedback_exp.append(all[1])
+            elif 'feedback implicit' in all[0]:
+                feedback_imp.append(all[1])
+            elif 'speed' in all[0]:
+                feedback_speed.append(all[1])
+            elif 'accuracy' in all[0]:
+                feedback_accuracy.append(all[1])
+            elif 'ending' in all[0]:
+                ending.append(all[1])
+            elif 'unexpected quit' in all[0]:
+                unexp_quit.append(all[1])
 
     return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit

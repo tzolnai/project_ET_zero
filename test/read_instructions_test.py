@@ -167,5 +167,17 @@ class readInstructionsTest(unittest.TestCase):
 
         self.assertEqual(insts[0], "Üdvözlünk a feladatban!")
 
+    def testKeywordWithoutContent(self):
+        inst_feedback_path = self.constructFilePath("keyword_without_content.txt")
+
+        insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt.read_instructions(inst_feedback_path)
+        self.assertEqual(len(insts), 0)
+        self.assertEqual(len(feedback_exp), 0)
+        self.assertEqual(len(feedback_imp), 0)
+        self.assertEqual(len(feedback_speed), 0)
+        self.assertEqual(len(feedback_accuracy), 0)
+        self.assertEqual(len(ending), 0)
+        self.assertEqual(len(unexp_quit), 0)
+
 if __name__ == "__main__":
     unittest.main() # run all tests
