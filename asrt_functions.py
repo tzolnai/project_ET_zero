@@ -74,3 +74,29 @@ def show_basic_settings_dialog():
         return (returned_data[0], returned_data[1])
     else:
         core.quit()
+
+# Ask the user to specify the name of the groups
+# Returns the list of group names
+def show_group_settings_dialog(numgroups, dict_accents):
+
+    if numgroups>1:
+        groups = []
+        expstart01=gui.Dlg(title=u'Beállítások')
+        expstart01.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
+        for i in range(numgroups):
+            expstart01.addField(u'Csoport '+str(i+1))
+        returned_data = expstart01.show()
+        if expstart01.OK:
+            for ii in returned_data:
+                ii = ii.lower()
+                ii = ii.replace(' ', '_')
+                ii = ii.replace('-', '_')
+                for accent in dict_accents.keys():
+                    ii = ii.replace(accent, dict_accents[accent])
+                groups.append(ii)
+        else:
+            core.quit()
+    else:
+            groups = ['nincsenek csoportok']
+
+    return groups

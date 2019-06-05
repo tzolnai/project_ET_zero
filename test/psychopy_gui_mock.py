@@ -75,4 +75,5 @@ class PsychoPyGuiMock:
                 data.append(self.list_of_values[index])
             else:
                 data.append(field.initial)
+            index += 1
         return data

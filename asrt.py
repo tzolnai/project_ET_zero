@@ -77,25 +77,7 @@ def all_settings_def():
         numsessions = 0
         (numgroups, numsessions) = asrt_functions.show_basic_settings_dialog()
 
-        if numgroups>1:
-            expstart01=gui.Dlg(title=u'Beállítások')
-            expstart01.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
-            for i in range(numgroups):
-                expstart01.addField(u'Csoport '+str(i+1), u'')
-            expstart01.show()
-            if expstart01.OK:
-                for ii in expstart01.data:
-                    for accent in dict_accents.keys():
-                        if accent in ii:
-                            ii = ii.replace(accent, dict_accents[accent])
-                            ii = ii.lower()
-                            ii = ii.replace(' ', '_')
-                            ii = ii.replace('-', '_')
-                    groups.append(ii)
-            else:
-                core.quit()
-        else:
-            groups = ['nincsenek csoportok']
+        groups = asrt_functions.show_group_settings_dialog(numgroups, dict_accents)
 
         asrt_types = {}
         expstart02=gui.Dlg(title=u'Beállítások')
