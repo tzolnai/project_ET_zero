@@ -2,9 +2,9 @@
 
 Üdvözlünk a feladatban!
 
-A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.
+A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.
 
-Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.
+Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.
 
 A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
 
@@ -18,7 +18,7 @@ Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!
 
 Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.
 
-A kutya egymás után többször ugyanazon a helyen is megjelenhet.
+Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.
 
 A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
 
