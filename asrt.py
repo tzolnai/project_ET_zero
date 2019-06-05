@@ -26,43 +26,11 @@ import pyglet
 from os import listdir
 from os.path import isfile, join
 
+import asrt_functions
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
-
-def instruction_def():
-    try:
-        inst_feedback = codecs.open(thispath+'\\inst_and_feedback.txt', 'r', encoding = 'utf-8')
-        all_inst_feedback = inst_feedback.read().split('***')
-    except:
-        all_inst_feedback=[]
-
-    insts= []
-    feedback_exp = []
-    feedback_imp = []
-    feedback_speed = []
-    feedback_accuracy = []
-    ende = []
-    unexp_quit = []
-
-    for all in all_inst_feedback:
-        all = all.split('#')
-        if 'inst' in all[0]:
-            insts.append(all[1])
-        elif 'feedback explicit' in all[0]:
-            feedback_exp.append(all[1])
-        elif 'feedback implicit' in all[0]:
-            feedback_imp.append(all[1])
-        elif 'speed' in all[0]:
-            feedback_speed.append(all[1])
-        elif 'accuracy' in all[0]:
-            feedback_accuracy.append(all[1])
-        elif 'ending' in all[0]:
-            ende.append(all[1])
-        elif 'unexpected quit' in all[0]:
-            unexp_quit.append(all[1])
-        
-    return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit
 
 def all_settings_def():    
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
@@ -2449,7 +2417,9 @@ dimension_x, dimension_y, my_monitor = monitor_settings()
 colors = { 'wincolor' : asrt_background, 'linecolor':'black', 'stimp':asrt_pcolor, 'stimr':asrt_rcolor}
 
 
-insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = instruction_def()
+
+inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
+insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ende, unexp_quit = asrt_functions.read_instructions(inst_feedback_path)
  
 thisperson_settings, group, subject_nr, identif = participant_id()
 nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()

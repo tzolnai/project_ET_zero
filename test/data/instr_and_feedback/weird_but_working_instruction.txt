@@ -1,0 +1,9 @@
+instagram#
+
+Üdvözlünk a feladatban!
+
+A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.
+
+Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.
+
+A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!

@@ -1,0 +1,64 @@
+﻿inst#
+
+Üdvözlünk a feladatban!
+
+A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.
+
+Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.
+
+A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
+
+***
+
+inst#
+
+A következő billenytűket kell használni: z, c, b, m
+
+Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!
+
+Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.
+
+A kutya egymás után többször ugyanazon a helyen is megjelenhet.
+
+A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
+
+***
+
+inst#
+
+Kb. percenként fogsz visszajelzést kapni arról,
+hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.
+
+A feladat indításához nyomd meg valamelyik válaszgombot!
+
+***
+
+feedback implicit#
+
+Most pihenhetsz egy kicsit.
+
+Pontosságod: *PERCACC* %
+Átlagos reakcióidőd: *MEANRT* másodperc
+*SPEEDACC*
+
+***
+
+feedback speed#
+Legyél gyorsabb!
+
+***
+
+feedback accuracy#
+Legyél pontosabb!
+
+***
+
+ending#
+
+A feladat végetért. Köszönjük a részvételt!
+
+***
+
+unexpected quit#
+
+Váratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.
