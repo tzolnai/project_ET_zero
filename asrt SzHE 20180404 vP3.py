@@ -26,10 +26,9 @@ import pyglet
 from os import listdir
 from os.path import isfile, join
 
-def ensure_dir(f): 
-    d = os.path.dirname(f)
-    if not os.path.exists(d):
-        os.makedirs(d)
+def ensure_dir(dirpath):
+    if not os.path.exists(dirpath):
+        os.makedirs(dirpath)
 
 def instruction_def():
     try:
@@ -2442,8 +2441,8 @@ for i in [1,2,3,4,5,6]:
 # vezerles
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-ensure_dir(thispath + '\\logs\\')
-ensure_dir(thispath + '\\settings\\')
+ensure_dir(os.path.join(thispath, "logs"))
+ensure_dir(os.path.join(thispath, "settings"))
 groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types = all_settings_def()
 dimension_x, dimension_y, my_monitor = monitor_settings()
 
