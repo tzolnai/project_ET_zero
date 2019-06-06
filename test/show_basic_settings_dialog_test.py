@@ -1,4 +1,4 @@
-#    Copyright (C) <2018>  <Tamás Zolnai>    <zolnaitamas2000@gmail.com>
+#    Copyright (C) <2018>  <Tamás Zolnai>  <zolnaitamas2000@gmail.com>
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ import sys
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
 
-import asrt_functions as asrt
+import asrt
 
 import psychopy_gui_mock as pgm
 

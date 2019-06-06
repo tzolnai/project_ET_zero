@@ -22,7 +22,7 @@ import sys
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
 
-import asrt_functions as asrt
+import asrt
 
 import psychopy_gui_mock as pgm
 

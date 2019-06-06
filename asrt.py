@@ -1,6 +1,7 @@
 
 #    ASRT script in Psychopy
 #    Copyright (C) <2018>  <Emese Szegedi-Hallgató>
+#                  <2018>  <Tamás Zolnai>  <zolnaitamas2000@gmail.com>
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,11 +27,87 @@ import pyglet
 from os import listdir
 from os.path import isfile, join
 
-import asrt_functions
-
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
+
+# Be aware of that line endings are preserved during reading instructions
+def read_instructions(inst_feedback_path):
+    try:
+        with codecs.open(inst_feedback_path, 'r', encoding = 'utf-8') as inst_feedback:
+            all_inst_feedback = inst_feedback.read().split('***')
+    except:
+        all_inst_feedback=[]
+
+    insts= []
+    feedback_exp = []
+    feedback_imp = []
+    feedback_speed = []
+    feedback_accuracy = []
+    ending = []
+    unexp_quit = []
+
+    for all in all_inst_feedback:
+        all = all.split('#')
+        if len(all) >= 2:
+            if 'inst' in all[0]:
+                insts.append(all[1])
+            elif 'feedback explicit' in all[0]:
+                feedback_exp.append(all[1])
+            elif 'feedback implicit' in all[0]:
+                feedback_imp.append(all[1])
+            elif 'speed' in all[0]:
+                feedback_speed.append(all[1])
+            elif 'accuracy' in all[0]:
+                feedback_accuracy.append(all[1])
+            elif 'ending' in all[0]:
+                ending.append(all[1])
+            elif 'unexpected quit' in all[0]:
+                unexp_quit.append(all[1])
+
+    return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit
+
+### Settings dialogs
+
+# Ask the user to specify the number of groups and the number of sessions
+def show_basic_settings_dialog():
+    expstart0=gui.Dlg(title=u'Beállítások')
+    expstart0.addText(u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
+    expstart0.addText(u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
+    expstart0.addField(u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
+    expstart0.addText(u'Hány ülés (session) lesz a kísérletben?')
+    expstart0.addField(u'Ulesek szama', 2)
+    returned_data = expstart0.show()
+    if expstart0.OK:
+        return (returned_data[0], returned_data[1])
+    else:
+        core.quit()
+
+# Ask the user to specify the name of the groups
+# Returns the list of group names
+def show_group_settings_dialog(numgroups, dict_accents):
+
+    if numgroups>1:
+        groups = []
+        expstart01=gui.Dlg(title=u'Beállítások')
+        expstart01.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
+        for i in range(numgroups):
+            expstart01.addField(u'Csoport '+str(i+1))
+        returned_data = expstart01.show()
+        if expstart01.OK:
+            for ii in returned_data:
+                ii = ii.lower()
+                ii = ii.replace(' ', '_')
+                ii = ii.replace('-', '_')
+                for accent in dict_accents.keys():
+                    ii = ii.replace(accent, dict_accents[accent])
+                groups.append(ii)
+        else:
+            core.quit()
+    else:
+        groups = ['nincsenek csoportok']
+
+    return groups
 
 def all_settings_def():    
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
@@ -75,9 +152,9 @@ def all_settings_def():
 
         numgroups = 0
         numsessions = 0
-        (numgroups, numsessions) = asrt_functions.show_basic_settings_dialog()
+        (numgroups, numsessions) = show_basic_settings_dialog()
 
-        groups = asrt_functions.show_group_settings_dialog(numgroups, dict_accents)
+        groups = show_group_settings_dialog(numgroups, dict_accents)
 
         asrt_types = {}
         expstart02=gui.Dlg(title=u'Beállítások')
@@ -2383,53 +2460,64 @@ for i in [1,2,3,4,5,6]:
 # vezerles
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-ensure_dir(os.path.join(thispath, "logs"))
-ensure_dir(os.path.join(thispath, "settings"))
-groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types = all_settings_def()
-dimension_x, dimension_y, my_monitor = monitor_settings()
+def main():
+    global groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types
+    global colors
+    global insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit
+    global thisperson_settings, group, subject_nr, identif
+    global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
+    global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
+    global stimbg, stimP, stimR, stim_pressed
+    global frame_time, frame_sd, frame_rate
 
-colors = { 'wincolor' : asrt_background, 'linecolor':'black', 'stimp':asrt_pcolor, 'stimr':asrt_rcolor}
+    ensure_dir(os.path.join(thispath, "logs"))
+    ensure_dir(os.path.join(thispath, "settings"))
+    groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types = all_settings_def()
+    dimension_x, dimension_y, my_monitor = monitor_settings()
+
+    colors = { 'wincolor' : asrt_background, 'linecolor':'black', 'stimp':asrt_pcolor, 'stimr':asrt_rcolor}
+
+    inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
+    insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = read_instructions(inst_feedback_path)
+
+    thisperson_settings, group, subject_nr, identif = participant_id()
+    nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+
+    # Ablak és ingerek felépítése az ismert beállítások szerint
+    mywindow = visual.Window (size = (dimension_x, dimension_y), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
+
+    xtext = visual.TextStim(mywindow, text = u"", units = "cm", height = 0.6, color = "black")
+
+    pressed_dict ={key1:1,key2:2,key3:3,key4:4}
+
+    RSI = core.StaticPeriod(screenHz=refreshrate)
+    RSI_clock = core.Clock()
+    trial_clock = core.Clock()
+
+    dict_pos = { 1:  ( float(asrt_distance)*(-1.5), 0),
+                 2:  ( float(asrt_distance)*(-0.5), 0),
+                 3:  ( float(asrt_distance)*  0.5,   0),
+                 4:  ( float(asrt_distance)*  1.5,   0) }
+
+    stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
+    stimP = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
+    stimR = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
+    stim_pressed = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = 'gray', lineColor = colors['linecolor'], lineWidth = 3, pos = dict_pos[1])
 
 
+    frame_time, frame_sd, frame_rate = frame_check()
 
-inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
-insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = asrt_functions.read_instructions(inst_feedback_path)
- 
-thisperson_settings, group, subject_nr, identif = participant_id()
-nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+    heading_to_output()
 
-# Ablak és ingerek felépítése az ismert beállítások szerint
-mywindow = visual.Window (size = (dimension_x, dimension_y), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
+    presentation()
+    save_personal_info(thisperson_settings)
 
-xtext = visual.TextStim(mywindow, text = u"", units = "cm", height = 0.6, color = "black")
+    outfile_txt = codecs.open(thispath+'\\logs\\'+group+'_'+str(subject_nr)+'_'+identif+'_log.txt', 'a+', encoding = 'utf-8')
+    outfile_txt.write('sessionend_planned_quit')
+    outfile_txt.close()
 
-pressed_dict ={key1:1,key2:2,key3:3,key4:4}
+    ending()
 
-RSI = core.StaticPeriod(screenHz=refreshrate)
-RSI_clock = core.Clock()
-trial_clock = core.Clock()
-
-dict_pos = { 1:  ( float(asrt_distance)*(-1.5), 0), 
-             2:  ( float(asrt_distance)*(-0.5), 0), 
-             3:  ( float(asrt_distance)*  0.5,   0), 
-             4:  ( float(asrt_distance)*  1.5,   0) }
-
-stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
-stimP = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
-stimR = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
-stim_pressed = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = 'gray', lineColor = colors['linecolor'], lineWidth = 3, pos = dict_pos[1])
-
-
-frame_time, frame_sd, frame_rate = frame_check()
-
-heading_to_output()
-
-presentation()
-save_personal_info(thisperson_settings)
-
-outfile_txt = codecs.open(thispath+'\\logs\\'+group+'_'+str(subject_nr)+'_'+identif+'_log.txt', 'a+', encoding = 'utf-8')
-outfile_txt.write('sessionend_planned_quit')
-outfile_txt.close()
-
-ending()
+if __name__ == "__main__":
+    main()
 

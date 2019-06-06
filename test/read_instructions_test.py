@@ -24,7 +24,7 @@ import sys
 sys.path = [".."] + sys.path
 
 import os
-import asrt_functions as asrt
+import asrt
 
 class readInstructionsTest(unittest.TestCase):
 
