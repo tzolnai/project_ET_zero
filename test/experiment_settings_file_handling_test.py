@@ -61,6 +61,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.block_in_epochN, None)
         self.assertEqual(exp_settings.epochN, None)
         self.assertEqual(exp_settings.epochs, None)
+        self.assertEqual(exp_settings.asrt_types, None)
         self.assertEqual(exp_settings.refreshrate, None)
         self.assertEqual(exp_settings.monitor_width, None)
         self.assertEqual(exp_settings.computer_name, None)
@@ -92,6 +93,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.block_in_epochN = 5
         exp_settings.epochN = 5
         exp_settings.epochs = [5]
+        exp_settings.asrt_types = ["implicit"]
         exp_settings.refreshrate = 60
         exp_settings.monitor_width = 29
         exp_settings.computer_name = "Laposka"
@@ -125,6 +127,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.block_in_epochN, 5)
         self.assertEqual(exp_settings.epochN, 5)
         self.assertEqual(exp_settings.epochs, [5])
+        self.assertEqual(exp_settings.asrt_types, ["implicit"])
         self.assertEqual(exp_settings.refreshrate, 60)
         self.assertEqual(exp_settings.monitor_width, 29)
         self.assertEqual(exp_settings.computer_name, "Laposka")
@@ -172,6 +175,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.block_in_epochN, None)
         self.assertEqual(exp_settings.epochN, None)
         self.assertEqual(exp_settings.epochs, None)
+        self.assertEqual(exp_settings.asrt_types, None)
         self.assertEqual(exp_settings.refreshrate, None)
         self.assertEqual(exp_settings.monitor_width, None)
         self.assertEqual(exp_settings.computer_name, None)

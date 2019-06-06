@@ -77,6 +77,8 @@ class ExperimentSettings:
                 self.epochN = settings_file['epochN']
                 self.epochs = settings_file['epochs']
 
+                self.asrt_types = settings_file['asrt_types']
+
                 self.refreshrate = settings_file['refreshrate']
                 self.monitor_width = settings_file['monitor_width']
                 self.computer_name = settings_file['computer_name']
@@ -113,6 +115,8 @@ class ExperimentSettings:
             settings_file['block_in_epochN'] = self.block_in_epochN
             settings_file['epochN'] = self.epochN
             settings_file['epochs'] = self.epochs
+
+            settings_file['asrt_types'] = self.asrt_types
 
             settings_file['refreshrate'] = self.refreshrate
             settings_file['monitor_width'] = self.monitor_width
