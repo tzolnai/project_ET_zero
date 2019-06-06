@@ -1,0 +1,276 @@
+#    Copyright (C) <2018>  <Tamás Zolnai>    <zolnaitamas2000@gmail.com>
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#!\\usr\\bin\\env python
+# -*- coding: utf-8 -*-
+
+import unittest
+
+import sys
+# Add the local path to the main script so we can import it.
+sys.path = [".."] + sys.path
+
+import os
+import shelve, dbm, codecs
+import asrt
+
+class experimentSettingsFileHandlingTest(unittest.TestCase):
+
+    def tearDown(self):
+        tempdir = os.path.abspath(__file__)
+        (tempdir, trail) = os.path.split(tempdir)
+        tempdir = os.path.join(tempdir, "data")
+        tempdir = os.path.join(tempdir, "experiment_settings")
+        # remove all temp files
+        for file in os.listdir(tempdir):
+            file_path = os.path.join(tempdir, file)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
+    def constructFilePath(self, file_name):
+        filepath = os.path.abspath(__file__)
+        (inst_and_feedback_path, trail) = os.path.split(filepath)
+        inst_and_feedback_path = os.path.join(inst_and_feedback_path, "data")
+        inst_and_feedback_path = os.path.join(inst_and_feedback_path, "experiment_settings")
+        inst_and_feedback_path = os.path.join(inst_and_feedback_path, file_name)
+        return inst_and_feedback_path
+
+    def testRoundTripInitialState(self):
+        exp_settings = asrt.ExperimentSettings()
+        output_file = self.constructFilePath("testRoundTripInitialState")
+        exp_settings.write_to_file(output_file)
+
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.read_from_file(output_file)
+
+        self.assertEqual(exp_settings.groups, None)
+        self.assertEqual(exp_settings.blockprepN, None)
+        self.assertEqual(exp_settings.blocklengthN, None)
+        self.assertEqual(exp_settings.block_in_epochN, None)
+        self.assertEqual(exp_settings.epochN, None)
+        self.assertEqual(exp_settings.epochs, None)
+        self.assertEqual(exp_settings.refreshrate, None)
+        self.assertEqual(exp_settings.monitor_width, None)
+        self.assertEqual(exp_settings.computer_name, None)
+        self.assertEqual(exp_settings.asrt_distance, None)
+        self.assertEqual(exp_settings.asrt_size, None)
+        self.assertEqual(exp_settings.asrt_rcolor, None)
+        self.assertEqual(exp_settings.asrt_pcolor, None)
+        self.assertEqual(exp_settings.asrt_background, None)
+        self.assertEqual(exp_settings.asrt_circle_background, None)
+        self.assertEqual(exp_settings.RSI_time, None)
+        self.assertEqual(exp_settings.key1, None)
+        self.assertEqual(exp_settings.key2, None)
+        self.assertEqual(exp_settings.key3, None)
+        self.assertEqual(exp_settings.key4, None)
+        self.assertEqual(exp_settings.key_quit, None)
+        self.assertEqual(exp_settings.whether_warning, None)
+        self.assertEqual(exp_settings.speed_warning, None)
+        self.assertEqual(exp_settings.acc_warning, None)
+        self.assertEqual(exp_settings.maxtrial, None)
+        self.assertEqual(exp_settings.sessionstarts, None)
+        self.assertEqual(exp_settings.blockstarts, None)
+
+    def testRoundTripCustomValues(self):
+        exp_settings = asrt.ExperimentSettings()
+
+        exp_settings.numsessions = 1
+        exp_settings.groups = ["kontrol"]
+        exp_settings.blockprepN = 5
+        exp_settings.blocklengthN = 80
+        exp_settings.block_in_epochN = 5
+        exp_settings.epochN = 5
+        exp_settings.epochs = [5]
+        exp_settings.refreshrate = 60
+        exp_settings.monitor_width = 29
+        exp_settings.computer_name = "Laposka"
+        exp_settings.asrt_distance = 4.5
+        exp_settings.asrt_size = 1.8
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_background = "Ivory"
+        exp_settings.asrt_circle_background = "Beige"
+        exp_settings.RSI_time = 0.12
+        exp_settings.key1 = 'z'
+        exp_settings.key2 = 'c'
+        exp_settings.key3 = 'b'
+        exp_settings.key4 = 'm'
+        exp_settings.key_quit = 'q'
+        exp_settings.whether_warning = True
+        exp_settings.speed_warning = 93
+        exp_settings.acc_warning = 91
+        exp_settings.maxtrial = 1
+        exp_settings.sessionstarts = [1, 2, 3]
+        exp_settings.blockstarts = [1, 2, 3]
+
+        output_file = self.constructFilePath("testRoundTripCustomValues")
+        exp_settings.write_to_file(output_file)
+
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.read_from_file(output_file)
+
+        self.assertEqual(exp_settings.groups, ["kontrol"])
+        self.assertEqual(exp_settings.blockprepN, 5)
+        self.assertEqual(exp_settings.blocklengthN, 80)
+        self.assertEqual(exp_settings.block_in_epochN, 5)
+        self.assertEqual(exp_settings.epochN, 5)
+        self.assertEqual(exp_settings.epochs, [5])
+        self.assertEqual(exp_settings.refreshrate, 60)
+        self.assertEqual(exp_settings.monitor_width, 29)
+        self.assertEqual(exp_settings.computer_name, "Laposka")
+        self.assertEqual(exp_settings.asrt_distance, 4.5)
+        self.assertEqual(exp_settings.asrt_size, 1.8)
+        self.assertEqual(exp_settings.asrt_rcolor, "Orange")
+        self.assertEqual(exp_settings.asrt_pcolor, "Green")
+        self.assertEqual(exp_settings.asrt_background, "Ivory")
+        self.assertEqual(exp_settings.asrt_circle_background, "Beige")
+        self.assertEqual(exp_settings.RSI_time, 0.12)
+        self.assertEqual(exp_settings.key1, 'z')
+        self.assertEqual(exp_settings.key2, 'c')
+        self.assertEqual(exp_settings.key3, 'b')
+        self.assertEqual(exp_settings.key4, 'm')
+        self.assertEqual(exp_settings.key_quit, 'q')
+        self.assertEqual(exp_settings.whether_warning, True)
+        self.assertEqual(exp_settings.speed_warning, 93)
+        self.assertEqual(exp_settings.acc_warning, 91)
+        self.assertEqual(exp_settings.maxtrial, 1)
+        self.assertEqual(exp_settings.sessionstarts, [1, 2, 3])
+        self.assertEqual(exp_settings.blockstarts, [1, 2, 3])
+
+    def testReadEmptyFile(self):
+        exp_settings = asrt.ExperimentSettings()
+
+        output_file = self.constructFilePath("testReadEmptyFile")
+        with self.assertRaises(dbm.error):
+            exp_settings.read_from_file(output_file)
+
+    def testReadCorruptedFile(self):
+        exp_settings = asrt.ExperimentSettings()
+
+        output_file = self.constructFilePath("testReadCorruptedFile")
+        # not all data is written out
+        with shelve.open(output_file) as settings_file:
+            settings_file['numsessions'] = 10
+            settings_file['groups'] = ["kontrol"]
+
+        with self.assertRaises(KeyError):
+            exp_settings.read_from_file(output_file)
+
+        # exp_settings has the initial state
+        self.assertEqual(exp_settings.groups, None)
+        self.assertEqual(exp_settings.blockprepN, None)
+        self.assertEqual(exp_settings.blocklengthN, None)
+        self.assertEqual(exp_settings.block_in_epochN, None)
+        self.assertEqual(exp_settings.epochN, None)
+        self.assertEqual(exp_settings.epochs, None)
+        self.assertEqual(exp_settings.refreshrate, None)
+        self.assertEqual(exp_settings.monitor_width, None)
+        self.assertEqual(exp_settings.computer_name, None)
+        self.assertEqual(exp_settings.asrt_distance, None)
+        self.assertEqual(exp_settings.asrt_size, None)
+        self.assertEqual(exp_settings.asrt_rcolor, None)
+        self.assertEqual(exp_settings.asrt_pcolor, None)
+        self.assertEqual(exp_settings.asrt_background, None)
+        self.assertEqual(exp_settings.asrt_circle_background, None)
+        self.assertEqual(exp_settings.RSI_time, None)
+        self.assertEqual(exp_settings.key1, None)
+        self.assertEqual(exp_settings.key2, None)
+        self.assertEqual(exp_settings.key3, None)
+        self.assertEqual(exp_settings.key4, None)
+        self.assertEqual(exp_settings.key_quit, None)
+        self.assertEqual(exp_settings.whether_warning, None)
+        self.assertEqual(exp_settings.speed_warning, None)
+        self.assertEqual(exp_settings.acc_warning, None)
+        self.assertEqual(exp_settings.maxtrial, None)
+        self.assertEqual(exp_settings.sessionstarts, None)
+        self.assertEqual(exp_settings.blockstarts, None)
+
+    def testReminderTxtCustomValues(self):
+        exp_settings = asrt.ExperimentSettings()
+
+        exp_settings.numsessions = 1
+        exp_settings.groups = ["kontrol"]
+        exp_settings.blockprepN = 5
+        exp_settings.blocklengthN = 80
+        exp_settings.block_in_epochN = 5
+        exp_settings.epochN = 5
+        exp_settings.epochs = [5]
+        exp_settings.refreshrate = 60
+        exp_settings.monitor_width = 29
+        exp_settings.computer_name = "Laposka"
+        exp_settings.asrt_distance = 4.5
+        exp_settings.asrt_size = 1.8
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_background = "Ivory"
+        exp_settings.asrt_circle_background = "Beige"
+        exp_settings.RSI_time = 0.12
+        exp_settings.key1 = 'z'
+        exp_settings.key2 = 'c'
+        exp_settings.key3 = 'b'
+        exp_settings.key4 = 'm'
+        exp_settings.key_quit = 'q'
+        exp_settings.whether_warning = True
+        exp_settings.speed_warning = 93
+        exp_settings.acc_warning = 91
+        exp_settings.maxtrial = 1
+        exp_settings.sessionstarts = [1, 2, 3]
+        exp_settings.blockstarts = [1, 2, 3]
+
+        output_file = self.constructFilePath("testReminderTxtCustomValues")
+        exp_settings.write_out_reminder(output_file)
+
+        with codecs.open(output_file,'r', encoding = 'utf-8') as reminder_file:
+            self.assertEqual(reminder_file.read(),
+                                u'Beállítások \n'+
+                                '\n'+
+                                'MonitorHz: '+ '\t'+ str(exp_settings.refreshrate).replace('.',',')+'\n'+
+                                'Monitor Width: '+ '\t'+ str(exp_settings.monitor_width).replace('.',',')+'\n'+
+                                'Computer Name: '+ '\t'+ exp_settings.computer_name+'\n'+
+                                'Response keys: '+ '\t'+ exp_settings.key1+', '+ exp_settings.key2+', '+ exp_settings.key3+', '+ exp_settings.key4+'.'+'\n'+
+                                'Quit key: '+ '\t'+ exp_settings.key_quit +'\n'+
+                                'Warning (speed, accuracy): '+ '\t'+ str(exp_settings.whether_warning)+'\n'+
+                                'Speed warning at:'+ '\t'+ str(exp_settings.speed_warning)+'\n'+
+                                'Acc warning at:'+ '\t'+ str(exp_settings.acc_warning)+'\n'+
+                                'Groups:'+ '\t'+ str(exp_settings.groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
+                                'Sessions:'+ '\t'+ str(exp_settings.numsessions)+'\n'+
+                                'Epochs in sessions:'+ '\t'+ str(exp_settings.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
+                                'Blocks in epochs:'+ '\t'+ str(exp_settings.block_in_epochN)+'\n'+
+                                'Preparatory Trials\\Block:'+ '\t'+ str(exp_settings.blockprepN)+'\n'+
+                                'Trials\\Block:'+ '\t'+ str(exp_settings.blocklengthN)+'\n'+
+                                'RSI:'+ '\t'+ str(exp_settings.RSI_time).replace('.',',')+'\n'+
+                                'Asrt stim distance:'+ '\t'+ str(exp_settings.asrt_distance)+'\n'+
+                                'Asrt stim size:'+ '\t'+ str(exp_settings.asrt_size)+'\n'+
+                                'Asrt stim color (implicit):'+ '\t'+ exp_settings.asrt_rcolor+'\n'+
+                                'Asrt stim color (explicit, cued):'+ '\t'+ exp_settings.asrt_pcolor+'\n'+
+                                'Asrt stim background color:'+ '\t'+ exp_settings.asrt_circle_background+'\n'+
+                                'Background color:'+ '\t'+ exp_settings.asrt_background+'\n'+
+                                '\n'+
+                                'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n'+
+
+                                'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n'+
+                                'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n'+
+                                'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n'+
+                                'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n'+
+
+                                'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n'+
+                                'beállítások vannak elmentve.\n\n'+
+
+                                'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n'+
+                                'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n'+
+                                'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+
+if __name__ == "__main__":
+    unittest.main() # run all tests

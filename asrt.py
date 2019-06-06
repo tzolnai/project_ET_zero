@@ -67,42 +67,46 @@ class ExperimentSettings:
         self.blockstarts = None
 
     def read_from_file(self, settings_file_path):
-        with shelve.open(settings_file_path) as settings_file:
-            self.numsessions = settings_file['numsessions']
-            self.groups = settings_file['groups']
+        try:
+            with shelve.open(settings_file_path, 'r') as settings_file:
+                self.numsessions = settings_file['numsessions']
+                self.groups = settings_file['groups']
 
-            self.blockprepN = settings_file['blockprepN']
-            self.blocklengthN= settings_file['blocklengthN']
-            self.block_in_epochN= settings_file['block_in_epochN']
-            self.epochN = settings_file['epochN']
-            self.epochs = settings_file['epochs']
+                self.blockprepN = settings_file['blockprepN']
+                self.blocklengthN= settings_file['blocklengthN']
+                self.block_in_epochN= settings_file['block_in_epochN']
+                self.epochN = settings_file['epochN']
+                self.epochs = settings_file['epochs']
 
-            self.refreshrate = settings_file['refreshrate']
-            self.monitor_width = settings_file['monitor_width']
-            self.computer_name = settings_file['computer_name']
-            self.asrt_distance = settings_file['asrt_distance']
-            self.asrt_size = settings_file['asrt_size']
-            self.asrt_rcolor = settings_file['asrt_rcolor']
-            self.asrt_pcolor = settings_file['asrt_pcolor']
-            self.asrt_background = settings_file['asrt_background']
-            self.asrt_circle_background = settings_file['asrt_circle_background']
-            self.RSI_time = settings_file['RSI_time']
+                self.refreshrate = settings_file['refreshrate']
+                self.monitor_width = settings_file['monitor_width']
+                self.computer_name = settings_file['computer_name']
+                self.asrt_distance = settings_file['asrt_distance']
+                self.asrt_size = settings_file['asrt_size']
+                self.asrt_rcolor = settings_file['asrt_rcolor']
+                self.asrt_pcolor = settings_file['asrt_pcolor']
+                self.asrt_background = settings_file['asrt_background']
+                self.asrt_circle_background = settings_file['asrt_circle_background']
+                self.RSI_time = settings_file['RSI_time']
 
-            self.key1 = settings_file['key1']
-            self.key2 = settings_file['key2']
-            self.key3 = settings_file['key3']
-            self.key4 = settings_file['key4']
-            self.key_quit = settings_file['key_quit']
-            self.whether_warning = settings_file['whether_warning']
-            self.speed_warning = settings_file['speed_warning']
-            self.acc_warning = settings_file['acc_warning']
+                self.key1 = settings_file['key1']
+                self.key2 = settings_file['key2']
+                self.key3 = settings_file['key3']
+                self.key4 = settings_file['key4']
+                self.key_quit = settings_file['key_quit']
+                self.whether_warning = settings_file['whether_warning']
+                self.speed_warning = settings_file['speed_warning']
+                self.acc_warning = settings_file['acc_warning']
 
-            self.maxtrial = settings_file['maxtrial']
-            self.sessionstarts = settings_file['sessionstarts']
-            self.blockstarts = settings_file['blockstarts']
+                self.maxtrial = settings_file['maxtrial']
+                self.sessionstarts = settings_file['sessionstarts']
+                self.blockstarts = settings_file['blockstarts']
+        except Exception as exc:
+            self.__init__()
+            raise exc
 
     def write_to_file(self, settings_file_path):
-        with shelve.open(settings_file_path) as settings_file:
+        with shelve.open(settings_file_path, 'n') as settings_file:
             settings_file['numsessions'] = self.numsessions
             settings_file['groups'] = self.groups
 
@@ -135,9 +139,6 @@ class ExperimentSettings:
             settings_file['maxtrial'] = self.maxtrial
             settings_file['sessionstarts'] = self.sessionstarts
             settings_file['blockstarts'] = self.blockstarts
-
-            settings_file.sync()
-            settings_file.close()
 
     def write_out_reminder(self, reminder_file_path):
         with codecs.open(reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
