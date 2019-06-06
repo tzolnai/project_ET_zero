@@ -192,6 +192,45 @@ def show_computer_and_display_settings_dialog(possible_colors):
     }
     return screen_and_display_settings
 
+# Ask the user to specify the keys used during the experiement
+# and also set options related to the displayed feedback.
+def show_key_and_feedback_settings_dialog():
+    expstart0b=gui.Dlg(title=u'Beállítások')
+    expstart0b.addText(u'Válaszbillentyűk')
+    expstart0b.addField(u'Bal szelso:', 'y')
+    expstart0b.addField(u'Bal kozep', 'c')
+    expstart0b.addField(u'Jobb kozep', 'b')
+    expstart0b.addField(u'Jobb szelso', 'm')
+    expstart0b.addField(u'Kilepes', 'q')
+    expstart0b.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
+    expstart0b.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
+    expstart0b.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
+    expstart0b.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
+    returned_data = expstart0b.show()
+    if expstart0b.OK:
+        key1 = returned_data[0]
+        key2 = returned_data[1]
+        key3 = returned_data[2]
+        key4 = returned_data[3]
+        key_quit = returned_data[4]
+        whether_warning = returned_data[5]
+        speed_warning = returned_data[6]
+        acc_warning = returned_data[7]
+    else:
+        core.quit()
+
+    key_and_feedback_settings = {
+        "key1" : key1,
+        "key2" : key2,
+        "key3" : key3,
+        "key4" : key4,
+        "key_quit" : key_quit,
+        "whether_warning" : whether_warning,
+        "speed_warning" : speed_warning,
+        "acc_warning" : acc_warning
+    }
+    return key_and_feedback_settings
+
 def all_settings_def():    
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
 
@@ -274,30 +313,15 @@ def all_settings_def():
         asrt_circle_background = computer_and_display_settings["asrt_circle_background"]
         RSI_time = computer_and_display_settings["RSI_time"]
             
-        expstart0b=gui.Dlg(title=u'Beállítások')
-        expstart0b.addText(u'Válaszbillentyűk')
-        expstart0b.addField(u'Bal szelso:', 'y')
-        expstart0b.addField(u'Bal kozep', 'c')
-        expstart0b.addField(u'Jobb kozep', 'b')
-        expstart0b.addField(u'Jobb szelso', 'm')
-        expstart0b.addField(u'Kilepes', 'q')
-        expstart0b.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
-        expstart0b.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
-        expstart0b.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
-        expstart0b.addField(u'Figyelmeztetes pontossagra ezen pontossag alatt (%):', 91)
-        expstart0b.show()
-        if expstart0b.OK:
-            key1 = expstart0b.data[0]
-            key2 = expstart0b.data[1]
-            key3 = expstart0b.data[2]
-            key4 = expstart0b.data[3]
-            key_quit = expstart0b.data[4]
-            whether_warning = expstart0b.data[5]
-            speed_warning = expstart0b.data[6]
-            acc_warning = expstart0b.data[7]
-        else:
-            core.quit()
-
+        key_and_feedback_settings = show_key_and_feedback_settings_dialog()
+        key1 = key_and_feedback_settings["key1"]
+        key2 = key_and_feedback_settings["key2"]
+        key3 = key_and_feedback_settings["key3"]
+        key4 = key_and_feedback_settings["key4"]
+        key_quit = key_and_feedback_settings["key_quit"]
+        whether_warning = key_and_feedback_settings["whether_warning"]
+        speed_warning = key_and_feedback_settings["speed_warning"]
+        acc_warning = key_and_feedback_settings["acc_warning"]
 
 
     all_settings_file['RSI_time'] = RSI_time
