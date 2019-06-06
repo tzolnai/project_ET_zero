@@ -32,19 +32,19 @@ from os.path import isfile, join
 class ExperimentSettings:
 
     def __init__(self):
-        self.numsessions = None
-        self.groups = None
+        self.numsessions = None         # number of sessions (e.g. 10)
+        self.groups = None              # list of group names (e.g. ["kontrol", "kiserleti"])
 
-        self.blockprepN = None
-        self.blocklengthN = None
-        self.block_in_epochN = None
-        self.epochN = None
-        self.epochs = None
-        self.asrt_types = None
+        self.blockprepN = None          # number of practice trials at the beginning of the block (e.g. 10)
+        self.blocklengthN = None        # number of trials in one block (e.g. 10)
+        self.block_in_epochN = None     # number of blocks in one epoch (e.g. 10)
+        self.epochN = None              # number of all epoch in all sessions (e.g. 12)
+        self.epochs = None              # list of epoch numbers of all sessions (e.g. [1, 2] (two sessions, first session has 1 epoch, the second has 2))
+        self.asrt_types = None          # list of asrt types of all sessions (e.g. ['implicit', 'explicit'] (two sessions, first session is an implicit asrt, the second one is explicit))
 
-        self.refreshrate = None
-        self.monitor_width = None
-        self.computer_name = None
+        self.refreshrate = None         # monitor refresh rate in Hz (e.g. 60)
+        self.monitor_width = None       # monitor's physical with in 'cm' (e.g. 29)
+        self.computer_name = None       # am imaginary name of the computer where the experiment is run
         self.asrt_distance = None
         self.asrt_size = None
         self.asrt_rcolor = None
@@ -53,14 +53,14 @@ class ExperimentSettings:
         self.asrt_circle_background = None
         self.RSI_time = None
 
-        self.key1 = None
-        self.key2 = None
-        self.key3 = None
-        self.key4 = None
-        self.key_quit = None
-        self.whether_warning = None
-        self.speed_warning = None
-        self.acc_warning = None
+        self.key1 = None                # key for the first stimulus (e.g. 'z')
+        self.key2 = None                # key for the second stimulus (e.g. 'v')
+        self.key3 = None                # key for the third stimulus (e.g. 'b')
+        self.key4 = None                # key for the fourth stimulus (e.g. 'm')
+        self.key_quit = None            # key used to quit the running script (e.g. 'q')
+        self.whether_warning = None     # whether display any feedback about speed and accuracy (e.g. True)
+        self.speed_warning = None       # an accuracy value, warn if the current accuracy is bigger than this value (e.g. 93)
+        self.acc_warning = None         # an accuracy value, warn if the current accuracy is smaller than this value (e.g. 91)
 
         self.maxtrial = None
         self.sessionstarts = None
@@ -400,14 +400,20 @@ def all_settings_def(experiment_settings):
     all_settings_file_path = os.path.join(thispath, "settings", "settings")
 
     try:
+        # check whether the settings file is in place
         experiment_settings.read_from_file(all_settings_file_path)
+
+    # if there is no settings file, we ask the user to specfiy the settings
     except:
         possible_colors = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]
 
+        # get the number of groups and number of sessions
         numgroups = show_basic_settings_dialog(experiment_settings)
 
+        # get the group names from the user
         show_group_settings_dialog(numgroups, dict_accents, experiment_settings)
 
+        # get epoch and block settings (block number, trial number, epoch number, etc)
         epoch_block_result = show_epoch_and_block_settings_dialog(experiment_settings)
             
         experiment_settings.maxtrial = (experiment_settings.blockprepN+experiment_settings.blocklengthN)*experiment_settings.epochN*experiment_settings.block_in_epochN
@@ -424,13 +430,17 @@ def all_settings_def(experiment_settings):
         experiment_settings.blockstarts = [1]
         for i in range(1, experiment_settings.epochN*experiment_settings.block_in_epochN+2):
             experiment_settings.blockstarts.append(i * (experiment_settings.blocklengthN+experiment_settings.blockprepN)+1)
-        
+
+        # get montior / computer settings, and also options about displaying (stimulus size, stimulus distance, etc)
         show_computer_and_display_settings_dialog(possible_colors, experiment_settings)
-            
+
+        # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
         show_key_and_feedback_settings_dialog(experiment_settings)
 
+        # save the settings sepcifed by the user in the different dialogs
         experiment_settings.write_to_file(all_settings_file_path)
 
+        # write out a text file with the experiment settings data, so the user can check settings in a human readable form
         reminder_file_path = os.path.join(thispath, "settings", "settings_reminder.txt")
         exp_settings.write_out_reminder(reminder_file_path)
 
