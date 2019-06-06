@@ -255,11 +255,6 @@ def show_subject_settings_dialog(groups, dict_accents):
             subject_nr = returned_data[1]
             if len(groups) > 1:
                 group = returned_data[2]
-                group = group.lower()
-                group = group.replace(' ', '_')
-                group = group.replace('-', '_')
-                for accent in dict_accents.keys():
-                    group = group.replace(accent, dict_accents[accent])
             else:
                 group = ""
 
