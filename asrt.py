@@ -50,7 +50,6 @@ class ExperimentSettings:
         self.asrt_rcolor = None
         self.asrt_pcolor = None
         self.asrt_background = None
-        self.asrt_circle_background = None
         self.RSI_time = None
 
         self.key1 = None                # key for the first stimulus (e.g. 'z')
@@ -86,7 +85,6 @@ class ExperimentSettings:
                 self.asrt_rcolor = settings_file['asrt_rcolor']
                 self.asrt_pcolor = settings_file['asrt_pcolor']
                 self.asrt_background = settings_file['asrt_background']
-                self.asrt_circle_background = settings_file['asrt_circle_background']
                 self.RSI_time = settings_file['RSI_time']
 
                 self.key1 = settings_file['key1']
@@ -124,7 +122,6 @@ class ExperimentSettings:
             settings_file['asrt_rcolor'] = self.asrt_rcolor
             settings_file['asrt_pcolor'] = self.asrt_pcolor
             settings_file['asrt_background'] = self.asrt_background
-            settings_file['asrt_circle_background'] = self.asrt_circle_background
             settings_file['RSI_time'] = self.RSI_time
 
             settings_file['key1'] = self.key1
@@ -163,7 +160,6 @@ class ExperimentSettings:
                                 'Asrt stim size:'+ '\t'+ str(self.asrt_size)+'\n'+
                                 'Asrt stim color (implicit):'+ '\t'+ self.asrt_rcolor+'\n'+
                                 'Asrt stim color (explicit, cued):'+ '\t'+ self.asrt_pcolor+'\n'+
-                                'Asrt stim background color:'+ '\t'+ self.asrt_circle_background+'\n'+
                                 'Background color:'+ '\t'+ self.asrt_background+'\n'+
                                 '\n'+
                                 'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n'+
@@ -304,7 +300,6 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
     expstart0a.addField(u'ASRT inger szine (elsodleges, R)', choices = possible_colors, initial = "Orange")
     expstart0a.addField(u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices = possible_colors, initial = "Green")
     expstart0a.addField(u'Hatter szine', choices = possible_colors, initial = "Ivory")
-    expstart0a.addField(u'Nem aktiv inger szine', choices = possible_colors, initial = "Beige")
     expstart0a.addField(u'RSI (ms)', 120)
     returned_data = expstart0a.show()
     if expstart0a.OK:
@@ -316,8 +311,7 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
         expriment_settings.asrt_rcolor = returned_data[5]
         expriment_settings.asrt_pcolor = returned_data[6]
         expriment_settings.asrt_background = returned_data[7]
-        expriment_settings.asrt_circle_background = returned_data[8]
-        expriment_settings.RSI_time = float(returned_data[9])/1000
+        expriment_settings.RSI_time = float(returned_data[8])/1000
     else:
         core.quit()
 

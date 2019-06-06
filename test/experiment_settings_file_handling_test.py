@@ -69,7 +69,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_rcolor, None)
         self.assertEqual(exp_settings.asrt_pcolor, None)
         self.assertEqual(exp_settings.asrt_background, None)
-        self.assertEqual(exp_settings.asrt_circle_background, None)
         self.assertEqual(exp_settings.RSI_time, None)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
@@ -101,7 +100,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.asrt_rcolor = "Orange"
         exp_settings.asrt_pcolor = "Green"
         exp_settings.asrt_background = "Ivory"
-        exp_settings.asrt_circle_background = "Beige"
         exp_settings.RSI_time = 0.12
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
@@ -135,7 +133,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_rcolor, "Orange")
         self.assertEqual(exp_settings.asrt_pcolor, "Green")
         self.assertEqual(exp_settings.asrt_background, "Ivory")
-        self.assertEqual(exp_settings.asrt_circle_background, "Beige")
         self.assertEqual(exp_settings.RSI_time, 0.12)
         self.assertEqual(exp_settings.key1, 'z')
         self.assertEqual(exp_settings.key2, 'c')
@@ -183,7 +180,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_rcolor, None)
         self.assertEqual(exp_settings.asrt_pcolor, None)
         self.assertEqual(exp_settings.asrt_background, None)
-        self.assertEqual(exp_settings.asrt_circle_background, None)
         self.assertEqual(exp_settings.RSI_time, None)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
@@ -215,7 +211,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.asrt_rcolor = "Orange"
         exp_settings.asrt_pcolor = "Green"
         exp_settings.asrt_background = "Ivory"
-        exp_settings.asrt_circle_background = "Beige"
         exp_settings.RSI_time = 0.12
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
@@ -255,7 +250,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                                 'Asrt stim size:'+ '\t'+ str(exp_settings.asrt_size)+'\n'+
                                 'Asrt stim color (implicit):'+ '\t'+ exp_settings.asrt_rcolor+'\n'+
                                 'Asrt stim color (explicit, cued):'+ '\t'+ exp_settings.asrt_pcolor+'\n'+
-                                'Asrt stim background color:'+ '\t'+ exp_settings.asrt_circle_background+'\n'+
                                 'Background color:'+ '\t'+ exp_settings.asrt_background+'\n'+
                                 '\n'+
                                 'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n'+

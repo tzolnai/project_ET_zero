@@ -44,7 +44,6 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_rcolor, "Orange")
         self.assertEqual(exp_settings.asrt_pcolor, "Green")
         self.assertEqual(exp_settings.asrt_background, "Ivory")
-        self.assertEqual(exp_settings.asrt_circle_background, "Beige")
         self.assertEqual(exp_settings.RSI_time, 0.12)
 
         list_of_texts = gui_mock.getListOfTexts()
@@ -53,7 +52,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[1], "Megjelenés..")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 10)
+        self.assertEqual(len(list_of_fields), 9)
         self.assertEqual(list_of_fields[0].label, "Hasznos kepernyo szelessege (cm)")
         self.assertEqual(list_of_fields[0].initial, 34.2)
         self.assertEqual(list_of_fields[1].label, "Szamitogep fantazianeve (ekezet nelkul)")
@@ -70,10 +69,8 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[6].initial, "Green")
         self.assertEqual(list_of_fields[7].label, "Hatter szine")
         self.assertEqual(list_of_fields[7].initial, "Ivory")
-        self.assertEqual(list_of_fields[8].label, "Nem aktiv inger szine")
-        self.assertEqual(list_of_fields[8].initial, "Beige")
-        self.assertEqual(list_of_fields[9].label, "RSI (ms)")
-        self.assertEqual(list_of_fields[9].initial, 120)
+        self.assertEqual(list_of_fields[8].label, "RSI (ms)")
+        self.assertEqual(list_of_fields[8].initial, 120)
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -85,7 +82,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues([17, "Alma", 51, 2.3, 1.2, "Black", "White", "Green", "Orange", 205])
+        gui_mock.addFieldValues([17, "Alma", 51, 2.3, 1.2, "Black", "White", "Green", 205])
 
         exp_settings = asrt.ExperimentSettings()
         asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
@@ -98,7 +95,6 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_rcolor, "Black")
         self.assertEqual(exp_settings.asrt_pcolor, "White")
         self.assertEqual(exp_settings.asrt_background, "Green")
-        self.assertEqual(exp_settings.asrt_circle_background, "Orange")
         self.assertEqual(exp_settings.RSI_time, 0.205)
 
 if __name__ == "__main__":
