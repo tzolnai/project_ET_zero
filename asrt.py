@@ -64,6 +64,79 @@ class ExperimentSettings:
         self.sessionstarts = None
         self.blockstarts = None
 
+    def read_from_file(self, settings_file_path):
+        with shelve.open(settings_file_path) as settings_file:
+            self.numsessions = settings_file['numsessions']
+            self.groups = settings_file['groups']
+
+            self.blockprepN = settings_file['blockprepN']
+            self.blocklengthN= settings_file['blocklengthN']
+            self.block_in_epochN= settings_file['block_in_epochN']
+            self.epochN = settings_file['epochN']
+            self.epochs = settings_file['epochs']
+
+            self.refreshrate = settings_file['refreshrate']
+            self.monitor_width = settings_file['monitor_width']
+            self.computer_name = settings_file['computer_name']
+            self.asrt_distance = settings_file['asrt_distance']
+            self.asrt_size = settings_file['asrt_size']
+            self.asrt_rcolor = settings_file['asrt_rcolor']
+            self.asrt_pcolor = settings_file['asrt_pcolor']
+            self.asrt_background = settings_file['asrt_background']
+            self.asrt_circle_background = settings_file['asrt_circle_background']
+            self.RSI_time = settings_file['RSI_time']
+
+            self.key1 = settings_file['key1']
+            self.key2 = settings_file['key2']
+            self.key3 = settings_file['key3']
+            self.key4 = settings_file['key4']
+            self.key_quit = settings_file['key_quit']
+            self.whether_warning = settings_file['whether_warning']
+            self.speed_warning = settings_file['speed_warning']
+            self.acc_warning = settings_file['acc_warning']
+
+            self.maxtrial = settings_file['maxtrial']
+            self.sessionstarts = settings_file['sessionstarts']
+            self.blockstarts = settings_file['blockstarts']
+
+    def write_to_file(self, settings_file_path):
+        with shelve.open(settings_file_path) as settings_file:
+            settings_file['numsessions'] = self.numsessions
+            settings_file['groups'] = self.groups
+
+            settings_file['blockprepN'] = self.blockprepN
+            settings_file['blocklengthN'] = self.blocklengthN
+            settings_file['block_in_epochN'] = self.block_in_epochN
+            settings_file['epochN'] = self.epochN
+            settings_file['epochs'] = self.epochs
+
+            settings_file['refreshrate'] = self.refreshrate
+            settings_file['monitor_width'] = self.monitor_width
+            settings_file['computer_name'] = self.computer_name
+            settings_file['asrt_distance'] = self.asrt_distance
+            settings_file['asrt_size'] = self.asrt_size
+            settings_file['asrt_rcolor'] = self.asrt_rcolor
+            settings_file['asrt_pcolor'] = self.asrt_pcolor
+            settings_file['asrt_background'] = self.asrt_background
+            settings_file['asrt_circle_background'] = self.asrt_circle_background
+            settings_file['RSI_time'] = self.RSI_time
+
+            settings_file['key1'] = self.key1
+            settings_file['key2'] = self.key2
+            settings_file['key3'] = self.key3
+            settings_file['key4'] = self.key4
+            settings_file['key_quit'] = self.key_quit
+            settings_file['whether_warning'] = self.whether_warning
+            settings_file['speed_warning'] = self.speed_warning
+            settings_file['acc_warning'] = self.acc_warning
+
+            settings_file['maxtrial'] = self.maxtrial
+            settings_file['sessionstarts'] = self.sessionstarts
+            settings_file['blockstarts'] = self.blockstarts
+
+            settings_file.sync()
+            settings_file.close()
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
@@ -279,42 +352,11 @@ def show_subject_settings_dialog(groups, dict_accents):
     return subject_settings
 
 def all_settings_def(experiment_settings):
-    all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
+
+    all_settings_file_path = os.path.join(thispath, "settings", "settings.dat")
 
     try:
-        experiment_settings.groups = all_settings_file['groups']
-        experiment_settings.numsessions = all_settings_file['numsessions']
-        experiment_settings.blockprepN = all_settings_file['blockprepN']
-        experiment_settings.blocklengthN= all_settings_file['blocklengthN']
-        experiment_settings.block_in_epochN= all_settings_file['block_in_epochN']
-        experiment_settings.epochN = all_settings_file['epochN']
-        experiment_settings.epochs = all_settings_file['epochs']
-        experiment_settings.monitor_width = all_settings_file['monitor_width']
-        experiment_settings.computer_name = all_settings_file['computer_name']
-        experiment_settings.asrt_distance = all_settings_file['asrt_distance']
-        experiment_settings.asrt_size = all_settings_file['asrt_size']
-        experiment_settings.asrt_rcolor = all_settings_file['asrt_rcolor']
-        experiment_settings.asrt_pcolor = all_settings_file['asrt_pcolor']
-        experiment_settings.asrt_background = all_settings_file['asrt_background']
-        experiment_settings.asrt_circle_background = all_settings_file['asrt_circle_background']
-
-        experiment_settings.refreshrate = all_settings_file['refreshrate']
-        experiment_settings.key1 = all_settings_file['key1']
-        experiment_settings.key2 = all_settings_file['key2']
-        experiment_settings.key3 = all_settings_file['key3']
-        experiment_settings.key4 = all_settings_file['key4']
-        experiment_settings.key_quit = all_settings_file['key_quit']
-        experiment_settings.whether_warning = all_settings_file['whether_warning']
-        experiment_settings.speed_warning = all_settings_file['speed_warning']
-        experiment_settings.acc_warning = all_settings_file['acc_warning']
-        experiment_settings.RSI_time = all_settings_file['RSI_time']
-        
-        experiment_settings.maxtrial = all_settings_file['maxtrial']
-        experiment_settings.sessionstarts = all_settings_file['sessionstarts']
-        experiment_settings.blockstarts= all_settings_file['blockstarts']
-        
-        experiment_settings.asrt_types = all_settings_file["asrt_types"]
-
+        experiment_settings.read_from_file(all_settings_file_path)
     except:
         possible_colors = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]
 
@@ -343,42 +385,7 @@ def all_settings_def(experiment_settings):
             
         show_key_and_feedback_settings_dialog(experiment_settings)
 
-
-    all_settings_file['RSI_time'] = experiment_settings.RSI_time
-    all_settings_file['refreshrate'] = experiment_settings.refreshrate
-    all_settings_file['key1'] = experiment_settings.key1
-    all_settings_file['key2'] = experiment_settings.key2
-    all_settings_file['key3'] = experiment_settings.key3
-    all_settings_file['key4'] = experiment_settings.key4
-    all_settings_file['key_quit'] = experiment_settings.key_quit
-    all_settings_file['whether_warning'] = experiment_settings.whether_warning
-    all_settings_file['speed_warning'] = experiment_settings.speed_warning
-    all_settings_file['acc_warning'] = experiment_settings.acc_warning
-
-    all_settings_file['groups'] = experiment_settings.groups
-    all_settings_file['numsessions'] = experiment_settings.numsessions
-    all_settings_file['blockprepN'] = experiment_settings.blockprepN
-    all_settings_file['blocklengthN'] = experiment_settings.blocklengthN
-    all_settings_file['block_in_epochN'] = experiment_settings.block_in_epochN
-    all_settings_file['epochN'] = experiment_settings.epochN
-    all_settings_file['epochs'] = experiment_settings.epochs
-
-    all_settings_file['asrt_types'] = experiment_settings.asrt_types
-
-    all_settings_file['monitor_width'] = experiment_settings.monitor_width
-    all_settings_file['computer_name'] = experiment_settings.computer_name
-    all_settings_file['asrt_distance'] = experiment_settings.asrt_distance
-    all_settings_file['asrt_size'] = experiment_settings.asrt_size
-    all_settings_file['asrt_rcolor'] = experiment_settings.asrt_rcolor
-    all_settings_file['asrt_pcolor'] = experiment_settings.asrt_pcolor
-    all_settings_file['asrt_background'] = experiment_settings.asrt_background
-    all_settings_file['asrt_circle_background'] = experiment_settings.asrt_circle_background
-    all_settings_file['maxtrial'] = experiment_settings.maxtrial
-    all_settings_file['sessionstarts'] = experiment_settings.sessionstarts
-    all_settings_file['blockstarts'] = experiment_settings.blockstarts
-
-    all_settings_file.sync()
-    all_settings_file.close()
+        experiment_settings.write_to_file(all_settings_file_path)
 
     settingstxt = codecs.open(thispath+'\\settings\\settings_reminder.txt','w', encoding = 'utf-8')
     settingstxt.write(u'Beállítások \n'+
