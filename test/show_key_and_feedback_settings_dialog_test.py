@@ -31,24 +31,17 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        key_and_feedback_settings = asrt.show_key_and_feedback_settings_dialog()
-        key1 = key_and_feedback_settings["key1"]
-        key2 = key_and_feedback_settings["key2"]
-        key3 = key_and_feedback_settings["key3"]
-        key4 = key_and_feedback_settings["key4"]
-        key_quit = key_and_feedback_settings["key_quit"]
-        whether_warning = key_and_feedback_settings["whether_warning"]
-        speed_warning = key_and_feedback_settings["speed_warning"]
-        acc_warning = key_and_feedback_settings["acc_warning"]
+        exp_settings = asrt.ExperimentSettings()
+        asrt.show_key_and_feedback_settings_dialog(exp_settings)
 
-        self.assertEqual(key1, 'y')
-        self.assertEqual(key2, 'c')
-        self.assertEqual(key3, 'b')
-        self.assertEqual(key4, 'm')
-        self.assertEqual(key_quit, 'q')
-        self.assertEqual(whether_warning, True)
-        self.assertEqual(speed_warning, 93)
-        self.assertEqual(acc_warning, 91)
+        self.assertEqual(exp_settings.key1, 'y')
+        self.assertEqual(exp_settings.key2, 'c')
+        self.assertEqual(exp_settings.key3, 'b')
+        self.assertEqual(exp_settings.key4, 'm')
+        self.assertEqual(exp_settings.key_quit, 'q')
+        self.assertEqual(exp_settings.whether_warning, True)
+        self.assertEqual(exp_settings.speed_warning, 93)
+        self.assertEqual(exp_settings.acc_warning, 91)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -78,31 +71,26 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
+        exp_settings = asrt.ExperimentSettings()
+
         with self.assertRaises(SystemExit):
-            asrt.show_key_and_feedback_settings_dialog()
+            asrt.show_key_and_feedback_settings_dialog(exp_settings)
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['a', 's', 'd', 'w', 'k', False, 80, 70])
 
-        key_and_feedback_settings = asrt.show_key_and_feedback_settings_dialog()
-        key1 = key_and_feedback_settings["key1"]
-        key2 = key_and_feedback_settings["key2"]
-        key3 = key_and_feedback_settings["key3"]
-        key4 = key_and_feedback_settings["key4"]
-        key_quit = key_and_feedback_settings["key_quit"]
-        whether_warning = key_and_feedback_settings["whether_warning"]
-        speed_warning = key_and_feedback_settings["speed_warning"]
-        acc_warning = key_and_feedback_settings["acc_warning"]
+        exp_settings = asrt.ExperimentSettings()
+        asrt.show_key_and_feedback_settings_dialog(exp_settings)
 
-        self.assertEqual(key1, 'a')
-        self.assertEqual(key2, 's')
-        self.assertEqual(key3, 'd')
-        self.assertEqual(key4, 'w')
-        self.assertEqual(key_quit, 'k')
-        self.assertEqual(whether_warning, False)
-        self.assertEqual(speed_warning, 80)
-        self.assertEqual(acc_warning, 70)
+        self.assertEqual(exp_settings.key1, 'a')
+        self.assertEqual(exp_settings.key2, 's')
+        self.assertEqual(exp_settings.key3, 'd')
+        self.assertEqual(exp_settings.key4, 'w')
+        self.assertEqual(exp_settings.key_quit, 'k')
+        self.assertEqual(exp_settings.whether_warning, False)
+        self.assertEqual(exp_settings.speed_warning, 80)
+        self.assertEqual(exp_settings.acc_warning, 70)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

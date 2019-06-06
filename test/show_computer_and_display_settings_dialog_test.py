@@ -33,28 +33,19 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        computer_and_display_settings = asrt.show_computer_and_display_settings_dialog(possible_colors)
-        monitor_width = computer_and_display_settings["monitor_width"]
-        computer_name = computer_and_display_settings["computer_name"]
-        refreshrate = computer_and_display_settings["refreshrate"]
-        asrt_distance = computer_and_display_settings["asrt_distance"]
-        asrt_size = computer_and_display_settings["asrt_size"]
-        asrt_rcolor = computer_and_display_settings["asrt_rcolor"]
-        asrt_pcolor = computer_and_display_settings["asrt_pcolor"]
-        asrt_background = computer_and_display_settings["asrt_background"]
-        asrt_circle_background = computer_and_display_settings["asrt_circle_background"]
-        RSI_time = computer_and_display_settings["RSI_time"]
+        exp_settings = asrt.ExperimentSettings()
+        asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
 
-        self.assertEqual(monitor_width, 34.2)
-        self.assertEqual(computer_name, "Laposka")
-        self.assertEqual(refreshrate, 60)
-        self.assertEqual(asrt_distance, 3)
-        self.assertEqual(asrt_size, 1)
-        self.assertEqual(asrt_rcolor, "Orange")
-        self.assertEqual(asrt_pcolor, "Green")
-        self.assertEqual(asrt_background, "Ivory")
-        self.assertEqual(asrt_circle_background, "Beige")
-        self.assertEqual(RSI_time, 0.12)
+        self.assertEqual(exp_settings.monitor_width, 34.2)
+        self.assertEqual(exp_settings.computer_name, "Laposka")
+        self.assertEqual(exp_settings.refreshrate, 60)
+        self.assertEqual(exp_settings.asrt_distance, 3)
+        self.assertEqual(exp_settings.asrt_size, 1)
+        self.assertEqual(exp_settings.asrt_rcolor, "Orange")
+        self.assertEqual(exp_settings.asrt_pcolor, "Green")
+        self.assertEqual(exp_settings.asrt_background, "Ivory")
+        self.assertEqual(exp_settings.asrt_circle_background, "Beige")
+        self.assertEqual(exp_settings.RSI_time, 0.12)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -89,34 +80,26 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         gui_mock.setReturnValue(False)
 
         with self.assertRaises(SystemExit):
-            asrt.show_computer_and_display_settings_dialog(possible_colors)
+            exp_settings = asrt.ExperimentSettings()
+            asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([17, "Alma", 51, 2.3, 1.2, "Black", "White", "Green", "Orange", 205])
 
-        computer_and_display_settings = asrt.show_computer_and_display_settings_dialog(possible_colors)
-        monitor_width = computer_and_display_settings["monitor_width"]
-        computer_name = computer_and_display_settings["computer_name"]
-        refreshrate = computer_and_display_settings["refreshrate"]
-        asrt_distance = computer_and_display_settings["asrt_distance"]
-        asrt_size = computer_and_display_settings["asrt_size"]
-        asrt_rcolor = computer_and_display_settings["asrt_rcolor"]
-        asrt_pcolor = computer_and_display_settings["asrt_pcolor"]
-        asrt_background = computer_and_display_settings["asrt_background"]
-        asrt_circle_background = computer_and_display_settings["asrt_circle_background"]
-        RSI_time = computer_and_display_settings["RSI_time"]
+        exp_settings = asrt.ExperimentSettings()
+        asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
 
-        self.assertEqual(monitor_width, 17)
-        self.assertEqual(computer_name, "Alma")
-        self.assertEqual(refreshrate, 51)
-        self.assertEqual(asrt_distance, 2.3)
-        self.assertEqual(asrt_size, 1.2)
-        self.assertEqual(asrt_rcolor, "Black")
-        self.assertEqual(asrt_pcolor, "White")
-        self.assertEqual(asrt_background, "Green")
-        self.assertEqual(asrt_circle_background, "Orange")
-        self.assertEqual(RSI_time, 0.205)
+        self.assertEqual(exp_settings.monitor_width, 17)
+        self.assertEqual(exp_settings.computer_name, "Alma")
+        self.assertEqual(exp_settings.refreshrate, 51)
+        self.assertEqual(exp_settings.asrt_distance, 2.3)
+        self.assertEqual(exp_settings.asrt_size, 1.2)
+        self.assertEqual(exp_settings.asrt_rcolor, "Black")
+        self.assertEqual(exp_settings.asrt_pcolor, "White")
+        self.assertEqual(exp_settings.asrt_background, "Green")
+        self.assertEqual(exp_settings.asrt_circle_background, "Orange")
+        self.assertEqual(exp_settings.RSI_time, 0.205)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

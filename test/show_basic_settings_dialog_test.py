@@ -30,11 +30,10 @@ class showBasicSettingsDialogTest(unittest.TestCase):
 
     def testDefault(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        numgroups = 0
-        numsessions = 0
-        (numgroups, numsessions) = asrt.show_basic_settings_dialog()
+        exp_settings = asrt.ExperimentSettings()
+        numgroups = asrt.show_basic_settings_dialog(exp_settings)
         self.assertEqual(numgroups, 2)
-        self.assertEqual(numsessions, 2)
+        self.assertEqual(exp_settings.numsessions, 2)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 3)
@@ -52,19 +51,19 @@ class showBasicSettingsDialogTest(unittest.TestCase):
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([3, 3])
-        numgroups = 0
-        numsessions = 0
-        (numgroups, numsessions) = asrt.show_basic_settings_dialog()
+
+        exp_settings = asrt.ExperimentSettings()
+        numgroups = asrt.show_basic_settings_dialog(exp_settings)
         self.assertEqual(numgroups, 3)
-        self.assertEqual(numsessions, 3)
+        self.assertEqual(exp_settings.numsessions, 3)
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
-        numgroups = 0
-        numsessions = 0
+
+        exp_settings = asrt.ExperimentSettings()
         with self.assertRaises(SystemExit):
-            (numgroups, numsessions) = asrt.show_basic_settings_dialog()
+            asrt.show_basic_settings_dialog(exp_settings)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

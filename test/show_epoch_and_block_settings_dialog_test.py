@@ -31,23 +31,18 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        numsessions = 1
-        epoch_block_result = asrt.show_epoch_and_block_settings_dialog(numsessions)
-        blockprepN = epoch_block_result["blockprepN"]
-        blocklengthN = epoch_block_result["blocklengthN"]
-        block_in_epochN = epoch_block_result["block_in_epochN"]
-        epochN = epoch_block_result["epochN"]
-        epochs = epoch_block_result["epochs"]
-        asrt_types = epoch_block_result["asrt_types"]
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.numsessions = 1
+        asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
-        self.assertEqual(blockprepN, 5)
-        self.assertEqual(blocklengthN, 80)
-        self.assertEqual(block_in_epochN, 5)
-        self.assertEqual(epochN, 5)
-        self.assertEqual(len(epochs), 1)
-        self.assertEqual(epochs[0], 5)
-        self.assertEqual(len(asrt_types), 1)
-        self.assertEqual(asrt_types[1], '')
+        self.assertEqual(exp_settings.blockprepN, 5)
+        self.assertEqual(exp_settings.blocklengthN, 80)
+        self.assertEqual(exp_settings.block_in_epochN, 5)
+        self.assertEqual(exp_settings.epochN, 5)
+        self.assertEqual(len(exp_settings.epochs), 1)
+        self.assertEqual(exp_settings.epochs[0], 5)
+        self.assertEqual(len(exp_settings.asrt_types), 1)
+        self.assertEqual(exp_settings.asrt_types[1], '')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -70,28 +65,25 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        numsessions = 1
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.numsessions = 1
+
         with self.assertRaises(SystemExit):
-            epoch_block_result = asrt.show_epoch_and_block_settings_dialog(numsessions)
+            asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
     def testNoSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        numsessions = 0
-        epoch_block_result = asrt.show_epoch_and_block_settings_dialog(numsessions)
-        blockprepN = epoch_block_result["blockprepN"]
-        blocklengthN = epoch_block_result["blocklengthN"]
-        block_in_epochN = epoch_block_result["block_in_epochN"]
-        epochN = epoch_block_result["epochN"]
-        epochs = epoch_block_result["epochs"]
-        asrt_types = epoch_block_result["asrt_types"]
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.numsessions = 0
+        asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
-        self.assertEqual(blockprepN, 5)
-        self.assertEqual(blocklengthN, 80)
-        self.assertEqual(block_in_epochN, 5)
-        self.assertEqual(epochN, 0)
-        self.assertEqual(len(epochs), 0)
-        self.assertEqual(len(asrt_types), 0)
+        self.assertEqual(exp_settings.blockprepN, 5)
+        self.assertEqual(exp_settings.blocklengthN, 80)
+        self.assertEqual(exp_settings.block_in_epochN, 5)
+        self.assertEqual(exp_settings.epochN, 0)
+        self.assertEqual(len(exp_settings.epochs), 0)
+        self.assertEqual(len(exp_settings.asrt_types), 0)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -109,24 +101,19 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
     def testMoreSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        numsessions = 3
-        epoch_block_result = asrt.show_epoch_and_block_settings_dialog(numsessions)
-        blockprepN = epoch_block_result["blockprepN"]
-        blocklengthN = epoch_block_result["blocklengthN"]
-        block_in_epochN = epoch_block_result["block_in_epochN"]
-        epochN = epoch_block_result["epochN"]
-        epochs = epoch_block_result["epochs"]
-        asrt_types = epoch_block_result["asrt_types"]
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.numsessions = 3
+        asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
-        self.assertEqual(blockprepN, 5)
-        self.assertEqual(blocklengthN, 80)
-        self.assertEqual(block_in_epochN, 5)
-        self.assertEqual(epochN, 15)
-        self.assertEqual(len(epochs), 3)
-        self.assertEqual(epochs[0], 5)
-        self.assertEqual(epochs[1], 5)
-        self.assertEqual(epochs[2], 5)
-        self.assertEqual(len(asrt_types), 3)
+        self.assertEqual(exp_settings.blockprepN, 5)
+        self.assertEqual(exp_settings.blocklengthN, 80)
+        self.assertEqual(exp_settings.block_in_epochN, 5)
+        self.assertEqual(exp_settings.epochN, 15)
+        self.assertEqual(len(exp_settings.epochs), 3)
+        self.assertEqual(exp_settings.epochs[0], 5)
+        self.assertEqual(exp_settings.epochs[1], 5)
+        self.assertEqual(exp_settings.epochs[2], 5)
+        self.assertEqual(len(exp_settings.asrt_types), 3)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -145,7 +132,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[4].label, "Session 2 epochok szama")
         self.assertEqual(list_of_fields[4].initial, 5)
         self.assertEqual(list_of_fields[5].label, "Session 3 epochok szama")
-        self.assertEqual(list_of_fields[5].initial, 5)        
+        self.assertEqual(list_of_fields[5].initial, 5)
         self.assertEqual(list_of_fields[6].label, "Session 1 ASRT tipusa")
         self.assertEqual(list_of_fields[6].initial, '')
         self.assertEqual(list_of_fields[7].label, "Session 2 ASRT tipusa")
@@ -157,27 +144,22 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([12, 79, 2, 3, 12, 7, 'implicit', 'explicit', 'noASRT'])
 
-        numsessions = 3
-        epoch_block_result = asrt.show_epoch_and_block_settings_dialog(numsessions)
-        blockprepN = epoch_block_result["blockprepN"]
-        blocklengthN = epoch_block_result["blocklengthN"]
-        block_in_epochN = epoch_block_result["block_in_epochN"]
-        epochN = epoch_block_result["epochN"]
-        epochs = epoch_block_result["epochs"]
-        asrt_types = epoch_block_result["asrt_types"]
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.numsessions = 3
+        asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
-        self.assertEqual(blockprepN, 12)
-        self.assertEqual(blocklengthN, 79)
-        self.assertEqual(block_in_epochN, 2)
-        self.assertEqual(epochN, 22)
-        self.assertEqual(len(epochs), 3)
-        self.assertEqual(epochs[0], 3)
-        self.assertEqual(epochs[1], 12)
-        self.assertEqual(epochs[2], 7)
-        self.assertEqual(len(asrt_types), 3)
-        self.assertEqual(asrt_types[1], 'implicit')
-        self.assertEqual(asrt_types[2], 'explicit')
-        self.assertEqual(asrt_types[3], 'noASRT')
+        self.assertEqual(exp_settings.blockprepN, 12)
+        self.assertEqual(exp_settings.blocklengthN, 79)
+        self.assertEqual(exp_settings.block_in_epochN, 2)
+        self.assertEqual(exp_settings.epochN, 22)
+        self.assertEqual(len(exp_settings.epochs), 3)
+        self.assertEqual(exp_settings.epochs[0], 3)
+        self.assertEqual(exp_settings.epochs[1], 12)
+        self.assertEqual(exp_settings.epochs[2], 7)
+        self.assertEqual(len(exp_settings.asrt_types), 3)
+        self.assertEqual(exp_settings.asrt_types[1], 'implicit')
+        self.assertEqual(exp_settings.asrt_types[2], 'explicit')
+        self.assertEqual(exp_settings.asrt_types[3], 'noASRT')
 
 if __name__ == "__main__":
     unittest.main() # run all tests

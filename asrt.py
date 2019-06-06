@@ -27,6 +27,43 @@ import pyglet
 from os import listdir
 from os.path import isfile, join
 
+class ExperimentSettings:
+
+    def __init__(self):
+        self.numsessions = None
+        self.groups = None
+
+        self.blockprepN = None
+        self.blocklengthN = None
+        self.block_in_epochN = None
+        self.epochN = None
+        self.epochs = None
+        self.asrt_types = None
+
+        self.refreshrate = None
+        self.monitor_width = None
+        self.computer_name = None
+        self.asrt_distance = None
+        self.asrt_size = None
+        self.asrt_rcolor = None
+        self.asrt_pcolor = None
+        self.asrt_background = None
+        self.asrt_circle_background = None
+        self.RSI_time = None
+
+        self.key1 = None
+        self.key2 = None
+        self.key3 = None
+        self.key4 = None
+        self.key_quit = None
+        self.whether_warning = None
+        self.speed_warning = None
+        self.acc_warning = None
+
+        self.maxtrial = None
+        self.sessionstarts = None
+        self.blockstarts = None
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
@@ -70,7 +107,7 @@ def read_instructions(inst_feedback_path):
 ### Settings dialogs
 
 # Ask the user to specify the number of groups and the number of sessions
-def show_basic_settings_dialog():
+def show_basic_settings_dialog(expriment_settings):
     expstart0=gui.Dlg(title=u'Beállítások')
     expstart0.addText(u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
     expstart0.addText(u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
@@ -79,16 +116,17 @@ def show_basic_settings_dialog():
     expstart0.addField(u'Ulesek szama', 2)
     returned_data = expstart0.show()
     if expstart0.OK:
-        return (returned_data[0], returned_data[1])
+        expriment_settings.numsessions = returned_data[1]
+        return returned_data[0]
     else:
         core.quit()
 
 # Ask the user to specify the name of the groups
 # Returns the list of group names
-def show_group_settings_dialog(numgroups, dict_accents):
+def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
 
     if numgroups>1:
-        groups = []
+        expriment_settings.groups = []
         expstart01=gui.Dlg(title=u'Beállítások')
         expstart01.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
         for i in range(numgroups):
@@ -101,55 +139,43 @@ def show_group_settings_dialog(numgroups, dict_accents):
                 ii = ii.replace('-', '_')
                 for accent in dict_accents.keys():
                     ii = ii.replace(accent, dict_accents[accent])
-                groups.append(ii)
+                expriment_settings.groups.append(ii)
         else:
             core.quit()
     else:
-        groups = ['nincsenek csoportok']
-
-    return groups
+        expriment_settings.groups = ['nincsenek csoportok']
 
 # Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
 # epoch number and asrt type in the different sessions
-def show_epoch_and_block_settings_dialog(numsessions):
+def show_epoch_and_block_settings_dialog(expriment_settings):
     expstart02=gui.Dlg(title=u'Beállítások')
     expstart02.addText(u'Kísérlet felépítése ')
     expstart02.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
     expstart02.addField(u'Eles probak a blokkban:', 80)
     expstart02.addField(u'Blokkok szama egy epochban:', 5)
-    for i in range(numsessions):
+    for i in range(expriment_settings.numsessions):
         expstart02.addField(u'Session '+str(i+1)+u' epochok szama', 5)
-    for ii in range(numsessions):
+    for ii in range(expriment_settings.numsessions):
         expstart02.addField(u'Session '+str(ii+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
     returned_data = expstart02.show()
     if expstart02.OK:
-        blockprepN = returned_data[0]
-        blocklengthN = returned_data[1]
-        block_in_epochN = returned_data[2]
-        epochN = 0
-        epochs = []
-        asrt_types = {}
-        for k in range(numsessions):
-            epochN += returned_data[3+k]
-            epochs.append(returned_data[3+k])
-        for k in range(numsessions):
-            asrt_types[k+1] = returned_data[3+numsessions+k]
+        expriment_settings.blockprepN = returned_data[0]
+        expriment_settings.blocklengthN = returned_data[1]
+        expriment_settings.block_in_epochN = returned_data[2]
+        expriment_settings.epochN = 0
+        expriment_settings.epochs = []
+        expriment_settings.asrt_types = {}
+        for k in range(expriment_settings.numsessions):
+            expriment_settings.epochN += returned_data[3+k]
+            expriment_settings.epochs.append(returned_data[3+k])
+        for k in range(expriment_settings.numsessions):
+            expriment_settings.asrt_types[k+1] = returned_data[3+expriment_settings.numsessions+k]
     else:
         core.quit()
 
-    epoch_block_result = {
-        "blockprepN" : blockprepN,
-        "blocklengthN" : blocklengthN,
-        "block_in_epochN" : block_in_epochN,
-        "epochN" : epochN,
-        "epochs" : epochs,
-        "asrt_types" : asrt_types
-    }
-    return epoch_block_result
-
 # Ask the user specific infromation about the computer
 # and also change display settings
-def show_computer_and_display_settings_dialog(possible_colors):
+def show_computer_and_display_settings_dialog(possible_colors, expriment_settings):
     expstart0a=gui.Dlg(title=u'Beállítások')
     expstart0a.addText(u'A számítógépről...')
     expstart0a.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
@@ -165,36 +191,22 @@ def show_computer_and_display_settings_dialog(possible_colors):
     expstart0a.addField(u'RSI (ms)', 120)
     returned_data = expstart0a.show()
     if expstart0a.OK:
-        monitor_width = returned_data[0]
-        computer_name = returned_data[1]
-        refreshrate = returned_data[2]
-        asrt_distance = returned_data[3]
-        asrt_size = returned_data[4]
-        asrt_rcolor = returned_data[5]
-        asrt_pcolor = returned_data[6]
-        asrt_background = returned_data[7]
-        asrt_circle_background = returned_data[8]
-        RSI_time = float(returned_data[9])/1000
+        expriment_settings.monitor_width = returned_data[0]
+        expriment_settings.computer_name = returned_data[1]
+        expriment_settings.refreshrate = returned_data[2]
+        expriment_settings.asrt_distance = returned_data[3]
+        expriment_settings.asrt_size = returned_data[4]
+        expriment_settings.asrt_rcolor = returned_data[5]
+        expriment_settings.asrt_pcolor = returned_data[6]
+        expriment_settings.asrt_background = returned_data[7]
+        expriment_settings.asrt_circle_background = returned_data[8]
+        expriment_settings.RSI_time = float(returned_data[9])/1000
     else:
         core.quit()
 
-    screen_and_display_settings = {
-        "monitor_width" : monitor_width,
-        "computer_name" : computer_name,
-        "refreshrate" : refreshrate,
-        "asrt_distance" : asrt_distance,
-        "asrt_size" : asrt_size,
-        "asrt_rcolor" : asrt_rcolor,
-        "asrt_pcolor" : asrt_pcolor,
-        "asrt_background" : asrt_background,
-        "asrt_circle_background" : asrt_circle_background,
-        "RSI_time" : RSI_time
-    }
-    return screen_and_display_settings
-
 # Ask the user to specify the keys used during the experiement
 # and also set options related to the displayed feedback.
-def show_key_and_feedback_settings_dialog():
+def show_key_and_feedback_settings_dialog(expriment_settings):
     expstart0b=gui.Dlg(title=u'Beállítások')
     expstart0b.addText(u'Válaszbillentyűk')
     expstart0b.addField(u'Bal szelso:', 'y')
@@ -208,28 +220,16 @@ def show_key_and_feedback_settings_dialog():
     expstart0b.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
     returned_data = expstart0b.show()
     if expstart0b.OK:
-        key1 = returned_data[0]
-        key2 = returned_data[1]
-        key3 = returned_data[2]
-        key4 = returned_data[3]
-        key_quit = returned_data[4]
-        whether_warning = returned_data[5]
-        speed_warning = returned_data[6]
-        acc_warning = returned_data[7]
+        expriment_settings.key1 = returned_data[0]
+        expriment_settings.key2 = returned_data[1]
+        expriment_settings.key3 = returned_data[2]
+        expriment_settings.key4 = returned_data[3]
+        expriment_settings.key_quit = returned_data[4]
+        expriment_settings.whether_warning = returned_data[5]
+        expriment_settings.speed_warning = returned_data[6]
+        expriment_settings.acc_warning = returned_data[7]
     else:
         core.quit()
-
-    key_and_feedback_settings = {
-        "key1" : key1,
-        "key2" : key2,
-        "key3" : key3,
-        "key4" : key4,
-        "key_quit" : key_quit,
-        "whether_warning" : whether_warning,
-        "speed_warning" : speed_warning,
-        "acc_warning" : acc_warning
-    }
-    return key_and_feedback_settings
 
 # Ask the user to specify the subject's attributes (id, subject number, group)
 def show_subject_settings_dialog(groups, dict_accents):
@@ -278,131 +278,104 @@ def show_subject_settings_dialog(groups, dict_accents):
     }
     return subject_settings
 
-def all_settings_def():    
+def all_settings_def(experiment_settings):
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
 
     try:
-        groups = all_settings_file['groups']
-        numsessions = all_settings_file['numsessions'] 
-        blockprepN = all_settings_file['blockprepN']
-        blocklengthN= all_settings_file['blocklengthN']
-        block_in_epochN= all_settings_file['block_in_epochN']
-        epochN = all_settings_file['epochN']
-        epochs = all_settings_file['epochs']
-        monitor_width = all_settings_file['monitor_width']
-        computer_name = all_settings_file['computer_name']
-        asrt_distance = all_settings_file['asrt_distance']
-        asrt_size = all_settings_file['asrt_size']
-        asrt_rcolor = all_settings_file['asrt_rcolor']
-        asrt_pcolor = all_settings_file['asrt_pcolor']
-        asrt_background = all_settings_file['asrt_background']
-        asrt_circle_background = all_settings_file['asrt_circle_background']
+        experiment_settings.groups = all_settings_file['groups']
+        experiment_settings.numsessions = all_settings_file['numsessions']
+        experiment_settings.blockprepN = all_settings_file['blockprepN']
+        experiment_settings.blocklengthN= all_settings_file['blocklengthN']
+        experiment_settings.block_in_epochN= all_settings_file['block_in_epochN']
+        experiment_settings.epochN = all_settings_file['epochN']
+        experiment_settings.epochs = all_settings_file['epochs']
+        experiment_settings.monitor_width = all_settings_file['monitor_width']
+        experiment_settings.computer_name = all_settings_file['computer_name']
+        experiment_settings.asrt_distance = all_settings_file['asrt_distance']
+        experiment_settings.asrt_size = all_settings_file['asrt_size']
+        experiment_settings.asrt_rcolor = all_settings_file['asrt_rcolor']
+        experiment_settings.asrt_pcolor = all_settings_file['asrt_pcolor']
+        experiment_settings.asrt_background = all_settings_file['asrt_background']
+        experiment_settings.asrt_circle_background = all_settings_file['asrt_circle_background']
 
-        refreshrate = all_settings_file['refreshrate']
-        key1 = all_settings_file['key1']
-        key2 = all_settings_file['key2'] 
-        key3 = all_settings_file['key3']
-        key4 = all_settings_file['key4'] 
-        key_quit = all_settings_file['key_quit']
-        whether_warning = all_settings_file['whether_warning'] 
-        speed_warning = all_settings_file['speed_warning']
-        acc_warning = all_settings_file['acc_warning']
-        RSI_time = all_settings_file['RSI_time']
+        experiment_settings.refreshrate = all_settings_file['refreshrate']
+        experiment_settings.key1 = all_settings_file['key1']
+        experiment_settings.key2 = all_settings_file['key2']
+        experiment_settings.key3 = all_settings_file['key3']
+        experiment_settings.key4 = all_settings_file['key4']
+        experiment_settings.key_quit = all_settings_file['key_quit']
+        experiment_settings.whether_warning = all_settings_file['whether_warning']
+        experiment_settings.speed_warning = all_settings_file['speed_warning']
+        experiment_settings.acc_warning = all_settings_file['acc_warning']
+        experiment_settings.RSI_time = all_settings_file['RSI_time']
         
-        maxtrial = all_settings_file['maxtrial']
-        sessionstarts = all_settings_file['sessionstarts']
-        blockstarts= all_settings_file['blockstarts']
+        experiment_settings.maxtrial = all_settings_file['maxtrial']
+        experiment_settings.sessionstarts = all_settings_file['sessionstarts']
+        experiment_settings.blockstarts= all_settings_file['blockstarts']
         
-        asrt_types = all_settings_file["asrt_types"]
+        experiment_settings.asrt_types = all_settings_file["asrt_types"]
 
     except:
-        groups = []
         possible_colors = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]
 
-        numgroups = 0
-        numsessions = 0
-        (numgroups, numsessions) = show_basic_settings_dialog()
+        numgroups = show_basic_settings_dialog(experiment_settings)
 
-        groups = show_group_settings_dialog(numgroups, dict_accents)
+        show_group_settings_dialog(numgroups, dict_accents, experiment_settings)
 
-        epoch_block_result = show_epoch_and_block_settings_dialog(numsessions)
-        blockprepN = epoch_block_result["blockprepN"]
-        blocklengthN = epoch_block_result["blocklengthN"]
-        block_in_epochN = epoch_block_result["block_in_epochN"]
-        epochN = epoch_block_result["epochN"]
-        epochs = epoch_block_result["epochs"]
-        asrt_types = epoch_block_result["asrt_types"]
+        epoch_block_result = show_epoch_and_block_settings_dialog(experiment_settings)
             
-        maxtrial = (blockprepN+blocklengthN)*epochN*block_in_epochN
-        sessionstarts = [1]
+        experiment_settings.maxtrial = (experiment_settings.blockprepN+experiment_settings.blocklengthN)*experiment_settings.epochN*experiment_settings.block_in_epochN
+        experiment_settings.sessionstarts = [1]
         epochs_cumulative = []
         e_temp = 0
-        for e in epochs:
+        for e in experiment_settings.epochs:
             e_temp+= e
             epochs_cumulative.append(e_temp)
             
         for e in epochs_cumulative:
-            sessionstarts.append(e* block_in_epochN * (blocklengthN + blockprepN) +1 )
+            experiment_settings.sessionstarts.append(e* experiment_settings.block_in_epochN * (experiment_settings.blocklengthN + experiment_settings.blockprepN) +1 )
 
-        blockstarts = [1]
-        for i in range(1, epochN*block_in_epochN+2):
-            blockstarts.append(i * (blocklengthN+blockprepN)+1)
+        experiment_settings.blockstarts = [1]
+        for i in range(1, experiment_settings.epochN*experiment_settings.block_in_epochN+2):
+            experiment_settings.blockstarts.append(i * (experiment_settings.blocklengthN+experiment_settings.blockprepN)+1)
         
-        computer_and_display_settings = show_computer_and_display_settings_dialog(possible_colors)
-        monitor_width = computer_and_display_settings["monitor_width"]
-        computer_name = computer_and_display_settings["computer_name"]
-        refreshrate = computer_and_display_settings["refreshrate"]
-        asrt_distance = computer_and_display_settings["asrt_distance"]
-        asrt_size = computer_and_display_settings["asrt_size"]
-        asrt_rcolor = computer_and_display_settings["asrt_rcolor"]
-        asrt_pcolor = computer_and_display_settings["asrt_pcolor"]
-        asrt_background = computer_and_display_settings["asrt_background"]
-        asrt_circle_background = computer_and_display_settings["asrt_circle_background"]
-        RSI_time = computer_and_display_settings["RSI_time"]
+        show_computer_and_display_settings_dialog(possible_colors, experiment_settings)
             
-        key_and_feedback_settings = show_key_and_feedback_settings_dialog()
-        key1 = key_and_feedback_settings["key1"]
-        key2 = key_and_feedback_settings["key2"]
-        key3 = key_and_feedback_settings["key3"]
-        key4 = key_and_feedback_settings["key4"]
-        key_quit = key_and_feedback_settings["key_quit"]
-        whether_warning = key_and_feedback_settings["whether_warning"]
-        speed_warning = key_and_feedback_settings["speed_warning"]
-        acc_warning = key_and_feedback_settings["acc_warning"]
+        show_key_and_feedback_settings_dialog(experiment_settings)
 
 
-    all_settings_file['RSI_time'] = RSI_time
-    all_settings_file['refreshrate'] = refreshrate
-    all_settings_file['key1'] = key1
-    all_settings_file['key2'] = key2
-    all_settings_file['key3'] = key3
-    all_settings_file['key4'] = key4
-    all_settings_file['key_quit'] = key_quit
-    all_settings_file['whether_warning'] = whether_warning
-    all_settings_file['speed_warning'] = speed_warning
-    all_settings_file['acc_warning'] = acc_warning
+    all_settings_file['RSI_time'] = experiment_settings.RSI_time
+    all_settings_file['refreshrate'] = experiment_settings.refreshrate
+    all_settings_file['key1'] = experiment_settings.key1
+    all_settings_file['key2'] = experiment_settings.key2
+    all_settings_file['key3'] = experiment_settings.key3
+    all_settings_file['key4'] = experiment_settings.key4
+    all_settings_file['key_quit'] = experiment_settings.key_quit
+    all_settings_file['whether_warning'] = experiment_settings.whether_warning
+    all_settings_file['speed_warning'] = experiment_settings.speed_warning
+    all_settings_file['acc_warning'] = experiment_settings.acc_warning
 
-    all_settings_file['groups'] = groups
-    all_settings_file['numsessions'] = numsessions
-    all_settings_file['blockprepN'] = blockprepN
-    all_settings_file['blocklengthN'] = blocklengthN
-    all_settings_file['block_in_epochN'] = block_in_epochN
-    all_settings_file['epochN'] = epochN
-    all_settings_file['epochs'] = epochs
+    all_settings_file['groups'] = experiment_settings.groups
+    all_settings_file['numsessions'] = experiment_settings.numsessions
+    all_settings_file['blockprepN'] = experiment_settings.blockprepN
+    all_settings_file['blocklengthN'] = experiment_settings.blocklengthN
+    all_settings_file['block_in_epochN'] = experiment_settings.block_in_epochN
+    all_settings_file['epochN'] = experiment_settings.epochN
+    all_settings_file['epochs'] = experiment_settings.epochs
 
-    all_settings_file['asrt_types'] = asrt_types
+    all_settings_file['asrt_types'] = experiment_settings.asrt_types
 
-    all_settings_file['monitor_width'] = monitor_width
-    all_settings_file['computer_name'] = computer_name
-    all_settings_file['asrt_distance'] = asrt_distance
-    all_settings_file['asrt_size'] = asrt_size
-    all_settings_file['asrt_rcolor'] = asrt_rcolor
-    all_settings_file['asrt_pcolor'] = asrt_pcolor
-    all_settings_file['asrt_background'] = asrt_background
-    all_settings_file['asrt_circle_background'] = asrt_circle_background
-    all_settings_file['maxtrial'] = maxtrial
-    all_settings_file['sessionstarts'] = sessionstarts
-    all_settings_file['blockstarts'] = blockstarts
+    all_settings_file['monitor_width'] = experiment_settings.monitor_width
+    all_settings_file['computer_name'] = experiment_settings.computer_name
+    all_settings_file['asrt_distance'] = experiment_settings.asrt_distance
+    all_settings_file['asrt_size'] = experiment_settings.asrt_size
+    all_settings_file['asrt_rcolor'] = experiment_settings.asrt_rcolor
+    all_settings_file['asrt_pcolor'] = experiment_settings.asrt_pcolor
+    all_settings_file['asrt_background'] = experiment_settings.asrt_background
+    all_settings_file['asrt_circle_background'] = experiment_settings.asrt_circle_background
+    all_settings_file['maxtrial'] = experiment_settings.maxtrial
+    all_settings_file['sessionstarts'] = experiment_settings.sessionstarts
+    all_settings_file['blockstarts'] = experiment_settings.blockstarts
 
     all_settings_file.sync()
     all_settings_file.close()
@@ -410,27 +383,27 @@ def all_settings_def():
     settingstxt = codecs.open(thispath+'\\settings\\settings_reminder.txt','w', encoding = 'utf-8')
     settingstxt.write(u'Beállítások \n'+
                                         '\n'+
-                                        'MonitorHz: '+ '\t'+ str(refreshrate).replace('.',',')+'\n'+
-                                        'Monitor Width: '+ '\t'+ str(monitor_width).replace('.',',')+'\n'+
-                                        'Computer Name: '+ '\t'+ computer_name+'\n'+
-                                        'Response keys: '+ '\t'+ key1+', '+ key2+', '+ key3+', '+ key4+'.'+'\n'+
-                                        'Quit key: '+ '\t'+ key_quit +'\n'+
-                                        'Warning (speed, accuracy): '+ '\t'+ str(whether_warning)+'\n'+
-                                        'Speed warning at:'+ '\t'+ str(speed_warning)+'\n'+
-                                        'Acc warning at:'+ '\t'+ str(acc_warning)+'\n'+
-                                        'Groups:'+ '\t'+ str(groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                        'Sessions:'+ '\t'+ str(numsessions)+'\n'+
-                                        'Epochs in sessions:'+ '\t'+ str(epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                        'Blocks in epochs:'+ '\t'+ str(block_in_epochN)+'\n'+
-                                        'Preparatory Trials/Block:'+ '\t'+ str(blockprepN)+'\n'+
-                                        'Trials/Block:'+ '\t'+ str(blocklengthN)+'\n'+
-                                        'RSI:'+ '\t'+ str(RSI_time).replace('.',',')+'\n'+
-                                        'Asrt stim distance:'+ '\t'+ str(asrt_distance)+'\n'+
-                                        'Asrt stim size:'+ '\t'+ str(asrt_size)+'\n'+
-                                        'Asrt stim color (implicit):'+ '\t'+ asrt_rcolor+'\n'+
-                                        'Asrt stim color (explicit, cued):'+ '\t'+ asrt_pcolor+'\n'+
-                                        'Asrt stim background color:'+ '\t'+ asrt_circle_background+'\n'+
-                                        'Background color:'+ '\t'+ asrt_background+'\n'+
+                                        'MonitorHz: '+ '\t'+ str(experiment_settings.refreshrate).replace('.',',')+'\n'+
+                                        'Monitor Width: '+ '\t'+ str(experiment_settings.monitor_width).replace('.',',')+'\n'+
+                                        'Computer Name: '+ '\t'+ experiment_settings.computer_name+'\n'+
+                                        'Response keys: '+ '\t'+ experiment_settings.key1+', '+ experiment_settings.key2+', '+ experiment_settings.key3+', '+ experiment_settings.key4+'.'+'\n'+
+                                        'Quit key: '+ '\t'+ experiment_settings.key_quit +'\n'+
+                                        'Warning (speed, accuracy): '+ '\t'+ str(experiment_settings.whether_warning)+'\n'+
+                                        'Speed warning at:'+ '\t'+ str(experiment_settings.speed_warning)+'\n'+
+                                        'Acc warning at:'+ '\t'+ str(experiment_settings.acc_warning)+'\n'+
+                                        'Groups:'+ '\t'+ str(experiment_settings.groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
+                                        'Sessions:'+ '\t'+ str(experiment_settings.numsessions)+'\n'+
+                                        'Epochs in sessions:'+ '\t'+ str(experiment_settings.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
+                                        'Blocks in epochs:'+ '\t'+ str(experiment_settings.block_in_epochN)+'\n'+
+                                        'Preparatory Trials/Block:'+ '\t'+ str(experiment_settings.blockprepN)+'\n'+
+                                        'Trials/Block:'+ '\t'+ str(experiment_settings.blocklengthN)+'\n'+
+                                        'RSI:'+ '\t'+ str(experiment_settings.RSI_time).replace('.',',')+'\n'+
+                                        'Asrt stim distance:'+ '\t'+ str(experiment_settings.asrt_distance)+'\n'+
+                                        'Asrt stim size:'+ '\t'+ str(experiment_settings.asrt_size)+'\n'+
+                                        'Asrt stim color (implicit):'+ '\t'+ experiment_settings.asrt_rcolor+'\n'+
+                                        'Asrt stim color (explicit, cued):'+ '\t'+ experiment_settings.asrt_pcolor+'\n'+
+                                        'Asrt stim background color:'+ '\t'+ experiment_settings.asrt_circle_background+'\n'+
+                                        'Background color:'+ '\t'+ experiment_settings.asrt_background+'\n'+
                                         '\n'+
                                         
     u'''Az alábbi beállítások minden személyre érvényesek és irányadóak. 
@@ -449,7 +422,6 @@ def all_settings_def():
     ''')
 
     settingstxt.close()
-    return  groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types
 
 def get_thisperson_settings():
     
@@ -510,7 +482,7 @@ def which_code(session_number = 0):
     return PCode, Pcode_str
 
 def participant_id():
-    global asrt_types, PCodes, PCode_types
+    global PCodes, PCode_types
     global stim_output_line
     global thisperson_settings, group, identif, subject_nr
     global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stim_quit, stimpr
@@ -518,7 +490,7 @@ def participant_id():
     global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts
     global pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts
     
-    subject_settings = show_subject_settings_dialog(groups, dict_accents)
+    subject_settings = show_subject_settings_dialog(exp_settings.groups, dict_accents)
     identif = subject_settings["identif"]
     subject_nr = subject_settings["subject_nr"]
     group = subject_settings["group"]
@@ -553,7 +525,7 @@ def participant_id():
         
     if letezo == 1:
         nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
-        if last_N+1 <= maxtrial:
+        if last_N+1 <= exp_settings.maxtrial:
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
             expstart11.addText(u'Folytatás innen...')
@@ -579,15 +551,15 @@ def participant_id():
         
         expstart1=gui.Dlg(title=u'Beállítások')
         expstart1.addText('')
-        for z in range(numsessions):
-            if asrt_types[z+1] == "noASRT":
+        for z in range(exp_settings.numsessions):
+            if exp_settings.asrt_types[z+1] == "noASRT":
                 expstart1.addFixedField(u'Session ' + str(z+1) + ' PCode', 'noPattern')         
             else: 
                 expstart1.addField(u'Session ' + str(z+1) + ' PCode', choices = ['1st' , '2nd', '3rd', '4th', '5th', '6th'])
         
         expstart1.show()
         if expstart1.OK:
-            for zz in range(numsessions):
+            for zz in range(exp_settings.numsessions):
                 PCodes[zz+1] = expstart1.data[zz]
             
             for key in PCodes.values():
@@ -609,24 +581,24 @@ def participant_id():
         
         # itt megnézzük, melyik számú inger melyik session része (ez amiatt kell, h sessionönként lehessen implicit/explicit/no asrt-t gyártani
         
-        for y in range(1, maxtrial+1):
-            for ss in range(1, len(sessionstarts)):
-                if y >= sessionstarts[ss-1] and y < sessionstarts[ss]:
+        for y in range(1, exp_settings.maxtrial+1):
+            for ss in range(1, len(exp_settings.sessionstarts)):
+                if y >= exp_settings.sessionstarts[ss-1] and y < exp_settings.sessionstarts[ss]:
                     stim_sessionN[y] = ss
-                    end_at[y] = sessionstarts[ss]
+                    end_at[y] = exp_settings.sessionstarts[ss]
 
-        for epoch in range(1,epochN+1):
+        for epoch in range(1,exp_settings.epochN+1):
             
-            for block in range(1, block_in_epochN+1):
+            for block in range(1, exp_settings.block_in_epochN+1):
                 bln += 1
                 current_trial_num = 0
                 
                 # practice
-                for practice in range(1, blockprepN+1):
+                for practice in range(1, exp_settings.blockprepN+1):
                     current_trial_num += 1
                     
                     Nr += 1 
-                    asrt_type = asrt_types[stim_sessionN[Nr]] 
+                    asrt_type = exp_settings.asrt_types[stim_sessionN[Nr]]
                     PCode, Pcode_str = which_code(stim_sessionN[Nr])
 
                     dict_HL = {}
@@ -639,21 +611,21 @@ def participant_id():
                     current_stim = random.choice([1,2,3,4])
                     stimlist[Nr] = current_stim
                     stimpr[Nr] = "R"
-                    stim_colorN[Nr] = asrt_rcolor
+                    stim_colorN[Nr] = exp_settings.asrt_rcolor
                     stimtrial[Nr] = current_trial_num
                     stimblock[Nr] = bln
                     stimepoch[Nr] = epoch
                  
                 # real
-                for real in range(1, blocklengthN+1):
+                for real in range(1, exp_settings.blocklengthN+1):
                 
                     current_trial_num += 1
                     Nr += 1
 
-                    asrt_type = asrt_types[stim_sessionN[Nr]] 
+                    asrt_type = exp_settings.asrt_types[stim_sessionN[Nr]]
                     PCode, Pcode_str = which_code(stim_sessionN[Nr])
                     
-                    if blockprepN%2 == 1:
+                    if exp_settings.blockprepN%2 == 1:
                         mod_pattern = 0
                     else:
                         mod_pattern = 1
@@ -663,13 +635,13 @@ def participant_id():
                         stimpr[Nr] = "P"
 
                         if asrt_type == 'explicit':
-                            stim_colorN[Nr] = asrt_pcolor
+                            stim_colorN[Nr] = exp_settings.asrt_pcolor
                         elif asrt_type == "implicit" or asrt_type == 'noASRT':
-                            stim_colorN[Nr] = asrt_rcolor
+                            stim_colorN[Nr] = exp_settings.asrt_rcolor
                     
                     else:
                         current_stim = random.choice([1,2,3,4])
-                        stim_colorN[Nr] = asrt_rcolor
+                        stim_colorN[Nr] = exp_settings.asrt_rcolor
                         stimpr[Nr] = "R"
 
                     stimlist[Nr] = current_stim
@@ -710,7 +682,7 @@ def monitor_settings():
     ## Monitor beállítása
     my_monitor = monitors.Monitor('myMon')
     my_monitor.setSizePix( [dimension_x, dimension_y] ) 
-    my_monitor.setWidth(monitor_width) # cm-ben
+    my_monitor.setWidth(exp_settings.monitor_width) # cm-ben
     my_monitor.saveMon()
     
     return dimension_x, dimension_y, my_monitor
@@ -738,24 +710,24 @@ def unexpectedquit():
     for l in unexp_quit:
         print_to_screen(l)
         mywindow.flip()
-        tempkey = event.waitKeys(keyList= [key1, key2, key3, key4, key_quit])
-        if key_quit in tempkey:
+        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
+        if exp_settings.key_quit in tempkey:
             core.quit() 
 
 def instructions():
     for l in insts:
         print_to_screen(l)
         mywindow.flip()
-        tempkey = event.waitKeys(keyList= [key1, key2, key3, key4, key_quit])
-        if key_quit in tempkey:
+        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
+        if exp_settings.key_quit in tempkey:
             core.quit() 
 
 def ending():
     for l in ending:
         print_to_screen(l)
         mywindow.flip()
-        tempkey = event.waitKeys(keyList= [key1, key2, key3, key4, key_quit])
-        if key_quit in tempkey:
+        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
+        if exp_settings.key_quit in tempkey:
             core.quit() 
 
 def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
@@ -766,18 +738,18 @@ def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
         l = l.replace('*PERCACCP*', acc_for_p)
         l = l.replace('*PERCACC*', acc_for_the_w)
         
-        if whether_warning is True:
-            if acc_for_the_whole > speed_warning:
+        if exp_settings.whether_warning is True:
+            if acc_for_the_whole > exp_settings.speed_warning:
                 l = l.replace('*SPEEDACC*', feedback_speed[0])
-            elif acc_for_the_whole < acc_warning:
+            elif acc_for_the_whole < exp_settings.acc_warning:
                 l = l.replace('*SPEEDACC*', feedback_accuracy[0])
             else:
                 l = l.replace('*SPEEDACC*', '')
             
         print_to_screen(l)
         mywindow.flip()
-        tempkey = event.waitKeys(keyList= [key1, key2, key3, key4, key_quit])
-        if key_quit in tempkey:
+        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
+        if exp_settings.key_quit in tempkey:
             return 'quit'
         else:
             return 'continue'
@@ -787,18 +759,18 @@ def feedback_implicit(rt_m = "", acc_for_the_w= ""):
         i = i.replace('*MEANRT*', rt_m)
         i = i.replace('*PERCACC*', acc_for_the_w)
         
-        if whether_warning is True:
-            if acc_for_the_whole > speed_warning:
+        if exp_settings.whether_warning is True:
+            if acc_for_the_whole > exp_settings.speed_warning:
                 i = i.replace('*SPEEDACC*', feedback_speed[0])
-            elif acc_for_the_whole < acc_warning:
+            elif acc_for_the_whole < exp_settings.acc_warning:
                 i = i.replace('*SPEEDACC*', feedback_accuracy[0])
             else:
                 i = i.replace('*SPEEDACC*', '')
             
         print_to_screen(i)
         mywindow.flip()
-        tempkey = event.waitKeys(keyList= [key1, key2, key3, key4, key_quit])
-        if key_quit in tempkey:
+        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
+        if exp_settings.key_quit in tempkey:
             return 'quit'
         else:
             return 'continue'
@@ -1577,7 +1549,7 @@ def presentation():
     trial_after_quit = '0' ###########################################################################
     
      
-    if (startfrom+1) in sessionstarts:
+    if (startfrom+1) in exp_settings.sessionstarts:
         instructions()
         
     else:
@@ -1596,7 +1568,7 @@ def presentation():
     previous_direction = []
     pr_previous_direction = []
     
-    asrt_type = asrt_types[stim_sessionN[N]] 
+    asrt_type = exp_settings.asrt_types[stim_sessionN[N]]
     PCode, Pcode_str = which_code(stim_sessionN[N])
     
     allACC = 0
@@ -1633,10 +1605,10 @@ def presentation():
         mywindow.flip()
         
         RSI_clock.reset()
-        RSI.start( RSI_time) 
+        RSI.start( exp_settings.RSI_time)
         
         try:
-            session_trial_num = N - sessionstarts[stim_sessionN[N]-1] + 1
+            session_trial_num = N - exp_settings.sessionstarts[stim_sessionN[N]-1] + 1
         except:
             session_trial_num = "N/A"
          
@@ -1649,7 +1621,7 @@ def presentation():
         
         
         if stimpr[N] == 'P':
-            if asrt_types[stim_sessionN[N]] == 'explicit':
+            if exp_settings.asrt_types[stim_sessionN[N]] == 'explicit':
                 stimP.fillColor =  colors['stimp']
             else:
                 stimP.fillColor =  colors['stimr']
@@ -1678,7 +1650,7 @@ def presentation():
                 RSI_timer = RSI_clock.getTime()
 
             trial_clock.reset()
-            press = event.waitKeys(keyList = [key1,key2,key3,key4, key_quit], timeStamped = trial_clock)
+            press = event.waitKeys(keyList = [exp_settings.key1,exp_settings.key2,exp_settings.key3,exp_settings.key4, exp_settings.key_quit], timeStamped = trial_clock)
             
             stim_RT_time = time.strftime('%H:%M:%S')
             stim_RT_date = time.strftime('%d/%m/%Y')
@@ -1694,7 +1666,7 @@ def presentation():
             stimbutton = press [0][0]
             stim_RSI = RSI_timer
 
-            if press[0][0] == key_quit:
+            if press[0][0] == exp_settings.key_quit:
                 print_to_screen("Quit...\nSaving data...")
                 mywindow.flip()
                 
@@ -2062,7 +2034,7 @@ def presentation():
                 relevant_anticips.append(all_anticips[int(mypcode)-1])
                 relevant_moves.append(all_category_moves[int(mypcode)-1])
 
-            tempy = [computer_name,
+            tempy = [exp_settings.computer_name,
                         group,
                         identif,
                         subject_nr,
@@ -2434,7 +2406,7 @@ def presentation():
             
         print (akarmi.getTime())
 
-        if N in blockstarts: # n+1 volt
+        if N in exp_settings.blockstarts: # n+1 volt
             
             print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
             mywindow.flip()
@@ -2470,7 +2442,7 @@ def presentation():
                 rt_mean_p = 'N/A'
 
 
-            if asrt_types[stim_sessionN[N-1]] == 'explicit':
+            if exp_settings.asrt_types[stim_sessionN[N-1]] == 'explicit':
                 whatnow = feedback_explicit(rt_m = rt_mean_str, rt_m_p = rt_mean_p_str, acc_for_p = acc_for_patterns_str, acc_for_the_w = acc_for_the_whole_str )
             else:
                 whatnow = feedback_implicit(rt_mean_str, acc_for_the_whole_str)
@@ -2541,7 +2513,6 @@ for i in [1,2,3,4,5,6]:
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def main():
-    global groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types
     global colors
     global insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit
     global thisperson_settings, group, subject_nr, identif
@@ -2549,13 +2520,16 @@ def main():
     global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
     global stimbg, stimP, stimR, stim_pressed
     global frame_time, frame_sd, frame_rate
+    global exp_settings
 
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
-    groups, numsessions, blockprepN, blocklengthN, block_in_epochN, epochN, epochs, monitor_width, computer_name, asrt_distance, asrt_size, asrt_rcolor, asrt_pcolor, asrt_background, asrt_circle_background, refreshrate, key1, key2, key3, key4, key_quit, whether_warning, speed_warning, acc_warning, RSI_time, maxtrial, sessionstarts, blockstarts, asrt_types = all_settings_def()
+
+    exp_settings = ExperimentSettings()
+    all_settings_def(exp_settings)
     dimension_x, dimension_y, my_monitor = monitor_settings()
 
-    colors = { 'wincolor' : asrt_background, 'linecolor':'black', 'stimp':asrt_pcolor, 'stimr':asrt_rcolor}
+    colors = { 'wincolor' : exp_settings.asrt_background, 'linecolor':'black', 'stimp':exp_settings.asrt_pcolor, 'stimr':exp_settings.asrt_rcolor}
 
     inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
     insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = read_instructions(inst_feedback_path)
@@ -2568,21 +2542,21 @@ def main():
 
     xtext = visual.TextStim(mywindow, text = u"", units = "cm", height = 0.6, color = "black")
 
-    pressed_dict ={key1:1,key2:2,key3:3,key4:4}
+    pressed_dict ={exp_settings.key1:1,exp_settings.key2:2,exp_settings.key3:3,exp_settings.key4:4}
 
-    RSI = core.StaticPeriod(screenHz=refreshrate)
+    RSI = core.StaticPeriod(screenHz=exp_settings.refreshrate)
     RSI_clock = core.Clock()
     trial_clock = core.Clock()
 
-    dict_pos = { 1:  ( float(asrt_distance)*(-1.5), 0),
-                 2:  ( float(asrt_distance)*(-0.5), 0),
-                 3:  ( float(asrt_distance)*  0.5,   0),
-                 4:  ( float(asrt_distance)*  1.5,   0) }
+    dict_pos = { 1:  ( float(exp_settings.asrt_distance)*(-1.5), 0),
+                 2:  ( float(exp_settings.asrt_distance)*(-0.5), 0),
+                 3:  ( float(exp_settings.asrt_distance)*  0.5,   0),
+                 4:  ( float(exp_settings.asrt_distance)*  1.5,   0) }
 
     stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
-    stimP = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
-    stimR = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
-    stim_pressed = visual.Circle( win = mywindow, radius = asrt_size, units = "cm", fillColor = 'gray', lineColor = colors['linecolor'], lineWidth = 3, pos = dict_pos[1])
+    stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
+    stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
+    stim_pressed = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = 'gray', lineColor = colors['linecolor'], lineWidth = 3, pos = dict_pos[1])
 
 
     frame_time, frame_sd, frame_rate = frame_check()
