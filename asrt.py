@@ -147,6 +147,51 @@ def show_epoch_and_block_settings_dialog(numsessions):
     }
     return epoch_block_result
 
+# Ask the user specific infromation about the computer
+# and also change display settings
+def show_computer_and_display_settings_dialog(possible_colors):
+    expstart0a=gui.Dlg(title=u'Beállítások')
+    expstart0a.addText(u'A számítógépről...')
+    expstart0a.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
+    expstart0a.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
+    expstart0a.addField(u'Kepernyofrissitesi frekvencia (Hz)', 60)
+    expstart0a.addText(u'Megjelenés..')
+    expstart0a.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+    expstart0a.addField(u'Ingerek sugara (cm)', 1)
+    expstart0a.addField(u'ASRT inger szine (elsodleges, R)', choices = possible_colors, initial = "Orange")
+    expstart0a.addField(u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices = possible_colors, initial = "Green")
+    expstart0a.addField(u'Hatter szine', choices = possible_colors, initial = "Ivory")
+    expstart0a.addField(u'Nem aktiv inger szine', choices = possible_colors, initial = "Beige")
+    expstart0a.addField(u'RSI (ms)', 120)
+    returned_data = expstart0a.show()
+    if expstart0a.OK:
+        monitor_width = returned_data[0]
+        computer_name = returned_data[1]
+        refreshrate = returned_data[2]
+        asrt_distance = returned_data[3]
+        asrt_size = returned_data[4]
+        asrt_rcolor = returned_data[5]
+        asrt_pcolor = returned_data[6]
+        asrt_background = returned_data[7]
+        asrt_circle_background = returned_data[8]
+        RSI_time = float(returned_data[9])/1000
+    else:
+        core.quit()
+
+    screen_and_display_settings = {
+        "monitor_width" : monitor_width,
+        "computer_name" : computer_name,
+        "refreshrate" : refreshrate,
+        "asrt_distance" : asrt_distance,
+        "asrt_size" : asrt_size,
+        "asrt_rcolor" : asrt_rcolor,
+        "asrt_pcolor" : asrt_pcolor,
+        "asrt_background" : asrt_background,
+        "asrt_circle_background" : asrt_circle_background,
+        "RSI_time" : RSI_time
+    }
+    return screen_and_display_settings
+
 def all_settings_def():    
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
 
@@ -217,33 +262,17 @@ def all_settings_def():
         for i in range(1, epochN*block_in_epochN+2):
             blockstarts.append(i * (blocklengthN+blockprepN)+1)
         
-        expstart0a=gui.Dlg(title=u'Beállítások')
-        expstart0a.addText(u'A számítógépről...')
-        expstart0a.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
-        expstart0a.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
-        expstart0a.addField(u'Kepernyofrissitesi frekvencia (Hz)', 60)
-        expstart0a.addText(u'Megjelenés..')    
-        expstart0a.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3) 
-        expstart0a.addField(u'Ingerek sugara (cm)', 1) 
-        expstart0a.addField(u'ASRT inger szine (elsodleges, R)', choices = ['orange']+possible_colors) 
-        expstart0a.addField(u'ASRT inger szine (masodlagos, P, explicit asrtnel)',  choices = ['green']+possible_colors) 
-        expstart0a.addField(u'Hatter szine',  choices = ['ivory']+possible_colors) 
-        expstart0a.addField(u'Nem aktiv inger szine',  choices = ['beige']+possible_colors) 
-        expstart0a.addField(u'RSI (ms)', 120) 
-        expstart0a.show()
-        if expstart0a.OK:
-            monitor_width = expstart0a.data[0]
-            computer_name = expstart0a.data[1]
-            refreshrate = expstart0a.data[2]
-            asrt_distance = expstart0a.data[3]
-            asrt_size = expstart0a.data[4]
-            asrt_rcolor = expstart0a.data[5]
-            asrt_pcolor = expstart0a.data[6]
-            asrt_background = expstart0a.data[7]
-            asrt_circle_background = expstart0a.data[8]
-            RSI_time = float(expstart0a.data[9])/1000
-        else:
-            core.quit()
+        computer_and_display_settings = show_computer_and_display_settings_dialog(possible_colors)
+        monitor_width = computer_and_display_settings["monitor_width"]
+        computer_name = computer_and_display_settings["computer_name"]
+        refreshrate = computer_and_display_settings["refreshrate"]
+        asrt_distance = computer_and_display_settings["asrt_distance"]
+        asrt_size = computer_and_display_settings["asrt_size"]
+        asrt_rcolor = computer_and_display_settings["asrt_rcolor"]
+        asrt_pcolor = computer_and_display_settings["asrt_pcolor"]
+        asrt_background = computer_and_display_settings["asrt_background"]
+        asrt_circle_background = computer_and_display_settings["asrt_circle_background"]
+        RSI_time = computer_and_display_settings["RSI_time"]
             
         expstart0b=gui.Dlg(title=u'Beállítások')
         expstart0b.addText(u'Válaszbillentyűk')
