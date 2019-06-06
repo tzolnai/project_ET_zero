@@ -109,6 +109,44 @@ def show_group_settings_dialog(numgroups, dict_accents):
 
     return groups
 
+# Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
+# epoch number and asrt type in the different sessions
+def show_epoch_and_block_settings_dialog(numsessions):
+    expstart02=gui.Dlg(title=u'Beállítások')
+    expstart02.addText(u'Kísérlet felépítése ')
+    expstart02.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
+    expstart02.addField(u'Eles probak a blokkban:', 80)
+    expstart02.addField(u'Blokkok szama egy epochban:', 5)
+    for i in range(numsessions):
+        expstart02.addField(u'Session '+str(i+1)+u' epochok szama', 5)
+    for ii in range(numsessions):
+        expstart02.addField(u'Session '+str(ii+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
+    returned_data = expstart02.show()
+    if expstart02.OK:
+        blockprepN = returned_data[0]
+        blocklengthN = returned_data[1]
+        block_in_epochN = returned_data[2]
+        epochN = 0
+        epochs = []
+        asrt_types = {}
+        for k in range(numsessions):
+            epochN += returned_data[3+k]
+            epochs.append(returned_data[3+k])
+        for k in range(numsessions):
+            asrt_types[k+1] = returned_data[3+numsessions+k]
+    else:
+        core.quit()
+
+    epoch_block_result = {
+        "blockprepN" : blockprepN,
+        "blocklengthN" : blocklengthN,
+        "block_in_epochN" : block_in_epochN,
+        "epochN" : epochN,
+        "epochs" : epochs,
+        "asrt_types" : asrt_types
+    }
+    return epoch_block_result
+
 def all_settings_def():    
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
 
@@ -156,30 +194,13 @@ def all_settings_def():
 
         groups = show_group_settings_dialog(numgroups, dict_accents)
 
-        asrt_types = {}
-        expstart02=gui.Dlg(title=u'Beállítások')
-        expstart02.addText(u'Kísérlet felépítése ')
-        expstart02.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
-        expstart02.addField(u'Eles probak a blokkban:', 80)
-        expstart02.addField(u'Blokkok szama egy epochban:', 5)
-        for i in range(numsessions):
-            expstart02.addField(u'Session '+str(i+1)+u' epochok szama', 5)
-        for ii in range(numsessions):
-            expstart02.addField(u'Session '+str(ii+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
-        expstart02.show()
-        if expstart02.OK:
-            blockprepN = int(expstart02.data[0])
-            blocklengthN = int(expstart02.data[1])
-            block_in_epochN = int(expstart02.data[2])
-            epochN = 0
-            epochs = []
-            for k in range(numsessions):
-                epochN += expstart02.data[3+k]
-                epochs.append(expstart02.data[3+k])
-            for kk in range(numsessions):
-                asrt_types[kk+1] = expstart02.data[3+numsessions+kk]
-        else:
-            core.quit()
+        epoch_block_result = show_epoch_and_block_settings_dialog(numsessions)
+        blockprepN = epoch_block_result["blockprepN"]
+        blocklengthN = epoch_block_result["blocklengthN"]
+        block_in_epochN = epoch_block_result["block_in_epochN"]
+        epochN = epoch_block_result["epochN"]
+        epochs = epoch_block_result["epochs"]
+        asrt_types = epoch_block_result["epochs"]
             
         maxtrial = (blockprepN+blocklengthN)*epochN*block_in_epochN
         sessionstarts = [1]
