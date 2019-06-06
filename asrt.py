@@ -397,7 +397,7 @@ def show_subject_settings_dialog(groups, dict_accents):
 
 def all_settings_def(experiment_settings):
 
-    all_settings_file_path = os.path.join(thispath, "settings", "settings.dat")
+    all_settings_file_path = os.path.join(thispath, "settings", "settings")
 
     try:
         experiment_settings.read_from_file(all_settings_file_path)
@@ -506,7 +506,7 @@ def participant_id():
     subject_nr = subject_settings["subject_nr"]
     group = subject_settings["group"]
     
-    p_settings_file = shelve.open(thispath+'\\settings\\participant_settings.dat')
+    p_settings_file = shelve.open(thispath+'\\settings\\participant_settings')
     try:
         ids_temp = p_settings_file['ids']
     except:
@@ -521,7 +521,7 @@ def participant_id():
     p_settings_file.close()
 
     # letezik-e mar ilyen ksz-szel beállítás?
-    p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group+'.dat')
+    p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group)
 
     try:
         p_settings_temp = p_settings_file['all_settings']
@@ -1291,7 +1291,7 @@ def save_personal_info(mydict ={}):
     thisperson_settings[ 'stim_colorN' ] = stim_colorN
     thisperson_settings[ 'stim_quit' ] = stim_quit
 
-    p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group+'.dat')
+    p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group)
     try:
         p_settings_temp = p_settings_file['all_settings']
     except:
