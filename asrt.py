@@ -284,7 +284,7 @@ def all_settings_def():
         block_in_epochN = epoch_block_result["block_in_epochN"]
         epochN = epoch_block_result["epochN"]
         epochs = epoch_block_result["epochs"]
-        asrt_types = epoch_block_result["epochs"]
+        asrt_types = epoch_block_result["asrt_types"]
             
         maxtrial = (blockprepN+blocklengthN)*epochN*block_in_epochN
         sessionstarts = [1]
