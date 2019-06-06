@@ -231,6 +231,58 @@ def show_key_and_feedback_settings_dialog():
     }
     return key_and_feedback_settings
 
+# Ask the user to specify the subject's attributes (id, subject number, group)
+def show_subject_settings_dialog(groups, dict_accents):
+    warningtext = ''
+    itsOK = False
+    while not itsOK:
+        expstart=gui.Dlg(title=u'Beállítások')
+        expstart.addText('')
+        expstart.addText(warningtext)
+        expstart.addField(u'Nev/Azonosito', u"Alattomos Aladar")
+        expstart.addField(u'Sorszam', "0")
+        if len(groups) > 1:
+            expstart.addField(u'Csoport', choices = groups)
+
+        returned_data = expstart.show()
+        if expstart.OK:
+            identif = returned_data[0]
+            identif = identif.lower()
+            identif = identif.replace(' ', '-')
+            for accent in dict_accents.keys():
+                identif = identif.replace(accent, dict_accents[accent])
+
+            subject_nr = returned_data[1]
+            if len(groups) > 1:
+                group = returned_data[2]
+                group = group.lower()
+                group = group.replace(' ', '_')
+                group = group.replace('-', '_')
+                for accent in dict_accents.keys():
+                    group = group.replace(accent, dict_accents[accent])
+            else:
+                group = ""
+
+            try:
+                subject_nr= int(subject_nr)
+                if subject_nr >= 0:
+                    itsOK = 1
+                else:
+                    warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
+
+            except:
+                warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
+
+        else:
+            core.quit()
+
+    subject_settings = {
+        "identif" : identif,
+        "subject_nr" : subject_nr,
+        "group" : group
+    }
+    return subject_settings
+
 def all_settings_def():    
     all_settings_file = shelve.open(thispath+'\\settings\\'+'settings.dat')
 
@@ -471,50 +523,10 @@ def participant_id():
     global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts
     global pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts
     
-    warningtext = ''
-    itsOK = 0
-    while itsOK == 0:
-        expstart=gui.Dlg(title=u'Beállítások')
-        expstart.addText('')
-        expstart.addText(warningtext)
-        expstart.addField(u'Nev/Azonosito', u"Alattomos Aladar")
-        expstart.addField(u'Sorszam', "0")
-        if len(groups) > 1:
-            expstart.addField(u'Csoport', choices = groups)
-        expstart.show()
-
-        if expstart.OK:
-            identif = expstart.data[0]
-            for accent in dict_accents.keys():
-                if accent in identif:
-                    identif = identif.replace(accent, dict_accents[accent])
-                identif = identif.lower()
-                identif = identif.replace(' ', '-')
-            subject_nr = expstart.data[1]
-            if len(groups) > 1:
-                group = expstart.data[2]
-                for accent in dict_accents.keys():
-                    if accent in group:
-                        group = group.replace(accent, dict_accents[accent])
-                    group = group.lower()
-                    group = group.replace(' ', '_')
-                    group = group.replace('-', '_')
-            else:
-                group = ""
-
-
-            try:
-                subject_nr= int(subject_nr)
-                if subject_nr >= 0:
-                    itsOK = 1
-                else:
-                    warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
-                    
-            except:
-                warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
-                
-        else:
-            core.quit()
+    subject_settings = show_subject_settings_dialog(groups, dict_accents)
+    identif = subject_settings["identif"]
+    subject_nr = subject_settings["subject_nr"]
+    group = subject_settings["group"]
     
     p_settings_file = shelve.open(thispath+'\\settings\\participant_settings.dat')
     try:

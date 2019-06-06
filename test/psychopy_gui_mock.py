@@ -68,12 +68,10 @@ class PsychoPyGuiMock:
     def show(self):
         gui.Dlg.OK = self.return_value
         data = []
-        index = 0
         for field in self.list_of_fields:
-
-            if len(self.list_of_values) > index:
-                data.append(self.list_of_values[index])
+            if len(self.list_of_values):
+                data.append(self.list_of_values[0])
+                self.list_of_values = self.list_of_values[1:]
             else:
                 data.append(field.initial)
-            index += 1
         return data
