@@ -27,6 +27,8 @@ import pyglet
 from os import listdir
 from os.path import isfile, join
 
+# This class handles all operation related to experiment settings
+# These settings apply to all subjects in the specific experiment
 class ExperimentSettings:
 
     def __init__(self):
@@ -345,7 +347,7 @@ def show_key_and_feedback_settings_dialog(expriment_settings):
     else:
         core.quit()
 
-# Ask the user to specify the subject's attributes (id, subject number, group)
+# Ask the user to specify the subject's attributes (name, subject number, group)
 def show_subject_settings_dialog(groups, dict_accents):
     warningtext = ''
     itsOK = False
