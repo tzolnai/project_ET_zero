@@ -26,8 +26,7 @@ import asrt
 
 import psychopy_gui_mock as pgm
 
-dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u',
-                u'Á':u'A',u'É':u'E',u'Í':u'I',u'Ó':u'O',u'Ö':u'O',u'Ő':u'O',u'Ú':u'U',u'Ű':u'U',u'Ü':u'U'}
+dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
 
 class showGroupSettingsDialogTest(unittest.TestCase):
 

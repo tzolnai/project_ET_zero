@@ -2521,8 +2521,7 @@ def presentation():
 # some constants and dictionaries
 
 thispath = '\\'.join( os.path.realpath(__file__).split('\\')[:-1])
-dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u',
-                u'Á':u'A',u'É':u'E',u'Í':u'I',u'Ó':u'O',u'Ö':u'O',u'Ő':u'O',u'Ú':u'U',u'Ű':u'U',u'Ü':u'U'} 
+dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
 
 sequences_PCode = { 1 : 1234, 2 : 1243, 3 : 1324, 4 : 1342, 5 : 1423, 6 : 1432 }
 sequence_highs = {}
