@@ -221,14 +221,14 @@ def read_instructions(inst_feedback_path):
 
 # Ask the user to specify the number of groups and the number of sessions
 def show_basic_settings_dialog(expriment_settings):
-    expstart0=gui.Dlg(title=u'Beállítások')
-    expstart0.addText(u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
-    expstart0.addText(u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
-    expstart0.addField(u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
-    expstart0.addText(u'Hány ülés (session) lesz a kísérletben?')
-    expstart0.addField(u'Ulesek szama', 2)
-    returned_data = expstart0.show()
-    if expstart0.OK:
+    settings_dialog = gui.Dlg(title=u'Beállítások')
+    settings_dialog.addText(u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
+    settings_dialog.addText(u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
+    settings_dialog.addField(u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
+    settings_dialog.addText(u'Hány ülés (session) lesz a kísérletben?')
+    settings_dialog.addField(u'Ulesek szama', 2)
+    returned_data = settings_dialog.show()
+    if settings_dialog.OK:
         expriment_settings.numsessions = returned_data[1]
         return returned_data[0]
     else:
@@ -240,12 +240,12 @@ def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
 
     if numgroups>1:
         expriment_settings.groups = []
-        expstart01=gui.Dlg(title=u'Beállítások')
-        expstart01.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
+        settings_dialog = gui.Dlg(title=u'Beállítások')
+        settings_dialog.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
         for i in range(numgroups):
-            expstart01.addField(u'Csoport '+str(i+1))
-        returned_data = expstart01.show()
-        if expstart01.OK:
+            settings_dialog.addField(u'Csoport '+str(i+1))
+        returned_data = settings_dialog.show()
+        if settings_dialog.OK:
             for ii in returned_data:
                 ii = ii.lower()
                 ii = ii.replace(' ', '_')
@@ -261,17 +261,17 @@ def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
 # Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
 # epoch number and asrt type in the different sessions
 def show_epoch_and_block_settings_dialog(expriment_settings):
-    expstart02=gui.Dlg(title=u'Beállítások')
-    expstart02.addText(u'Kísérlet felépítése ')
-    expstart02.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
-    expstart02.addField(u'Eles probak a blokkban:', 80)
-    expstart02.addField(u'Blokkok szama egy epochban:', 5)
+    settings_dialog = gui.Dlg(title=u'Beállítások')
+    settings_dialog.addText(u'Kísérlet felépítése ')
+    settings_dialog.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
+    settings_dialog.addField(u'Eles probak a blokkban:', 80)
+    settings_dialog.addField(u'Blokkok szama egy epochban:', 5)
     for i in range(expriment_settings.numsessions):
-        expstart02.addField(u'Session '+str(i+1)+u' epochok szama', 5)
-    for ii in range(expriment_settings.numsessions):
-        expstart02.addField(u'Session '+str(ii+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
-    returned_data = expstart02.show()
-    if expstart02.OK:
+        settings_dialog.addField(u'Session '+str(i+1)+u' epochok szama', 5)
+    for i in range(expriment_settings.numsessions):
+        settings_dialog.addField(u'Session '+str(i+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
+    returned_data = settings_dialog.show()
+    if settings_dialog.OK:
         expriment_settings.blockprepN = returned_data[0]
         expriment_settings.blocklengthN = returned_data[1]
         expriment_settings.block_in_epochN = returned_data[2]
@@ -289,20 +289,20 @@ def show_epoch_and_block_settings_dialog(expriment_settings):
 # Ask the user specific infromation about the computer
 # and also change display settings
 def show_computer_and_display_settings_dialog(possible_colors, expriment_settings):
-    expstart0a=gui.Dlg(title=u'Beállítások')
-    expstart0a.addText(u'A számítógépről...')
-    expstart0a.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
-    expstart0a.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
-    expstart0a.addField(u'Kepernyofrissitesi frekvencia (Hz)', 60)
-    expstart0a.addText(u'Megjelenés..')
-    expstart0a.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
-    expstart0a.addField(u'Ingerek sugara (cm)', 1)
-    expstart0a.addField(u'ASRT inger szine (elsodleges, R)', choices = possible_colors, initial = "Orange")
-    expstart0a.addField(u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices = possible_colors, initial = "Green")
-    expstart0a.addField(u'Hatter szine', choices = possible_colors, initial = "Ivory")
-    expstart0a.addField(u'RSI (ms)', 120)
-    returned_data = expstart0a.show()
-    if expstart0a.OK:
+    settings_dialog = gui.Dlg(title=u'Beállítások')
+    settings_dialog.addText(u'A számítógépről...')
+    settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
+    settings_dialog.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
+    settings_dialog.addField(u'Kepernyofrissitesi frekvencia (Hz)', 60)
+    settings_dialog.addText(u'Megjelenés..')
+    settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+    settings_dialog.addField(u'Ingerek sugara (cm)', 1)
+    settings_dialog.addField(u'ASRT inger szine (elsodleges, R)', choices = possible_colors, initial = "Orange")
+    settings_dialog.addField(u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices = possible_colors, initial = "Green")
+    settings_dialog.addField(u'Hatter szine', choices = possible_colors, initial = "Ivory")
+    settings_dialog.addField(u'RSI (ms)', 120)
+    returned_data = settings_dialog.show()
+    if settings_dialog.OK:
         expriment_settings.monitor_width = returned_data[0]
         expriment_settings.computer_name = returned_data[1]
         expriment_settings.refreshrate = returned_data[2]
@@ -318,19 +318,19 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
 # Ask the user to specify the keys used during the experiement
 # and also set options related to the displayed feedback.
 def show_key_and_feedback_settings_dialog(expriment_settings):
-    expstart0b=gui.Dlg(title=u'Beállítások')
-    expstart0b.addText(u'Válaszbillentyűk')
-    expstart0b.addField(u'Bal szelso:', 'y')
-    expstart0b.addField(u'Bal kozep', 'c')
-    expstart0b.addField(u'Jobb kozep', 'b')
-    expstart0b.addField(u'Jobb szelso', 'm')
-    expstart0b.addField(u'Kilepes', 'q')
-    expstart0b.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
-    expstart0b.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
-    expstart0b.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
-    expstart0b.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
-    returned_data = expstart0b.show()
-    if expstart0b.OK:
+    settings_dialog = gui.Dlg(title=u'Beállítások')
+    settings_dialog.addText(u'Válaszbillentyűk')
+    settings_dialog.addField(u'Bal szelso:', 'y')
+    settings_dialog.addField(u'Bal kozep', 'c')
+    settings_dialog.addField(u'Jobb kozep', 'b')
+    settings_dialog.addField(u'Jobb szelso', 'm')
+    settings_dialog.addField(u'Kilepes', 'q')
+    settings_dialog.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
+    settings_dialog.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
+    settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
+    settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
+    returned_data = settings_dialog.show()
+    if settings_dialog.OK:
         expriment_settings.key1 = returned_data[0]
         expriment_settings.key2 = returned_data[1]
         expriment_settings.key3 = returned_data[2]
@@ -347,16 +347,16 @@ def show_subject_settings_dialog(groups, dict_accents):
     warningtext = ''
     itsOK = False
     while not itsOK:
-        expstart=gui.Dlg(title=u'Beállítások')
-        expstart.addText('')
-        expstart.addText(warningtext)
-        expstart.addField(u'Nev', u"Alattomos Aladar")
-        expstart.addField(u'Sorszam', "0")
+        settings_dialog = gui.Dlg(title=u'Beállítások')
+        settings_dialog.addText('')
+        settings_dialog.addText(warningtext)
+        settings_dialog.addField(u'Nev', u"Alattomos Aladar")
+        settings_dialog.addField(u'Sorszam', "0")
         if len(groups) > 1:
-            expstart.addField(u'Csoport', choices = groups)
+            settings_dialog.addField(u'Csoport', choices = groups)
 
-        returned_data = expstart.show()
-        if expstart.OK:
+        returned_data = settings_dialog.show()
+        if settings_dialog.OK:
             name = returned_data[0]
             name = name.lower()
             name = name.replace(' ', '-')
