@@ -137,6 +137,47 @@ class ExperimentSettings:
             settings_file.sync()
             settings_file.close()
 
+    def write_out_reminder(self, reminder_file_path):
+        with codecs.open(reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
+            reminder_file.write(u'Beállítások \n'+
+                                '\n'+
+                                'MonitorHz: '+ '\t'+ str(self.refreshrate).replace('.',',')+'\n'+
+                                'Monitor Width: '+ '\t'+ str(self.monitor_width).replace('.',',')+'\n'+
+                                'Computer Name: '+ '\t'+ self.computer_name+'\n'+
+                                'Response keys: '+ '\t'+ self.key1+', '+ self.key2+', '+ self.key3+', '+ self.key4+'.'+'\n'+
+                                'Quit key: '+ '\t'+ self.key_quit +'\n'+
+                                'Warning (speed, accuracy): '+ '\t'+ str(self.whether_warning)+'\n'+
+                                'Speed warning at:'+ '\t'+ str(self.speed_warning)+'\n'+
+                                'Acc warning at:'+ '\t'+ str(self.acc_warning)+'\n'+
+                                'Groups:'+ '\t'+ str(self.groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
+                                'Sessions:'+ '\t'+ str(self.numsessions)+'\n'+
+                                'Epochs in sessions:'+ '\t'+ str(self.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
+                                'Blocks in epochs:'+ '\t'+ str(self.block_in_epochN)+'\n'+
+                                'Preparatory Trials\\Block:'+ '\t'+ str(self.blockprepN)+'\n'+
+                                'Trials\\Block:'+ '\t'+ str(self.blocklengthN)+'\n'+
+                                'RSI:'+ '\t'+ str(self.RSI_time).replace('.',',')+'\n'+
+                                'Asrt stim distance:'+ '\t'+ str(self.asrt_distance)+'\n'+
+                                'Asrt stim size:'+ '\t'+ str(self.asrt_size)+'\n'+
+                                'Asrt stim color (implicit):'+ '\t'+ self.asrt_rcolor+'\n'+
+                                'Asrt stim color (explicit, cued):'+ '\t'+ self.asrt_pcolor+'\n'+
+                                'Asrt stim background color:'+ '\t'+ self.asrt_circle_background+'\n'+
+                                'Background color:'+ '\t'+ self.asrt_background+'\n'+
+                                '\n'+
+                                'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n'+
+
+                                'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n'+
+                                'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n'+
+                                'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n'+
+                                'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n'+
+
+                                'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n'+
+                                'beállítások vannak elmentve.\n\n'+
+
+                                'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n'+
+                                'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n'+
+                                'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
@@ -387,48 +428,8 @@ def all_settings_def(experiment_settings):
 
         experiment_settings.write_to_file(all_settings_file_path)
 
-    settingstxt = codecs.open(thispath+'\\settings\\settings_reminder.txt','w', encoding = 'utf-8')
-    settingstxt.write(u'Beállítások \n'+
-                                        '\n'+
-                                        'MonitorHz: '+ '\t'+ str(experiment_settings.refreshrate).replace('.',',')+'\n'+
-                                        'Monitor Width: '+ '\t'+ str(experiment_settings.monitor_width).replace('.',',')+'\n'+
-                                        'Computer Name: '+ '\t'+ experiment_settings.computer_name+'\n'+
-                                        'Response keys: '+ '\t'+ experiment_settings.key1+', '+ experiment_settings.key2+', '+ experiment_settings.key3+', '+ experiment_settings.key4+'.'+'\n'+
-                                        'Quit key: '+ '\t'+ experiment_settings.key_quit +'\n'+
-                                        'Warning (speed, accuracy): '+ '\t'+ str(experiment_settings.whether_warning)+'\n'+
-                                        'Speed warning at:'+ '\t'+ str(experiment_settings.speed_warning)+'\n'+
-                                        'Acc warning at:'+ '\t'+ str(experiment_settings.acc_warning)+'\n'+
-                                        'Groups:'+ '\t'+ str(experiment_settings.groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                        'Sessions:'+ '\t'+ str(experiment_settings.numsessions)+'\n'+
-                                        'Epochs in sessions:'+ '\t'+ str(experiment_settings.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                        'Blocks in epochs:'+ '\t'+ str(experiment_settings.block_in_epochN)+'\n'+
-                                        'Preparatory Trials/Block:'+ '\t'+ str(experiment_settings.blockprepN)+'\n'+
-                                        'Trials/Block:'+ '\t'+ str(experiment_settings.blocklengthN)+'\n'+
-                                        'RSI:'+ '\t'+ str(experiment_settings.RSI_time).replace('.',',')+'\n'+
-                                        'Asrt stim distance:'+ '\t'+ str(experiment_settings.asrt_distance)+'\n'+
-                                        'Asrt stim size:'+ '\t'+ str(experiment_settings.asrt_size)+'\n'+
-                                        'Asrt stim color (implicit):'+ '\t'+ experiment_settings.asrt_rcolor+'\n'+
-                                        'Asrt stim color (explicit, cued):'+ '\t'+ experiment_settings.asrt_pcolor+'\n'+
-                                        'Asrt stim background color:'+ '\t'+ experiment_settings.asrt_circle_background+'\n'+
-                                        'Background color:'+ '\t'+ experiment_settings.asrt_background+'\n'+
-                                        '\n'+
-                                        
-    u'''Az alábbi beállítások minden személyre érvényesek és irányadóak. 
-
-    A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,
-    az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,
-    úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,
-    és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.
-
-    Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő
-    beállítások vannak elmentve.
-
-    A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl
-    törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,
-    jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.
-    ''')
-
-    settingstxt.close()
+        reminder_file_path = os.path.join(thispath, "settings", "settings_reminder.txt")
+        exp_settings.write_out_reminder(reminder_file_path)
 
 def get_thisperson_settings():
     
