@@ -50,7 +50,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 3)
-        self.assertEqual(list_of_fields[0].label, "Nev/Azonosito")
+        self.assertEqual(list_of_fields[0].label, "Nev")
         self.assertEqual(list_of_fields[0].initial, 'Alattomos Aladar')
         self.assertEqual(list_of_fields[1].label, "Sorszam")
         self.assertEqual(list_of_fields[1].initial, '0')
@@ -171,7 +171,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 2)
-        self.assertEqual(list_of_fields[0].label, "Nev/Azonosito")
+        self.assertEqual(list_of_fields[0].label, "Nev")
         self.assertEqual(list_of_fields[0].initial, 'Alattomos Aladar')
         self.assertEqual(list_of_fields[1].label, "Sorszam")
         self.assertEqual(list_of_fields[1].initial, '0')

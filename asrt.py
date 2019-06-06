@@ -239,28 +239,28 @@ def show_subject_settings_dialog(groups, dict_accents):
         expstart=gui.Dlg(title=u'Beállítások')
         expstart.addText('')
         expstart.addText(warningtext)
-        expstart.addField(u'Nev/Azonosito', u"Alattomos Aladar")
+        expstart.addField(u'Nev', u"Alattomos Aladar")
         expstart.addField(u'Sorszam', "0")
         if len(groups) > 1:
             expstart.addField(u'Csoport', choices = groups)
 
         returned_data = expstart.show()
         if expstart.OK:
-            identif = returned_data[0]
-            identif = identif.lower()
-            identif = identif.replace(' ', '-')
+            name = returned_data[0]
+            name = name.lower()
+            name = name.replace(' ', '-')
             for accent in dict_accents.keys():
-                identif = identif.replace(accent, dict_accents[accent])
+                name = name.replace(accent, dict_accents[accent])
 
-            subject_nr = returned_data[1]
+            subject_number = returned_data[1]
             if len(groups) > 1:
                 group = returned_data[2]
             else:
                 group = ""
 
             try:
-                subject_nr= int(subject_nr)
-                if subject_nr >= 0:
+                subject_number = int(subject_number)
+                if subject_number >= 0:
                     itsOK = 1
                 else:
                     warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
@@ -272,8 +272,8 @@ def show_subject_settings_dialog(groups, dict_accents):
             core.quit()
 
     subject_settings = {
-        "identif" : identif,
-        "subject_nr" : subject_nr,
+        "identif" : name,
+        "subject_nr" : subject_number,
         "group" : group
     }
     return subject_settings
