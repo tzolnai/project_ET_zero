@@ -33,11 +33,20 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         (tempdir, trail) = os.path.split(tempdir)
         tempdir = os.path.join(tempdir, "data")
         tempdir = os.path.join(tempdir, "experiment_settings")
+
         # remove all temp files
         for file in os.listdir(tempdir):
             file_path = os.path.join(tempdir, file)
             if os.path.isfile(file_path):
                 os.unlink(file_path)
+
+    def setUp(self):
+        tempdir = os.path.abspath(__file__)
+        (tempdir, trail) = os.path.split(tempdir)
+        tempdir = os.path.join(tempdir, "data")
+        tempdir = os.path.join(tempdir, "experiment_settings")
+        if not os.path.exists(tempdir):
+            os.makedirs(tempdir)
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
