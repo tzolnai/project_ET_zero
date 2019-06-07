@@ -1,3 +1,5 @@
 [submodule "externals/psychopy_mock"]
 	path = externals/psychopy_mock
 	url = git://github.com/tzolnai/psychopy_mock.git
+[submodule "externals/psychopy_mock"]
+	ignore = untracked
