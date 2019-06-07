@@ -728,29 +728,22 @@ def stim_bg():
         stimbg.pos = dict_pos[i]
         stimbg.draw()
 
-def unexpectedquit():
-    for l in instruction_helper.unexp_quit:
+def show_instruction(instruction_list):
+    for l in instruction_list:
         print_to_screen(l)
         mywindow.flip()
         tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
         if exp_settings.key_quit in tempkey:
-            core.quit() 
+            core.quit()
+
+def unexpectedquit():
+    show_instruction(instruction_helper.unexp_quit)
 
 def instructions():
-    for l in instruction_helper.insts:
-        print_to_screen(l)
-        mywindow.flip()
-        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
-        if exp_settings.key_quit in tempkey:
-            core.quit() 
+    show_instruction(instruction_helper.insts)
 
 def ending():
-    for l in instruction_helper.ending:
-        print_to_screen(l)
-        mywindow.flip()
-        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
-        if exp_settings.key_quit in tempkey:
-            core.quit() 
+    show_instruction(instruction_helper.ending)
 
 def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
 
