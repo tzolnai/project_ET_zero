@@ -181,45 +181,48 @@ class ExperimentSettings:
                                 'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
 
+# Class for handle instruction strings (reading from file, storing and displaying)
+class InstructionHelper:
+
+    def __init__(self):
+        self.insts = []
+        self.feedback_exp = []
+        self.feedback_imp = []
+        self.feedback_speed = []
+        self.feedback_accuracy = []
+        self.ending = []
+        self.unexp_quit = []
+
+    # Be aware of that line endings are preserved during reading instructions
+    def read_insts_from_file(self, inst_feedback_path):
+        try:
+            with codecs.open(inst_feedback_path, 'r', encoding = 'utf-8') as inst_feedback:
+                all_inst_feedback = inst_feedback.read().split('***')
+        except:
+            all_inst_feedback=[]
+
+        for all in all_inst_feedback:
+            all = all.split('#')
+            if len(all) >= 2:
+                if 'inst' in all[0]:
+                    self.insts.append(all[1])
+                elif 'feedback explicit' in all[0]:
+                    self.feedback_exp.append(all[1])
+                elif 'feedback implicit' in all[0]:
+                    self.feedback_imp.append(all[1])
+                elif 'speed' in all[0]:
+                    self.feedback_speed.append(all[1])
+                elif 'accuracy' in all[0]:
+                    self.feedback_accuracy.append(all[1])
+                elif 'ending' in all[0]:
+                    self.ending.append(all[1])
+                elif 'unexpected quit' in all[0]:
+                    self.unexp_quit.append(all[1])
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
 
-# Be aware of that line endings are preserved during reading instructions
-def read_instructions(inst_feedback_path):
-    try:
-        with codecs.open(inst_feedback_path, 'r', encoding = 'utf-8') as inst_feedback:
-            all_inst_feedback = inst_feedback.read().split('***')
-    except:
-        all_inst_feedback=[]
-
-    insts= []
-    feedback_exp = []
-    feedback_imp = []
-    feedback_speed = []
-    feedback_accuracy = []
-    ending = []
-    unexp_quit = []
-
-    for all in all_inst_feedback:
-        all = all.split('#')
-        if len(all) >= 2:
-            if 'inst' in all[0]:
-                insts.append(all[1])
-            elif 'feedback explicit' in all[0]:
-                feedback_exp.append(all[1])
-            elif 'feedback implicit' in all[0]:
-                feedback_imp.append(all[1])
-            elif 'speed' in all[0]:
-                feedback_speed.append(all[1])
-            elif 'accuracy' in all[0]:
-                feedback_accuracy.append(all[1])
-            elif 'ending' in all[0]:
-                ending.append(all[1])
-            elif 'unexpected quit' in all[0]:
-                unexp_quit.append(all[1])
-
-    return insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit
 
 ### Settings dialogs
 
@@ -726,7 +729,7 @@ def stim_bg():
         stimbg.draw()
 
 def unexpectedquit():
-    for l in unexp_quit:
+    for l in instruction_helper.unexp_quit:
         print_to_screen(l)
         mywindow.flip()
         tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
@@ -734,7 +737,7 @@ def unexpectedquit():
             core.quit() 
 
 def instructions():
-    for l in insts:
+    for l in instruction_helper.insts:
         print_to_screen(l)
         mywindow.flip()
         tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
@@ -742,7 +745,7 @@ def instructions():
             core.quit() 
 
 def ending():
-    for l in ending:
+    for l in instruction_helper.ending:
         print_to_screen(l)
         mywindow.flip()
         tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
@@ -751,7 +754,7 @@ def ending():
 
 def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
 
-    for l in feedback_exp:
+    for l in instruction_helper.feedback_exp:
         l = l.replace('*MEANRT*', rt_m)
         l = l.replace('*MEANRTP*', rt_m_p)
         l = l.replace('*PERCACCP*', acc_for_p)
@@ -759,9 +762,9 @@ def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
         
         if exp_settings.whether_warning is True:
             if acc_for_the_whole > exp_settings.speed_warning:
-                l = l.replace('*SPEEDACC*', feedback_speed[0])
+                l = l.replace('*SPEEDACC*', instruction_helper.feedback_speed[0])
             elif acc_for_the_whole < exp_settings.acc_warning:
-                l = l.replace('*SPEEDACC*', feedback_accuracy[0])
+                l = l.replace('*SPEEDACC*', instruction_helper.feedback_accuracy[0])
             else:
                 l = l.replace('*SPEEDACC*', '')
             
@@ -774,15 +777,15 @@ def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
             return 'continue'
 
 def feedback_implicit(rt_m = "", acc_for_the_w= ""):
-    for i in feedback_imp:
+    for i in instruction_helper.feedback_imp:
         i = i.replace('*MEANRT*', rt_m)
         i = i.replace('*PERCACC*', acc_for_the_w)
         
         if exp_settings.whether_warning is True:
             if acc_for_the_whole > exp_settings.speed_warning:
-                i = i.replace('*SPEEDACC*', feedback_speed[0])
+                i = i.replace('*SPEEDACC*', instruction_helper.feedback_speed[0])
             elif acc_for_the_whole < exp_settings.acc_warning:
-                i = i.replace('*SPEEDACC*', feedback_accuracy[0])
+                i = i.replace('*SPEEDACC*', instruction_helper.feedback_accuracy[0])
             else:
                 i = i.replace('*SPEEDACC*', '')
             
@@ -2533,13 +2536,12 @@ for i in [1,2,3,4,5,6]:
 
 def main():
     global colors
-    global insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit
     global thisperson_settings, group, subject_nr, identif
     global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
     global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
     global stimbg, stimP, stimR, stim_pressed
     global frame_time, frame_sd, frame_rate
-    global exp_settings
+    global exp_settings, instruction_helper
 
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
@@ -2550,8 +2552,9 @@ def main():
 
     colors = { 'wincolor' : exp_settings.asrt_background, 'linecolor':'black', 'stimp':exp_settings.asrt_pcolor, 'stimr':exp_settings.asrt_rcolor}
 
+    instruction_helper = InstructionHelper()
     inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
-    insts, feedback_exp, feedback_imp, feedback_speed, feedback_accuracy, ending, unexp_quit = read_instructions(inst_feedback_path)
+    instruction_helper.read_insts_from_file(inst_feedback_path)
 
     thisperson_settings, group, subject_nr, identif = participant_id()
     nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
