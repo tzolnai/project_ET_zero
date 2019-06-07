@@ -18,9 +18,11 @@
 
 import unittest
 
+import os
+
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + sys.path
+sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
 import asrt
 
