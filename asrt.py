@@ -219,6 +219,80 @@ class InstructionHelper:
                 elif 'unexpected quit' in all[0]:
                     self.unexp_quit.append(all[1])
 
+    # Display given string in the given window
+    def __print_to_screen(self, mytext, mywindow):
+        text_stim = visual.TextStim(mywindow, text = mytext, units = 'cm', height = 0.6, color = 'black')
+        text_stim.draw()
+
+    # Display simple instructions on the screen
+    def __show_message(self, instruction_list, mywindow, expriment_settings):
+        # There can be more instructions to display successively
+        for inst in instruction_list:
+            self.__print_to_screen(inst, mywindow)
+            mywindow.flip()
+            tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            if expriment_settings.key_quit in tempkey:
+                core.quit()
+
+    def show_instructions(self, mywindow, expriment_settings):
+        self.__show_message(self.insts, mywindow, expriment_settings)
+
+    def show_unexp_quit(self, mywindow, expriment_settings):
+        self.__show_message(self.unexp_quit, mywindow, expriment_settings)
+
+    def show_ending(self, mywindow, expriment_settings):
+        self.__show_message(self.ending, mywindow, expriment_settings)
+
+    def feedback_explicit(self, rt_mean, rt_mean_p, acc_for_pattern, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
+
+        for l in self.feedback_exp:
+            l = l.replace('*MEANRT*', rt_mean)
+            l = l.replace('*MEANRTP*', rt_mean_p)
+            l = l.replace('*PERCACCP*', acc_for_pattern)
+            l = l.replace('*PERCACC*', acc_for_the_whole_str)
+
+            if expriment_settings.whether_warning is True:
+                if acc_for_the_whole > expriment_settings.speed_warning:
+                    l = l.replace('*SPEEDACC*', self.feedback_speed[0])
+                elif acc_for_the_whole < expriment_settings.acc_warning:
+                    l = l.replace('*SPEEDACC*', self.feedback_accuracy[0])
+                else:
+                    l = l.replace('*SPEEDACC*', '')
+            else:
+                l = l.replace('*SPEEDACC*', '')
+
+            self.__print_to_screen(l, mywindow)
+            mywindow.flip()
+            tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            if expriment_settings.key_quit in tempkey:
+                return 'quit'
+            else:
+                return 'continue'
+
+    def feedback_implicit(self, rt_mean, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
+
+        for i in self.feedback_imp:
+            i = i.replace('*MEANRT*', rt_mean)
+            i = i.replace('*PERCACC*', acc_for_the_whole_str)
+
+            if expriment_settings.whether_warning is True:
+                if acc_for_the_whole > expriment_settings.speed_warning:
+                    i = i.replace('*SPEEDACC*', self.feedback_speed[0])
+                elif acc_for_the_whole < expriment_settings.acc_warning:
+                    i = i.replace('*SPEEDACC*', self.feedback_accuracy[0])
+                else:
+                    i = i.replace('*SPEEDACC*', '')
+            else:
+                i = i.replace('*SPEEDACC*', '')
+
+            self.__print_to_screen(i, mywindow)
+            mywindow.flip()
+            tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            if expriment_settings.key_quit in tempkey:
+                return 'quit'
+            else:
+                return 'continue'
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
@@ -727,68 +801,6 @@ def stim_bg():
     for i in range(1,5):
         stimbg.pos = dict_pos[i]
         stimbg.draw()
-
-def show_instruction(instruction_list):
-    for l in instruction_list:
-        print_to_screen(l)
-        mywindow.flip()
-        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
-        if exp_settings.key_quit in tempkey:
-            core.quit()
-
-def unexpectedquit():
-    show_instruction(instruction_helper.unexp_quit)
-
-def instructions():
-    show_instruction(instruction_helper.insts)
-
-def ending():
-    show_instruction(instruction_helper.ending)
-
-def feedback_explicit(rt_m ="", rt_m_p = "", acc_for_p= "", acc_for_the_w= ""):
-
-    for l in instruction_helper.feedback_exp:
-        l = l.replace('*MEANRT*', rt_m)
-        l = l.replace('*MEANRTP*', rt_m_p)
-        l = l.replace('*PERCACCP*', acc_for_p)
-        l = l.replace('*PERCACC*', acc_for_the_w)
-        
-        if exp_settings.whether_warning is True:
-            if acc_for_the_whole > exp_settings.speed_warning:
-                l = l.replace('*SPEEDACC*', instruction_helper.feedback_speed[0])
-            elif acc_for_the_whole < exp_settings.acc_warning:
-                l = l.replace('*SPEEDACC*', instruction_helper.feedback_accuracy[0])
-            else:
-                l = l.replace('*SPEEDACC*', '')
-            
-        print_to_screen(l)
-        mywindow.flip()
-        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
-        if exp_settings.key_quit in tempkey:
-            return 'quit'
-        else:
-            return 'continue'
-
-def feedback_implicit(rt_m = "", acc_for_the_w= ""):
-    for i in instruction_helper.feedback_imp:
-        i = i.replace('*MEANRT*', rt_m)
-        i = i.replace('*PERCACC*', acc_for_the_w)
-        
-        if exp_settings.whether_warning is True:
-            if acc_for_the_whole > exp_settings.speed_warning:
-                i = i.replace('*SPEEDACC*', instruction_helper.feedback_speed[0])
-            elif acc_for_the_whole < exp_settings.acc_warning:
-                i = i.replace('*SPEEDACC*', instruction_helper.feedback_accuracy[0])
-            else:
-                i = i.replace('*SPEEDACC*', '')
-            
-        print_to_screen(i)
-        mywindow.flip()
-        tempkey = event.waitKeys(keyList= [exp_settings.key1, exp_settings.key2, exp_settings.key3, exp_settings.key4, exp_settings.key_quit])
-        if exp_settings.key_quit in tempkey:
-            return 'quit'
-        else:
-            return 'continue'
 
 def heading_to_output():
     try:
@@ -1565,10 +1577,10 @@ def presentation():
     
      
     if (startfrom+1) in exp_settings.sessionstarts:
-        instructions()
+        instruction_helper.show_instructions(mywindow, exp_settings)
         
     else:
-        unexpectedquit()
+        instruction_helper.show_unexp_quit(mywindow, exp_settings)
         trial_after_quit = 0 ######################################################################
                 
     relative_directions = []
@@ -2436,7 +2448,7 @@ def presentation():
 
             try:
                 acc_for_the_whole = 100*float( Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
-                acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',') + ' %'  # ezzel nem kezdek semmit latszolag
+                acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',')
                 
             except:
                 acc_for_the_whole = 'N/A'
@@ -2458,9 +2470,9 @@ def presentation():
 
 
             if exp_settings.asrt_types[stim_sessionN[N-1]] == 'explicit':
-                whatnow = feedback_explicit(rt_m = rt_mean_str, rt_m_p = rt_mean_p_str, acc_for_p = acc_for_patterns_str, acc_for_the_w = acc_for_the_whole_str )
+                whatnow = instruction_helper.feedback_explicit(rt_mean_str, rt_mean_p_str, acc_for_patterns_str, acc_for_the_whole, acc_for_the_whole_str, mywindow, exp_settings)
             else:
-                whatnow = feedback_implicit(rt_mean_str, acc_for_the_whole_str)
+                whatnow = instruction_helper.feedback_implicit(rt_mean_str, acc_for_the_whole, acc_for_the_whole_str, mywindow, exp_settings)
 
             if whatnow == 'continue':
                 pass
@@ -2585,7 +2597,7 @@ def main():
     outfile_txt.write('sessionend_planned_quit')
     outfile_txt.close()
 
-    ending()
+    instruction_helper.show_ending(mywindow, exp_settings)
 
 if __name__ == "__main__":
     main()

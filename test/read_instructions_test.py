@@ -43,7 +43,7 @@ class readInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file(inst_feedback_path)
 
         self.assertEqual(len(instruction_helper.insts), 3)
-        self.assertEqual(len(instruction_helper.feedback_exp), 0)
+        self.assertEqual(len(instruction_helper.feedback_exp), 1)
         self.assertEqual(len(instruction_helper.feedback_imp), 1)
         self.assertEqual(len(instruction_helper.feedback_speed), 1)
         self.assertEqual(len(instruction_helper.feedback_accuracy), 1)
@@ -66,6 +66,13 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(instruction_helper.feedback_imp[0], "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
                                                              "Pontosságod: *PERCACC* %\r\n"
                                                              "Átlagos reakcióidőd: *MEANRT* másodperc\r\n"
+                                                             "*SPEEDACC*\r\n\r\n")
+
+        self.assertEqual(instruction_helper.feedback_exp[0], "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                             "Pontosságod általában: *PERCACC* %\r\n"
+                                                             "Átlagos reakcióidőd: *MEANRT* másodperc\r\n"
+                                                             "Pontosságod a bejósolható elemeknél: *PERCACCP* %\r\n"
+                                                             "Átlagos reakcióidőd a bejósolható elemeknél: *MEANRTP* másodperc\r\n"
                                                              "*SPEEDACC*\r\n\r\n")
 
         self.assertEqual(instruction_helper.feedback_speed[0], "\r\nLegyél gyorsabb!\r\n\r\n")

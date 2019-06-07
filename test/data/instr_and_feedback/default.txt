@@ -43,6 +43,19 @@ Pontosságod: *PERCACC* %
 
 ***
 
+feedback explicit#
+
+Most pihenhetsz egy kicsit.
+
+Pontosságod általában: *PERCACC* %
+Átlagos reakcióidőd: *MEANRT* másodperc
+Pontosságod a bejósolható elemeknél: *PERCACCP* %
+Átlagos reakcióidőd a bejósolható elemeknél: *MEANRTP* másodperc
+*SPEEDACC*
+
+***
+***
+
 feedback speed#
 Legyél gyorsabb!
 
