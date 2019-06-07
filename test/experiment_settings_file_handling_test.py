@@ -31,8 +31,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
     def tearDown(self):
         tempdir = os.path.abspath(__file__)
         (tempdir, trail) = os.path.split(tempdir)
-        tempdir = os.path.join(tempdir, "data")
-        tempdir = os.path.join(tempdir, "experiment_settings")
+        tempdir = os.path.join(tempdir, "data", "experiment_settings")
 
         # remove all temp files
         for file in os.listdir(tempdir):
@@ -43,8 +42,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
     def setUp(self):
         tempdir = os.path.abspath(__file__)
         (tempdir, trail) = os.path.split(tempdir)
-        tempdir = os.path.join(tempdir, "data")
-        tempdir = os.path.join(tempdir, "experiment_settings")
+        tempdir = os.path.join(tempdir, "data", "experiment_settings")
         if not os.path.exists(tempdir):
             os.makedirs(tempdir)
 

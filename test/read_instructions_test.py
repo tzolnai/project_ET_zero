@@ -31,9 +31,7 @@ class readInstructionsTest(unittest.TestCase):
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
         (inst_feedback_path, trail) = os.path.split(filepath)
-        inst_feedback_path = os.path.join(inst_feedback_path, "data")
-        inst_feedback_path = os.path.join(inst_feedback_path, "instr_and_feedback")
-        inst_feedback_path = os.path.join(inst_feedback_path, file_name)
+        inst_feedback_path = os.path.join(inst_feedback_path, "data", "instr_and_feedback", file_name)
         return inst_feedback_path
 
     def testDefaultInstructionSet(self):
