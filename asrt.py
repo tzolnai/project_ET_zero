@@ -185,13 +185,13 @@ class ExperimentSettings:
 class InstructionHelper:
 
     def __init__(self):
-        self.insts = []
-        self.feedback_exp = []
-        self.feedback_imp = []
-        self.feedback_speed = []
-        self.feedback_accuracy = []
-        self.ending = []
-        self.unexp_quit = []
+        self.insts = []                 # instructions in the beginning of the experiment
+        self.feedback_exp = []          # feedback for the subject about speed and accuracy in the explicit asrt case
+        self.feedback_imp = []          # feedback for the subject about speed and accuracy in the explicit asrt case
+        self.feedback_speed = []        # speed feedback line embedded into feedback_imp / feedback_exp
+        self.feedback_accuracy = []     # accuracy feedback line embedded into feedback_imp / feedback_exp
+        self.ending = []                # message in the end of the experiment
+        self.unexp_quit = []            # shown message when continuing sessions after the previous data recoding was quited
 
     # Be aware of that line endings are preserved during reading instructions
     def read_insts_from_file(self, inst_feedback_path):
