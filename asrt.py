@@ -1582,7 +1582,6 @@ def presentation():
         trial_after_quit = 0 ######################################################################
                 
     relative_directions = []
-    last_hand = ""
     
     Npressed_in_block = 0
     pressed_buttons = []
