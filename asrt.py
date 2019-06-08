@@ -772,16 +772,14 @@ def participant_id():
 
 def monitor_settings():
     screen = pyglet.window.get_platform().get_default_display().get_default_screen()
-    dimension_x = screen.width
-    dimension_y = screen.height
 
     ## Monitor beállítása
     my_monitor = monitors.Monitor('myMon')
-    my_monitor.setSizePix( [dimension_x, dimension_y] ) 
+    my_monitor.setSizePix( [screen.width, screen.height] )
     my_monitor.setWidth(exp_settings.monitor_width) # cm-ben
     my_monitor.saveMon()
-    
-    return dimension_x, dimension_y, my_monitor
+
+    return my_monitor
 
 def print_to_screen(mytext = u""):
     xtext.text = mytext
@@ -2549,7 +2547,7 @@ def main():
 
     exp_settings = ExperimentSettings()
     all_settings_def(exp_settings)
-    dimension_x, dimension_y, my_monitor = monitor_settings()
+    my_monitor = monitor_settings()
 
     colors = { 'wincolor' : exp_settings.asrt_background, 'linecolor':'black', 'stimp':exp_settings.asrt_pcolor, 'stimr':exp_settings.asrt_rcolor}
 
@@ -2561,7 +2559,7 @@ def main():
     nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
-    mywindow = visual.Window (size = (dimension_x, dimension_y), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
+    mywindow = visual.Window (size = (my_monitor.getSizePix()[0], my_monitor.getSizePix()[1]), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
 
     xtext = visual.TextStim(mywindow, text = u"", units = "cm", height = 0.6, color = "black")
 
