@@ -1792,8 +1792,6 @@ def presentation():
             stimbuttonnr = pressed_dict[ press [0][0] ]
             stim_allACC  = allACC
 
-            akarmi = core.Clock()
-
            # kiszamitjuk, mik voltak a latott/nyomott kombinaciok (ingerhatosok szintjeig)
 
             stim_duplet, stim_triplet, stim_quartet, stim_quintet, stim_sextet = combos(stims_in_block)
@@ -2431,8 +2429,6 @@ def presentation():
 
                 break
             
-        print (akarmi.getTime())
-
         if N in exp_settings.blockstarts: # n+1 volt
             
             print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
