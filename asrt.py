@@ -2519,7 +2519,7 @@ def presentation():
 
 # some constants and dictionaries
 
-thispath = '\\'.join( os.path.realpath(__file__).split('\\')[:-1])
+thispath = os.path.split(os.path.abspath(__file__))[0]
 dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
 
 sequences_PCode = { 1 : 1234, 2 : 1243, 3 : 1324, 4 : 1342, 5 : 1423, 6 : 1432 }
