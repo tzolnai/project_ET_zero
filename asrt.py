@@ -795,7 +795,6 @@ def heading_to_output():
                                 'Pcode_Types', 
 
                                 'output_line',
-                                'userquit_log',
                                 
                                 'session',
                                 'epoch',  
@@ -863,15 +862,12 @@ def presentation():
     RSI_timer = 0.0
     startfrom = thisperson_settings.get('last_N')
     N = startfrom + 1
-
-    trial_after_quit = '0' ###########################################################################
     
     if (startfrom+1) in exp_settings.sessionstarts:
         instruction_helper.show_instructions(mywindow, exp_settings)
         
     else:
         instruction_helper.show_unexp_quit(mywindow, exp_settings)
-        trial_after_quit = 0 ######################################################################
     
     Npressed_in_block = 0
     accs_in_block  = []
@@ -895,14 +891,6 @@ def presentation():
         
         RSI_clock.reset()
         RSI.start( exp_settings.RSI_time)
-         
-        try:
-            trial_after_quit += 1
-            if trial_after_quit == 6:
-                trial_after_quit = "0"
-        except:
-            trial_after_quit = "0"
-        
         
         if stimpr[N] == 'P':
             if exp_settings.asrt_types[stim_sessionN[N]] == 'explicit':
@@ -995,7 +983,6 @@ def presentation():
                         PCode_types,
 
                         stim_output_line,
-                        trial_after_quit,
 
                         stim_sessionN[N], 
                         stimepoch[N],  
