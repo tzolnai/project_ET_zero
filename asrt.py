@@ -1112,7 +1112,7 @@ def main():
     global thisperson_settings, group, subject_nr, identif
     global PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
     global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
-    global stimbg, stimP, stimR, stim_pressed
+    global stimbg, stimP, stimR
     global frame_time, frame_sd, frame_rate
     global exp_settings, instruction_helper
 
@@ -1151,8 +1151,6 @@ def main():
     stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
     stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
-    stim_pressed = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = 'gray', lineColor = colors['linecolor'], lineWidth = 3, pos = dict_pos[1])
-
 
     frame_time, frame_sd, frame_rate = frame_check()
 
