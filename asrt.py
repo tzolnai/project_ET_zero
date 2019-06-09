@@ -1132,17 +1132,6 @@ thispath = os.path.split(os.path.abspath(__file__))[0]
 dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
 
 sequences_PCode = { 1 : 1234, 2 : 1243, 3 : 1324, 4 : 1342, 5 : 1423, 6 : 1432 }
-sequence_highs = {}
-sequence_highs_long = {}
-for i in [1,2,3,4,5,6]:
-    temp = []
-    for k in [1,2,3,4]:
-        temp.append(str(sequences_PCode[i])[0]+str(k)+str(sequences_PCode[i])[1])
-        temp.append(str(sequences_PCode[i])[1]+str(k)+str(sequences_PCode[i])[2])
-        temp.append(str(sequences_PCode[i])[2]+str(k)+str(sequences_PCode[i])[3])
-        temp.append(str(sequences_PCode[i])[3]+str(k)+str(sequences_PCode[i])[0])
-    sequence_highs[i] = temp[:]
-    sequence_highs_long[sequences_PCode[i]] = temp[:]
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # vezerles
