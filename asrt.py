@@ -520,24 +520,6 @@ def all_settings_def(experiment_settings):
         exp_settings.write_out_reminder(reminder_file_path)
 
 def get_thisperson_settings():
-    
-    nr_of_duplets = thisperson_settings.get('nr_of_duplets', 0)
-    nr_of_triplets = thisperson_settings.get('nr_of_triplets', 0)
-    nr_of_quads = thisperson_settings.get('nr_of_quads', 0)
-    nr_of_quints = thisperson_settings.get('nr_of_quints', 0)
-    nr_of_sexts = thisperson_settings.get('nr_of_sexts', 0)
-
-    pr_nr_of_duplets = thisperson_settings.get('pr_nr_of_duplets', 0)
-    pr_nr_of_triplets = thisperson_settings.get('pr_nr_of_triplets', 0)
-    pr_nr_of_quads = thisperson_settings.get('pr_nr_of_quads', 0)
-    pr_nr_of_quints = thisperson_settings.get('pr_nr_of_quints', 0)
-    pr_nr_of_sexts = thisperson_settings.get('pr_nr_of_sexts', 0)
-
-    context_freq = thisperson_settings.get('context_freq',{})
-    comb_freq = thisperson_settings.get('comb_freq',{})
-    pr_context_freq = thisperson_settings.get('pr_context_freq',{})
-    pr_comb_freq = thisperson_settings.get('pr_comb_freq',{})
-
     PCodes = thisperson_settings.get('PCodes', {})                          #
     PCode_types = thisperson_settings.get('PCode_types','')        #
     stim_output_line = thisperson_settings.get('stim_output_line',0)
@@ -555,7 +537,7 @@ def get_thisperson_settings():
     stim_colorN = thisperson_settings.get('stim_colorN',{})
     stim_quit = thisperson_settings.get('stim_quit',{})
     
-    return nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
+    return PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
 
 def which_code(session_number = 0):
     pcode_raw = PCodes[session_number]
@@ -582,9 +564,6 @@ def participant_id():
     global stim_output_line
     global thisperson_settings, group, identif, subject_nr
     global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stim_quit, stimpr
-    global context_freq, comb_freq, pr_comb_freq, pr_context_freq
-    global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts
-    global pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts
     
     subject_settings = show_subject_settings_dialog(exp_settings.groups, dict_accents)
     identif = subject_settings["identif"]
@@ -620,7 +599,7 @@ def participant_id():
         letezo = 0
         
     if letezo == 1:
-        nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
         if last_N+1 <= exp_settings.maxtrial:
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
@@ -643,7 +622,7 @@ def participant_id():
     else:
         # no such person yet
         thisperson_settings = {}
-        nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
         
         expstart1=gui.Dlg(title=u'Beállítások')
         expstart1.addText('')
@@ -817,10 +796,8 @@ def heading_to_output():
                                 'Pcode_Types', 
 
                                 'output_line',
-                                'outputline_thisstart', #
                                 'trialN_in_whole_ASRT', 
                                 "trialN_in_session",
-                                'trialN_thisstart',         #
                                 
                                 'userquit_log',
                                 
@@ -836,337 +813,12 @@ def heading_to_output():
                                 'date',
                                 'time',
 
-                                'stimulus_color', #uj helyen
-                                'PR', #uj helyen
-                                'RT', #uj helyen
-                                'error', #uj helyen 
-                                'cumulative_error',  #uj helyen
-                                'previous_one_accurate', #uj helyen
-                                'previous_two_accurate', #uj helyen
-                                'previous_three_accurate', #uj helyen
-                                'previous_four_accurate', #uj helyen
-                                'previous_five_accurate', #uj helyen
-
-                                # innenmegy a duplazas meg az anyazas
-
-                                'tripfilter',
-                                'quadfilter',
-
-                                'stimulus', 
-                                'duplet',
-                                'triplet',
-                                'quad',
-                                'quint',
-                                'sext',
-
-                                'sing_frequency',
-                                "dup_frequency",
-                                "trip_frequency",
-                                "quad_frequency",
-                                "quint_frequency",
-                                "sext_frequency",
-                                
-                                'sing_trialprob',
-                                "dup_trialprob",
-                                "trip_trialprob",
-                                "quad_trialprob",
-                                "quint_trialprob",
-                                "sext_trialprob",
-
-                                'thisstart_sing_frequency',
-                                "thisstart_dup_frequency",
-                                "thisstart_trip_frequency",
-                                "thisstart_quad_frequency",
-                                "thisstart_quint_frequency",
-                                "thisstart_sext_frequency",
-                                
-                                'thisstart_sing_trialprob',
-                                "thisstart_dup_trialprob",
-                                "thisstart_trip_trialprob",
-                                "thisstart_quad_trialprob",
-                                "thisstart_quint_trialprob",
-                                "thisstart_sext_trialprob",
-                                
-                                "hand_change",
-
-                                'abstr_dup',
-                                'abstr_trip',
-                                'abstr_quad',
-                                'abstr_quint',
-                                'abstr_sext',
-
-                                "dir_last",
-                                "dir_last_two",
-                                "dir_last_three",
-                                "dir_last_four",
-                                "dir_last_five",
-
-                                "relative_dir_last",
-                                "relative_dir_last_two",
-                                "relative_dir_last_three",
-                                "relative_dir_last_four",
-                                "relative_dir_last_five",
-
-                                "relative_dir_last_up",
-                                "relative_dir_last_two_up",
-                                "relative_dir_last_three_up",
-                                "relative_dir_last_four_up",
-                                "relative_dir_last_five_up",
-
-                                'currentTT',
-                                'currentQT',
-                                'currentQiT',
-                                'currentST',
-
-                                "trip_group",
-                                "quad_group",
-                                "quint_group",
-                                "sext_group",
-
-                                "P1_trip",
-                                "P1_tripT",
-                                "P1_quad",
-                                "P1_quadT",
-                                "P1_quint",
-                                "P1_quintT",
-                                "P1_sext",
-                                "P1_sextT",
-
-                                "P2_trip",
-                                "P2_tripT",
-                                "P2_quad",
-                                "P2_quadT",
-                                "P2_quint",
-                                "P2_quintT",
-                                "P2_sext",
-                                "P2_sextT",
-
-                                "P3_trip",
-                                "P3_tripT",
-                                "P3_quad",
-                                "P3_quadT",
-                                "P3_quint",
-                                "P3_quintT",
-                                "P3_sext",
-                                "P3_sextT",
-
-                                "P4_trip",
-                                "P4_tripT",
-                                "P4_quad",
-                                "P4_quadT",
-                                "P4_quint",
-                                "P4_quintT",
-                                "P4_sext",
-                                "P4_sextT",
-
-                                "P5_trip",
-                                "P5_tripT",
-                                "P5_quad",
-                                "P5_quadT",
-                                "P5_quint",
-                                "P5_quintT",
-                                "P5_sext",
-                                "P5_sextT",
-
-                                "P6_trip",
-                                "P6_tripT",
-                                "P6_quad",
-                                "P6_quadT",
-                                "P6_quint",
-                                "P6_quintT",
-                                "P6_sext",
-                                "P6_sextT",
-
-# ez csak erre vonatkozik
-
-                                'stimbutton',
-
-# innenmegy a duplazas meg az anyazas
-
-                                'pr_tripfilter',
-                                'pr_quadfilter',
-
-                                'pr_stimulus', 
-                                'pr_duplet',
-                                'pr_triplet',
-                                'pr_quad',
-                                'pr_quint',
-                                'pr_sext',
-
-                                'pr_sing_frequency',
-                                "pr_dup_frequency",
-                                "pr_trip_frequency",
-                                "pr_quad_frequency",
-                                "pr_quint_frequency",
-                                "pr_sext_frequency",
-                                
-                                'pr_sing_trialprob',
-                                "pr_dup_trialprob",
-                                "pr_trip_trialprob",
-                                "pr_quad_trialprob",
-                                "pr_quint_trialprob",
-                                "pr_sext_trialprob",
-
-                                'pr_thisstart_sing_frequency',
-                                "pr_thisstart_dup_frequency",
-                                "pr_thisstart_trip_frequency",
-                                "pr_thisstart_quad_frequency",
-                                "pr_thisstart_quint_frequency",
-                                "pr_thisstart_sext_frequency",
-                                
-                                'pr_thisstart_sing_trialprob',
-                                "pr_thisstart_dup_trialprob",
-                                "pr_thisstart_trip_trialprob",
-                                "pr_thisstart_quad_trialprob",
-                                "pr_thisstart_quint_trialprob",
-                                "pr_thisstart_sext_trialprob",
-
-                                "pr_hand_change",
-
-                                'pr_abstr_dup',
-                                'pr_abstr_trip',
-                                'pr_abstr_quad',
-                                'pr_abstr_quint',
-                                'pr_abstr_sext',
-
-                                "pr_dir_last",
-                                "pr_dir_last_two",
-                                "pr_dir_last_three",
-                                "pr_dir_last_four",
-                                "pr_dir_last_five",
-
-                                "pr_relative_dir_last",
-                                "pr_relative_dir_last_two",
-                                "pr_relative_dir_last_three",
-                                "pr_relative_dir_last_four",
-                                "pr_relative_dir_last_five",
-
-                                "pr_relative_dir_last_up",
-                                "pr_relative_dir_last_two_up",
-                                "pr_relative_dir_last_three_up",
-                                "pr_relative_dir_last_four_up",
-                                "pr_relative_dir_last_five_up",
-
-                                'pr_currentTT',
-                                'pr_currentQT',
-                                'pr_currentQiT',
-                                'pr_currentST',
-
-                                "pr_trip_group",
-                                "pr_quad_group",
-                                "pr_quint_group",
-                                "pr_sext_group",
-
-
-                                "pr_P1_trip",
-                                "pr_P1_tripT",
-                                "pr_P1_quad",
-                                "pr_P1_quadT",
-                                "pr_P1_quint",
-                                "pr_P1_quintT",
-                                "pr_P1_sext",
-                                "pr_P1_sextT",
-
-                                "pr_P2_trip",
-                                "pr_P2_tripT",
-                                "pr_P2_quad",
-                                "pr_P2_quadT",
-                                "pr_P2_quint",
-                                "pr_P2_quintT",
-                                "pr_P2_sext",
-                                "pr_P2_sextT",
-
-                                "pr_P3_trip",
-                                "pr_P3_tripT",
-                                "pr_P3_quad",
-                                "pr_P3_quadT",
-                                "pr_P3_quint",
-                                "pr_P3_quintT",
-                                "pr_P3_sext",
-                                "pr_P3_sextT",
-
-                                "pr_P4_trip",
-                                "pr_P4_tripT",
-                                "pr_P4_quad",
-                                "pr_P4_quadT",
-                                "pr_P4_quint",
-                                "pr_P4_quintT",
-                                "pr_P4_sext",
-                                "pr_P4_sextT",
-
-                                "pr_P5_trip",
-                                "pr_P5_tripT",
-                                "pr_P5_quad",
-                                "pr_P5_quadT",
-                                "pr_P5_quint",
-                                "pr_P5_quintT",
-                                "pr_P5_sext",
-                                "pr_P5_sextT",
-
-                                "pr_P6_trip",
-                                "pr_P6_tripT",
-                                "pr_P6_quad",
-                                "pr_P6_quadT",
-                                "pr_P6_quint",
-                                "pr_P6_quintT",
-                                "pr_P6_sext",
-                                "pr_P6_sextT",
-
-                                # ez a ketto viszonyara vonatkozik
-
-                                'obs_pr_trip',
-                                'obs_pr_quad',
-                                'obs_pr_quint',
-                                'obs_pr_sext',
-
-                                'anticip_trip_moved_category',
-                                'anticip_quad_moved_category',
-                                'anticip_quint_moved_category',
-                                'anticip_sext_moved_category',
-
-                                'obs_pr_sing_actual_difference_freq',
-                                'obs_pr_dup_actual_difference_freq',
-                                'obs_pr_trip_actual_difference_freq',
-                                'obs_pr_quad_actual_difference_freq',
-                                'obs_pr_quint_actual_difference_freq',
-                                'obs_pr_sext_actual_difference_freq',
-
-                                'obs_pr_sing_actual_difference_prob',
-                                'obs_pr_dup_actual_difference_prob',
-                                'obs_pr_trip_actual_difference_prob',
-                                'obs_pr_quad_actual_difference_prob',
-                                'obs_pr_quint_actual_difference_prob',
-                                'obs_pr_sext_actual_difference_prob',
-                                
-                                'thisstart_obs_pr_sing_actual_difference_freq',
-                                'thisstart_obs_pr_dup_actual_difference_freq',
-                                'thisstart_obs_pr_trip_actual_difference_freq',
-                                'thisstart_obs_pr_quad_actual_difference_freq',
-                                'thisstart_obs_pr_quint_actual_difference_freq',
-                                'thisstart_obs_pr_sext_actual_difference_freq',
-
-                                'thisstart_obs_pr_sing_actual_difference_prob',
-                                'thisstart_obs_pr_dup_actual_difference_prob',
-                                'thisstart_obs_pr_trip_actual_difference_prob',
-                                'thisstart_obs_pr_quad_actual_difference_prob',
-                                'thisstart_obs_pr_quint_actual_difference_prob',
-                                'thisstart_obs_pr_sext_actual_difference_prob'
-                                
-                                ]
-    
-    abclist = ['_a_code', '_b_code', '_c_code', '_d_code', '_e_code', '_f_code' ]
-    
-    for mypc in range(len(PCode_types.split('='))):
-        heading_list.append('anticip_type_trip' + abclist[mypc])
-        heading_list.append('anticip_type_quad' + abclist[mypc])
-        heading_list.append('anticip_type_quint' + abclist[mypc])
-        heading_list.append('anticip_type_sext' + abclist[mypc])
-
-    for mypc in range(len(PCode_types.split('='))):
-        heading_list.append('anticip_move_trip' + abclist[mypc])
-        heading_list.append('anticip_move_type_quad' + abclist[mypc])
-        heading_list.append('anticip_move_type_quint' + abclist[mypc])
-        heading_list.append('anticip_move_type_sext' + abclist[mypc])
+                                'stimulus_color',
+                                'PR',
+                                'RT',
+                                'error',
+                                'stimulus',
+                                'stimbutton']
 
     heading_list.append('quit_log')
 
@@ -1176,118 +828,8 @@ def heading_to_output():
             outfile_txt.write(h+'\t')
         outfile_txt.close()
 
-def otherseq(codenum = "1234", listfrom = []):
-    
-    codenum = codenum*3
-    #trip
-    try:
-        trip_pattern = str(listfrom[-3]) + str(listfrom[-1])
-        if trip_pattern in codenum:
-            tripASRT = "5"
-            tripASRT_type = "H"
-        else:
-            tripASRT = "1"
-            tripASRT_type = "L"
-    except:
-        tripASRT= ""
-        tripASRT_type = ""
-        
-        
-    #quad 
-    try:
-        quad_pattern1 = str(listfrom[-4])+ str(listfrom[-2])
-        quad_pattern2 = str(listfrom[-3])+ str(listfrom[-1])
-        if (quad_pattern1 in codenum) or (quad_pattern2 in codenum):
-            if (quad_pattern1 in codenum) and (quad_pattern2 in codenum):
-                quadASRT = "2"
-                quadASRT_type = "H1"
-            else:
-                quadASRT = "1"
-                if tripASRT_type == "H":
-                    quadASRT_type = "H2"
-                elif tripASRT_type == "L":
-                    quadASRT_type = "L"
-        else:
-            quadASRT = "0"
-            quadASRT_type = "NA"
-    except:
-        quadASRT = ""
-        quadASRT_type = ""
-        
-        
-    #quint
-    try:
-        quint1 = str(listfrom[-5])+str(listfrom[-3])+str(listfrom[-1])
-        quint2 = str(listfrom[-4])+str(listfrom[-2])
-        quint_context =  str(listfrom[-5])+str(listfrom[-3])
-        if (quint1 in codenum) or (quint2 in codenum):
-            if (quint1 in codenum) and (quint2 in codenum):
-                quintASRT = "5"
-                quintASRT_type = "H1b"
-            elif quint1 in codenum:
-                quintASRT = "4"
-                quintASRT_type = "H2"
-            elif quint2 in codenum:
-                quintASRT = "1"
-                if (quadASRT_type == "L") and (quint_context in codenum):
-                    quintASRT_type = "La"
-                elif (quadASRT_type == "L"):
-                    quintASRT_type = "Lb"
-                elif quadASRT_type  == "H1":
-                    quintASRT_type = "H1a"
-
-        else: 
-            quintASRT = "0"
-            quintASRT_type = "NA"
-
-    except:
-        quintASRT = ""
-        quintASRT_type = ""
-    
-    #sext
-    try:
-        sext1 = str(listfrom[-6]) + str(listfrom[-4]) + str(listfrom[-2])
-        sext2 =str(listfrom[-5]) + str(listfrom[-3]) + str(listfrom[-1])
-        if (sext1 in codenum) or (sext2 in codenum):
-            if (sext1 in codenum) and (sext2 in codenum):
-                sextASRT = "2"
-                sextASRT_type = "H1b-I"
-            else:
-                sextASRT = "1"
-                if quintASRT_type == "H1b":
-                    sextASRT_type = "H1b-II"
-                else:
-                    sextASRT_type = quintASRT_type
-        else:
-            sextASRT = "0"
-            sextASRT_type = "NA"
-    except:
-        sextASRT = ""
-        sextASRT_type =""
-    
-    if 'noPattern' in codenum:
-        tripASRT, tripASRT_type, quadASRT, quadASRT_type, quintASRT, quintASRT_type, sextASRT, sextASRT_type = "","","","","","","",""
-    return tripASRT, tripASRT_type, quadASRT, quadASRT_type, quintASRT, quintASRT_type, sextASRT, sextASRT_type
-
 def save_personal_info(mydict ={}):
     global thisperson_settings
-
-    thisperson_settings['nr_of_duplets'] = nr_of_duplets
-    thisperson_settings['nr_of_triplets'] = nr_of_triplets
-    thisperson_settings['nr_of_quads'] = nr_of_quads
-    thisperson_settings['nr_of_quints'] = nr_of_quints
-    thisperson_settings['nr_of_sexts'] = nr_of_sexts
-    
-    thisperson_settings['pr_nr_of_duplets'] = pr_nr_of_duplets
-    thisperson_settings['pr_nr_of_triplets'] = pr_nr_of_triplets
-    thisperson_settings['pr_nr_of_quads'] = pr_nr_of_quads
-    thisperson_settings['pr_nr_of_quints'] = pr_nr_of_quints
-    thisperson_settings['pr_nr_of_sexts'] = pr_nr_of_sexts
-
-    thisperson_settings['context_freq'] = context_freq
-    thisperson_settings['comb_freq'] = comb_freq
-    thisperson_settings['pr_context_freq'] = pr_context_freq
-    thisperson_settings['pr_comb_freq'] = pr_comb_freq
 
     thisperson_settings[ 'PCodes' ] = PCodes
     thisperson_settings[ 'PCode_types' ] = PCode_types
@@ -1317,251 +859,8 @@ def save_personal_info(mydict ={}):
     p_settings_file.sync()
     p_settings_file.close()
 
-def combos(listfrom = []):
-    
-    try:
-        sext = listfrom[-6] * 100000 + listfrom[-5] * 10000 + listfrom[-4] * 1000 + listfrom[-3] * 100 + listfrom[-2] * 10 + listfrom[-1]
-    except:
-        sext = ""
-
-    try:
-        quint =  listfrom[-5] * 10000 + listfrom[-4] * 1000 + listfrom[-3] * 100 + listfrom[-2] * 10 + listfrom[-1]
-    except:
-        quint = ""
-        
-    try:
-        quad = listfrom[-4] * 1000 + listfrom[-3] * 100 + listfrom[-2] * 10 + listfrom[-1]
-    except:
-        quad = ""
-
-    try:
-        trip = listfrom[-3] * 100 + listfrom[-2] * 10 + listfrom[-1]
-    except:
-        trip = ""
-        
-    try:
-        dup = listfrom[-2] * 10 + listfrom[-1]
-    except:
-        dup = ""
-        
-    return dup, trip, quad, quint, sext
-        
-def previous_accuracy(listfrom = []):
-    
-    try:
-        if listfrom[-6] + listfrom[-5] + listfrom[-4] + listfrom[-3] + listfrom[-2] == 0:
-            last_five = 1
-        else:
-            last_five = 0
-    except:
-        last_five = ''
-
-    try:
-        if  listfrom[-5] + listfrom[-4] + listfrom[-3] + listfrom[-2] == 0:
-            last_four = 1
-        else:
-            last_four = 0
-    except:
-        last_four = ''
-        
-    try:
-        if  listfrom[-4] + listfrom[-3] + listfrom[-2] == 0:
-            last_three = 1
-        else:
-            last_three = 0
-    except:
-        last_three = ''
-
-    try:
-        if  listfrom[-3] + listfrom[-2] == 0:
-            last_two = 1
-        else:
-            last_two = 0
-    except:
-        last_two = ''
-        
-    try:
-        if listfrom[-2] == 0:
-            last_one = 1
-        else:
-            last_one = 0
-    except:
-        last_one = ''
-
-    return last_five, last_four, last_three, last_two, last_one
-
-def directions_def(listfrom = []):
-    
-    try:
-        dir_one = listfrom[-1]
-    except:
-        dir_one = ''
-        
-    try:
-        dir_two = listfrom[-2] + listfrom[-1]
-    except:
-        dir_two = ''
-
-    try:
-        dir_three = listfrom[-3] + listfrom[-2] + listfrom[-1]
-    except:
-        dir_three = ''
-
-    try:
-        dir_four = listfrom[-4] + listfrom[-3] + listfrom[-2] + listfrom[-1]
-    except:
-        dir_four = ''
-
-    try:
-        dir_five = listfrom[-5] + listfrom[-4] + listfrom[-3] + listfrom[-2] + listfrom[-1]
-    except:
-        dir_five = ''
-
-    return dir_one, dir_two, dir_three, dir_four, dir_five
-
-def reldir(howmany = 1, listfrom=[], lastdlist = []):
-    prevs = lastdlist[:-1]
-    to_return = ''
-    try:
-        for i in range(howmany): 
-            if listfrom[-i-1] in (">","<"):
-                if listfrom[-i-2] == 'R':
-                    immediate = 0
-                elif listfrom[-i-2] in (">","<"):
-                    immediate = 1
-                else:
-                    pass
-                lastd = prevs[-1]
-                if lastd  == listfrom[-i-1]:
-                    if immediate == 1:
-                        to_return = "S" + to_return
-                    elif immediate == 0:
-                        to_return = "s" + to_return
-                else:
-                    if immediate == 1:
-                        to_return = "O" + to_return
-                    elif immediate == 0:
-                        to_return = "o" + to_return
-                        
-                del prevs[-1]
-            elif listfrom[-i-1] in ("R"):
-                to_return = 'R'+ to_return
-            else:
-                to_return=""
-    except:
-        to_return = ""
-
-    return to_return
-
-def hand_changing(listfrom = [], handdict = {}):
-    try:
-        if handdict[listfrom[-1]] == handdict[listfrom[-2]]:
-            return 'same_as_before'
-        else:
-            return 'different_from_prev'
-    except:
-        return ''
-
-def abstract_structure(listfrom =[], howmany = 3):
-    dict_abst={}
-    dict_abst[ listfrom[-1] ] = 'a'
-    to_return = ''
-    
-    try:
-        for i in range(howmany-1):
-            if listfrom[-2-i] not in dict_abst.keys():
-                if 'b' not in dict_abst.values():
-                    dict_abst[listfrom[-2-i]] = 'b'
-                    to_return = 'b' + to_return
-                elif 'c' not in dict_abst.values():
-                    dict_abst[listfrom[-2-i]] = 'c'
-                    to_return = 'c' + to_return
-                elif 'd' not in dict_abst.values():
-                    dict_abst[listfrom[-2-i]] = 'd'
-                    to_return = 'd' + to_return
-            else:
-                to_return = dict_abst[listfrom[-2-i]] + to_return
-        to_return = to_return + 'a'
-    except:
-        to_return = ''
-    
-    return to_return
-
-def grouped_types (mylist = [], structure = 3):
-    
-    to_return= ''
-    try:
-        for mycode in PCode_types.split("="):
-            mycode = int(mycode)
-            if mylist[mycode-1][structure-3] != '':
-                to_return = to_return + mylist [mycode-1][structure-3] + '-'
-
-        if '-' in to_return:
-            to_return = to_return[:-1]
-    except:
-        to_return=  ''
-       
-    return to_return
-
-def freqs_and_probs( my_dict_stim = {}, my_dict_context = {},   stim_comb = 0, numb = 0):
-    try:
-        if stim_comb != '':
-            to_return_freq = 100 * float( my_dict_stim.get( str(stim_comb), 1) - 1 )  /  (numb -1)
-        else:
-            to_return_freq = ""
-    except ZeroDivisionError:
-        to_return_freq = ''
-    except:
-        print('unhandled exception in the function freqs and probs')
-
-    try:
-        if stim_comb != '':
-            to_return_prob = 100 * float( my_dict_stim.get( str(stim_comb), 1) - 1 )  /  ( my_dict_context.get(str(stim_comb)[0:-1], 1) -1)
-        else:
-            to_return_prob = ''
-    except ZeroDivisionError:
-        to_return_prob = ''
-    except:
-        print('unhandled exception in the function freqs and probs')
-
-    return to_return_freq, to_return_prob
-
-def update_occurences( mydict_whole = {}, mydict_context = {}, current_com = ''):    
-    if not current_com == '':
-        mydict_context [ str(current_com)[0:-1] ] = mydict_context.get(  str(current_com)[0:-1], 0) +1
-        mydict_whole [ str(current_com) ] = mydict_whole.get( str(current_com), 0) +1
-
-def whether_anticip ( type1 = '', type2 = '', mylist =[]):
-    to_return = 0
-    if type1 != '' and type2 != '':
-        to_return = mylist.index(type2) - mylist.index(type1)
-    else:
-        to_return = ''
-    return to_return
-
-def difs(freq=0.0, freq_pr = 0.0, prob = 0.0, prob_pr = 0.0):
-    
-    to_return_freq, to_return_prob = '',''
-    
-    try:
-        to_return_freq = str(freq_pr - freq)
-    except:
-        to_return_freq = ''
-        
-
-    try:
-        to_return_prob = str(prob_pr - prob)
-    except:
-        to_return_prob = ''
-
-    return to_return_freq, to_return_prob
-
 def presentation():
-    global context_freq, comb_freq, pr_context_freq, pr_comb_freq
-    global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts
-    global pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts
-    global pr_nr_of_duplets_thisstart, pr_nr_of_triplets_thisstart, pr_nr_of_quads_thisstart, pr_nr_of_quints_thisstart, pr_nr_of_sexts_thisstart
-    global last_N, N, stim_output_line, thisstart_outputline
+    global last_N, N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
     
@@ -1569,28 +868,18 @@ def presentation():
     RSI_timer = 0.0
     startfrom = thisperson_settings.get('last_N')
     N = startfrom + 1
-    thisstart_N = 1
 
     trial_after_quit = '0' ###########################################################################
     
-     
     if (startfrom+1) in exp_settings.sessionstarts:
         instruction_helper.show_instructions(mywindow, exp_settings)
         
     else:
         instruction_helper.show_unexp_quit(mywindow, exp_settings)
         trial_after_quit = 0 ######################################################################
-                
-    relative_directions = []
     
     Npressed_in_block = 0
-    pressed_buttons = []
-    stims_in_block = []
     accs_in_block  = []
-    directions_in_block = []
-    pr_directions_in_block = []
-    previous_direction = []
-    pr_previous_direction = []
     
     asrt_type = exp_settings.asrt_types[stim_sessionN[N]]
     PCode, Pcode_str = which_code(stim_sessionN[N])
@@ -1601,27 +890,8 @@ def presentation():
     
     RT_pattern_list = []
     RT_all_list = []
-    
-    hand_dict = {1:'left', 2:'left', 3:'right', 4:'right'}
-    
-    thisstart_comb_freq = {}
-    thisstart_context_freq = {}
-    pr_thisstart_comb_freq = {}
-    pr_thisstart_context_freq = {}
-
-    trip_type_list = ['NA','L','H']
-    quad_type_list = ['NA','L', 'H1', 'H2']
-    quint_type_list = ['NA','La','Lb','H1a','H1b','H2']
-    sext_type_list = ['NA','La','Lb','H1a','H1b-I','H1b-II','H2']
-    type_lists = [trip_type_list, quad_type_list, quint_type_list, sext_type_list]
-
-    anticip_trip, anticip_quad, anticip_quint, anticip_sext = '','','',''
 
     tempy = []
-    thisstart_outputline = 0
-    
-    nr_of_duplets_thisstart, nr_of_triplets_thisstart, nr_of_quads_thisstart, nr_of_quints_thisstart, nr_of_sexts_thisstart = 0,0,0,0,0
-    pr_nr_of_duplets_thisstart, pr_nr_of_triplets_thisstart, pr_nr_of_quads_thisstart, pr_nr_of_quints_thisstart, pr_nr_of_sexts_thisstart = 0,0,0,0,0
 
     while True:
                     
@@ -1658,8 +928,6 @@ def presentation():
         cycle = 0
         allACC = 0
         
-        stims_in_block.append(stimlist[N])
-        
         while True:
             cycle += 1
             stim_bg()
@@ -1679,8 +947,7 @@ def presentation():
             stim_RT_time = time.strftime('%H:%M:%S')
             stim_RT_date = time.strftime('%d/%m/%Y')
             stimRT = press[0][1]
-            
-            thisstart_outputline +=1
+
             stim_output_line += 1
             Npressed_in_block += 1
 
@@ -1713,35 +980,6 @@ def presentation():
             elif pressed_dict[press[0][0]] == stimlist[N]:                
                 stimACC = 0
                 accs_in_block.append(0)
-                pressed_buttons.append(pressed_dict[press[0][0]])
-                
-                if stimACC == allACC and Npressed_in_block > 1:
-                    try:
-                        if (stimlist[N] > stimlist[N-1]) :
-                            directions_in_block.append(">")
-                            previous_direction.append(">")
-                        elif (stimlist[N] < stimlist[N-1]):
-                            directions_in_block.append("<")
-                            previous_direction.append("<")
-                        elif (stimlist[N] == stimlist[N-1]) :
-                            directions_in_block.append('R')
-                    except:
-                        pass
-
-                if Npressed_in_block > 1:
-                    try:
-                        if (pressed_buttons[-1] > pressed_buttons[-2]) :
-                            pr_directions_in_block.append(">")
-                            pr_previous_direction.append('>')
-                        elif (pressed_buttons[-1] < pressed_buttons[-2] ) :
-                            pr_directions_in_block.append("<")
-                            pr_previous_direction.append('<')
-                        elif (pressed_buttons[-1] == pressed_buttons[-2])  :
-                            pr_directions_in_block.append('R')
-                    except:
-                        pass
-                    
-                
 
                 if stimpr[N] == 'P':
                     number_of_patterns +=1
@@ -1753,308 +991,12 @@ def presentation():
                 allACC += 1
                 accs_in_block.append(1)
 
-                pressed_buttons.append(pressed_dict[press[0][0]])
                 if stimpr[N] == 'P':
                     patternERR +=1
                     number_of_patterns +=1
                     RT_pattern_list.append(stimRT)
                 RT_all_list.append(stimRT)
-
-                if stimACC == allACC and Npressed_in_block > 1:
-                    try:
-                        if (stimlist[N] > stimlist[N-1]) :
-                            directions_in_block.append(">")
-                            previous_direction.append(">")
-                        elif  (stimlist[N] < stimlist[N-1]):
-                            directions_in_block.append("<")
-                            previous_direction.append("<")
-                        elif (stimlist[N] == stimlist[N-1]) :
-                            directions_in_block.append('R')
-                    except:
-                        pass
-                        
-                if Npressed_in_block > 1:
-                    try:
-                        if (pressed_buttons[-1] > pressed_buttons[-2] ) :
-                            pr_directions_in_block.append(">")
-                            pr_previous_direction.append('>')
-                        elif  (pressed_buttons[-1] < pressed_buttons[-2]) :
-                            pr_directions_in_block.append("<")
-                            pr_previous_direction.append('<')
-                        elif ( pressed_buttons[-1] == pressed_buttons[-2] ) :
-                            pr_directions_in_block.append('R')
-                    except:
-                        pass
-               
-            stimbuttonnr = pressed_dict[ press [0][0] ]
             stim_allACC  = allACC
-
-           # kiszamitjuk, mik voltak a latott/nyomott kombinaciok (ingerhatosok szintjeig)
-
-            stim_duplet, stim_triplet, stim_quartet, stim_quintet, stim_sextet = combos(stims_in_block)
-            if stim_duplet != "" and stimACC == stim_allACC:
-                nr_of_duplets += 1
-                nr_of_duplets_thisstart += 1
-            if stim_triplet != "" and stimACC == stim_allACC:
-                nr_of_triplets += 1
-                nr_of_triplets_thisstart += 1
-            if stim_quartet != "" and stimACC == stim_allACC:
-                nr_of_quads += 1
-                nr_of_quads_thisstart += 1
-            if stim_quintet != ""and stimACC == stim_allACC:
-                nr_of_quints += 1
-                nr_of_quints_thisstart += 1
-            if stim_sextet != "" and stimACC == stim_allACC:
-                nr_of_sexts += 1
-                nr_of_sexts_thisstart += 1
-
-            pressed_duplet, pressed_triplet, pressed_quad, pressed_quint, pressed_sext = combos(pressed_buttons)
-            if pressed_duplet != "":
-                pr_nr_of_duplets += 1
-                pr_nr_of_duplets_thisstart += 1
-            if pressed_triplet != "":
-                pr_nr_of_triplets += 1
-                pr_nr_of_triplets_thisstart += 1
-            if pressed_quad != "":
-                pr_nr_of_quads += 1
-                pr_nr_of_quads_thisstart += 1
-            if pressed_quint != "":
-                pr_nr_of_quints += 1
-                pr_nr_of_quints_thisstart += 1
-            if pressed_sext != "":
-                pr_nr_of_sexts += 1
-                pr_nr_of_sexts_thisstart += 1
-
-            # eltaroljuk, hogy ezek a latott/nyomott kombinaciok (es kontextusaik) hanyadszor fordulnak elo
-            
-            if stimACC == 0:
-                update_occurences( mydict_whole = comb_freq, mydict_context = context_freq, current_com = stimlist[N])
-                update_occurences( mydict_whole = comb_freq, mydict_context = context_freq, current_com = stim_duplet)
-                update_occurences( mydict_whole = comb_freq, mydict_context = context_freq, current_com = stim_triplet)
-                update_occurences( mydict_whole = comb_freq, mydict_context = context_freq, current_com = stim_quartet)
-                update_occurences( mydict_whole = comb_freq, mydict_context = context_freq, current_com = stim_quintet)
-                update_occurences( mydict_whole = comb_freq, mydict_context = context_freq, current_com = stim_sextet)
-
-            update_occurences( mydict_whole = pr_comb_freq, mydict_context = pr_context_freq, current_com = pressed_dict[press[0][0]])
-            update_occurences( mydict_whole = pr_comb_freq, mydict_context = pr_context_freq, current_com = pressed_duplet)
-            update_occurences( mydict_whole = pr_comb_freq, mydict_context = pr_context_freq, current_com = pressed_triplet)
-            update_occurences( mydict_whole = pr_comb_freq, mydict_context = pr_context_freq, current_com = pressed_quad)
-            update_occurences( mydict_whole = pr_comb_freq, mydict_context = pr_context_freq, current_com = pressed_quint)
-            update_occurences( mydict_whole = pr_comb_freq, mydict_context = pr_context_freq, current_com = pressed_sext)
-
-            # ugyanez erre az inditasra vonatkoztatva csak
-
-            if stimACC == 0:
-                update_occurences( mydict_whole = thisstart_comb_freq, mydict_context = thisstart_context_freq, current_com = stimlist[N])
-                update_occurences( mydict_whole = thisstart_comb_freq, mydict_context = thisstart_context_freq, current_com = stim_duplet)
-                update_occurences( mydict_whole = thisstart_comb_freq, mydict_context = thisstart_context_freq, current_com = stim_triplet)
-                update_occurences( mydict_whole = thisstart_comb_freq, mydict_context = thisstart_context_freq, current_com = stim_quartet)
-                update_occurences( mydict_whole = thisstart_comb_freq, mydict_context = thisstart_context_freq, current_com = stim_quintet)
-                update_occurences( mydict_whole = thisstart_comb_freq, mydict_context = thisstart_context_freq, current_com = stim_sextet)
-
-            update_occurences( mydict_whole = pr_thisstart_comb_freq, mydict_context = pr_thisstart_context_freq, current_com = pressed_dict[press[0][0]])
-            update_occurences( mydict_whole = pr_thisstart_comb_freq, mydict_context = pr_thisstart_context_freq, current_com = pressed_duplet)
-            update_occurences( mydict_whole = pr_thisstart_comb_freq, mydict_context = pr_thisstart_context_freq, current_com = pressed_triplet)
-            update_occurences( mydict_whole = pr_thisstart_comb_freq, mydict_context = pr_thisstart_context_freq, current_com = pressed_quad)
-            update_occurences( mydict_whole = pr_thisstart_comb_freq, mydict_context = pr_thisstart_context_freq, current_com = pressed_quint)
-            update_occurences( mydict_whole = pr_thisstart_comb_freq, mydict_context = pr_thisstart_context_freq, current_com = pressed_sext)
-
-            # kiszamoljuk, hogy akkor mi a jelenlegi freq, és mi a probability
-            # minden esetben az eddigi elofordulast szamszerusitjuk, a jelenlegi nelkul
-            # ehhez kell tudunk, hanyadik az inger  # N tarolja
-            # es hanyadik a buttonpress # stim_output_line tárolja
-           
-            sing_freq, sing_prob = freqs_and_probs(         my_dict_stim = comb_freq, my_dict_context = context_freq, stim_comb = stimlist[N], numb = N)
-            dup_freq, dup_prob = freqs_and_probs(          my_dict_stim = comb_freq, my_dict_context = context_freq, stim_comb = stim_duplet, numb = nr_of_duplets)
-            trip_freq, trip_prob = freqs_and_probs(           my_dict_stim = comb_freq, my_dict_context = context_freq, stim_comb = stim_triplet, numb = nr_of_triplets)
-            quad_freq, quad_prob = freqs_and_probs(      my_dict_stim = comb_freq, my_dict_context = context_freq, stim_comb = stim_quartet, numb = nr_of_quads)
-            quint_freq, quint_prob = freqs_and_probs(      my_dict_stim = comb_freq, my_dict_context = context_freq, stim_comb = stim_quintet, numb = nr_of_quints)
-            sext_freq, sext_prob = freqs_and_probs(           my_dict_stim = comb_freq, my_dict_context = context_freq, stim_comb = stim_sextet, numb = nr_of_sexts)
-              
-            pr_sing_freq, pr_sing_prob = freqs_and_probs(my_dict_stim = pr_comb_freq, my_dict_context = pr_context_freq, stim_comb = pressed_dict[press[0][0]], numb = stim_output_line)
-            pr_dup_freq, pr_dup_prob = freqs_and_probs(my_dict_stim = pr_comb_freq, my_dict_context = pr_context_freq, stim_comb = pressed_duplet, numb = pr_nr_of_duplets)
-            pr_trip_freq, pr_trip_prob = freqs_and_probs(my_dict_stim = pr_comb_freq, my_dict_context = pr_context_freq, stim_comb = pressed_triplet, numb = pr_nr_of_triplets)
-            pr_quad_freq, pr_quad_prob = freqs_and_probs(my_dict_stim = pr_comb_freq, my_dict_context = pr_context_freq, stim_comb = pressed_quad, numb = pr_nr_of_quads)
-            pr_quint_freq, pr_quint_prob = freqs_and_probs(my_dict_stim = pr_comb_freq, my_dict_context = pr_context_freq, stim_comb = pressed_quint, numb = pr_nr_of_quints)
-            pr_sext_freq, pr_sext_prob = freqs_and_probs(my_dict_stim = pr_comb_freq, my_dict_context = pr_context_freq, stim_comb = pressed_sext, numb = pr_nr_of_sexts)
-           
-            
-            sing_dif_freq,       sing_dif_prob =      difs(freq= sing_freq,    freq_pr =  pr_sing_freq,       prob = sing_prob,          prob_pr = pr_sing_prob)
-            dup_dif_freq,        dup_dif_prob =       difs(freq=  dup_freq,    freq_pr =  pr_dup_freq,        prob = dup_prob,         prob_pr = pr_dup_prob)
-            trip_dif_freq,        trip_dif_prob =        difs(freq= trip_freq,     freq_pr =  pr_trip_freq,        prob = trip_prob,          prob_pr = pr_trip_prob)
-            quad_dif_freq,     quad_dif_prob =      difs(freq= quad_freq,  freq_pr =  pr_quad_freq,     prob = quad_prob,        prob_pr = pr_quad_prob)
-            quint_dif_freq,     quint_dif_prob =     difs(freq= quint_freq,  freq_pr =  pr_quint_freq,     prob = quint_prob,       prob_pr = pr_quint_prob)
-            sext_dif_freq,        sext_dif_prob =       difs(freq= sext_freq,    freq_pr =  pr_sext_freq,        prob = sext_prob,         prob_pr = pr_sext_prob)
-                
-
-            #ugyanez csak erre az inditasra vonatkoztatva
-            
-            thisstart_sing_freq, thisstart_sing_prob = freqs_and_probs(       my_dict_stim = thisstart_comb_freq, my_dict_context = thisstart_context_freq, stim_comb = stimlist[N], numb = thisstart_N) # helyett az kene, h inditas ota hanyadik
-            thisstart_dup_freq, thisstart_dup_prob = freqs_and_probs(       my_dict_stim = thisstart_comb_freq, my_dict_context = thisstart_context_freq, stim_comb = stim_duplet, numb = nr_of_duplets_thisstart) # helyett az kene, h inditas ota hanyadik
-            thisstart_trip_freq, thisstart_trip_prob = freqs_and_probs(        my_dict_stim = thisstart_comb_freq, my_dict_context = thisstart_context_freq, stim_comb = stim_triplet, numb = nr_of_triplets_thisstart)
-            thisstart_quad_freq, thisstart_quad_prob = freqs_and_probs(   my_dict_stim = thisstart_comb_freq, my_dict_context = thisstart_context_freq, stim_comb = stim_quartet, numb = nr_of_quads_thisstart)
-            thisstart_quint_freq, thisstart_quint_prob = freqs_and_probs(   my_dict_stim = thisstart_comb_freq, my_dict_context = thisstart_context_freq, stim_comb = stim_quintet, numb = nr_of_quints_thisstart)
-            thisstart_sext_freq, thisstart_sext_prob = freqs_and_probs(        my_dict_stim = thisstart_comb_freq, my_dict_context = thisstart_context_freq, stim_comb = stim_sextet, numb = nr_of_sexts_thisstart)
-              
-            pr_thisstart_sing_freq, pr_thisstart_sing_prob = freqs_and_probs(     my_dict_stim = pr_thisstart_comb_freq, my_dict_context = pr_thisstart_context_freq, stim_comb = pressed_dict[press[0][0]], numb = thisstart_outputline)
-            pr_thisstart_dup_freq, pr_thisstart_dup_prob = freqs_and_probs(     my_dict_stim = pr_thisstart_comb_freq, my_dict_context = pr_thisstart_context_freq, stim_comb = pressed_duplet, numb = pr_nr_of_duplets_thisstart)
-            pr_thisstart_trip_freq, pr_thisstart_trip_prob = freqs_and_probs(      my_dict_stim = pr_thisstart_comb_freq, my_dict_context = pr_thisstart_context_freq, stim_comb = pressed_triplet, numb = pr_nr_of_triplets_thisstart)
-            pr_thisstart_quad_freq, pr_thisstart_quad_prob = freqs_and_probs( my_dict_stim = pr_thisstart_comb_freq, my_dict_context = pr_thisstart_context_freq, stim_comb = pressed_quad, numb = pr_nr_of_quads_thisstart)
-            pr_thisstart_quint_freq, pr_thisstart_quint_prob = freqs_and_probs(my_dict_stim = pr_thisstart_comb_freq, my_dict_context = pr_thisstart_context_freq, stim_comb = pressed_quint, numb = pr_nr_of_quints_thisstart)
-            pr_thisstart_sext_freq, pr_thisstart_sext_prob = freqs_and_probs(     my_dict_stim = pr_thisstart_comb_freq, my_dict_context = pr_thisstart_context_freq, stim_comb = pressed_sext, numb = pr_nr_of_sexts_thisstart)
-
-            thisstart_sing_dif_freq,    thisstart_sing_dif_prob =         difs(   freq= thisstart_sing_freq,   freq_pr =  pr_thisstart_sing_freq,    prob = thisstart_sing_prob,       prob_pr = pr_thisstart_sing_prob)
-            thisstart_dup_dif_freq,     thisstart_dup_dif_prob =         difs(   freq= thisstart_dup_freq,    freq_pr =  pr_thisstart_dup_freq,     prob = thisstart_dup_prob,        prob_pr = pr_thisstart_dup_prob)
-            thisstart_trip_dif_freq,      thisstart_trip_dif_prob =         difs(   freq= thisstart_trip_freq,    freq_pr =  pr_thisstart_trip_freq,      prob = thisstart_trip_prob,        prob_pr = pr_thisstart_trip_prob)
-            thisstart_quad_dif_freq,    thisstart_quad_dif_prob =      difs(   freq= thisstart_quad_freq, freq_pr =  pr_thisstart_quad_freq,   prob = thisstart_quad_prob,     prob_pr = pr_thisstart_quad_prob)
-            thisstart_quint_dif_freq,    thisstart_quint_dif_prob =     difs(   freq= thisstart_quint_freq, freq_pr =  pr_thisstart_quint_freq,   prob = thisstart_quint_prob,     prob_pr = pr_thisstart_quint_prob) 
-            thisstart_sext_dif_freq,      thisstart_sext_dif_prob =        difs(   freq= thisstart_sext_freq,   freq_pr =  pr_thisstart_sext_freq,      prob = thisstart_sext_prob,       prob_pr = pr_thisstart_sext_prob)
-
-            # ellenorizzuk hogy a megelozo trialek pontosak voltak-e
-
-            last_five_accurate, last_four_accurate, last_three_accurate, last_two_accurate, last_one_accurate  = previous_accuracy(accs_in_block)
-      
-            abs1 = abstract_structure(listfrom = stims_in_block, howmany = 1)
-            abs2 = abstract_structure(listfrom = stims_in_block, howmany = 2)
-            abs3 = abstract_structure(listfrom = stims_in_block, howmany = 3)
-            abs4 = abstract_structure(listfrom = stims_in_block, howmany = 4)
-            abs5 = abstract_structure(listfrom = stims_in_block, howmany = 5)
-            abs6 = abstract_structure(listfrom = stims_in_block, howmany = 6)
-
-            pr_abs1 = abstract_structure(listfrom = pressed_buttons, howmany = 1)
-            pr_abs2 = abstract_structure(listfrom = pressed_buttons, howmany = 2)
-            pr_abs3 = abstract_structure(listfrom = pressed_buttons, howmany = 3)
-            pr_abs4 = abstract_structure(listfrom = pressed_buttons, howmany = 4)
-            pr_abs5 = abstract_structure(listfrom = pressed_buttons, howmany = 5)
-            pr_abs6 = abstract_structure(listfrom = pressed_buttons, howmany = 6)
-
-            if abs3 in ('aba','aaa'):
-                tripfilter = 0
-            elif abs3 == '':
-                tripfilter= ''
-            else:
-                tripfilter = 1
-                
-            if abs4 in ('acba', 'dcba', 'cbba'):
-                quadfilter = 1
-            elif abs4 == '':
-                quadfilter = ''
-            else:
-                quadfilter = 0
-                
-            if pr_abs3 in ('aba','aaa'):
-                pr_tripfilter = 0
-            elif pr_abs3 == '':
-                pr_tripfilter= ''
-            else:
-                pr_tripfilter = 1
-                
-            if pr_abs4 in ('acba', 'dcba', 'cbba'):
-                pr_quadfilter = 1
-            elif pr_abs4 == '':
-                pr_quadfilter = ''
-            else:
-                pr_quadfilter = 0
-
-
-            d1, d2, d3, d4, d5 = directions_def(listfrom = directions_in_block)
-            pr_d1, pr_d2, pr_d3, pr_d4, pr_d5 = directions_def(listfrom = pr_directions_in_block)
-            
-            rel_five     = reldir(howmany= 5, listfrom = directions_in_block, lastdlist = previous_direction)
-            rel_four    = reldir(howmany= 4, listfrom = directions_in_block, lastdlist = previous_direction)
-            rel_three   = reldir(howmany= 3, listfrom = directions_in_block, lastdlist = previous_direction)
-            rel_two      = reldir(howmany= 2, listfrom = directions_in_block, lastdlist = previous_direction)
-            rel_one      = reldir(howmany= 1, listfrom = directions_in_block, lastdlist = previous_direction)
-
-            pr_rel_five     = reldir(howmany= 5, listfrom = pr_directions_in_block, lastdlist = pr_previous_direction)
-            pr_rel_four    = reldir(howmany= 4, listfrom = pr_directions_in_block, lastdlist = pr_previous_direction)
-            pr_rel_three   = reldir(howmany= 3, listfrom = pr_directions_in_block, lastdlist = pr_previous_direction)
-            pr_rel_two      = reldir(howmany= 2, listfrom = pr_directions_in_block, lastdlist = pr_previous_direction)
-            pr_rel_one      = reldir(howmany= 1, listfrom = pr_directions_in_block, lastdlist = pr_previous_direction)
-
-            handchange = hand_changing(listfrom = stims_in_block, handdict = hand_dict)
-            pr_handchange = hand_changing(listfrom = pressed_buttons, handdict = hand_dict)
-        
-            currentT, currentTT, currentQ, currentQT, currentQi, currentQiT, currenctS, currentST = otherseq(codenum = Pcode_str, listfrom = stims_in_block)
-            pr_currentT, pr_currentTT, pr_currentQ, pr_currentQT, pr_currentQi, pr_currentQiT, pr_currenctS, pr_currentST = otherseq(codenum = Pcode_str, listfrom = pressed_buttons)
-    
-            obs_pr_trip_moved_category = whether_anticip(type1 = currentTT, type2 = pr_currentTT, mylist = trip_type_list)
-            obs_pr_quad_moved_category = whether_anticip(type1 = currentQT, type2 = pr_currentQT, mylist = quad_type_list)
-            obs_pr_quint_moved_category = whether_anticip(type1 = currentQiT, type2 = pr_currentQiT, mylist = quint_type_list)
-            obs_pr_sext_moved_category = whether_anticip(type1 = currentST, type2 = pr_currentST, mylist = sext_type_list)
-                        
-            obs_pr_trip, obs_pr_quad, obs_pr_quint, obs_pr_sext = '','','',''
-            if  currentTT != '' and pr_currentTT != '':
-                obs_pr_trip = currentTT + '_' + pr_currentTT
-            if  currentQT != '' and pr_currentQT != '':
-                obs_pr_quad = currentQT + '_' + pr_currentQT
-            if currentQiT != '' and pr_currentQiT != '':
-                obs_pr_quint = currentQiT + '_' + pr_currentQiT
-            if currentST != '' and pr_currentT != '':
-                obs_pr_sext = currentST + '_' + pr_currentST
-                
-            P1_trip, P1_tripT, P1_quad, P1_quadT, P1_quint, P1_quintT, P1_sext, P1_sextT = otherseq(codenum = "1234", listfrom = stims_in_block)
-            P2_trip, P2_tripT, P2_quad, P2_quadT, P2_quint, P2_quintT, P2_sext, P2_sextT = otherseq(codenum = "1243", listfrom = stims_in_block)
-            P3_trip, P3_tripT, P3_quad, P3_quadT, P3_quint, P3_quintT, P3_sext, P3_sextT = otherseq(codenum = "1324",listfrom = stims_in_block)
-            P4_trip, P4_tripT, P4_quad, P4_quadT, P4_quint, P4_quintT, P4_sext, P4_sextT = otherseq(codenum = "1342", listfrom = stims_in_block)
-            P5_trip, P5_tripT, P5_quad, P5_quadT, P5_quint, P5_quintT, P5_sext, P5_sextT = otherseq(codenum = "1423", listfrom = stims_in_block)
-            P6_trip, P6_tripT, P6_quad, P6_quadT, P6_quint, P6_quintT, P6_sext, P6_sextT = otherseq(codenum = "1432", listfrom = stims_in_block)
-
-            prP1_trip, prP1_tripT, prP1_quad, prP1_quadT, prP1_quint, prP1_quintT, prP1_sext, prP1_sextT = otherseq(codenum = "1234", listfrom = pressed_buttons)
-            prP2_trip, prP2_tripT, prP2_quad, prP2_quadT, prP2_quint, prP2_quintT, prP2_sext, prP2_sextT = otherseq(codenum = "1243", listfrom = pressed_buttons)
-            prP3_trip, prP3_tripT, prP3_quad, prP3_quadT, prP3_quint, prP3_quintT, prP3_sext, prP3_sextT = otherseq(codenum = "1324",listfrom = pressed_buttons)
-            prP4_trip, prP4_tripT, prP4_quad, prP4_quadT, prP4_quint, prP4_quintT, prP4_sext, prP4_sextT = otherseq(codenum = "1342", listfrom = pressed_buttons)
-            prP5_trip, prP5_tripT, prP5_quad, prP5_quadT, prP5_quint, prP5_quintT, prP5_sext, prP5_sextT = otherseq(codenum = "1423", listfrom = pressed_buttons)
-            prP6_trip, prP6_tripT, prP6_quad, prP6_quadT, prP6_quint, prP6_quintT, prP6_sext, prP6_sextT = otherseq(codenum = "1432", listfrom = pressed_buttons)
-        
-            temporary_typelist_current = [currentTT, currentQT, currentQiT, currentST]
-
-            temporary_typelist = [[P1_tripT, P1_quadT, P1_quintT, P1_sextT] ,
-                                                    [P2_tripT, P2_quadT, P2_quintT, P2_sextT] ,
-                                                    [P3_tripT, P3_quadT, P3_quintT, P3_sextT] ,
-                                                    [P4_tripT, P4_quadT, P4_quintT, P4_sextT] ,
-                                                    [P5_tripT, P5_quadT, P5_quintT, P5_sextT] ,
-                                                    [P6_tripT, P6_quadT, P6_quintT, P6_sextT] ]
-                        
-            grouped_trip = grouped_types(mylist = temporary_typelist, structure = 3)
-            grouped_quad = grouped_types(mylist = temporary_typelist, structure = 4)
-            grouped_quint = grouped_types(mylist = temporary_typelist, structure = 5)
-            grouped_sext = grouped_types(mylist = temporary_typelist, structure = 6)
-
-            pr_temporary_typelist = [[prP1_tripT, prP1_quadT, prP1_quintT, prP1_sextT] ,
-                                                    [prP2_tripT, prP2_quadT, prP2_quintT, prP2_sextT] ,
-                                                    [prP3_tripT, prP3_quadT, prP3_quintT, prP3_sextT] ,
-                                                    [prP4_tripT, prP4_quadT, prP4_quintT, prP4_sextT] ,
-                                                    [prP5_tripT, prP5_quadT, prP5_quintT, prP5_sextT] ,
-                                                    [prP6_tripT, prP6_quadT, prP6_quintT, prP6_sextT] ]
-
-            pr_grouped_trip = grouped_types(mylist = pr_temporary_typelist, structure = 3)
-            pr_grouped_quad = grouped_types(mylist = pr_temporary_typelist, structure = 4)
-            pr_grouped_quint = grouped_types(mylist = pr_temporary_typelist, structure = 5)
-            pr_grouped_sext = grouped_types(mylist = pr_temporary_typelist, structure = 6)
-           
-            
-            all_anticips = []
-            all_category_moves = []
-            for kod in range(6):
-                allista_type = []
-                allista_move = []
-                for tipus in range(4):
-                    if pr_temporary_typelist[kod][tipus] != '' and temporary_typelist_current[tipus] != '':
-                        allista_type.append(temporary_typelist_current[tipus] + '_' + pr_temporary_typelist[kod][tipus])
-                        allista_move.append(    whether_anticip (type1 = temporary_typelist_current[tipus], type2 =  pr_temporary_typelist[kod][tipus], mylist = type_lists[tipus]) )       
-                    else:
-                        allista_type.append('')
-                        allista_move.append('')
-                
-                all_anticips.append(allista_type[:])
-                all_category_moves.append(allista_move[:])
-
-            relevant_anticips = []
-            relevant_moves = []
-            for mypcode in PCode_types.split('='):
-                relevant_anticips.append(all_anticips[int(mypcode)-1])
-                relevant_moves.append(all_category_moves[int(mypcode)-1])
 
             tempy = [exp_settings.computer_name,
                         group,
@@ -2065,10 +1007,8 @@ def presentation():
                         PCode_types,
 
                         stim_output_line, 
-                        thisstart_outputline,
                         N, 
                         session_trial_num,
-                        thisstart_N,
 
                         trial_after_quit,
 
@@ -2087,325 +1027,10 @@ def presentation():
                         stim_colorN[N],
                         stimpr[N], 
                         stimRT, 
-                        stimACC, 
-                        stim_allACC, 
-                        last_one_accurate,
-                        last_two_accurate, 
-                        last_three_accurate, 
-                        last_four_accurate,
-                        last_five_accurate,
+                        stimACC,
 
-                        # innen ism
-
-                        tripfilter,
-                        quadfilter,
-
-                        stimlist[N], 
-                        stim_duplet,
-                        stim_triplet,
-                        stim_quartet,
-                        stim_quintet,
-                        stim_sextet,
-
-                        str(sing_freq)[:5],
-                        str(dup_freq)[:5],
-                        str(trip_freq)[:5],
-                        str(quad_freq)[:5],
-                        str(quint_freq)[:5],
-                        str(sext_freq)[:5],
-
-                        str(sing_prob)[:5],
-                        str(dup_prob)[:5],
-                        str(trip_prob)[:5],
-                        str(quad_prob)[:5],
-                        str(quint_prob)[:5],
-                        str(sext_prob)[:5],
-
-                        str(thisstart_sing_freq)[:5],
-                        str(thisstart_dup_freq)[:5],
-                        str(thisstart_trip_freq)[:5],
-                        str(thisstart_quad_freq)[:5],
-                        str(thisstart_quint_freq)[:5],
-                        str(thisstart_sext_freq)[:5],
-
-                        str(thisstart_sing_prob)[:5],
-                        str(thisstart_dup_prob)[:5],
-                        str(thisstart_trip_prob)[:5],
-                        str(thisstart_quad_prob)[:5],
-                        str(thisstart_quint_prob)[:5],
-                        str(thisstart_sext_prob)[:5],
-
-
-                        handchange,
-                        abs2,
-                        abs3,
-                        abs4,
-                        abs5,
-                        abs6,
-
-                        d1,
-                        d2,
-                        d3,
-                        d4,
-                        d5,
-
-                        rel_one,
-                        rel_two,
-                        rel_three,
-                        rel_four,
-                        rel_five,
-
-                        rel_one.upper(),
-                        rel_two.upper(),
-                        rel_three.upper(),
-                        rel_four.upper(),
-                        rel_five.upper(),
-                
-                        currentTT,
-                        currentQT,
-                        currentQiT,
-                        currentST,
-                        
-                        grouped_trip,
-                        grouped_quad,
-                        grouped_quint,
-                        grouped_sext,
-
-                        P1_trip,
-                        P1_tripT,
-                        P1_quad,
-                        P1_quadT,
-                        P1_quint,
-                        P1_quintT,
-                        P1_sext,
-                        P1_sextT,
-
-                        P2_trip,
-                        P2_tripT,
-                        P2_quad,
-                        P2_quadT,
-                        P2_quint,
-                        P2_quintT,
-                        P2_sext,
-                        P2_sextT,
-
-                        P3_trip,
-                        P3_tripT,
-                        P3_quad,
-                        P3_quadT,
-                        P3_quint,
-                        P3_quintT,
-                        P3_sext,
-                        P3_sextT,
-
-                        P4_trip,
-                        P4_tripT,
-                        P4_quad,
-                        P4_quadT,
-                        P4_quint,
-                        P4_quintT,
-                        P4_sext,
-                        P4_sextT,
-
-                        P5_trip,
-                        P5_tripT,
-                        P5_quad,
-                        P5_quadT,
-                        P5_quint,
-                        P5_quintT,
-                        P5_sext,
-                        P5_sextT,
-
-                        P6_trip,
-                        P6_tripT,
-                        P6_quad,
-                        P6_quadT,
-                        P6_quint,
-                        P6_quintT,
-                        P6_sext,
-                        P6_sextT,
-
-
-                        # ez csak erre vonatkozik
-                        stimbutton, 
-                        
-                        # es ide a duplazasok
-                        # innen ism
-
-                        pr_tripfilter,
-                        pr_quadfilter,
-
-                        pressed_dict[press[0][0]],  # ey mi
-                        pressed_duplet,
-                        pressed_triplet,
-                        pressed_quad,
-                        pressed_quint,
-                        pressed_sext,
-
-                        str(pr_sing_freq)[:5],
-                        str(pr_dup_freq)[:5],
-                        str(pr_trip_freq)[:5],
-                        str(pr_quad_freq)[:5],
-                        str(pr_quint_freq)[:5],
-                        str(pr_sext_freq)[:5],
-
-                        str(pr_sing_prob)[:5],
-                        str(pr_dup_prob)[:5],
-                        str(pr_trip_prob)[:5],
-                        str(pr_quad_prob)[:5],
-                        str(pr_quint_prob)[:5],
-                        str(pr_sext_prob)[:5],
-
-                        str(pr_thisstart_sing_freq)[:5],
-                        str(pr_thisstart_dup_freq)[:5],
-                        str(pr_thisstart_trip_freq)[:5],
-                        str(pr_thisstart_quad_freq)[:5],
-                        str(pr_thisstart_quint_freq)[:5],
-                        str(pr_thisstart_sext_freq)[:5],
-
-                        str(pr_thisstart_sing_prob)[:5],
-                        str(pr_thisstart_dup_prob)[:5],
-                        str(pr_thisstart_trip_prob)[:5],
-                        str(pr_thisstart_quad_prob)[:5],
-                        str(pr_thisstart_quint_prob)[:5],
-                        str(pr_thisstart_sext_prob)[:5],
-
-                        pr_handchange,
-                        pr_abs2,
-                        pr_abs3,
-                        pr_abs4,
-                        pr_abs5,
-                        pr_abs6,
-
-                        pr_d1,
-                        pr_d2,
-                        pr_d3,
-                        pr_d4,
-                        pr_d5,
-
-                        pr_rel_one,
-                        pr_rel_two,
-                        pr_rel_three,
-                        pr_rel_four,
-                        pr_rel_five,
-
-                        pr_rel_one.upper(),
-                        pr_rel_two.upper(),
-                        pr_rel_three.upper(),
-                        pr_rel_four.upper(),
-                        pr_rel_five.upper(),
-                
-                        pr_currentTT,
-                        pr_currentQT,
-                        pr_currentQiT,
-                        pr_currentST,
-                        
-                        pr_grouped_trip,
-                        pr_grouped_quad,
-                        pr_grouped_quint,
-                        pr_grouped_sext,
-
-                        prP1_trip,
-                        prP1_tripT,
-                        prP1_quad,
-                        prP1_quadT,
-                        prP1_quint,
-                        prP1_quintT,
-                        prP1_sext,
-                        prP1_sextT,
-
-                        prP2_trip,
-                        prP2_tripT,
-                        prP2_quad,
-                        prP2_quadT,
-                        prP2_quint,
-                        prP2_quintT,
-                        prP2_sext,
-                        prP2_sextT,
-
-                        prP3_trip,
-                        prP3_tripT,
-                        prP3_quad,
-                        prP3_quadT,
-                        prP3_quint,
-                        prP3_quintT,
-                        prP3_sext,
-                        prP3_sextT,
-
-                        prP4_trip,
-                        prP4_tripT,
-                        prP4_quad,
-                        prP4_quadT,
-                        prP4_quint,
-                        prP4_quintT,
-                        prP4_sext,
-                        prP4_sextT,
-
-                        prP5_trip,
-                        prP5_tripT,
-                        prP5_quad,
-                        prP5_quadT,
-                        prP5_quint,
-                        prP5_quintT,
-                        prP5_sext,
-                        prP5_sextT,
-
-                        prP6_trip,
-                        prP6_tripT,
-                        prP6_quad,
-                        prP6_quadT,
-                        prP6_quint,
-                        prP6_quintT,
-                        prP6_sext,
-                        prP6_sextT,
-
-                        # observed es pressed viszonya
-
-                        obs_pr_trip,
-                        obs_pr_quad,
-                        obs_pr_quint,
-                        obs_pr_sext,
-                        
-                        obs_pr_trip_moved_category,
-                        obs_pr_quad_moved_category,
-                        obs_pr_quint_moved_category,
-                        obs_pr_sext_moved_category,
-                        
-                        sing_dif_freq,
-                        dup_dif_freq,
-                        trip_dif_freq,
-                        quad_dif_freq,
-                        quint_dif_freq,
-                        sext_dif_freq,
-                        
-                        sing_dif_prob,
-                        dup_dif_prob,
-                        trip_dif_prob,
-                        quad_dif_prob,
-                        quint_dif_prob,
-                        sext_dif_prob,
-
-                        thisstart_sing_dif_freq,
-                        thisstart_dup_dif_freq,
-                        thisstart_trip_dif_freq,
-                        thisstart_quad_dif_freq,
-                        thisstart_quint_dif_freq,
-                        thisstart_sext_dif_freq,
-                        
-                        thisstart_sing_dif_prob,
-                        thisstart_dup_dif_prob,
-                        thisstart_trip_dif_prob,
-                        thisstart_quad_dif_prob,
-                        thisstart_quint_dif_prob,
-                        thisstart_sext_dif_prob ]
-
-            for relevant in relevant_anticips:
-                for k in range(4):
-                    tempy.append(relevant[k])
-                    
-            for relevant in relevant_moves:
-                for k in range(4):
-                    tempy.append(relevant[k])
+                        stimlist[N],
+                        stimbutton]
                                     
             outfile_txt.write('\n')
             for t in tempy:
@@ -2422,7 +1047,6 @@ def presentation():
                 last_trial_in_block = stimtrial[N]
                 last_epoch = stimepoch[N]
                 N += 1
-                thisstart_N += 1
 
                 break
             
@@ -2496,15 +1120,7 @@ def presentation():
             RT_pattern_list = []
             RT_all_list = []
             
-            stims_in_block = []
-            pressed_buttons  = []
-            
             accs_in_block  = []
-            
-            directions_in_block = []
-            pr_directions_in_block = []
-            previous_direction = []
-            pr_previous_direction = []
 
         if N  == end_at[N-1]:
             break
@@ -2535,7 +1151,7 @@ for i in [1,2,3,4,5,6]:
 def main():
     global colors
     global thisperson_settings, group, subject_nr, identif
-    global nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
+    global PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
     global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
     global stimbg, stimP, stimR, stim_pressed
     global frame_time, frame_sd, frame_rate
@@ -2555,7 +1171,7 @@ def main():
     instruction_helper.read_insts_from_file(inst_feedback_path)
 
     thisperson_settings, group, subject_nr, identif = participant_id()
-    nr_of_duplets, nr_of_triplets, nr_of_quads, nr_of_quints, nr_of_sexts, pr_nr_of_duplets, pr_nr_of_triplets, pr_nr_of_quads, pr_nr_of_quints, pr_nr_of_sexts, context_freq, comb_freq, pr_context_freq, pr_comb_freq, PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+    PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
     mywindow = visual.Window (size = (my_monitor.getSizePix()[0], my_monitor.getSizePix()[1]), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
