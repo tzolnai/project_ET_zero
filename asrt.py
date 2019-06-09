@@ -796,9 +796,6 @@ def heading_to_output():
                                 'Pcode_Types', 
 
                                 'output_line',
-                                'trialN_in_whole_ASRT', 
-                                "trialN_in_session",
-                                
                                 'userquit_log',
                                 
                                 'session',
@@ -900,11 +897,6 @@ def presentation():
         
         RSI_clock.reset()
         RSI.start( exp_settings.RSI_time)
-        
-        try:
-            session_trial_num = N - exp_settings.sessionstarts[stim_sessionN[N]-1] + 1
-        except:
-            session_trial_num = "N/A"
          
         try:
             trial_after_quit += 1
@@ -1006,10 +998,7 @@ def presentation():
                         PCode,
                         PCode_types,
 
-                        stim_output_line, 
-                        N, 
-                        session_trial_num,
-
+                        stim_output_line,
                         trial_after_quit,
 
                         stim_sessionN[N], 
