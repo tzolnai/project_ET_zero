@@ -470,6 +470,39 @@ def show_subject_settings_dialog(groups, dict_accents):
     }
     return subject_settings
 
+def show_subject_PCodes_dialog(experiment_settings):
+    settings_dialog = gui.Dlg(title=u'Beállítások')
+    settings_dialog.addText('')
+    for z in range(experiment_settings.numsessions):
+        if experiment_settings.asrt_types[z+1] == "noASRT":
+            settings_dialog.addFixedField(u'Session ' + str(z+1) + ' PCode', 'noPattern')
+        else:
+            settings_dialog.addField(u'Session ' + str(z+1) + ' PCode', choices = ['1st' , '2nd', '3rd', '4th', '5th', '6th'])
+
+    returned_data = settings_dialog.show()
+    if settings_dialog.OK:
+        PCodes = {}
+        PCode_types = ""
+
+        for zz in range(experiment_settings.numsessions):
+            PCodes[zz+1] = returned_data[zz]
+
+        for key in PCodes.values():
+            if (not key in PCode_types) and (not key == 'noPattern'):
+                PCode_types += key+'='
+        if '=' in PCode_types:
+            PCode_types = PCode_types[:-1]
+        PCode_types = PCode_types.replace('1st', "1")
+        PCode_types = PCode_types.replace('2nd', "2")
+        PCode_types = PCode_types.replace('3rd', "3")
+        PCode_types = PCode_types.replace('4th', "4")
+        PCode_types = PCode_types.replace('5th', "5")
+        PCode_types = PCode_types.replace('6th', "6")
+
+        return PCodes, PCode_types
+    else:
+        core.quit()
+
 def all_settings_def(experiment_settings):
 
     all_settings_file_path = os.path.join(thispath, "settings", "settings")
@@ -623,32 +656,7 @@ def participant_id():
         thisperson_settings = {}
         PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
         
-        expstart1=gui.Dlg(title=u'Beállítások')
-        expstart1.addText('')
-        for z in range(exp_settings.numsessions):
-            if exp_settings.asrt_types[z+1] == "noASRT":
-                expstart1.addFixedField(u'Session ' + str(z+1) + ' PCode', 'noPattern')         
-            else: 
-                expstart1.addField(u'Session ' + str(z+1) + ' PCode', choices = ['1st' , '2nd', '3rd', '4th', '5th', '6th'])
-        
-        expstart1.show()
-        if expstart1.OK:
-            for zz in range(exp_settings.numsessions):
-                PCodes[zz+1] = expstart1.data[zz]
-            
-            for key in PCodes.values():
-                if (not key in PCode_types) and (not key == 'noPattern'):
-                    PCode_types += key+'='
-            if '=' in PCode_types:
-                PCode_types = PCode_types[:-1]
-            PCode_types = PCode_types.replace('1st', "1")
-            PCode_types = PCode_types.replace('2nd', "2")
-            PCode_types = PCode_types.replace('3rd', "3")
-            PCode_types = PCode_types.replace('4th', "4")
-            PCode_types = PCode_types.replace('5th', "5")
-            PCode_types = PCode_types.replace('6th', "6")
-        else:
-            core.quit()
+        PCodes, PCode_types = show_subject_PCodes_dialog(exp_settings)
             
         Nr = 0
         bln = 0
