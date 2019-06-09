@@ -482,24 +482,11 @@ def show_subject_PCodes_dialog(experiment_settings):
     returned_data = settings_dialog.show()
     if settings_dialog.OK:
         PCodes = {}
-        PCode_types = ""
 
         for zz in range(experiment_settings.numsessions):
             PCodes[zz+1] = returned_data[zz]
 
-        for key in PCodes.values():
-            if (not key in PCode_types) and (not key == 'noPattern'):
-                PCode_types += key+'='
-        if '=' in PCode_types:
-            PCode_types = PCode_types[:-1]
-        PCode_types = PCode_types.replace('1st', "1")
-        PCode_types = PCode_types.replace('2nd', "2")
-        PCode_types = PCode_types.replace('3rd', "3")
-        PCode_types = PCode_types.replace('4th', "4")
-        PCode_types = PCode_types.replace('5th', "5")
-        PCode_types = PCode_types.replace('6th', "6")
-
-        return PCodes, PCode_types
+        return PCodes
     else:
         core.quit()
 
@@ -554,7 +541,6 @@ def all_settings_def(experiment_settings):
 
 def get_thisperson_settings():
     PCodes = thisperson_settings.get('PCodes', {})                          #
-    PCode_types = thisperson_settings.get('PCode_types','')        #
     stim_output_line = thisperson_settings.get('stim_output_line',0)
 
     stim_sessionN = thisperson_settings.get('stim_sessionN',{})
@@ -569,7 +555,7 @@ def get_thisperson_settings():
 
     stim_colorN = thisperson_settings.get('stim_colorN',{})
     
-    return PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
+    return PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
 
 def which_code(session_number = 0):
     pcode_raw = PCodes[session_number]
@@ -592,7 +578,7 @@ def which_code(session_number = 0):
     return PCode, Pcode_str
 
 def participant_id():
-    global PCodes, PCode_types
+    global PCodes
     global stim_output_line
     global thisperson_settings, group, identif, subject_nr
     global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
@@ -631,7 +617,7 @@ def participant_id():
         letezo = 0
         
     if letezo == 1:
-        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
+        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
         if last_N+1 <= exp_settings.maxtrial:
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
@@ -654,9 +640,9 @@ def participant_id():
     else:
         # no such person yet
         thisperson_settings = {}
-        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
+        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
         
-        PCodes, PCode_types = show_subject_PCodes_dialog(exp_settings)
+        PCodes = show_subject_PCodes_dialog(exp_settings)
             
         Nr = 0
         bln = 0
@@ -800,7 +786,6 @@ def heading_to_output():
                                 'Subject_nr',
                                 'asrt_type',
                                 'PCode',
-                                'Pcode_Types', 
 
                                 'output_line',
                                 
@@ -835,7 +820,6 @@ def save_personal_info(mydict ={}):
     global thisperson_settings
 
     thisperson_settings[ 'PCodes' ] = PCodes
-    thisperson_settings[ 'PCode_types' ] = PCode_types
     thisperson_settings[ 'stim_output_line' ] = stim_output_line
 
     thisperson_settings[ 'stim_sessionN' ] = stim_sessionN
@@ -988,7 +972,6 @@ def presentation():
                         subject_nr,
                         asrt_type,
                         PCode,
-                        PCode_types,
 
                         stim_output_line,
 
@@ -1118,7 +1101,7 @@ sequences_PCode = { 1 : 1234, 2 : 1243, 3 : 1324, 4 : 1342, 5 : 1423, 6 : 1432 }
 def main():
     global colors
     global thisperson_settings, group, subject_nr, identif
-    global PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
+    global PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
     global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
     global stimbg, stimP, stimR
     global frame_time, frame_sd, frame_rate
@@ -1138,7 +1121,7 @@ def main():
     instruction_helper.read_insts_from_file(inst_feedback_path)
 
     thisperson_settings, group, subject_nr, identif = participant_id()
-    PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
+    PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
     mywindow = visual.Window (size = (my_monitor.getSizePix()[0], my_monitor.getSizePix()[1]), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")

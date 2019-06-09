@@ -38,11 +38,10 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"
 
-        PCodes, PCode_types = asrt.show_subject_PCodes_dialog(exp_settings)
+        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
 
         self.assertEqual(len(PCodes), exp_settings.numsessions)
         self.assertEqual(PCodes[1], "")
-        self.assertEqual(PCode_types, "")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -61,11 +60,10 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"
 
-        PCodes, PCode_types = asrt.show_subject_PCodes_dialog(exp_settings)
+        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
 
         self.assertEqual(len(PCodes), exp_settings.numsessions)
         self.assertEqual(PCodes[1], "1st")
-        self.assertEqual(PCode_types, "1")
 
     def testMoreSessionsCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -80,7 +78,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         exp_settings.asrt_types[4] = "implicit"
         exp_settings.asrt_types[5] = "implicit"
 
-        PCodes, PCode_types = asrt.show_subject_PCodes_dialog(exp_settings)
+        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
 
         self.assertEqual(len(PCodes), exp_settings.numsessions)
         self.assertEqual(PCodes[1], "2nd")
@@ -88,7 +86,6 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         self.assertEqual(PCodes[3], "6th")
         self.assertEqual(PCodes[4], "3rd")
         self.assertEqual(PCodes[5], "1st")
-        self.assertEqual(PCode_types, "2=1=6=3")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -112,7 +109,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         exp_settings.asrt_types[1] = "implicit"
 
         with self.assertRaises(SystemExit):
-            PCodes, PCode_types = asrt.show_subject_PCodes_dialog(exp_settings)
+            PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
 
     def testNoASRTSussions(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -127,7 +124,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         exp_settings.asrt_types[4] = "implicit"
         exp_settings.asrt_types[5] = "noASRT"
 
-        PCodes, PCode_types = asrt.show_subject_PCodes_dialog(exp_settings)
+        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
 
         self.assertEqual(len(PCodes), exp_settings.numsessions)
         self.assertEqual(PCodes[1], "2nd")
@@ -135,7 +132,6 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         self.assertEqual(PCodes[3], "noPattern")
         self.assertEqual(PCodes[4], "3rd")
         self.assertEqual(PCodes[5], "noPattern")
-        self.assertEqual(PCode_types, "2=1=3")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
