@@ -535,9 +535,8 @@ def get_thisperson_settings():
     end_at = thisperson_settings.get('end_at',{})
 
     stim_colorN = thisperson_settings.get('stim_colorN',{})
-    stim_quit = thisperson_settings.get('stim_quit',{})
     
-    return PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
+    return PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
 
 def which_code(session_number = 0):
     pcode_raw = PCodes[session_number]
@@ -563,7 +562,7 @@ def participant_id():
     global PCodes, PCode_types
     global stim_output_line
     global thisperson_settings, group, identif, subject_nr
-    global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stim_quit, stimpr
+    global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
     
     subject_settings = show_subject_settings_dialog(exp_settings.groups, dict_accents)
     identif = subject_settings["identif"]
@@ -599,7 +598,7 @@ def participant_id():
         letezo = 0
         
     if letezo == 1:
-        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
         if last_N+1 <= exp_settings.maxtrial:
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
@@ -622,7 +621,7 @@ def participant_id():
     else:
         # no such person yet
         thisperson_settings = {}
-        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+        PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
         
         expstart1=gui.Dlg(title=u'Beállítások')
         expstart1.addText('')
@@ -842,7 +841,6 @@ def save_personal_info(mydict ={}):
     thisperson_settings[ 'last_N' ] = last_N
     thisperson_settings[ 'end_at' ] = end_at
     thisperson_settings[ 'stim_colorN' ] = stim_colorN
-    thisperson_settings[ 'stim_quit' ] = stim_quit
 
     p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group)
     try:
@@ -952,9 +950,7 @@ def presentation():
             if press[0][0] == exp_settings.key_quit:
                 print_to_screen("Quit...\nSaving data...")
                 mywindow.flip()
-                
-                if stim_output_line > 1:
-                    stim_quit ='userquit'
+
                 outfile_txt.write('userquit')
                 outfile_txt.close()
 
@@ -1086,8 +1082,6 @@ def presentation():
                 print_to_screen("Quit...\nSaving data...")
                 mywindow.flip()
                 
-                if stim_output_line > 1:
-                    stim_quit ='userquit'
                 outfile_txt.write('userquit')
                 outfile_txt.close()
                 
@@ -1129,7 +1123,7 @@ sequences_PCode = { 1 : 1234, 2 : 1243, 3 : 1324, 4 : 1342, 5 : 1423, 6 : 1432 }
 def main():
     global colors
     global thisperson_settings, group, subject_nr, identif
-    global PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit
+    global PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
     global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
     global stimbg, stimP, stimR, stim_pressed
     global frame_time, frame_sd, frame_rate
@@ -1149,7 +1143,7 @@ def main():
     instruction_helper.read_insts_from_file(inst_feedback_path)
 
     thisperson_settings, group, subject_nr, identif = participant_id()
-    PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN, stim_quit = get_thisperson_settings()
+    PCodes, PCode_types, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
     mywindow = visual.Window (size = (my_monitor.getSizePix()[0], my_monitor.getSizePix()[1]), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
