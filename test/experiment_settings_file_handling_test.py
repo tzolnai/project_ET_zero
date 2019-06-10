@@ -69,7 +69,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.epochN, None)
         self.assertEqual(exp_settings.epochs, None)
         self.assertEqual(exp_settings.asrt_types, None)
-        self.assertEqual(exp_settings.refreshrate, None)
         self.assertEqual(exp_settings.monitor_width, None)
         self.assertEqual(exp_settings.computer_name, None)
         self.assertEqual(exp_settings.asrt_distance, None)
@@ -101,7 +100,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.epochN = 5
         exp_settings.epochs = [5]
         exp_settings.asrt_types = ["implicit"]
-        exp_settings.refreshrate = 60
         exp_settings.monitor_width = 29
         exp_settings.computer_name = "Laposka"
         exp_settings.asrt_distance = 4.5
@@ -135,7 +133,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.epochN, 5)
         self.assertEqual(exp_settings.epochs, [5])
         self.assertEqual(exp_settings.asrt_types, ["implicit"])
-        self.assertEqual(exp_settings.refreshrate, 60)
         self.assertEqual(exp_settings.monitor_width, 29)
         self.assertEqual(exp_settings.computer_name, "Laposka")
         self.assertEqual(exp_settings.asrt_distance, 4.5)
@@ -183,7 +180,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.epochN, None)
         self.assertEqual(exp_settings.epochs, None)
         self.assertEqual(exp_settings.asrt_types, None)
-        self.assertEqual(exp_settings.refreshrate, None)
         self.assertEqual(exp_settings.monitor_width, None)
         self.assertEqual(exp_settings.computer_name, None)
         self.assertEqual(exp_settings.asrt_distance, None)
@@ -214,7 +210,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.block_in_epochN = 5
         exp_settings.epochN = 5
         exp_settings.epochs = [5]
-        exp_settings.refreshrate = 60
         exp_settings.monitor_width = 29
         exp_settings.computer_name = "Laposka"
         exp_settings.asrt_distance = 4.5
@@ -242,7 +237,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
             self.assertEqual(reminder_file.read(),
                                 u'Beállítások \n'+
                                 '\n'+
-                                'MonitorHz: '+ '\t'+ str(exp_settings.refreshrate).replace('.',',')+'\n'+
                                 'Monitor Width: '+ '\t'+ str(exp_settings.monitor_width).replace('.',',')+'\n'+
                                 'Computer Name: '+ '\t'+ exp_settings.computer_name+'\n'+
                                 'Response keys: '+ '\t'+ exp_settings.key1+', '+ exp_settings.key2+', '+ exp_settings.key3+', '+ exp_settings.key4+'.'+'\n'+

@@ -42,7 +42,6 @@ class ExperimentSettings:
         self.epochs = None              # list of epoch numbers of all sessions (e.g. [1, 2] (two sessions, first session has 1 epoch, the second has 2))
         self.asrt_types = None          # list of asrt types of all sessions (e.g. ['implicit', 'explicit'] (two sessions, first session is an implicit asrt, the second one is explicit))
 
-        self.refreshrate = None         # monitor refresh rate in Hz (e.g. 60)
         self.monitor_width = None       # monitor's physical with in 'cm' (e.g. 29)
         self.computer_name = None       # am imaginary name of the computer where the experiment is run
         self.asrt_distance = None
@@ -79,7 +78,6 @@ class ExperimentSettings:
 
                 self.asrt_types = settings_file['asrt_types']
 
-                self.refreshrate = settings_file['refreshrate']
                 self.monitor_width = settings_file['monitor_width']
                 self.computer_name = settings_file['computer_name']
                 self.asrt_distance = settings_file['asrt_distance']
@@ -118,7 +116,6 @@ class ExperimentSettings:
 
             settings_file['asrt_types'] = self.asrt_types
 
-            settings_file['refreshrate'] = self.refreshrate
             settings_file['monitor_width'] = self.monitor_width
             settings_file['computer_name'] = self.computer_name
             settings_file['asrt_distance'] = self.asrt_distance
@@ -145,7 +142,6 @@ class ExperimentSettings:
         with codecs.open(reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
             reminder_file.write(u'Beállítások \n'+
                                 '\n'+
-                                'MonitorHz: '+ '\t'+ str(self.refreshrate).replace('.',',')+'\n'+
                                 'Monitor Width: '+ '\t'+ str(self.monitor_width).replace('.',',')+'\n'+
                                 'Computer Name: '+ '\t'+ self.computer_name+'\n'+
                                 'Response keys: '+ '\t'+ self.key1+', '+ self.key2+', '+ self.key3+', '+ self.key4+'.'+'\n'+
@@ -374,7 +370,6 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
     settings_dialog.addText(u'A számítógépről...')
     settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
     settings_dialog.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
-    settings_dialog.addField(u'Kepernyofrissitesi frekvencia (Hz)', 60)
     settings_dialog.addText(u'Megjelenés..')
     settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
     settings_dialog.addField(u'Ingerek sugara (cm)', 1)
@@ -386,13 +381,12 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
     if settings_dialog.OK:
         expriment_settings.monitor_width = returned_data[0]
         expriment_settings.computer_name = returned_data[1]
-        expriment_settings.refreshrate = returned_data[2]
-        expriment_settings.asrt_distance = returned_data[3]
-        expriment_settings.asrt_size = returned_data[4]
-        expriment_settings.asrt_rcolor = returned_data[5]
-        expriment_settings.asrt_pcolor = returned_data[6]
-        expriment_settings.asrt_background = returned_data[7]
-        expriment_settings.RSI_time = float(returned_data[8])/1000
+        expriment_settings.asrt_distance = returned_data[2]
+        expriment_settings.asrt_size = returned_data[3]
+        expriment_settings.asrt_rcolor = returned_data[4]
+        expriment_settings.asrt_pcolor = returned_data[5]
+        expriment_settings.asrt_background = returned_data[6]
+        expriment_settings.RSI_time = float(returned_data[7])/1000
     else:
         core.quit()
 
@@ -1129,7 +1123,9 @@ def main():
 
     pressed_dict ={exp_settings.key1:1,exp_settings.key2:2,exp_settings.key3:3,exp_settings.key4:4}
 
-    RSI = core.StaticPeriod(screenHz=exp_settings.refreshrate)
+    frame_time, frame_sd, frame_rate = frame_check()
+
+    RSI = core.StaticPeriod(screenHz=frame_rate)
     RSI_clock = core.Clock()
     trial_clock = core.Clock()
 
@@ -1142,7 +1138,6 @@ def main():
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
     stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
 
-    frame_time, frame_sd, frame_rate = frame_check()
 
     heading_to_output()
 
