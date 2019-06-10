@@ -588,7 +588,7 @@ def participant_id():
     subject_nr = subject_settings["subject_nr"]
     group = subject_settings["group"]
     
-    p_settings_file = shelve.open(thispath+'\\settings\\participant_settings')
+    p_settings_file = shelve.open(os.path.join(thispath, "settings", "participant_settings"))
     try:
         ids_temp = p_settings_file['ids']
     except:
@@ -603,7 +603,7 @@ def participant_id():
     p_settings_file.close()
 
     # letezik-e mar ilyen ksz-szel beállítás?
-    p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group)
+    p_settings_file = shelve.open(os.path.join(thispath, "settings", identif+'_'+str(subject_nr)+"_"+group))
 
     try:
         p_settings_temp = p_settings_file['all_settings']
@@ -720,7 +720,7 @@ def participant_id():
         thisperson_settings = {}
         save_personal_info()
 
-    participanttxt = codecs.open(thispath+'\\settings\\participants_in_experiment.txt','w', encoding = 'utf-8')
+    participanttxt = codecs.open(os.path.join(thispath, "settings", "participants_in_experiment.txt"),'w', encoding = 'utf-8')
     for ida in ids_temp:
         y = ida.split('_')
         for x in y:
@@ -774,7 +774,7 @@ def stim_bg():
 
 def heading_to_output():
     try:
-        outfile_txt = codecs.open(thispath+'\\logs\\'+group+'_'+str(subject_nr)+'_'+identif+'_log.txt', 'r', encoding = 'utf-8')
+        outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'r', encoding = 'utf-8')
         heading = 1
         outfile_txt.close()
     except:
@@ -811,7 +811,7 @@ def heading_to_output():
     heading_list.append('quit_log')
 
     if heading == 0:
-        outfile_txt = codecs.open(thispath+'\\logs\\'+group+'_'+str(subject_nr)+'_'+identif+'_log.txt', 'w', encoding = 'utf-8')
+        outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'w', encoding = 'utf-8')
         for h in heading_list:
             outfile_txt.write(h+'\t')
         outfile_txt.close()
@@ -833,7 +833,7 @@ def save_personal_info(mydict ={}):
     thisperson_settings[ 'end_at' ] = end_at
     thisperson_settings[ 'stim_colorN' ] = stim_colorN
 
-    p_settings_file = shelve.open(thispath+'\\settings\\'+identif+'_'+str(subject_nr)+"_"+group)
+    p_settings_file = shelve.open(os.path.join(thispath, "settings", identif+'_'+str(subject_nr)+"_"+group))
     try:
         p_settings_temp = p_settings_file['all_settings']
     except:
@@ -849,8 +849,7 @@ def presentation():
     global last_N, N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
-    
-    outfile_txt = codecs.open(thispath+'\\logs\\'+group+'_'+str(subject_nr)+'_'+identif+'_log.txt', 'a+', encoding = 'utf-8')
+    outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'a+', encoding = 'utf-8')
     RSI_timer = 0.0
     startfrom = thisperson_settings.get('last_N')
     N = startfrom + 1
@@ -1150,7 +1149,7 @@ def main():
     presentation()
     save_personal_info(thisperson_settings)
 
-    outfile_txt = codecs.open(thispath+'\\logs\\'+group+'_'+str(subject_nr)+'_'+identif+'_log.txt', 'a+', encoding = 'utf-8')
+    outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'a+', encoding = 'utf-8')
     outfile_txt.write('sessionend_planned_quit')
     outfile_txt.close()
 
