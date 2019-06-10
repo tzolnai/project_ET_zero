@@ -593,14 +593,6 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
 
                 all_trial_Nr += 1
                 asrt_type = experiment_settings.asrt_types[stim_sessionN[all_trial_Nr]]
-                PCode, Pcode_str = which_code(stim_sessionN[all_trial_Nr], PCodes)
-
-                dict_HL = {}
-                if not PCode == "noPattern":
-                    dict_HL[Pcode_str[0]] = Pcode_str[1]
-                    dict_HL[Pcode_str[1]] = Pcode_str[2]
-                    dict_HL[Pcode_str[2]] = Pcode_str[3]
-                    dict_HL[Pcode_str[3]] = Pcode_str[0]
 
                 current_stim = random.choice([1,2,3,4])
                 stimlist[all_trial_Nr] = current_stim
@@ -619,13 +611,23 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
                 asrt_type = experiment_settings.asrt_types[stim_sessionN[all_trial_Nr]]
                 PCode, Pcode_str = which_code(stim_sessionN[all_trial_Nr], PCodes)
 
+                dict_HL = {}
+                if not PCode == "noPattern":
+                    dict_HL[Pcode_str[0]] = Pcode_str[1]
+                    dict_HL[Pcode_str[1]] = Pcode_str[2]
+                    dict_HL[Pcode_str[2]] = Pcode_str[3]
+                    dict_HL[Pcode_str[3]] = Pcode_str[0]
+
                 if experiment_settings.blockprepN%2 == 1:
                     mod_pattern = 0
                 else:
                     mod_pattern = 1
 
                 if current_trial_num%2 == mod_pattern and asrt_type != "noASRT":
-                    current_stim = int( dict_HL[ str(stimlist[all_trial_Nr-2]) ] )
+                    if all_trial_Nr > 2:
+                        current_stim = int( dict_HL[ str(stimlist[all_trial_Nr-2]) ] )
+                    else:
+                        current_stim = random.choice([1,2,3,4]) # first pattern stim is random
                     stimpr[all_trial_Nr] = "P"
 
                     if asrt_type == 'explicit':
