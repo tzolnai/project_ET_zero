@@ -551,7 +551,7 @@ def get_thisperson_settings():
     
     return PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
 
-def which_code(session_number = 0):
+def which_code(session_number, PCodes):
     pcode_raw = PCodes[session_number]
    
     if pcode_raw == 'noPattern':
@@ -570,6 +570,77 @@ def which_code(session_number = 0):
         PCode = sequences_PCode[6]
     Pcode_str = str(PCode)
     return PCode, Pcode_str
+
+def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
+    all_trial_Nr = 0
+    block_num = 0
+
+    for trial_num in range(1, experiment_settings.maxtrial+1):
+        for session_num in range(1, len(experiment_settings.sessionstarts)):
+            if trial_num >= experiment_settings.sessionstarts[session_num-1] and trial_num < experiment_settings.sessionstarts[session_num]:
+                stim_sessionN[trial_num] = session_num
+                end_at[trial_num] = experiment_settings.sessionstarts[session_num]
+
+    for epoch in range(1,experiment_settings.epochN+1):
+
+        for block in range(1, experiment_settings.block_in_epochN+1):
+            block_num += 1
+            current_trial_num = 0
+
+            # practice
+            for practice in range(1, experiment_settings.blockprepN+1):
+                current_trial_num += 1
+
+                all_trial_Nr += 1
+                asrt_type = experiment_settings.asrt_types[stim_sessionN[all_trial_Nr]]
+                PCode, Pcode_str = which_code(stim_sessionN[all_trial_Nr], PCodes)
+
+                dict_HL = {}
+                if not PCode == "noPattern":
+                    dict_HL[Pcode_str[0]] = Pcode_str[1]
+                    dict_HL[Pcode_str[1]] = Pcode_str[2]
+                    dict_HL[Pcode_str[2]] = Pcode_str[3]
+                    dict_HL[Pcode_str[3]] = Pcode_str[0]
+
+                current_stim = random.choice([1,2,3,4])
+                stimlist[all_trial_Nr] = current_stim
+                stimpr[all_trial_Nr] = "R"
+                stim_colorN[all_trial_Nr] = experiment_settings.asrt_rcolor
+                stimtrial[all_trial_Nr] = current_trial_num
+                stimblock[all_trial_Nr] = block_num
+                stimepoch[all_trial_Nr] = epoch
+
+            # real
+            for real in range(1, experiment_settings.blocklengthN+1):
+
+                current_trial_num += 1
+                all_trial_Nr += 1
+
+                asrt_type = experiment_settings.asrt_types[stim_sessionN[all_trial_Nr]]
+                PCode, Pcode_str = which_code(stim_sessionN[all_trial_Nr], PCodes)
+
+                if experiment_settings.blockprepN%2 == 1:
+                    mod_pattern = 0
+                else:
+                    mod_pattern = 1
+
+                if current_trial_num%2 == mod_pattern and asrt_type != "noASRT":
+                    current_stim = int( dict_HL[ str(stimlist[all_trial_Nr-2]) ] )
+                    stimpr[all_trial_Nr] = "P"
+
+                    if asrt_type == 'explicit':
+                        stim_colorN[all_trial_Nr] = experiment_settings.asrt_pcolor
+                    elif asrt_type == "implicit" or asrt_type == 'noASRT':
+                        stim_colorN[all_trial_Nr] = experiment_settings.asrt_rcolor
+                else:
+                    current_stim = random.choice([1,2,3,4])
+                    stim_colorN[all_trial_Nr] = experiment_settings.asrt_rcolor
+                    stimpr[all_trial_Nr] = "R"
+
+                stimlist[all_trial_Nr] = current_stim
+                stimtrial[all_trial_Nr] = current_trial_num
+                stimblock[all_trial_Nr] = block_num
+                stimepoch[all_trial_Nr] = epoch
 
 def participant_id():
     global PCodes
@@ -638,78 +709,7 @@ def participant_id():
         
         PCodes = show_subject_PCodes_dialog(exp_settings)
             
-        Nr = 0
-        bln = 0
-        
-        # itt megnézzük, melyik számú inger melyik session része (ez amiatt kell, h sessionönként lehessen implicit/explicit/no asrt-t gyártani
-        
-        for y in range(1, exp_settings.maxtrial+1):
-            for ss in range(1, len(exp_settings.sessionstarts)):
-                if y >= exp_settings.sessionstarts[ss-1] and y < exp_settings.sessionstarts[ss]:
-                    stim_sessionN[y] = ss
-                    end_at[y] = exp_settings.sessionstarts[ss]
-
-        for epoch in range(1,exp_settings.epochN+1):
-            
-            for block in range(1, exp_settings.block_in_epochN+1):
-                bln += 1
-                current_trial_num = 0
-                
-                # practice
-                for practice in range(1, exp_settings.blockprepN+1):
-                    current_trial_num += 1
-                    
-                    Nr += 1 
-                    asrt_type = exp_settings.asrt_types[stim_sessionN[Nr]]
-                    PCode, Pcode_str = which_code(stim_sessionN[Nr])
-
-                    dict_HL = {}
-                    if not PCode == "noPattern":
-                        dict_HL[Pcode_str[0]] = Pcode_str[1]
-                        dict_HL[Pcode_str[1]] = Pcode_str[2]
-                        dict_HL[Pcode_str[2]] = Pcode_str[3]
-                        dict_HL[Pcode_str[3]] = Pcode_str[0]
-
-                    current_stim = random.choice([1,2,3,4])
-                    stimlist[Nr] = current_stim
-                    stimpr[Nr] = "R"
-                    stim_colorN[Nr] = exp_settings.asrt_rcolor
-                    stimtrial[Nr] = current_trial_num
-                    stimblock[Nr] = bln
-                    stimepoch[Nr] = epoch
-                 
-                # real
-                for real in range(1, exp_settings.blocklengthN+1):
-                
-                    current_trial_num += 1
-                    Nr += 1
-
-                    asrt_type = exp_settings.asrt_types[stim_sessionN[Nr]]
-                    PCode, Pcode_str = which_code(stim_sessionN[Nr])
-                    
-                    if exp_settings.blockprepN%2 == 1:
-                        mod_pattern = 0
-                    else:
-                        mod_pattern = 1
-                    
-                    if current_trial_num%2 == mod_pattern and asrt_type != "noASRT":
-                        current_stim = int( dict_HL[ str(stimlist[Nr-2]) ] )
-                        stimpr[Nr] = "P"
-
-                        if asrt_type == 'explicit':
-                            stim_colorN[Nr] = exp_settings.asrt_pcolor
-                        elif asrt_type == "implicit" or asrt_type == 'noASRT':
-                            stim_colorN[Nr] = exp_settings.asrt_rcolor
-                    
-                    else:
-                        current_stim = random.choice([1,2,3,4])
-                        stim_colorN[Nr] = exp_settings.asrt_rcolor
-                        stimpr[Nr] = "R"
-
-                    stimlist[Nr] = current_stim
-                    stimtrial[Nr] = current_trial_num
-                    stimblock[Nr] = bln
-                    stimepoch[Nr] = epoch
+        calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         thisperson_settings = {}
         save_personal_info()
@@ -858,7 +858,7 @@ def presentation():
     accs_in_block  = []
     
     asrt_type = exp_settings.asrt_types[stim_sessionN[N]]
-    PCode, Pcode_str = which_code(stim_sessionN[N])
+    PCode, Pcode_str = which_code(stim_sessionN[N], PCodes)
     
     allACC = 0
     patternERR = 0
