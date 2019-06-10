@@ -65,7 +65,6 @@ class calculateStimPropertiesTest(unittest.TestCase):
         self.assertEqual(len(stim_colorN), exp_settings.maxtrial)
         self.assertEqual(len(stimpr), exp_settings.maxtrial)
 
-        # all trials are in the same session
         for i in range(len(stim_sessionN)):
             if i < exp_settings.maxtrial / 2:
                 self.assertEqual(stim_sessionN[i+1], 1)
@@ -156,7 +155,6 @@ class calculateStimPropertiesTest(unittest.TestCase):
         self.assertEqual(len(stim_colorN), exp_settings.maxtrial)
         self.assertEqual(len(stimpr), exp_settings.maxtrial)
 
-        # all trials are in the same session
         for i in range(len(stim_sessionN)):
             if i < exp_settings.maxtrial / 2:
                 self.assertEqual(stim_sessionN[i+1], 1)
@@ -363,6 +361,231 @@ class calculateStimPropertiesTest(unittest.TestCase):
         self.assertEqual(count_2, 250)
         self.assertEqual(count_3, 250)
         self.assertEqual(oount_4, 250)
+
+        # implicit asrt
+        for i in range(len(stim_colorN)):
+            self.assertEqual(stim_colorN[i+1], "Orange")
+
+        for i in range(len(stimpr)):
+            trial_num_in_block = i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1
+            if trial_num_in_block > exp_settings.blockprepN and (trial_num_in_block - exp_settings.blockprepN) % 2 == 1:
+                self.assertEqual(stimpr[i+1], "P")
+            else:
+                self.assertEqual(stimpr[i+1], "R")
+
+    def testASRTWithoutReal(self):
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.epochN = 5
+        exp_settings.block_in_epochN = 5
+        exp_settings.blockprepN = 5
+        exp_settings.blocklengthN = 0
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "implicit"
+        exp_settings.maxtrial = (exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.epochN*exp_settings.block_in_epochN
+        exp_settings.sessionstarts = [1, exp_settings.maxtrial + 1]
+
+        stim_sessionN = {}
+        end_at = {}
+        stimepoch = {}
+        stimblock = {}
+        stimtrial = {}
+        stimlist = {}
+        stim_colorN = {}
+        stimpr = {}
+        PCodes = {}
+        PCodes [1] = "1st"
+        asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
+
+        self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
+        self.assertEqual(len(end_at), exp_settings.maxtrial)
+        self.assertEqual(len(stimepoch), exp_settings.maxtrial)
+        self.assertEqual(len(stimblock), exp_settings.maxtrial)
+        self.assertEqual(len(stimtrial), exp_settings.maxtrial)
+        self.assertEqual(len(stimlist), exp_settings.maxtrial)
+        self.assertEqual(len(stim_colorN), exp_settings.maxtrial)
+        self.assertEqual(len(stimpr), exp_settings.maxtrial)
+
+        # all trials are in the same session
+        for i in range(len(stim_sessionN)):
+            self.assertEqual(stim_sessionN[i+1], 1)
+
+        for i in range(len(end_at)):
+            self.assertEqual(end_at[i+1], exp_settings.maxtrial + 1)
+
+        for i in range(len(stimepoch)):
+            self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
+
+        for i in range(len(stimblock)):
+            self.assertEqual(stimblock[i+1], i // (exp_settings.blockprepN+exp_settings.blocklengthN) + 1)
+
+        for i in range(len(stimtrial)):
+            self.assertEqual(stimtrial[i+1], i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1)
+
+        # random only
+        for i in range(len(stim_colorN)):
+            self.assertEqual(stim_colorN[i+1], "Orange")
+
+        # random only
+        for i in range(len(stimpr)):
+            self.assertEqual(stimpr[i+1], "R")
+
+    def testWithEvenPracticeTrials(self):
+
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.epochN = 5
+        exp_settings.block_in_epochN = 5
+        exp_settings.blockprepN = 6
+        exp_settings.blocklengthN = 80
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "implicit"
+        exp_settings.maxtrial = (exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.epochN*exp_settings.block_in_epochN
+        exp_settings.sessionstarts = [1, exp_settings.maxtrial + 1]
+
+        stim_sessionN = {}
+        end_at = {}
+        stimepoch = {}
+        stimblock = {}
+        stimtrial = {}
+        stimlist = {}
+        stim_colorN = {}
+        stimpr = {}
+        PCodes = {}
+        PCodes [1] = "1st"
+        asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
+
+        self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
+        self.assertEqual(len(end_at), exp_settings.maxtrial)
+        self.assertEqual(len(stimepoch), exp_settings.maxtrial)
+        self.assertEqual(len(stimblock), exp_settings.maxtrial)
+        self.assertEqual(len(stimtrial), exp_settings.maxtrial)
+        self.assertEqual(len(stimlist), exp_settings.maxtrial)
+        self.assertEqual(len(stim_colorN), exp_settings.maxtrial)
+        self.assertEqual(len(stimpr), exp_settings.maxtrial)
+
+        # all trials are in the same session
+        for i in range(len(stim_sessionN)):
+            self.assertEqual(stim_sessionN[i+1], 1)
+
+        for i in range(len(end_at)):
+            self.assertEqual(end_at[i+1], exp_settings.maxtrial + 1)
+
+        for i in range(len(stimepoch)):
+            self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
+
+        for i in range(len(stimblock)):
+            self.assertEqual(stimblock[i+1], i // (exp_settings.blockprepN+exp_settings.blocklengthN) + 1)
+
+        for i in range(len(stimtrial)):
+            self.assertEqual(stimtrial[i+1], i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1)
+
+        count_1 = 0
+        count_2 = 0
+        count_3 = 0
+        oount_4 = 0
+        for i in range(len(stimlist)):
+            trial_num_in_block = i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1
+            if trial_num_in_block > exp_settings.blockprepN and (trial_num_in_block - exp_settings.blockprepN) % 2 == 1:
+                if stimlist[i+1] == 1:
+                    count_1 += 1
+                elif stimlist[i+1] == 2:
+                    count_2 += 1
+                elif stimlist[i+1] == 3:
+                    count_3 += 1
+                elif stimlist[i+1] == 4:
+                    oount_4 += 1
+
+        self.assertEqual(count_1, 250)
+        self.assertEqual(count_2, 250)
+        self.assertEqual(count_3, 250)
+        self.assertEqual(oount_4, 250)
+
+        # implicit asrt
+        for i in range(len(stim_colorN)):
+            self.assertEqual(stim_colorN[i+1], "Orange")
+
+        for i in range(len(stimpr)):
+            trial_num_in_block = i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1
+            if trial_num_in_block > exp_settings.blockprepN and (trial_num_in_block - exp_settings.blockprepN) % 2 == 1:
+                self.assertEqual(stimpr[i+1], "P")
+            else:
+                self.assertEqual(stimpr[i+1], "R")
+
+    def testWithOddRealTrials(self):
+
+        exp_settings = asrt.ExperimentSettings()
+        exp_settings.epochN = 5
+        exp_settings.block_in_epochN = 5
+        exp_settings.blockprepN = 6
+        exp_settings.blocklengthN = 75
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "implicit"
+        exp_settings.maxtrial = (exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.epochN*exp_settings.block_in_epochN
+        exp_settings.sessionstarts = [1, exp_settings.maxtrial + 1]
+
+        stim_sessionN = {}
+        end_at = {}
+        stimepoch = {}
+        stimblock = {}
+        stimtrial = {}
+        stimlist = {}
+        stim_colorN = {}
+        stimpr = {}
+        PCodes = {}
+        PCodes [1] = "1st"
+        asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
+
+        self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
+        self.assertEqual(len(end_at), exp_settings.maxtrial)
+        self.assertEqual(len(stimepoch), exp_settings.maxtrial)
+        self.assertEqual(len(stimblock), exp_settings.maxtrial)
+        self.assertEqual(len(stimtrial), exp_settings.maxtrial)
+        self.assertEqual(len(stimlist), exp_settings.maxtrial)
+        self.assertEqual(len(stim_colorN), exp_settings.maxtrial)
+        self.assertEqual(len(stimpr), exp_settings.maxtrial)
+
+        # all trials are in the same session
+        for i in range(len(stim_sessionN)):
+            self.assertEqual(stim_sessionN[i+1], 1)
+
+        for i in range(len(end_at)):
+            self.assertEqual(end_at[i+1], exp_settings.maxtrial + 1)
+
+        for i in range(len(stimepoch)):
+            self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
+
+        for i in range(len(stimblock)):
+            self.assertEqual(stimblock[i+1], i // (exp_settings.blockprepN+exp_settings.blocklengthN) + 1)
+
+        for i in range(len(stimtrial)):
+            self.assertEqual(stimtrial[i+1], i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1)
+
+        count_1 = 0
+        count_2 = 0
+        count_3 = 0
+        oount_4 = 0
+        for i in range(len(stimlist)):
+            trial_num_in_block = i % (exp_settings.blockprepN+exp_settings.blocklengthN) + 1
+            if trial_num_in_block > exp_settings.blockprepN and (trial_num_in_block - exp_settings.blockprepN) % 2 == 1:
+                if stimlist[i+1] == 1:
+                    count_1 += 1
+                elif stimlist[i+1] == 2:
+                    count_2 += 1
+                elif stimlist[i+1] == 3:
+                    count_3 += 1
+                elif stimlist[i+1] == 4:
+                    oount_4 += 1
+
+        # there are some variance in the number, becuase some pattern trials are cut down at the end of the blocks
+        self.assertAlmostEqual(count_1, 237, delta=5)
+        self.assertAlmostEqual(count_2, 237, delta=5)
+        self.assertAlmostEqual(count_3, 237, delta=5)
+        self.assertAlmostEqual(oount_4, 237, delta=5)        
 
         # implicit asrt
         for i in range(len(stim_colorN)):
