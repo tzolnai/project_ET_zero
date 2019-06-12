@@ -52,8 +52,8 @@ class calculateStimPropertiesTest(unittest.TestCase):
         stim_colorN = {}
         stimpr = {}
         PCodes = {}
-        PCodes [1] = "1st"
-        PCodes [2] = "1st"
+        PCodes [1] = "1st - 1234"
+        PCodes [2] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
@@ -142,8 +142,8 @@ class calculateStimPropertiesTest(unittest.TestCase):
         stim_colorN = {}
         stimpr = {}
         PCodes = {}
-        PCodes [1] = "2nd"
-        PCodes [2] = "3rd"
+        PCodes [1] = "2nd - 1243"
+        PCodes [2] = "3rd - 1324"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
@@ -313,7 +313,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
         stim_colorN = {}
         stimpr = {}
         PCodes = {}
-        PCodes [1] = "1st"
+        PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
@@ -395,7 +395,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
         stim_colorN = {}
         stimpr = {}
         PCodes = {}
-        PCodes [1] = "1st"
+        PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
@@ -454,7 +454,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
         stim_colorN = {}
         stimpr = {}
         PCodes = {}
-        PCodes [1] = "1st"
+        PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)
@@ -537,7 +537,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
         stim_colorN = {}
         stimpr = {}
         PCodes = {}
-        PCodes [1] = "1st"
+        PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
         self.assertEqual(len(stim_sessionN), exp_settings.maxtrial)

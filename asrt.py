@@ -471,7 +471,7 @@ def show_subject_PCodes_dialog(experiment_settings):
         if experiment_settings.asrt_types[z+1] == "noASRT":
             settings_dialog.addFixedField(u'Session ' + str(z+1) + ' PCode', 'noPattern')
         else:
-            settings_dialog.addField(u'Session ' + str(z+1) + ' PCode', choices = ['1st' , '2nd', '3rd', '4th', '5th', '6th'])
+            settings_dialog.addField(u'Session ' + str(z+1) + ' PCode', choices = ['1st - 1234' , '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
 
     returned_data = settings_dialog.show()
     if settings_dialog.OK:
@@ -553,20 +553,19 @@ def get_thisperson_settings():
 
 def which_code(session_number, PCodes):
     pcode_raw = PCodes[session_number]
-   
-    if pcode_raw == 'noPattern':
-        PCode = 'noPattern'
-    elif pcode_raw == '1st':
+    PCode = 'noPattern'
+
+    if pcode_raw == '1st - 1234':
         PCode = 1234
-    elif pcode_raw == '2nd':
+    elif pcode_raw == '2nd - 1243':
         PCode = 1243
-    elif pcode_raw == '3rd':
+    elif pcode_raw == '3rd - 1324':
         PCode = 1324
-    elif pcode_raw == '4th':
+    elif pcode_raw == '4th - 1342':
         PCode = 1342
-    elif pcode_raw == '5th':
+    elif pcode_raw == '5th - 1423':
         PCode = 1423
-    elif pcode_raw == '6th':
+    elif pcode_raw == '6th - 1432':
         PCode = 1432
     Pcode_str = str(PCode)
     return PCode, Pcode_str
