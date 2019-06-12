@@ -85,9 +85,15 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, None)
         self.assertEqual(exp_settings.speed_warning, None)
         self.assertEqual(exp_settings.acc_warning, None)
-        self.assertEqual(exp_settings.maxtrial, None)
-        self.assertEqual(exp_settings.sessionstarts, None)
-        self.assertEqual(exp_settings.blockstarts, None)
+
+        with self.assertRaises(TypeError):
+            exp_settings.getMaxtrial()
+
+        with self.assertRaises(TypeError):
+            exp_settings.getSessionStarts()
+
+        with self.assertRaises(TypeError):
+            exp_settings.getBlockStarts()
 
     def testRoundTripCustomValues(self):
         output_file = self.constructFilePath("testRoundTripCustomValues")
@@ -117,9 +123,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.whether_warning = True
         exp_settings.speed_warning = 93
         exp_settings.acc_warning = 91
-        exp_settings.maxtrial = 1
         exp_settings.sessionstarts = [1, 2, 3]
-        exp_settings.blockstarts = [1, 2, 3]
 
         exp_settings.write_to_file()
 
@@ -149,9 +153,9 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, True)
         self.assertEqual(exp_settings.speed_warning, 93)
         self.assertEqual(exp_settings.acc_warning, 91)
-        self.assertEqual(exp_settings.maxtrial, 1)
-        self.assertEqual(exp_settings.sessionstarts, [1, 2, 3])
-        self.assertEqual(exp_settings.blockstarts, [1, 2, 3])
+        self.assertEqual(exp_settings.getMaxtrial(), 2125)
+        self.assertEqual(exp_settings.getSessionStarts(), [1, 2126])
+        self.assertEqual(exp_settings.getBlockStarts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
 
     def testReadEmptyFile(self):
         output_file = self.constructFilePath("testReadEmptyFile")
@@ -196,9 +200,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, None)
         self.assertEqual(exp_settings.speed_warning, None)
         self.assertEqual(exp_settings.acc_warning, None)
-        self.assertEqual(exp_settings.maxtrial, None)
-        self.assertEqual(exp_settings.sessionstarts, None)
-        self.assertEqual(exp_settings.blockstarts, None)
 
     def testReminderTxtCustomValues(self):
         output_file = self.constructFilePath("testReminderTxtCustomValues")
@@ -227,9 +228,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.whether_warning = True
         exp_settings.speed_warning = 93
         exp_settings.acc_warning = 91
-        exp_settings.maxtrial = 1
         exp_settings.sessionstarts = [1, 2, 3]
-        exp_settings.blockstarts = [1, 2, 3]
 
         exp_settings.write_out_reminder()
 

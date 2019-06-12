@@ -60,7 +60,6 @@ class ExperimentSettings:
         self.speed_warning = None       # an accuracy value, warn if the current accuracy is bigger than this value (e.g. 93)
         self.acc_warning = None         # an accuracy value, warn if the current accuracy is smaller than this value (e.g. 91)
 
-        self.maxtrial = None
         self.sessionstarts = None
         self.blockstarts = None
 
@@ -98,10 +97,6 @@ class ExperimentSettings:
                 self.whether_warning = settings_file['whether_warning']
                 self.speed_warning = settings_file['speed_warning']
                 self.acc_warning = settings_file['acc_warning']
-
-                self.maxtrial = settings_file['maxtrial']
-                self.sessionstarts = settings_file['sessionstarts']
-                self.blockstarts = settings_file['blockstarts']
         except Exception as exc:
             self.__init__(self.settings_file_path, self.reminder_file_path)
             raise exc
@@ -136,10 +131,6 @@ class ExperimentSettings:
             settings_file['whether_warning'] = self.whether_warning
             settings_file['speed_warning'] = self.speed_warning
             settings_file['acc_warning'] = self.acc_warning
-
-            settings_file['maxtrial'] = self.maxtrial
-            settings_file['sessionstarts'] = self.sessionstarts
-            settings_file['blockstarts'] = self.blockstarts
 
     def write_out_reminder(self):
         with codecs.open(self.reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
@@ -179,6 +170,30 @@ class ExperimentSettings:
                                 'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n'+
                                 'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
+    def getMaxtrial(self):
+        return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
+
+    def getBlockStarts(self):
+        if self.blockstarts == None:
+            self.blockstarts = [1]
+            for i in range(1, self.epochN * self.block_in_epochN + 2):
+                self.blockstarts.append(i * (self.blocklengthN + self.blockprepN) + 1)
+
+        return self.blockstarts
+
+    def getSessionStarts(self):
+        if self.sessionstarts == None:
+            self.sessionstarts = [1]
+            epochs_cumulative = []
+            e_temp = 0
+            for e in self.epochs:
+                e_temp += e
+                epochs_cumulative.append(e_temp)
+
+            for e in epochs_cumulative:
+                self.sessionstarts.append(e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1)
+
+        return self.sessionstarts
 
 # Class for handle instruction strings (reading from file, storing and displaying)
 class InstructionHelper:
@@ -508,21 +523,6 @@ def all_settings_def(experiment_settings):
         # get epoch and block settings (block number, trial number, epoch number, etc)
         epoch_block_result = show_epoch_and_block_settings_dialog(experiment_settings)
             
-        experiment_settings.maxtrial = (experiment_settings.blockprepN+experiment_settings.blocklengthN)*experiment_settings.epochN*experiment_settings.block_in_epochN
-        experiment_settings.sessionstarts = [1]
-        epochs_cumulative = []
-        e_temp = 0
-        for e in experiment_settings.epochs:
-            e_temp+= e
-            epochs_cumulative.append(e_temp)
-            
-        for e in epochs_cumulative:
-            experiment_settings.sessionstarts.append(e* experiment_settings.block_in_epochN * (experiment_settings.blocklengthN + experiment_settings.blockprepN) +1 )
-
-        experiment_settings.blockstarts = [1]
-        for i in range(1, experiment_settings.epochN*experiment_settings.block_in_epochN+2):
-            experiment_settings.blockstarts.append(i * (experiment_settings.blocklengthN+experiment_settings.blockprepN)+1)
-
         # get montior / computer settings, and also options about displaying (stimulus size, stimulus distance, etc)
         show_computer_and_display_settings_dialog(possible_colors, experiment_settings)
 
@@ -576,11 +576,12 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
     all_trial_Nr = 0
     block_num = 0
 
-    for trial_num in range(1, experiment_settings.maxtrial+1):
-        for session_num in range(1, len(experiment_settings.sessionstarts)):
-            if trial_num >= experiment_settings.sessionstarts[session_num-1] and trial_num < experiment_settings.sessionstarts[session_num]:
+    sessionsstarts = experiment_settings.getSessionStarts()
+    for trial_num in range(1, experiment_settings.getMaxtrial()+1):
+        for session_num in range(1, len(sessionsstarts)):
+            if trial_num >= sessionsstarts[session_num-1] and trial_num < sessionsstarts[session_num]:
                 stim_sessionN[trial_num] = session_num
-                end_at[trial_num] = experiment_settings.sessionstarts[session_num]
+                end_at[trial_num] = sessionsstarts[session_num]
 
     for epoch in range(1,experiment_settings.epochN+1):
 
@@ -686,7 +687,7 @@ def participant_id():
         
     if letezo == 1:
         PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
-        if last_N+1 <= exp_settings.maxtrial:
+        if last_N+1 <= exp_settings.getMaxtrial():
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
             expstart11.addText(u'Folytatás innen...')
@@ -853,7 +854,7 @@ def presentation():
     startfrom = thisperson_settings.get('last_N')
     N = startfrom + 1
     
-    if (startfrom+1) in exp_settings.sessionstarts:
+    if (startfrom+1) in exp_settings.getSessionStarts():
         instruction_helper.show_instructions(mywindow, exp_settings)
         
     else:
@@ -1011,7 +1012,7 @@ def presentation():
 
                 break
             
-        if N in exp_settings.blockstarts: # n+1 volt
+        if N in exp_settings.getBlockStarts(): # n+1 volt
             
             print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
             mywindow.flip()
