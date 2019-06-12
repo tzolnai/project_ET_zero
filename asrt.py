@@ -759,7 +759,9 @@ def frame_check():
     mywindow.flip()
     core.wait(2)
 
-    frame_time, frame_sd = mywindow.getMsPerFrame(nFrames = 120) [0], mywindow.getMsPerFrame(nFrames = 120) [1]
+    ms_per_frame = mywindow.getMsPerFrame(nFrames = 120)
+    frame_time = ms_per_frame[0]
+    frame_sd = ms_per_frame[1]
     frame_rate = mywindow.getActualFrameRate()
     return frame_time, frame_sd, frame_rate
     
