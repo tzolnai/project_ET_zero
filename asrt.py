@@ -31,7 +31,7 @@ from os.path import isfile, join
 # These settings apply to all subjects in the specific experiment
 class ExperimentSettings:
 
-    def __init__(self):
+    def __init__(self, settings_file_path, reminder_file_path):
         self.numsessions = None         # number of sessions (e.g. 10)
         self.groups = None              # list of group names (e.g. ["kontrol", "kiserleti"])
 
@@ -64,9 +64,12 @@ class ExperimentSettings:
         self.sessionstarts = None
         self.blockstarts = None
 
-    def read_from_file(self, settings_file_path):
+        self.settings_file_path = settings_file_path
+        self.reminder_file_path = reminder_file_path
+
+    def read_from_file(self):
         try:
-            with shelve.open(settings_file_path, 'r') as settings_file:
+            with shelve.open(self.settings_file_path, 'r') as settings_file:
                 self.numsessions = settings_file['numsessions']
                 self.groups = settings_file['groups']
 
@@ -100,11 +103,11 @@ class ExperimentSettings:
                 self.sessionstarts = settings_file['sessionstarts']
                 self.blockstarts = settings_file['blockstarts']
         except Exception as exc:
-            self.__init__()
+            self.__init__(self.settings_file_path, self.reminder_file_path)
             raise exc
 
-    def write_to_file(self, settings_file_path):
-        with shelve.open(settings_file_path, 'n') as settings_file:
+    def write_to_file(self):
+        with shelve.open(self.settings_file_path, 'n') as settings_file:
             settings_file['numsessions'] = self.numsessions
             settings_file['groups'] = self.groups
 
@@ -138,8 +141,8 @@ class ExperimentSettings:
             settings_file['sessionstarts'] = self.sessionstarts
             settings_file['blockstarts'] = self.blockstarts
 
-    def write_out_reminder(self, reminder_file_path):
-        with codecs.open(reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
+    def write_out_reminder(self):
+        with codecs.open(self.reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
             reminder_file.write(u'Beállítások \n'+
                                 '\n'+
                                 'Monitor Width: '+ '\t'+ str(self.monitor_width).replace('.',',')+'\n'+
@@ -180,7 +183,7 @@ class ExperimentSettings:
 # Class for handle instruction strings (reading from file, storing and displaying)
 class InstructionHelper:
 
-    def __init__(self):
+    def __init__(self, instructions_file_path):
         self.insts = []                 # instructions in the beginning of the experiment
         self.feedback_exp = []          # feedback for the subject about speed and accuracy in the explicit asrt case
         self.feedback_imp = []          # feedback for the subject about speed and accuracy in the explicit asrt case
@@ -189,10 +192,12 @@ class InstructionHelper:
         self.ending = []                # message in the end of the experiment
         self.unexp_quit = []            # shown message when continuing sessions after the previous data recoding was quited
 
+        self.instructions_file_path = instructions_file_path
+
     # Be aware of that line endings are preserved during reading instructions
-    def read_insts_from_file(self, inst_feedback_path):
+    def read_insts_from_file(self):
         try:
-            with codecs.open(inst_feedback_path, 'r', encoding = 'utf-8') as inst_feedback:
+            with codecs.open(self.instructions_file_path, 'r', encoding = 'utf-8') as inst_feedback:
                 all_inst_feedback = inst_feedback.read().split('***')
         except:
             all_inst_feedback=[]
@@ -486,11 +491,9 @@ def show_subject_PCodes_dialog(experiment_settings):
 
 def all_settings_def(experiment_settings):
 
-    all_settings_file_path = os.path.join(thispath, "settings", "settings")
-
     try:
         # check whether the settings file is in place
-        experiment_settings.read_from_file(all_settings_file_path)
+        experiment_settings.read_from_file()
 
     # if there is no settings file, we ask the user to specfiy the settings
     except:
@@ -527,11 +530,10 @@ def all_settings_def(experiment_settings):
         show_key_and_feedback_settings_dialog(experiment_settings)
 
         # save the settings sepcifed by the user in the different dialogs
-        experiment_settings.write_to_file(all_settings_file_path)
+        experiment_settings.write_to_file()
 
         # write out a text file with the experiment settings data, so the user can check settings in a human readable form
-        reminder_file_path = os.path.join(thispath, "settings", "settings_reminder.txt")
-        exp_settings.write_out_reminder(reminder_file_path)
+        exp_settings.write_out_reminder()
 
 def get_thisperson_settings():
     PCodes = thisperson_settings.get('PCodes', {})                          #
@@ -1104,15 +1106,18 @@ def main():
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
 
-    exp_settings = ExperimentSettings()
+    all_settings_file_path = os.path.join(thispath, "settings", "settings")
+    reminder_file_path = os.path.join(thispath, "settings", "settings_reminder.txt")
+    exp_settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
     all_settings_def(exp_settings)
+
     my_monitor = monitor_settings()
 
     colors = { 'wincolor' : exp_settings.asrt_background, 'linecolor':'black', 'stimp':exp_settings.asrt_pcolor, 'stimr':exp_settings.asrt_rcolor}
 
-    instruction_helper = InstructionHelper()
     inst_feedback_path = os.path.join(thispath, "inst_and_feedback.txt")
-    instruction_helper.read_insts_from_file(inst_feedback_path)
+    instruction_helper = InstructionHelper(inst_feedback_path)
+    instruction_helper.read_insts_from_file()
 
     thisperson_settings, group, subject_nr, identif = participant_id()
     PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()

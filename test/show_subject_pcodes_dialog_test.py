@@ -33,7 +33,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 1
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"
@@ -55,7 +55,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['1st'])
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 1
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"
@@ -69,7 +69,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['2nd', '1st', '6th', '3rd', '1st'])
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 5
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"
@@ -103,7 +103,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 1
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"
@@ -115,7 +115,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['2nd', '1st', 'noPattern', '3rd', 'noPattern'])
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 5
         exp_settings.asrt_types = {}
         exp_settings.asrt_types[1] = "implicit"

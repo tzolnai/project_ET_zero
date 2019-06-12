@@ -35,7 +35,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
 
         self.assertEqual(exp_settings.monitor_width, 34.2)
@@ -76,14 +76,14 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         gui_mock.setReturnValue(False)
 
         with self.assertRaises(SystemExit):
-            exp_settings = asrt.ExperimentSettings()
+            exp_settings = asrt.ExperimentSettings("", "")
             asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([17, "Alma", 2.3, 1.2, "Black", "White", "Green", 205])
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         asrt.show_computer_and_display_settings_dialog(possible_colors, exp_settings)
 
         self.assertEqual(exp_settings.monitor_width, 17)

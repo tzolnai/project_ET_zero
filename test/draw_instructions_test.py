@@ -64,8 +64,8 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testDisplaySingleText(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
@@ -88,10 +88,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testDisplaySingleInstruction(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -119,10 +119,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testQuitDisplay(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -137,7 +137,7 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testDisplayEmptyInstructionList(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -146,7 +146,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper = asrt.InstructionHelper()
+        instruction_helper = asrt.InstructionHelper("")
         instruction_helper._InstructionHelper__show_message(instruction_helper.ending, self.mywindow, exp_settings)
 
         drawing_list = visual_mock.getListOfDrawings()
@@ -154,10 +154,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testDisplayMoreInstructions(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -186,10 +186,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowInstruction(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -218,10 +218,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowUnexpectedQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -239,10 +239,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowEnding(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -260,10 +260,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowImplicitFeedbackNoWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -286,10 +286,10 @@ class drawInstructionsTest(unittest.TestCase):
                                                
     def testShowImplicitFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -315,10 +315,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowImplicitFeedbackAccuracyWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -342,10 +342,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowImplicitFeedbackSpeedWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -369,10 +369,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowExplicitFeedbackNoWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -397,10 +397,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowExplicitFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -426,10 +426,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowExplicitFeedbackAccuracyWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -455,10 +455,10 @@ class drawInstructionsTest(unittest.TestCase):
 
     def testShowExplicitFeedbackSpeedWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_and_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'

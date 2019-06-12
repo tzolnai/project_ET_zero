@@ -30,7 +30,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
 
     def testImplicitASRT(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 10
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 5
@@ -120,7 +120,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
 
     def testExplicitASRT(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 10
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 5
@@ -214,7 +214,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
 
     def testNoASRT(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 5
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 5
@@ -292,7 +292,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
 
     def testASRTWithoutPractice(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 5
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 0
@@ -374,7 +374,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
                 self.assertEqual(stimpr[i+1], "R")
 
     def testASRTWithoutReal(self):
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 5
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 5
@@ -433,7 +433,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
 
     def testWithEvenPracticeTrials(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 5
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 6
@@ -516,7 +516,7 @@ class calculateStimPropertiesTest(unittest.TestCase):
 
     def testWithOddRealTrials(self):
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.epochN = 5
         exp_settings.block_in_epochN = 5
         exp_settings.blockprepN = 6

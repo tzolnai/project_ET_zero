@@ -55,12 +55,12 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         return inst_and_feedback_path
 
     def testRoundTripInitialState(self):
-        exp_settings = asrt.ExperimentSettings()
         output_file = self.constructFilePath("testRoundTripInitialState")
-        exp_settings.write_to_file(output_file)
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+        exp_settings.write_to_file()
 
-        exp_settings = asrt.ExperimentSettings()
-        exp_settings.read_from_file(output_file)
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+        exp_settings.read_from_file()
 
         self.assertEqual(exp_settings.groups, None)
         self.assertEqual(exp_settings.blockprepN, None)
@@ -90,7 +90,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.blockstarts, None)
 
     def testRoundTripCustomValues(self):
-        exp_settings = asrt.ExperimentSettings()
+        output_file = self.constructFilePath("testRoundTripCustomValues")
+        exp_settings = asrt.ExperimentSettings(output_file, "")
 
         exp_settings.numsessions = 1
         exp_settings.groups = ["kontrol"]
@@ -120,11 +121,10 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.sessionstarts = [1, 2, 3]
         exp_settings.blockstarts = [1, 2, 3]
 
-        output_file = self.constructFilePath("testRoundTripCustomValues")
-        exp_settings.write_to_file(output_file)
+        exp_settings.write_to_file()
 
-        exp_settings = asrt.ExperimentSettings()
-        exp_settings.read_from_file(output_file)
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+        exp_settings.read_from_file()
 
         self.assertEqual(exp_settings.groups, ["kontrol"])
         self.assertEqual(exp_settings.blockprepN, 5)
@@ -154,23 +154,23 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.blockstarts, [1, 2, 3])
 
     def testReadEmptyFile(self):
-        exp_settings = asrt.ExperimentSettings()
-
         output_file = self.constructFilePath("testReadEmptyFile")
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+
         with self.assertRaises(dbm.error):
-            exp_settings.read_from_file(output_file)
+            exp_settings.read_from_file()
 
     def testReadCorruptedFile(self):
-        exp_settings = asrt.ExperimentSettings()
-
         output_file = self.constructFilePath("testReadCorruptedFile")
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+
         # not all data is written out
         with shelve.open(output_file) as settings_file:
             settings_file['numsessions'] = 10
             settings_file['groups'] = ["kontrol"]
 
         with self.assertRaises(KeyError):
-            exp_settings.read_from_file(output_file)
+            exp_settings.read_from_file()
 
         # exp_settings has the initial state
         self.assertEqual(exp_settings.groups, None)
@@ -201,7 +201,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.blockstarts, None)
 
     def testReminderTxtCustomValues(self):
-        exp_settings = asrt.ExperimentSettings()
+        output_file = self.constructFilePath("testReminderTxtCustomValues")
+        exp_settings = asrt.ExperimentSettings("", output_file)
 
         exp_settings.numsessions = 1
         exp_settings.groups = ["kontrol"]
@@ -230,8 +231,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.sessionstarts = [1, 2, 3]
         exp_settings.blockstarts = [1, 2, 3]
 
-        output_file = self.constructFilePath("testReminderTxtCustomValues")
-        exp_settings.write_out_reminder(output_file)
+        exp_settings.write_out_reminder()
 
         with codecs.open(output_file,'r', encoding = 'utf-8') as reminder_file:
             self.assertEqual(reminder_file.read(),

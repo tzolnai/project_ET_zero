@@ -32,7 +32,7 @@ class showBasicSettingsDialogTest(unittest.TestCase):
 
     def testDefault(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         numgroups = asrt.show_basic_settings_dialog(exp_settings)
         self.assertEqual(numgroups, 2)
         self.assertEqual(exp_settings.numsessions, 2)
@@ -54,7 +54,7 @@ class showBasicSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([3, 3])
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         numgroups = asrt.show_basic_settings_dialog(exp_settings)
         self.assertEqual(numgroups, 3)
         self.assertEqual(exp_settings.numsessions, 3)
@@ -63,7 +63,7 @@ class showBasicSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         with self.assertRaises(SystemExit):
             asrt.show_basic_settings_dialog(exp_settings)
 

@@ -37,8 +37,8 @@ class readInstructionsTest(unittest.TestCase):
     def testDefaultInstructionSet(self):
         inst_feedback_path = self.constructFilePath("default.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 3)
         self.assertEqual(len(instruction_helper.feedback_exp), 1)
@@ -82,8 +82,8 @@ class readInstructionsTest(unittest.TestCase):
     def testOneInstruction(self):
         inst_feedback_path = self.constructFilePath("one_instruction.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 1)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -96,8 +96,8 @@ class readInstructionsTest(unittest.TestCase):
     def testTypoInInstructionName(self):
         inst_feedback_path = self.constructFilePath("typo_in_instruction_name.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 0)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -110,8 +110,8 @@ class readInstructionsTest(unittest.TestCase):
     def testWeirdButWorkingInstruction(self):
         inst_feedback_path = self.constructFilePath("weird_but_working_instruction.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 1) # instagram is recognized as an 'inst'
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -124,8 +124,8 @@ class readInstructionsTest(unittest.TestCase):
     def testMissingFile(self):
         inst_feedback_path = self.constructFilePath("missing_file.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 0)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -138,8 +138,8 @@ class readInstructionsTest(unittest.TestCase):
     def testMoreInstructionsWithTheSameType(self):
         inst_feedback_path = self.constructFilePath("more_instructions_with_the_same_type.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 2)
         self.assertEqual(len(instruction_helper.feedback_exp), 2)
@@ -152,8 +152,8 @@ class readInstructionsTest(unittest.TestCase):
     def testEmptyFile(self):
         inst_feedback_path = self.constructFilePath("empty.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 0)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -166,8 +166,8 @@ class readInstructionsTest(unittest.TestCase):
     def testInvalidFile(self):
         inst_feedback_path = self.constructFilePath("invalid.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 0)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -180,8 +180,8 @@ class readInstructionsTest(unittest.TestCase):
     def testNoLineEnding(self):
         inst_feedback_path = self.constructFilePath("no_line_ending.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 1)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
@@ -196,8 +196,8 @@ class readInstructionsTest(unittest.TestCase):
     def testKeywordWithoutContent(self):
         inst_feedback_path = self.constructFilePath("keyword_without_content.txt")
 
-        instruction_helper = asrt.InstructionHelper()
-        instruction_helper.read_insts_from_file(inst_feedback_path)
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
 
         self.assertEqual(len(instruction_helper.insts), 0)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)

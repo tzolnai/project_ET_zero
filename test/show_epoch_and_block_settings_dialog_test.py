@@ -33,7 +33,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 1
         asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
@@ -67,7 +67,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 1
 
         with self.assertRaises(SystemExit):
@@ -76,7 +76,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
     def testNoSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 0
         asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
@@ -103,7 +103,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
     def testMoreSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 3
         asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
@@ -146,7 +146,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([12, 79, 2, 3, 12, 7, 'implicit', 'explicit', 'noASRT'])
 
-        exp_settings = asrt.ExperimentSettings()
+        exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 3
         asrt.show_epoch_and_block_settings_dialog(exp_settings)
 
