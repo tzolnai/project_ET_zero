@@ -557,17 +557,17 @@ def which_code(session_number, PCodes):
     if pcode_raw == 'noPattern':
         PCode = 'noPattern'
     elif pcode_raw == '1st':
-        PCode = sequences_PCode[1]
+        PCode = 1234
     elif pcode_raw == '2nd':
-        PCode = sequences_PCode[2]
+        PCode = 1243
     elif pcode_raw == '3rd':
-        PCode = sequences_PCode[3]
+        PCode = 1324
     elif pcode_raw == '4th':
-        PCode = sequences_PCode[4]
+        PCode = 1342
     elif pcode_raw == '5th':
-        PCode = sequences_PCode[5]
+        PCode = 1423
     elif pcode_raw == '6th':
-        PCode = sequences_PCode[6]
+        PCode = 1432
     Pcode_str = str(PCode)
     return PCode, Pcode_str
 
@@ -1088,8 +1088,6 @@ def presentation():
 
 thispath = os.path.split(os.path.abspath(__file__))[0]
 dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
-
-sequences_PCode = { 1 : 1234, 2 : 1243, 3 : 1324, 4 : 1342, 5 : 1423, 6 : 1432 }
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # vezerles
