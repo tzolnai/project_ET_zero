@@ -1119,7 +1119,7 @@ def main():
     PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
-    mywindow = visual.Window (size = (my_monitor.getSizePix()[0], my_monitor.getSizePix()[1]), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
+    mywindow = visual.Window (size = my_monitor.getSizePix(), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
 
     xtext = visual.TextStim(mywindow, text = u"", units = "cm", height = 0.6, color = "black")
 
