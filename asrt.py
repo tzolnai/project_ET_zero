@@ -558,19 +558,18 @@ def which_code(session_number, PCodes):
     PCode = 'noPattern'
 
     if pcode_raw == '1st - 1234':
-        PCode = 1234
+        PCode = '1234'
     elif pcode_raw == '2nd - 1243':
-        PCode = 1243
+        PCode = '1243'
     elif pcode_raw == '3rd - 1324':
-        PCode = 1324
+        PCode = '1324'
     elif pcode_raw == '4th - 1342':
-        PCode = 1342
+        PCode = '1342'
     elif pcode_raw == '5th - 1423':
-        PCode = 1423
+        PCode = '1423'
     elif pcode_raw == '6th - 1432':
-        PCode = 1432
-    Pcode_str = str(PCode)
-    return PCode, Pcode_str
+        PCode = '1432'
+    return PCode
 
 def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
     all_trial_Nr = 0
@@ -611,14 +610,14 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
                 all_trial_Nr += 1
 
                 asrt_type = experiment_settings.asrt_types[stim_sessionN[all_trial_Nr]]
-                PCode, Pcode_str = which_code(stim_sessionN[all_trial_Nr], PCodes)
+                PCode = which_code(stim_sessionN[all_trial_Nr], PCodes)
 
                 dict_HL = {}
                 if not PCode == "noPattern":
-                    dict_HL[Pcode_str[0]] = Pcode_str[1]
-                    dict_HL[Pcode_str[1]] = Pcode_str[2]
-                    dict_HL[Pcode_str[2]] = Pcode_str[3]
-                    dict_HL[Pcode_str[3]] = Pcode_str[0]
+                    dict_HL[PCode[0]] = PCode[1]
+                    dict_HL[PCode[1]] = PCode[2]
+                    dict_HL[PCode[2]] = PCode[3]
+                    dict_HL[PCode[3]] = PCode[0]
 
                 if experiment_settings.blockprepN%2 == 1:
                     mod_pattern = 0
@@ -864,7 +863,7 @@ def presentation():
     accs_in_block  = []
     
     asrt_type = exp_settings.asrt_types[stim_sessionN[N]]
-    PCode, Pcode_str = which_code(stim_sessionN[N], PCodes)
+    PCode = which_code(stim_sessionN[N], PCodes)
     
     allACC = 0
     patternERR = 0
