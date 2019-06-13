@@ -38,7 +38,7 @@ class whichCodeTest(unittest.TestCase):
         self.assertEqual(asrt.which_code(5, PCodes), "1234")
         self.assertEqual(asrt.which_code(6, PCodes), "1243")
 
-    def testTypeInPCode(self):
+    def testTypoInPCode(self):
         PCodes = {1 : "6tj - 1432"}
         self.assertEqual(asrt.which_code(1, PCodes), "noPattern")
 
@@ -49,9 +49,9 @@ class whichCodeTest(unittest.TestCase):
     def testWrongSession(self):
         PCodes = {1 : "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
         with self.assertRaises(KeyError):
-            self.assertEqual(asrt.which_code(7, PCodes), "noPattern")
+            asrt.which_code(7, PCodes)
         with self.assertRaises(KeyError):
-            self.assertEqual(asrt.which_code(0, PCodes), "noPattern")
+            asrt.which_code(0, PCodes)
 
 if __name__ == "__main__":
     unittest.main() # run all tests
