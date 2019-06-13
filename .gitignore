@@ -5,3 +5,4 @@
 *settings\*
 *externals/*
 *externals\*
+.coverage
