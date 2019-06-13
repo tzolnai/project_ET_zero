@@ -406,7 +406,9 @@ class drawInstructionsTest(unittest.TestCase):
         exp_settings.key3 = 'b'
         exp_settings.key4 = 'm'
         exp_settings.key_quit = 'q'
-        exp_settings.whether_warning = False
+        exp_settings.whether_warning = True
+        exp_settings.acc_warning = 90
+        exp_settings.speed_warning = 94
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
