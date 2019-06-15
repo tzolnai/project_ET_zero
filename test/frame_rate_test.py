@@ -41,13 +41,13 @@ class frameRateTest(unittest.TestCase):
 
             frame_time, frame_sd, frame_rate = asrt.frame_check(mywindow)
 
-            self.assertAlmostEqual(frame_rate, 60.0, delta = 15.0) # not too stable
+            self.assertAlmostEqual(frame_rate, 60.0, delta = 2.0) # not too stable
 
-            self.assertAlmostEqual(frame_sd, 2.5, delta = 4.0) # in ms
+            self.assertAlmostEqual(frame_sd, 1.0, delta = 1.0) # in ms
 
-            self.assertAlmostEqual(frame_time, 16.67, delta = 5.0) # not too stable
+            self.assertAlmostEqual(frame_time, 16.67, delta = 1.0) # not too stable
 
-            self.assertAlmostEqual(1000.0 / frame_rate, frame_time, delta = 5.0) # not too stable
+            self.assertAlmostEqual(1000.0 / frame_rate, frame_time, delta = 1.0) # not too stable
 
     def testFrameRatePyglet(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -59,7 +59,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip()
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRatePygame(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -73,7 +73,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             #for i in range(0,60):
             #    mywindow.flip()
-            #self.assertAlmostEqual(timer.getTime(), 1.0, delta = 1.0)
+            #self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRateFullScreen(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -85,7 +85,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip()
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRateNoMouse(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -98,7 +98,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip()
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRatePixUnits(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -110,7 +110,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip()
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRateSmallWindow(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -122,7 +122,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip()
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRateBlackBackground(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -133,7 +133,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip()
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
     def testFrameRateNoClearBuffer(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -144,7 +144,7 @@ class frameRateTest(unittest.TestCase):
             timer = core.Clock()
             for i in range(0,60):
                 mywindow.flip(False)
-            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.25)
+            self.assertAlmostEqual(timer.getTime(), 1.0, delta = 0.1)
 
 if __name__ == "__main__":
     unittest.main() # run all tests
