@@ -750,13 +750,13 @@ def monitor_settings():
 
     return my_monitor
 
-def print_to_screen(mytext = u""):
-    xtext.text = mytext
+def print_to_screen(mywindow, mytext):
+    xtext = visual.TextStim(mywindow, text = mytext, units = "cm", height = 0.6, color = "black")
     xtext.draw()
 
-def frame_check():
+def frame_check(mywindow):
     # monitorral kapcsolatos informáciok
-    print_to_screen(u'Adatok előkészítése folyamatban. \nEz eltarthat pár másodpercig. \nAddig semmit sem fogsz látni a képernyőn...')
+    print_to_screen(mywindow, u'Adatok előkészítése folyamatban. \nEz eltarthat pár másodpercig. \nAddig semmit sem fogsz látni a képernyőn...')
     mywindow.flip()
     core.wait(2)
 
@@ -926,7 +926,7 @@ def presentation():
             stim_RSI = RSI_timer
 
             if press[0][0] == exp_settings.key_quit:
-                print_to_screen("Quit...\nSaving data...")
+                print_to_screen(mywindow, "Quit...\nSaving data...")
                 mywindow.flip()
 
                 outfile_txt.write('userquit')
@@ -1013,7 +1013,7 @@ def presentation():
             
         if N in exp_settings.getBlockStarts(): # n+1 volt
             
-            print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
+            print_to_screen(mywindow, u"Adatok mentése és visszajelzés előkészítése...")
             mywindow.flip()
 
 #            # random, implicit
@@ -1055,7 +1055,7 @@ def presentation():
             if whatnow == 'continue':
                 pass
             elif whatnow == 'quit':
-                print_to_screen("Quit...\nSaving data...")
+                print_to_screen(mywindow, "Quit...\nSaving data...")
                 mywindow.flip()
                 
                 outfile_txt.write('userquit')
@@ -1098,7 +1098,7 @@ def main():
     global colors
     global thisperson_settings, group, subject_nr, identif
     global PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
-    global mywindow, xtext, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
+    global mywindow, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
     global stimbg, stimP, stimR
     global frame_time, frame_sd, frame_rate
     global exp_settings, instruction_helper
@@ -1125,11 +1125,9 @@ def main():
     # Ablak és ingerek felépítése az ismert beállítások szerint
     mywindow = visual.Window (size = my_monitor.getSizePix(), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
 
-    xtext = visual.TextStim(mywindow, text = u"", units = "cm", height = 0.6, color = "black")
-
     pressed_dict ={exp_settings.key1:1,exp_settings.key2:2,exp_settings.key3:3,exp_settings.key4:4}
 
-    frame_time, frame_sd, frame_rate = frame_check()
+    frame_time, frame_sd, frame_rate = frame_check(mywindow)
 
     RSI = core.StaticPeriod(screenHz=frame_rate)
     RSI_clock = core.Clock()
