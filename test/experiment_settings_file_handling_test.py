@@ -123,7 +123,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.whether_warning = True
         exp_settings.speed_warning = 93
         exp_settings.acc_warning = 91
-        exp_settings.sessionstarts = [1, 2, 3]
 
         exp_settings.write_to_file()
 

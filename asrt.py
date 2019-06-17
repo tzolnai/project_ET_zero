@@ -504,7 +504,7 @@ def show_subject_PCodes_dialog(experiment_settings):
     else:
         core.quit()
 
-def all_settings_def(experiment_settings):
+def all_settings_def(experiment_settings, dict_accents):
 
     try:
         # check whether the settings file is in place
@@ -533,7 +533,7 @@ def all_settings_def(experiment_settings):
         experiment_settings.write_to_file()
 
         # write out a text file with the experiment settings data, so the user can check settings in a human readable form
-        exp_settings.write_out_reminder()
+        experiment_settings.write_out_reminder()
 
 def get_thisperson_settings():
     PCodes = thisperson_settings.get('PCodes', {})                          #
@@ -1109,7 +1109,7 @@ def main():
     all_settings_file_path = os.path.join(thispath, "settings", "settings")
     reminder_file_path = os.path.join(thispath, "settings", "settings_reminder.txt")
     exp_settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
-    all_settings_def(exp_settings)
+    all_settings_def(exp_settings, dict_accents)
 
     my_monitor = monitor_settings()
 
