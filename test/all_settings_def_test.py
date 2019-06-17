@@ -193,8 +193,8 @@ class allSettingsDefTest(unittest.TestCase):
                                                          2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
                                                          3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
 
-    def testSettingsDialogsDefaultValues(self):
-        output_file = self.constructFilePath("testSettingsDialogsDefaultValues")
+    def testSettingsDialogsCustomValues(self):
+        output_file = self.constructFilePath("testSettingsDialogsCustomValues")
         exp_settings = asrt.ExperimentSettings(output_file, output_file + "_reminder.txt")
 
         gui_mock = pgm.PsychoPyGuiMock()
