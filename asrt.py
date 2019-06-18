@@ -309,10 +309,177 @@ class InstructionHelper:
             else:
                 return 'continue'
 
+class PersonDataHandler:
+
+    def __init__(self, subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path):
+        self.subject_id = subject_id
+        self.all_settings_file_path = all_settings_file_path
+        self.all_IDs_file_path = all_IDs_file_path
+        self.subject_list_file_path = subject_list_file_path
+        self.output_file_path = output_file_path
+
+    def load_person_settings(self):
+        try:
+            with shelve.open(self.all_settings_file_path, 'r') as all_settings_file:
+
+                all_settings = all_settings_file['all_settings']
+                this_person_settings = all_settings [self.subject_id]
+
+                PCodes = this_person_settings['PCodes']
+                stim_output_line = this_person_settings['stim_output_line']
+
+                stim_sessionN = this_person_settings['stim_sessionN']
+                stimepoch = this_person_settings['stimepoch']
+                stimblock = this_person_settings['stimblock']
+                stimtrial = this_person_settings['stimtrial']
+
+                stimlist = this_person_settings['stimlist']
+                stimpr = this_person_settings['stimpr']
+                last_N = this_person_settings['last_N']
+                end_at = this_person_settings['end_at']
+
+                stim_colorN = this_person_settings['stim_colorN']
+        except:
+            PCodes = {}
+            stim_output_line = 0
+            stim_sessionN = {}
+            stimepoch = {}
+            stimblock = {}
+            stimtrial = {}
+            stimlist = {}
+            stimpr = {}
+            last_N = 0
+            end_at = {}
+            stim_colorN = {}
+
+        return PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
+
+    def save_person_settings(self, PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN):
+        with shelve.open(self.all_settings_file_path, 'n') as all_settings_file:
+            this_person_settings = {}
+            this_person_settings[ 'PCodes' ] = PCodes
+            this_person_settings[ 'stim_output_line' ] = stim_output_line
+
+            this_person_settings[ 'stim_sessionN' ] = stim_sessionN
+            this_person_settings[ 'stimepoch' ] = stimepoch
+            this_person_settings[ 'stimblock' ] = stimblock
+            this_person_settings[ 'stimtrial' ] = stimtrial
+
+            this_person_settings[ 'stimlist' ] = stimlist
+            this_person_settings[ 'stimpr' ] = stimpr
+            this_person_settings[ 'last_N' ] = last_N
+            this_person_settings[ 'end_at' ] = end_at
+            this_person_settings[ 'stim_colorN' ] = stim_colorN
+
+            all_settings = {}
+            all_settings[self.subject_id] = this_person_settings
+
+            all_settings_file['all_settings'] = all_settings
+
+    def update_subject_IDs_files(self):
+        all_IDs = []
+        with shelve.open(self.all_IDs_file_path) as all_IDs_file:
+            try:
+                all_IDs = all_IDs_file['ids']
+            except:
+                all_IDs = []
+
+            if self.subject_id not in all_IDs:
+                all_IDs.append(self.subject_id)
+                all_IDs_file['ids'] = all_IDs
+
+        with codecs.open(self.subject_list_file_path, 'w', encoding = 'utf-8') as subject_list_file:
+            for id in all_IDs:
+                id_segmented = id.replace('_', '\t')
+                subject_list_file.write(id_segmented)
+                subject_list_file.write('\n')
+
+    def append_to_output_file(self, string_to_append):
+        if not os.path.isfile(self.output_file_path):
+            with codecs.open(self.output_file_path, 'w', encoding = 'utf-8') as output_file:
+                self.add_heading_to_output(output_file)
+                output_file.write(string_to_append)
+        else:
+            with codecs.open(self.output_file_path, 'a+', encoding = 'utf-8') as output_file:
+                output_file.write(string_to_append)
+
+    def write_data_to_output(self, computer_name, group, identif, subject_nr, asrt_type, PCode, stim_output_line,
+                             session, epoch, block, trial, stim_RSI, frame_rate, frame_time, frame_sd, stim_RT_time,
+                             stim_RT_date, stim_color, stimpr, stimRT, stimACC, stimulus, stimbutton):
+        output_data = [ computer_name,
+                        group,
+                        identif,
+                        subject_nr,
+                        asrt_type,
+                        PCode,
+
+                        stim_output_line,
+
+                        session,
+                        epoch,
+                        block,
+                        trial,
+
+                        stim_RSI,
+                        frame_rate,
+                        frame_time,
+                        frame_sd,
+                        stim_RT_time,
+                        stim_RT_date,
+
+                        stim_color,
+                        stimpr,
+                        stimRT,
+                        stimACC,
+
+                        stimulus,
+                        stimbutton]
+        output = "\n"
+        for data in output_data:
+            try:
+                data = str(data)
+                data = data.replace('.',',')
+                output += data + '\t'
+            except:
+                output += data + '\t'
+        self.append_to_output_file(output)
+
+    def add_heading_to_output(self, output_file):
+        heading_list = [ 'computer_name',
+                         'Group',
+                         'Subject_ID',
+                         'Subject_nr',
+                         'asrt_type',
+                         'PCode',
+
+                         'output_line',
+
+                         'session',
+                         'epoch',
+                         'block',
+                         'trial',
+
+                         'RSI_time',
+                         'frame_rate',
+                         'frame_time',
+                         'frame_sd',
+                         'date',
+                         'time',
+
+                         'stimulus_color',
+                         'PR',
+                         'RT',
+                         'error',
+                         'stimulus',
+                         'stimbutton',
+                         'quit_log']
+
+        for h in heading_list:
+            output_file.write(h + '\t')
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
-
 
 ### Settings dialogs
 
@@ -535,24 +702,6 @@ def all_settings_def(experiment_settings, dict_accents):
         # write out a text file with the experiment settings data, so the user can check settings in a human readable form
         experiment_settings.write_out_reminder()
 
-def get_thisperson_settings():
-    PCodes = thisperson_settings.get('PCodes', {})                          #
-    stim_output_line = thisperson_settings.get('stim_output_line',0)
-
-    stim_sessionN = thisperson_settings.get('stim_sessionN',{})
-    stimepoch = thisperson_settings.get('stimepoch',{})
-    stimblock = thisperson_settings.get('stimblock',{})
-    stimtrial = thisperson_settings.get('stimtrial',{})
-
-    stimlist = thisperson_settings.get('stimlist',{})
-    stimpr = thisperson_settings.get('stimpr',{})
-    last_N = thisperson_settings.get('last_N', 0)
-    end_at = thisperson_settings.get('end_at',{})
-
-    stim_colorN = thisperson_settings.get('stim_colorN',{})
-    
-    return PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
-
 def which_code(session_number, PCodes):
     pcode_raw = PCodes[session_number]
     PCode = 'noPattern'
@@ -648,44 +797,27 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
 def participant_id():
     global PCodes
     global stim_output_line
-    global thisperson_settings, group, identif, subject_nr
+    global group, identif, subject_nr
     global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
+    global person_data_handler
     
     subject_settings = show_subject_settings_dialog(exp_settings.groups, dict_accents)
     identif = subject_settings["identif"]
     subject_nr = subject_settings["subject_nr"]
     group = subject_settings["group"]
-    
-    p_settings_file = shelve.open(os.path.join(thispath, "settings", "participant_settings"))
-    try:
-        ids_temp = p_settings_file['ids']
-    except:
-        ids_temp = []
-            
 
-    if identif+'_'+str(subject_nr)+'_'+group not in ids_temp:
-        ids_temp.append(identif+'_'+str(subject_nr)+'_'+group)
+    subject_id = identif + '_' + str(subject_nr) + '_' + group
+    all_settings_file_path = os.path.join(thispath, "settings", subject_id)
+    all_IDs_file_path = os.path.join(thispath, "settings", "participant_settings")
+    subject_list_file_path = os.path.join(thispath, "settings", "participants_in_experiment.txt")
+    output_file_path =  os.path.join(thispath, "logs", subject_id + '_log.txt')
+    person_data_handler = PersonDataHandler(subject_id,  all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
 
-    p_settings_file['ids'] = ids_temp
-    p_settings_file.sync()
-    p_settings_file.close()
+    person_data_handler.update_subject_IDs_files()
 
-    # letezik-e mar ilyen ksz-szel beállítás?
-    p_settings_file = shelve.open(os.path.join(thispath, "settings", identif+'_'+str(subject_nr)+"_"+group))
-
-    try:
-        p_settings_temp = p_settings_file['all_settings']
-    except:
-        p_settings_temp = {}
-
-    try:
-        thisperson_settings = p_settings_temp [identif+'_'+str(subject_nr)+'_'+group]
-        letezo = 1
-    except:
-        letezo = 0
+    PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
         
-    if letezo == 1:
-        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
+    if last_N > 0:
         if last_N+1 <= exp_settings.getMaxtrial():
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
@@ -704,40 +836,15 @@ def participant_id():
             expstart11.addText(u'A személy végigcsinálta a feladatot.')
             expstart11.show()
             core.quit()
-                
+
     else:
-        # no such person yet
-        thisperson_settings = {}
-        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
-        
         PCodes = show_subject_PCodes_dialog(exp_settings)
             
         calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        thisperson_settings = {}
-        save_personal_info()
+        person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
 
-    participanttxt = codecs.open(os.path.join(thispath, "settings", "participants_in_experiment.txt"),'w', encoding = 'utf-8')
-    for ida in ids_temp:
-        y = ida.split('_')
-        for x in y:
-            try:
-                x=str(x)
-            except:
-                pass
-            participanttxt.write(x+'\t')
-        try:
-            participanttxt.write(p_settings_temp[ida]['asrt_type']+'\t')
-        except:
-            participanttxt.write('\t')
-        try:
-            participanttxt.write(str(p_settings_temp[ida]['PCode'])+'\n')
-        except:
-            participanttxt.write('\n')
-            
-                                        
-    participanttxt.close()
-    return thisperson_settings, group, subject_nr, identif
+    return group, subject_nr, identif
 
 def monitor_settings():
     screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -771,86 +878,12 @@ def stim_bg():
         stimbg.pos = dict_pos[i]
         stimbg.draw()
 
-def heading_to_output():
-    try:
-        outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'r', encoding = 'utf-8')
-        heading = 1
-        outfile_txt.close()
-    except:
-        heading = 0
-        
-    heading_list = [ 'computer_name',
-                                'Group',
-                                'Subject_ID',
-                                'Subject_nr',
-                                'asrt_type',
-                                'PCode',
-
-                                'output_line',
-                                
-                                'session',
-                                'epoch',  
-                                'block', 
-                                'trial',  
-                                
-                                'RSI_time',
-                                'frame_rate',
-                                'frame_time',
-                                'frame_sd',
-                                'date',
-                                'time',
-
-                                'stimulus_color',
-                                'PR',
-                                'RT',
-                                'error',
-                                'stimulus',
-                                'stimbutton']
-
-    heading_list.append('quit_log')
-
-    if heading == 0:
-        outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'w', encoding = 'utf-8')
-        for h in heading_list:
-            outfile_txt.write(h+'\t')
-        outfile_txt.close()
-
-def save_personal_info(mydict ={}):
-    global thisperson_settings
-
-    thisperson_settings[ 'PCodes' ] = PCodes
-    thisperson_settings[ 'stim_output_line' ] = stim_output_line
-
-    thisperson_settings[ 'stim_sessionN' ] = stim_sessionN
-    thisperson_settings[ 'stimepoch' ] = stimepoch
-    thisperson_settings[ 'stimblock' ] = stimblock
-    thisperson_settings[ 'stimtrial' ] = stimtrial
-
-    thisperson_settings[ 'stimlist' ] = stimlist
-    thisperson_settings[ 'stimpr' ] = stimpr
-    thisperson_settings[ 'last_N' ] = last_N
-    thisperson_settings[ 'end_at' ] = end_at
-    thisperson_settings[ 'stim_colorN' ] = stim_colorN
-
-    p_settings_file = shelve.open(os.path.join(thispath, "settings", identif+'_'+str(subject_nr)+"_"+group))
-    try:
-        p_settings_temp = p_settings_file['all_settings']
-    except:
-        p_settings_temp = {}
-
-    p_settings_temp[identif+'_'+str(subject_nr)+'_'+group] = thisperson_settings
-
-    p_settings_file['all_settings'] = p_settings_temp
-    p_settings_file.sync()
-    p_settings_file.close()
-
 def presentation():
     global last_N, N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
-    outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'a+', encoding = 'utf-8')
     RSI_timer = 0.0
-    startfrom = thisperson_settings.get('last_N')
+    startfrom = last_N
     N = startfrom + 1
     
     if (startfrom+1) in exp_settings.getSessionStarts():
@@ -929,8 +962,7 @@ def presentation():
                 print_to_screen(mywindow, "Quit...\nSaving data...")
                 mywindow.flip()
 
-                outfile_txt.write('userquit')
-                outfile_txt.close()
+                person_data_handler.append_to_output_file('userquit')
 
                 stim_output_line -= 1
                 
@@ -940,7 +972,7 @@ def presentation():
                     last_trial_in_block = stimtrial[N-1]
                     last_epoch = stimepoch[N-1]
                     
-                save_personal_info(thisperson_settings)
+                person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
                 core.quit() 
             
             elif pressed_dict[press[0][0]] == stimlist[N]:                
@@ -963,45 +995,11 @@ def presentation():
                     RT_pattern_list.append(stimRT)
                 RT_all_list.append(stimRT)
             stim_allACC  = allACC
-
-            tempy = [exp_settings.computer_name,
-                        group,
-                        identif,
-                        subject_nr,
-                        asrt_type,
-                        PCode,
-
-                        stim_output_line,
-
-                        stim_sessionN[N], 
-                        stimepoch[N],  
-                        stimblock[N], 
-                        stimtrial[N],  
-
-                        stim_RSI, 
-                        frame_rate,
-                        frame_time,
-                        frame_sd,
-                        stim_RT_time ,
-                        stim_RT_date ,
-
-                        stim_colorN[N],
-                        stimpr[N], 
-                        stimRT, 
-                        stimACC,
-
-                        stimlist[N],
-                        stimbutton]
-                                    
-            outfile_txt.write('\n')
-            for t in tempy:
-                try:
-                    t = str(t)
-                    t = t.replace('.',',')
-                    outfile_txt.write(t+'\t')
-                except:
-                    outfile_txt.write(t+'\t')
             
+            person_data_handler.write_data_to_output(exp_settings.computer_name, group, identif, subject_nr, asrt_type, PCode, stim_output_line,
+                                                    stim_sessionN[N], stimepoch[N], stimblock[N], stimtrial[N], stim_RSI, frame_rate, frame_time,
+                                                    frame_sd, stim_RT_time, stim_RT_date, stim_colorN[N], stimpr[N], stimRT, stimACC, stimlist[N], stimbutton)
+
             if stimACC== 0:
                 last_N = N
                 last_session = stim_sessionN[N]
@@ -1058,8 +1056,7 @@ def presentation():
                 print_to_screen(mywindow, "Quit...\nSaving data...")
                 mywindow.flip()
                 
-                outfile_txt.write('userquit')
-                outfile_txt.close()
+                person_data_handler.append_to_output_file('userquit')
                 
                 if N>=1:
                     last_N = N-1
@@ -1067,7 +1064,7 @@ def presentation():
                     last_trial_in_block = stimtrial[N-1]
                     last_epoch = stimepoch[N-1]
                     
-                save_personal_info(thisperson_settings)
+                person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
                 core.quit() 
             else:
                 print('wtf')
@@ -1083,7 +1080,6 @@ def presentation():
 
         if N  == end_at[N-1]:
             break
-    outfile_txt.close()
 
 # some constants and dictionaries
 
@@ -1119,8 +1115,7 @@ def main():
     instruction_helper = InstructionHelper(inst_feedback_path)
     instruction_helper.read_insts_from_file()
 
-    thisperson_settings, group, subject_nr, identif = participant_id()
-    PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = get_thisperson_settings()
+    group, subject_nr, identif = participant_id()
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
     mywindow = visual.Window (size = my_monitor.getSizePix(), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
@@ -1142,15 +1137,10 @@ def main():
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
     stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
 
-
-    heading_to_output()
-
     presentation()
-    save_personal_info(thisperson_settings)
+    person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
 
-    outfile_txt = codecs.open(os.path.join(thispath, "logs", group+'_'+str(subject_nr)+'_'+identif+'_log.txt'), 'a+', encoding = 'utf-8')
-    outfile_txt.write('sessionend_planned_quit')
-    outfile_txt.close()
+    person_data_handler.append_to_output_file('sessionend_planned_quit')
 
     instruction_helper.show_ending(mywindow, exp_settings)
 
