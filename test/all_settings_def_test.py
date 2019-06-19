@@ -115,9 +115,9 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, True)
         self.assertEqual(exp_settings.speed_warning, 93)
         self.assertEqual(exp_settings.acc_warning, 91)
-        self.assertEqual(exp_settings.getMaxtrial(), 2125)
-        self.assertEqual(exp_settings.getSessionStarts(), [1, 2126])
-        self.assertEqual(exp_settings.getBlockStarts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
+        self.assertEqual(exp_settings.get_maxtrial(), 2125)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 2126])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
 
     def testSettingsDialogsDefaultValues(self):
         output_file = self.constructFilePath("testSettingsDialogsDefaultValues")
@@ -149,9 +149,9 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, True)
         self.assertEqual(exp_settings.speed_warning, 93)
         self.assertEqual(exp_settings.acc_warning, 91)
-        self.assertEqual(exp_settings.getMaxtrial(), 4250)
-        self.assertEqual(exp_settings.getSessionStarts(), [1, 2126, 4251])
-        self.assertEqual(exp_settings.getBlockStarts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
+        self.assertEqual(exp_settings.get_maxtrial(), 4250)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 2126, 4251])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
                                                          1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
                                                          2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
                                                          3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
@@ -186,9 +186,9 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, True)
         self.assertEqual(exp_settings.speed_warning, 93)
         self.assertEqual(exp_settings.acc_warning, 91)
-        self.assertEqual(exp_settings.getMaxtrial(), 4250)
-        self.assertEqual(exp_settings.getSessionStarts(), [1, 2126, 4251])
-        self.assertEqual(exp_settings.getBlockStarts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
+        self.assertEqual(exp_settings.get_maxtrial(), 4250)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 2126, 4251])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
                                                          1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
                                                          2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
                                                          3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
@@ -225,9 +225,9 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, False)
         self.assertEqual(exp_settings.speed_warning, 89)
         self.assertEqual(exp_settings.acc_warning, 78)
-        self.assertEqual(exp_settings.getMaxtrial(), 7140)
-        self.assertEqual(exp_settings.getSessionStarts(), [1, 7141])
-        self.assertEqual(exp_settings.getBlockStarts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
+        self.assertEqual(exp_settings.get_maxtrial(), 7140)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 7141])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
                                                          1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
                                                          2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
                                                          3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336, 4421, 4506,
@@ -265,9 +265,9 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, False)
         self.assertEqual(exp_settings.speed_warning, 89)
         self.assertEqual(exp_settings.acc_warning, 78)
-        self.assertEqual(exp_settings.getMaxtrial(), 7140)
-        self.assertEqual(exp_settings.getSessionStarts(), [1, 7141])
-        self.assertEqual(exp_settings.getBlockStarts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
+        self.assertEqual(exp_settings.get_maxtrial(), 7140)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 7141])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
                                                          1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
                                                          2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
                                                          3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336, 4421, 4506,

@@ -171,10 +171,10 @@ class ExperimentSettings:
                                 'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n'+
                                 'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
-    def getMaxtrial(self):
+    def get_maxtrial(self):
         return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
 
-    def getBlockStarts(self):
+    def get_block_starts(self):
         if self.blockstarts == None:
             self.blockstarts = [1]
             for i in range(1, self.epochN * self.block_in_epochN + 2):
@@ -182,7 +182,7 @@ class ExperimentSettings:
 
         return self.blockstarts
 
-    def getSessionStarts(self):
+    def get_session_starts(self):
         if self.sessionstarts == None:
             self.sessionstarts = [1]
             epochs_cumulative = []
@@ -717,8 +717,8 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
     all_trial_Nr = 0
     block_num = 0
 
-    sessionsstarts = experiment_settings.getSessionStarts()
-    for trial_num in range(1, experiment_settings.getMaxtrial()+1):
+    sessionsstarts = experiment_settings.get_session_starts()
+    for trial_num in range(1, experiment_settings.get_maxtrial()+1):
         for session_num in range(1, len(sessionsstarts)):
             if trial_num >= sessionsstarts[session_num-1] and trial_num < sessionsstarts[session_num]:
                 stim_sessionN[trial_num] = session_num
@@ -810,7 +810,7 @@ def participant_id():
     PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
         
     if last_N > 0:
-        if last_N+1 <= exp_settings.getMaxtrial():
+        if last_N+1 <= exp_settings.get_maxtrial():
             expstart11=gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
             expstart11.addText(u'Folytatás innen...')
@@ -878,7 +878,7 @@ def presentation():
     startfrom = last_N
     N = startfrom + 1
     
-    if (startfrom+1) in exp_settings.getSessionStarts():
+    if (startfrom+1) in exp_settings.get_session_starts():
         instruction_helper.show_instructions(mywindow, exp_settings)
         
     else:
@@ -1001,7 +1001,7 @@ def presentation():
 
                 break
             
-        if N in exp_settings.getBlockStarts(): # n+1 volt
+        if N in exp_settings.get_block_starts(): # n+1 volt
             
             print_to_screen(mywindow, u"Adatok mentése és visszajelzés előkészítése...")
             mywindow.flip()

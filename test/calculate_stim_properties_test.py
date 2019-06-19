@@ -55,26 +55,26 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [2] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         for i in range(len(stim_sessionN)):
-            if i < exp_settings.getMaxtrial() / 2:
+            if i < exp_settings.get_maxtrial() / 2:
                 self.assertEqual(stim_sessionN[i+1], 1)
             else:
                 self.assertEqual(stim_sessionN[i+1], 2)
 
         for i in range(len(end_at)):
-            if i < exp_settings.getMaxtrial() / 2:
-                self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() / 2 + 1)
+            if i < exp_settings.get_maxtrial() / 2:
+                self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() / 2 + 1)
             else:
-                self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+                self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -144,26 +144,26 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [2] = "3rd - 1324"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         for i in range(len(stim_sessionN)):
-            if i < exp_settings.getMaxtrial() / 2:
+            if i < exp_settings.get_maxtrial() / 2:
                 self.assertEqual(stim_sessionN[i+1], 1)
             else:
                 self.assertEqual(stim_sessionN[i+1], 2)
 
         for i in range(len(end_at)):
-            if i < exp_settings.getMaxtrial() / 2:
-                self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() / 2 + 1)
+            if i < exp_settings.get_maxtrial() / 2:
+                self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() / 2 + 1)
             else:
-                self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+                self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -235,21 +235,21 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [1] = "noPattern"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         # all trials are in the same session
         for i in range(len(stim_sessionN)):
             self.assertEqual(stim_sessionN[i+1], 1)
 
         for i in range(len(end_at)):
-            self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+            self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -312,21 +312,21 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         # all trials are in the same session
         for i in range(len(stim_sessionN)):
             self.assertEqual(stim_sessionN[i+1], 1)
 
         for i in range(len(end_at)):
-            self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+            self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -393,21 +393,21 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         # all trials are in the same session
         for i in range(len(stim_sessionN)):
             self.assertEqual(stim_sessionN[i+1], 1)
 
         for i in range(len(end_at)):
-            self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+            self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -451,21 +451,21 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         # all trials are in the same session
         for i in range(len(stim_sessionN)):
             self.assertEqual(stim_sessionN[i+1], 1)
 
         for i in range(len(end_at)):
-            self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+            self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -533,21 +533,21 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [1] = "1st - 1234"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         # all trials are in the same session
         for i in range(len(stim_sessionN)):
             self.assertEqual(stim_sessionN[i+1], 1)
 
         for i in range(len(end_at)):
-            self.assertEqual(end_at[i+1], exp_settings.getMaxtrial() + 1)
+            self.assertEqual(end_at[i+1], exp_settings.get_maxtrial() + 1)
 
         for i in range(len(stimepoch)):
             self.assertEqual(stimepoch[i+1], i // ((exp_settings.blockprepN+exp_settings.blocklengthN)*exp_settings.block_in_epochN) + 1)
@@ -620,14 +620,14 @@ class calculateStimPropertiesTest(unittest.TestCase):
         PCodes [3] = "noPattern"
         asrt.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, exp_settings)
 
-        self.assertEqual(len(stim_sessionN), exp_settings.getMaxtrial())
-        self.assertEqual(len(end_at), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimepoch), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimblock), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimtrial), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimlist), exp_settings.getMaxtrial())
-        self.assertEqual(len(stim_colorN), exp_settings.getMaxtrial())
-        self.assertEqual(len(stimpr), exp_settings.getMaxtrial())
+        self.assertEqual(len(stim_sessionN), exp_settings.get_maxtrial())
+        self.assertEqual(len(end_at), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimepoch), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimblock), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimtrial), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimlist), exp_settings.get_maxtrial())
+        self.assertEqual(len(stim_colorN), exp_settings.get_maxtrial())
+        self.assertEqual(len(stimpr), exp_settings.get_maxtrial())
 
         first_session_last_trial = exp_settings.epochs[0] * exp_settings.block_in_epochN * (exp_settings.blockprepN + exp_settings.blocklengthN)
         second_session_last_trial = first_session_last_trial + exp_settings.epochs[1] * exp_settings.block_in_epochN * (exp_settings.blockprepN + exp_settings.blocklengthN)
