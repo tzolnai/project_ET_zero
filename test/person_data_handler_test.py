@@ -244,7 +244,7 @@ class personDataHandlerTest(unittest.TestCase):
             self.assertEqual(all_IDs, ["alattomos-aladar_333_group_1"])
 
         with codecs.open(subject_list_file_path,'r', encoding = 'utf-8') as subject_list_txt:
-            self.assertEqual(subject_list_txt.read(), "alattomos-aladar\t333\tgroup\t1\n") # TODO
+            self.assertEqual(subject_list_txt.read(), "alattomos-aladar\t333\tgroup_1\n")
 
     def testAppendToEmptyOutput(self):
         output_file_path = self.constructFilePath("testAppendToEmptyOutput.txt")

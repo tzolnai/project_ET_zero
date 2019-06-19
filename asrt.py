@@ -382,7 +382,7 @@ class PersonDataHandler:
 
         with codecs.open(self.subject_list_file_path, 'w', encoding = 'utf-8') as subject_list_file:
             for id in all_IDs:
-                id_segmented = id.replace('_', '\t')
+                id_segmented = id.replace('_', '\t', 2)
                 subject_list_file.write(id_segmented)
                 subject_list_file.write('\n')
 
@@ -614,6 +614,7 @@ def show_subject_settings_dialog(groups, dict_accents):
             name = returned_data[0]
             name = name.lower()
             name = name.replace(' ', '-')
+            name = name.replace('_', '-')
             for accent in dict_accents.keys():
                 name = name.replace(accent, dict_accents[accent])
 
