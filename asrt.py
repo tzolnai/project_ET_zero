@@ -321,10 +321,7 @@ class PersonDataHandler:
 
     def load_person_settings(self):
         try:
-            with shelve.open(self.all_settings_file_path, 'r') as all_settings_file:
-
-                all_settings = all_settings_file['all_settings']
-                this_person_settings = all_settings [self.subject_id]
+            with shelve.open(self.all_settings_file_path, 'r') as this_person_settings:
 
                 PCodes = this_person_settings['PCodes']
                 stim_output_line = this_person_settings['stim_output_line']
@@ -356,8 +353,7 @@ class PersonDataHandler:
         return PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
 
     def save_person_settings(self, PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN):
-        with shelve.open(self.all_settings_file_path, 'n') as all_settings_file:
-            this_person_settings = {}
+        with shelve.open(self.all_settings_file_path, 'n') as this_person_settings:
             this_person_settings[ 'PCodes' ] = PCodes
             this_person_settings[ 'stim_output_line' ] = stim_output_line
 
@@ -371,11 +367,6 @@ class PersonDataHandler:
             this_person_settings[ 'last_N' ] = last_N
             this_person_settings[ 'end_at' ] = end_at
             this_person_settings[ 'stim_colorN' ] = stim_colorN
-
-            all_settings = {}
-            all_settings[self.subject_id] = this_person_settings
-
-            all_settings_file['all_settings'] = all_settings
 
     def update_subject_IDs_files(self):
         all_IDs = []
