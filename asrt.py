@@ -790,7 +790,6 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
 def participant_id():
     global PCodes
     global stim_output_line
-    global group, identif, subject_nr
     global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
     global person_data_handler
     
