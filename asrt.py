@@ -26,6 +26,7 @@ import pyglet
 
 from os import listdir
 from os.path import isfile, join
+import numbers
 
 # This class handles all operation related to experiment settings
 # These settings apply to all subjects in the specific experiment
@@ -436,12 +437,12 @@ class PersonDataHandler:
                         stimbutton]
         output = "\n"
         for data in output_data:
-            try:
+            if isinstance(data, numbers.Number):
                 data = str(data)
                 data = data.replace('.',',')
-                output += data + '\t'
-            except:
-                output += data + '\t'
+            else:
+                data = str(data)
+            output += data + '\t'
         self.append_to_output_file(output)
 
     def add_heading_to_output(self, output_file):
