@@ -10,3 +10,4 @@ use datetime for registering also the microsecond for the time stamp of pushing 
 bring back stimhr output variable
 use a bit more readable variable names (both in name and in output). e.g. bad naming example: stimpr and "PR" in output (can pattern_or_random or someting like that)
 might be a good idea to make consitent the output variable: session, epoch, block, trial, how they are calculated, as global serial number or as inner serial number
+store both converted user id and the user name without changes
