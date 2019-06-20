@@ -664,6 +664,25 @@ def show_subject_PCodes_dialog(experiment_settings):
     else:
         core.quit()
 
+def show_subject_continuation_dialog(stim_sessionN, stimepoch, stimblock, stimtrial, last_N, experiment_settings):
+    if last_N + 1 <= experiment_settings.get_maxtrial():
+        expstart11=gui.Dlg(title=u'Feladat indítása...')
+        expstart11.addText(u'A személy adatait beolvastam.')
+        expstart11.addText(u'Folytatás innen...')
+        expstart11.addText('Session: '+ str(stim_sessionN[last_N + 1]))
+        expstart11.addText('Epoch: '+str(stimepoch[last_N + 1]))
+        expstart11.addText('Block: '+str(stimblock[last_N + 1]))
+        expstart11.addText('Trial: '+str(stimtrial[last_N + 1]))
+        expstart11.show()
+        if not expstart11.OK:
+            core.quit()
+    else:
+        expstart11=gui.Dlg(title=u'Feladat indítása...')
+        expstart11.addText(u'A személy adatait beolvastam.')
+        expstart11.addText(u'A személy végigcsinálta a feladatot.')
+        expstart11.show()
+        core.quit()
+
 def all_settings_def(experiment_settings, dict_accents):
 
     try:
@@ -810,24 +829,7 @@ def participant_id():
     PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
         
     if last_N > 0:
-        if last_N+1 <= exp_settings.get_maxtrial():
-            expstart11=gui.Dlg(title=u'Feladat indítása...')
-            expstart11.addText(u'A személy adatait beolvastam.')
-            expstart11.addText(u'Folytatás innen...')
-            expstart11.addText('Session: '+ str(stim_sessionN[ last_N+1]))
-            expstart11.addText('Epoch: '+str(stimepoch[ last_N+1]))
-            expstart11.addText('Block: '+str(stimblock[last_N+1]))
-            expstart11.addText('Trial: '+str(stimtrial[last_N+1]))
-            expstart11.show()
-            if not expstart11.OK:
-                core.quit()
-                
-        else:
-            expstart11=gui.Dlg(title=u'Feladat indítása...')
-            expstart11.addText(u'A személy adatait beolvastam.')
-            expstart11.addText(u'A személy végigcsinálta a feladatot.')
-            expstart11.show()
-            core.quit()
+        show_subject_continuation_dialog(stim_sessionN, stimepoch, stimblock, stimtrial, last_N, exp_settings)
 
     else:
         PCodes = show_subject_PCodes_dialog(exp_settings)
