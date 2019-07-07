@@ -872,6 +872,43 @@ def stim_bg():
         stimbg.pos = dict_pos[i]
         stimbg.draw()
 
+def show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list,
+                  RT_pattern_list, stim_sessionN, N, exp_settings, instruction_helper, mywindow):
+
+    try:
+        acc_for_the_whole = 100*float( Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
+        acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',')
+
+    except:
+        acc_for_the_whole = 0
+        acc_for_the_whole_str = 'N/A'
+
+    try:
+        rt_mean = float( sum(RT_all_list)) / len(RT_all_list)
+        rt_mean_str = str(rt_mean)[:5].replace('.',',')
+    except:
+        rt_mean_str = 'N/A'
+
+    if exp_settings.asrt_types[stim_sessionN[N-1]] == 'explicit':
+
+        try:
+            rt_mean_p =  float( sum(RT_pattern_list)) / len(RT_pattern_list)
+            rt_mean_p_str = str(rt_mean_p)[:5].replace('.',',')
+        except:
+            rt_mean_p_str = 'N/A'
+
+        try:
+            acc_for_patterns = 100*float( number_of_patterns - patternERR) / number_of_patterns
+            acc_for_patterns_str = str(acc_for_patterns)[0:5].replace('.',',')
+        except:
+            acc_for_patterns_str = 'N/A'
+
+        whatnow = instruction_helper.feedback_explicit(rt_mean_str, rt_mean_p_str, acc_for_patterns_str, acc_for_the_whole, acc_for_the_whole_str, mywindow, exp_settings)
+    else:
+        whatnow = instruction_helper.feedback_implicit(rt_mean_str, acc_for_the_whole, acc_for_the_whole_str, mywindow, exp_settings)
+
+    return whatnow
+
 def presentation():
     global last_N, N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
@@ -1011,46 +1048,11 @@ def presentation():
             
             print_to_screen(mywindow, u"Adatok mentése és visszajelzés előkészítése...")
             mywindow.flip()
-
-#            # random, implicit
-            try:
-                acc_for_patterns = 100*float( number_of_patterns - patternERR) / number_of_patterns
-                acc_for_patterns_str = str(acc_for_patterns)[0:5].replace('.',',') + ' %'
-            except:
-                acc_for_patterns = "N/A"
-                acc_for_patterns_str = "N/A"
-
-            try:
-                acc_for_the_whole = 100*float( Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
-                acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',')
-                
-            except:
-                acc_for_the_whole = 'N/A'
-                acc_for_the_whole_str = 'N/A'
             
-            try:
-                rt_mean = float( sum(RT_all_list)) / len(RT_all_list)
-                rt_mean_str = str(rt_mean)[:5].replace('.',',')
-            except:
-                rt_mean = 'N/A'
-                rt_mean_str = 'N/A'
-                
-            try:
-                rt_mean_p =  float( sum(RT_pattern_list)) / len(RT_pattern_list)
-                rt_mean_p_str = str(rt_mean_p)[:5].replace('.',',')
-            except:
-                rt_mean_p = 'N/A'
-                rt_mean_p = 'N/A'
+            whatnow = show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list,
+                                    RT_pattern_list, stim_sessionN, N, exp_settings, instruction_helper, mywindow)
 
-
-            if exp_settings.asrt_types[stim_sessionN[N-1]] == 'explicit':
-                whatnow = instruction_helper.feedback_explicit(rt_mean_str, rt_mean_p_str, acc_for_patterns_str, acc_for_the_whole, acc_for_the_whole_str, mywindow, exp_settings)
-            else:
-                whatnow = instruction_helper.feedback_implicit(rt_mean_str, acc_for_the_whole, acc_for_the_whole_str, mywindow, exp_settings)
-
-            if whatnow == 'continue':
-                pass
-            elif whatnow == 'quit':
+            if whatnow == 'quit':
                 print_to_screen(mywindow, "Quit...\nSaving data...")
                 mywindow.flip()
                 
@@ -1064,7 +1066,7 @@ def presentation():
                     
                 person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
                 core.quit() 
-            else:
+            elif whatnow != 'continue':
                 print('wtf')
                 
             patternERR = 0
