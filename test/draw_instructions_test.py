@@ -283,7 +283,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
                                                "Pontosságod: 92.123 %\r\n"
                                                "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n\r\n")
-                                               
+
     def testShowImplicitFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
@@ -452,7 +452,7 @@ class drawInstructionsTest(unittest.TestCase):
                                                "Pontosságod általában: 52.123 %\r\n"
                                                "Átlagos reakcióidőd: 450.2 másodperc\r\n"
                                                "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"                                               
+                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
                                                "Legyél pontosabb!\r\n\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackSpeedWarning(self):
@@ -481,8 +481,74 @@ class drawInstructionsTest(unittest.TestCase):
                                                "Pontosságod általában: 96.123 %\r\n"
                                                "Átlagos reakcióidőd: 450.2 másodperc\r\n"
                                                "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"                                               
+                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
+                                               "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+
+    def testShowExplicitFeedbackWithMoreScreens(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+        # We have more items in the feedback list
+        instruction_helper.feedback_exp = ["Dummy string for the first screen"] + instruction_helper.feedback_exp
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.key1 = 'z'
+        exp_settings.key2 = 'c'
+        exp_settings.key3 = 'b'
+        exp_settings.key4 = 'm'
+        exp_settings.key_quit = 'q'
+        exp_settings.whether_warning = True
+        exp_settings.acc_warning = 90
+        exp_settings.speed_warning = 94
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c', 'q'])
+        self.initWindow()
+        return_value = instruction_helper.feedback_explicit("450.2", "410.2", "90.123", 96.123, "96.123", self.mywindow, exp_settings)
+        self.assertEqual(return_value, "quit")
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 2)
+
+        self.assertEqual(drawing_list[0].text, "Dummy string for the first screen")
+        self.assertEqual(drawing_list[1].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                               "Pontosságod általában: 96.123 %\r\n"
+                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n"
+                                               "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
+                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
+                                               "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+
+    def testShowImplicitFeedbackWithMoreScreens(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+        # We have more items in the feedback list
+        instruction_helper.feedback_imp = ["Dummy string for the first screen"] + instruction_helper.feedback_imp
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.key1 = 'z'
+        exp_settings.key2 = 'c'
+        exp_settings.key3 = 'b'
+        exp_settings.key4 = 'm'
+        exp_settings.key_quit = 'q'
+        exp_settings.whether_warning = True
+        exp_settings.acc_warning = 90
+        exp_settings.speed_warning = 94
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['c', 'q'])
+        self.initWindow()
+        return_value = instruction_helper.feedback_implicit("450.2", 96.123, "96.123", self.mywindow, exp_settings)
+        self.assertEqual(return_value, "quit")
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 2)
+
+        self.assertEqual(drawing_list[0].text, "Dummy string for the first screen")
+        self.assertEqual(drawing_list[1].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                               "Pontosságod: 96.123 %\r\n"
+                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
                                                "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
 if __name__ == "__main__":
-    unittest.main() # run all tests 
+    unittest.main() # run all tests

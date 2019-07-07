@@ -281,10 +281,10 @@ class InstructionHelper:
             self.__print_to_screen(l, mywindow)
             mywindow.flip()
             tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
-            if expriment_settings.key_quit in tempkey:
-                return 'quit'
-            else:
-                return 'continue'
+        if expriment_settings.key_quit in tempkey:
+            return 'quit'
+        else:
+            return 'continue'
 
     def feedback_implicit(self, rt_mean, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
 
@@ -305,10 +305,10 @@ class InstructionHelper:
             self.__print_to_screen(i, mywindow)
             mywindow.flip()
             tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
-            if expriment_settings.key_quit in tempkey:
-                return 'quit'
-            else:
-                return 'continue'
+        if expriment_settings.key_quit in tempkey:
+            return 'quit'
+        else:
+            return 'continue'
 
 class PersonDataHandler:
 
