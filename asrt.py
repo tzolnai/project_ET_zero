@@ -603,7 +603,7 @@ def show_subject_settings_dialog(groups, dict_accents):
     while not itsOK:
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText('')
-        settings_dialog.addText(warningtext)
+        settings_dialog.addText(warningtext, color='Red')
         settings_dialog.addField(u'Nev', u"Alattomos Aladar")
         settings_dialog.addField(u'Sorszam', "0")
         if len(groups) > 1:
