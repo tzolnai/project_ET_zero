@@ -901,6 +901,10 @@ def presentation():
 
     tempy = []
 
+    RSI = core.StaticPeriod(screenHz=frame_rate)
+    RSI_clock = core.Clock()
+    trial_clock = core.Clock()
+
     while True:
                     
         stim_bg()
@@ -1088,7 +1092,7 @@ def main():
     global colors
     global thisperson_settings, group, subject_nr, identif
     global PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
-    global mywindow, pressed_dict, RSI, RSI_clock, trial_clock, dict_pos
+    global mywindow, pressed_dict, dict_pos
     global stimbg, stimP, stimR
     global frame_time, frame_sd, frame_rate
     global exp_settings, instruction_helper
@@ -1118,9 +1122,6 @@ def main():
 
     frame_time, frame_sd, frame_rate = frame_check(mywindow)
 
-    RSI = core.StaticPeriod(screenHz=frame_rate)
-    RSI_clock = core.Clock()
-    trial_clock = core.Clock()
 
     dict_pos = { 1:  ( float(exp_settings.asrt_distance)*(-1.5), 0),
                  2:  ( float(exp_settings.asrt_distance)*(-0.5), 0),
