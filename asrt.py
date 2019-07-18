@@ -806,12 +806,7 @@ def calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimt
                 stimblock[all_trial_Nr] = block_num
                 stimepoch[all_trial_Nr] = epoch
 
-def participant_id():
-    global PCodes
-    global stim_output_line
-    global stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
-    global person_data_handler
-    
+def participant_id(thispath, exp_settings, dict_accents):
     subject_settings = show_subject_settings_dialog(exp_settings.groups, dict_accents)
     identif = subject_settings["identif"]
     subject_nr = subject_settings["subject_nr"]
@@ -838,7 +833,7 @@ def participant_id():
 
         person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
 
-    return group, subject_nr, identif
+    return group, subject_nr, identif, person_data_handler, PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
 
 def monitor_settings():
     screen = pyglet.window.get_platform().get_default_display().get_default_screen()
@@ -1098,6 +1093,7 @@ def main():
     global stimbg, stimP, stimR
     global frame_time, frame_sd, frame_rate
     global exp_settings, instruction_helper
+    global person_data_handler
 
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
@@ -1115,7 +1111,7 @@ def main():
     instruction_helper = InstructionHelper(inst_feedback_path)
     instruction_helper.read_insts_from_file()
 
-    group, subject_nr, identif = participant_id()
+    group, subject_nr, identif, person_data_handler, PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr = participant_id(thispath, exp_settings, dict_accents)
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
     mywindow = visual.Window (size = my_monitor.getSizePix(), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
