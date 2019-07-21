@@ -907,7 +907,6 @@ def show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_blo
 
 def presentation():
     global last_N, stim_output_line
-    global last_trial_in_block
 	
     # Init circle stimulus
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
@@ -1003,9 +1002,6 @@ def presentation():
                 
                 if N>=1:
                     last_N = N-1
-                    last_session = stim_sessionN[N-1]
-                    last_trial_in_block = stimtrial[N-1]
-                    last_epoch = stimepoch[N-1]
                     
                 person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
                 core.quit() 
@@ -1037,9 +1033,6 @@ def presentation():
 
             if stimACC== 0:
                 last_N = N
-                last_session = stim_sessionN[N]
-                last_trial_in_block = stimtrial[N]
-                last_epoch = stimepoch[N]
                 N += 1
 
                 break
@@ -1060,9 +1053,6 @@ def presentation():
                 
                 if N>=1:
                     last_N = N-1
-                    last_session = stim_sessionN[N-1]
-                    last_trial_in_block = stimtrial[N-1]
-                    last_epoch = stimepoch[N-1]
                     
                 person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
                 core.quit() 
