@@ -909,10 +909,9 @@ def presentation():
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
     RSI_timer = 0.0
-    startfrom = last_N
-    N = startfrom + 1
+    N = last_N + 1
     
-    if (startfrom+1) in exp_settings.get_session_starts():
+    if N in exp_settings.get_session_starts():
         instruction_helper.show_instructions(mywindow, exp_settings)
         
     else:
