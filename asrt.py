@@ -906,7 +906,7 @@ def show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_blo
     return whatnow
 
 def presentation():
-    global last_N, N, stim_output_line
+    global last_N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
     # Init circle stimulus
