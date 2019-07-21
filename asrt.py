@@ -863,6 +863,7 @@ def frame_check(mywindow):
     return frame_time, frame_sd, frame_rate
     
 def stim_bg():
+    stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
     for i in range(1,5):
         stimbg.pos = dict_pos[i]
         stimbg.draw()
@@ -1125,7 +1126,6 @@ def main():
                  3:  ( float(exp_settings.asrt_distance)*  0.5,   0),
                  4:  ( float(exp_settings.asrt_distance)*  1.5,   0) }
 
-    stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
     stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
 
