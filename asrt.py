@@ -907,7 +907,7 @@ def show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_blo
 
 def presentation():
     global last_N, stim_output_line
-    global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
+    global last_trial_in_block
 	
     # Init circle stimulus
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
