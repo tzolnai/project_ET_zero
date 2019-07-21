@@ -909,6 +909,9 @@ def presentation():
     global last_N, N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
+    stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
+    stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
+
     RSI_timer = 0.0
     N = last_N + 1
     
@@ -1090,7 +1093,6 @@ def main():
     global group, subject_nr, identif
     global PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
     global mywindow, pressed_dict, dict_pos
-    global stimbg, stimP, stimR
     global frame_time, frame_sd, frame_rate
     global exp_settings, instruction_helper
     global person_data_handler
@@ -1126,8 +1128,6 @@ def main():
                  3:  ( float(exp_settings.asrt_distance)*  0.5,   0),
                  4:  ( float(exp_settings.asrt_distance)*  1.5,   0) }
 
-    stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
-    stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
 
     presentation()
     person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
