@@ -1087,7 +1087,7 @@ dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o
 
 def main():
     global colors
-    global thisperson_settings, group, subject_nr, identif
+    global group, subject_nr, identif
     global PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
     global mywindow, pressed_dict, dict_pos
     global stimbg, stimP, stimR
