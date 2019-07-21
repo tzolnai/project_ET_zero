@@ -909,12 +909,14 @@ def presentation():
     global last_N, N, stim_output_line
     global rt_mean, rt_mean_p, acc_for_patterns, acc_for_the_whole, last_trial_in_block
 	
+    # Init circle stimulus
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
     stimR = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimr'], lineColor = colors['linecolor'], pos = dict_pos[1])
 
     RSI_timer = 0.0
     N = last_N + 1
     
+    # Show instructions or continuation message
     if N in exp_settings.get_session_starts():
         instruction_helper.show_instructions(mywindow, exp_settings)
         
