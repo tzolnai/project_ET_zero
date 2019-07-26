@@ -1074,14 +1074,13 @@ def presentation(mywindow, exp_settings, instruction_helper, person_data_handler
 
 # some constants and dictionaries
 
-thispath = os.path.split(os.path.abspath(__file__))[0]
-dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # vezerles
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def main():
+    dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
+    thispath = os.path.split(os.path.abspath(__file__))[0]
 
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
