@@ -935,8 +935,6 @@ def presentation():
     RT_pattern_list = []
     RT_all_list = []
 
-    tempy = []
-
     RSI = core.StaticPeriod(screenHz=frame_rate)
     RSI_clock = core.Clock()
     trial_clock = core.Clock()
