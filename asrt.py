@@ -835,7 +835,7 @@ def participant_id(thispath, exp_settings, dict_accents):
 
     return group, subject_nr, identif, person_data_handler, PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr
 
-def monitor_settings():
+def monitor_settings(exp_settings):
     screen = pyglet.window.get_platform().get_default_display().get_default_screen()
 
     ## Monitor beállítása
@@ -862,7 +862,7 @@ def frame_check(mywindow):
     frame_rate = mywindow.getActualFrameRate()
     return frame_time, frame_sd, frame_rate
     
-def stim_bg():
+def stim_bg(mywindow, colors, dict_pos):
     stimbg = visual.Circle( win = mywindow, radius = 1, units = "cm", fillColor = None, lineColor = colors['linecolor'])
     for i in range(1,5):
         stimbg.pos = dict_pos[i]
@@ -905,8 +905,9 @@ def show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_blo
 
     return whatnow
 
-def presentation():
-    global last_N, stim_output_line
+def presentation(mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
+                 last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
+                 group, identif, subject_nr, frame_rate, frame_time, frame_sd):
 	
     # Init circle stimulus
     stimP = visual.Circle( win = mywindow, radius = exp_settings.asrt_size, units = "cm", fillColor = colors['stimp'], lineColor = colors['linecolor'], pos = dict_pos[1])
@@ -941,7 +942,7 @@ def presentation():
 
     while True:
                     
-        stim_bg()
+        stim_bg(mywindow, colors, dict_pos)
         mywindow.flip()
         
         RSI_clock.reset()
@@ -963,7 +964,7 @@ def presentation():
         
         while True:
             cycle += 1
-            stim_bg()
+            stim_bg(mywindow, colors, dict_pos)
             
             if stimpr[N] == 'P':
                 stimP.draw()
@@ -1069,6 +1070,8 @@ def presentation():
         if N  == end_at[N-1]:
             break
 
+    return last_N, stim_output_line
+
 # some constants and dictionaries
 
 thispath = os.path.split(os.path.abspath(__file__))[0]
@@ -1079,13 +1082,6 @@ dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 def main():
-    global colors
-    global group, subject_nr, identif
-    global PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN
-    global mywindow, pressed_dict, dict_pos
-    global frame_time, frame_sd, frame_rate
-    global exp_settings, instruction_helper
-    global person_data_handler
 
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
@@ -1095,7 +1091,7 @@ def main():
     exp_settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
     all_settings_def(exp_settings, dict_accents)
 
-    my_monitor = monitor_settings()
+    my_monitor = monitor_settings(exp_settings)
 
     colors = { 'wincolor' : exp_settings.asrt_background, 'linecolor':'black', 'stimp':exp_settings.asrt_pcolor, 'stimr':exp_settings.asrt_rcolor}
 
@@ -1119,7 +1115,9 @@ def main():
                  4:  ( float(exp_settings.asrt_distance)*  1.5,   0) }
 
 
-    presentation()
+    last_N, stim_output_line = presentation(mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
+                                            last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
+                                            group, identif, subject_nr, frame_rate, frame_time, frame_sd)
     person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
 
     person_data_handler.append_to_output_file('sessionend_planned_quit')
