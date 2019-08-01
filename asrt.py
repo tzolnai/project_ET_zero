@@ -1054,10 +1054,8 @@ def presentation(mywindow, exp_settings, instruction_helper, person_data_handler
                     last_N = N-1
                     
                 person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
-                core.quit() 
-            elif whatnow != 'continue':
-                print('wtf')
-                
+                core.quit()
+
             patternERR = 0
             allACC = 0
             Npressed_in_block = 0
