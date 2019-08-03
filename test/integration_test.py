@@ -52,8 +52,20 @@ class integrationTest(unittest.TestCase):
         self.clearDir(self.work_dir)
         self.copyFilesToWorkdir()
 
+        # override this method to get the stimlist to be able to generate the keylist
         self.calculate_stim_properties = asrt.calculate_stim_properties
         asrt.calculate_stim_properties = self.calculate_stim_properties_override
+        asrt.frame_check = self.frame_check_override
+
+        # override static period to avoid waiting time
+        class DummyStaticPeriod:
+            def __init__(self, screenHz=None, win=None, name='StaticPeriod'):
+                pass
+            def start(self, duration):
+                pass
+            def complete(self):
+                pass
+        core.StaticPeriod = DummyStaticPeriod
 
         dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
         settings_path = os.path.join(self.work_dir, "settings", "settings")
@@ -99,6 +111,7 @@ class integrationTest(unittest.TestCase):
         self.key_list = [self.exp_settings.key1, self.exp_settings.key1, self.exp_settings.key1]
 
         # Then we have the stimuli
+        trial = 1
         for stim in stimlist.values():
             if stim == 1:
                 self.key_list.append(self.exp_settings.key1)
@@ -109,9 +122,18 @@ class integrationTest(unittest.TestCase):
             elif stim == 4:
                 self.key_list.append(self.exp_settings.key4)
 
-        # feedback and ending screen
-        self.key_list += [self.exp_settings.key1, self.exp_settings.key1]
+            trial += 1
+
+            # feedback at the end of the block
+            if trial in experiment_settings.get_block_starts():
+                    self.key_list.append(self.exp_settings.key1)
+
+        # ending screen
+        self.key_list += [self.exp_settings.key1]
         self.visual_mock.setReturnKeyList(self.key_list)
+
+    def frame_check_override(self, mywindow):
+        return 0.0, 0.0, 60.0
 
     def checkOutputFile(self):
         reference_file_path = os.path.join(self.current_dir, "reference", "toth-bela_10__log.txt")
@@ -147,10 +169,10 @@ class integrationTest(unittest.TestCase):
                     self.assertEqual(ref_values[8], act_values[8]) # epoch
                     self.assertEqual(ref_values[9], act_values[9]) # block
                     self.assertEqual(ref_values[10], act_values[10]) # trial
-                    self.assertAlmostEqual(float(ref_values[11].replace(',', '.')), float(act_values[11].replace(',', '.')), delta = 0.01) # RSI time
-                    # frame_rate
-                    # frame_time
-                    # frame_sd
+                    # RSI time
+                    self.assertEqual(ref_values[12], act_values[12]) # frame_rate
+                    self.assertEqual(ref_values[13], act_values[13]) # frame_time
+                    self.assertEqual(ref_values[14], act_values[14]) # frame_sd
                     # date
                     # time
                     self.assertEqual(ref_values[17], act_values[17]) # stimulus color
@@ -165,6 +187,76 @@ class integrationTest(unittest.TestCase):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        asrt.main(self.work_dir)
+
+        self.checkOutputFile()
+
+    def calculate_stim_properties_override_quit(self, stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
+        self.calculate_stim_properties_override(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings)
+        self.key_list[10] = self.exp_settings.key_quit
+        self.visual_mock.setReturnKeyList(self.key_list)
+
+    def testQuitInsideABlock(self):
+        asrt.calculate_stim_properties = self.calculate_stim_properties_override_quit
+
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        with self.assertRaises(SystemExit):
+            asrt.main(self.work_dir)
+
+        self.checkOutputFile()
+
+    def testExplicitASRT(self):
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        asrt.main(self.work_dir)
+
+        self.checkOutputFile()
+
+    def calculate_stim_properties_override_wrong_button(self, stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
+        self.calculate_stim_properties_override(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings)
+        self.key_list = self.key_list[0:10] + [self.key_list[8]] + self.key_list[10:]
+        self.visual_mock.setReturnKeyList(self.key_list)
+
+    def testWrongPressedButton(self):
+        asrt.calculate_stim_properties = self.calculate_stim_properties_override_wrong_button
+
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        asrt.main(self.work_dir)
+
+        self.checkOutputFile()
+
+    def testMoreBlocks(self):
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        asrt.main(self.work_dir)
+
+        self.checkOutputFile()
+
+    def testMoreSessions(self):
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', '3rd - 1324', '3rd - 1324'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
