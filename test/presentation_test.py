@@ -36,7 +36,7 @@ logging.console.setLevel(logging.ERROR)
 
 dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
 
-class participantIDTest(unittest.TestCase):
+class presentationTest(unittest.TestCase):
 
     def clearDir(self, dir_path):
         for file in os.listdir(dir_path):
