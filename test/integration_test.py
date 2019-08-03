@@ -1,0 +1,176 @@
+#    Copyright (C) <2019>  <Tamás Zolnai>  <zolnaitamas2000@gmail.com>
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#!\\usr\\bin\\env python
+# -*- coding: utf-8 -*-
+
+import unittest
+
+import os
+
+import sys
+# Add the local path to the main script so we can import it.
+sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+
+import asrt
+import shutil
+
+import psychopy_visual_mock as pvm
+import psychopy_gui_mock as pgm
+from psychopy import visual, logging, core
+
+# ignore warnings comming from psychopy
+logging.console.setLevel(logging.ERROR)
+
+def DummyFunction(*argv):
+    pass
+
+core.wait = DummyFunction
+
+class integrationTest(unittest.TestCase):
+
+    def setUp(self):
+        # Init work directories
+        filepath = os.path.abspath(__file__)
+        (filepath, trail) = os.path.split(filepath)
+        test_name = self.id().split(".")[2]
+        self.current_dir = os.path.join(filepath, "data", "integration", test_name)
+        self.work_dir = os.path.join(self.current_dir, "workdir")
+        asrt.ensure_dir(self.work_dir)
+        self.clearDir(self.work_dir)
+        self.copyFilesToWorkdir()
+
+        self.calculate_stim_properties = asrt.calculate_stim_properties
+        asrt.calculate_stim_properties = self.calculate_stim_properties_override
+
+        dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
+        settings_path = os.path.join(self.work_dir, "settings", "settings")
+        self.exp_settings = asrt.ExperimentSettings(settings_path, "")
+        asrt.all_settings_def(self.exp_settings, dict_accents)
+
+    def tearDown(self):
+        self.clearDir(self.work_dir)
+
+    def copyFilesToWorkdir(self):
+        this_path = self.current_dir
+
+        asrt.ensure_dir(os.path.join(self.work_dir, "settings"))
+        asrt.ensure_dir(os.path.join(self.work_dir, "logs"))
+
+        for file in os.listdir(self.current_dir):
+            file_path = os.path.join(self.current_dir, file)
+            if os.path.isfile(file_path):
+                shutil.copyfile(file_path, os.path.join(self.work_dir, file))
+            elif "workdir" in file_path or "reference" in file_path:
+                continue
+            elif os.path.isdir(file_path):
+                for sub_file in os.listdir(file_path):
+                    sub_file_path = os.path.join(file_path, sub_file)
+                    if "settings" in sub_file_path:
+                        shutil.copyfile(sub_file_path, os.path.join(self.work_dir, "settings", sub_file))
+                    else:
+                        shutil.copyfile(sub_file_path, os.path.join(self.work_dir, "logs", sub_file))
+
+    def clearDir(self, dir_path):
+        for file in os.listdir(dir_path):
+            file_path = os.path.join(dir_path, file)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+
+    def calculate_stim_properties_override(self, stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
+        self.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings)
+        self.stimtrial = stimtrial
+
+        # There are some instructions first
+        self.key_list = [self.exp_settings.key1, self.exp_settings.key1, self.exp_settings.key1]
+
+        # Then we have the stimuli
+        for stim in stimlist.values():
+            if stim == 1:
+                self.key_list.append(self.exp_settings.key1)
+            elif stim == 2:
+                self.key_list.append(self.exp_settings.key2)
+            elif stim == 3:
+                self.key_list.append(self.exp_settings.key3)
+            elif stim == 4:
+                self.key_list.append(self.exp_settings.key4)
+
+        # feedback and ending screen
+        self.key_list += [self.exp_settings.key1, self.exp_settings.key1]
+        self.visual_mock.setReturnKeyList(self.key_list)
+
+    def checkOutputFile(self):
+        reference_file_path = os.path.join(self.current_dir, "reference", "toth-bela_10__log.txt")
+        workdir_output = os.path.join(self.work_dir, "logs", "toth-bela_10__log.txt")
+
+        with open(reference_file_path, "r") as ref_file:
+            with open(workdir_output, "r") as output_file:
+                while True:
+                    ref_line = ref_file.readline()
+                    output_line = output_file.readline()
+
+                    # make sure both files have the same number of lines
+                    self.assertEqual(bool(ref_line), bool(output_line))
+
+                    if not ref_line or not output_line:
+                        break
+
+                    ref_values = ref_line.split("\t")
+                    act_values = output_line.split("\t")
+
+                    if ref_values[0] == "computer_name":
+                        self.assertEqual(ref_line, output_line) # first line is equal (headers)
+                        continue
+
+                    self.assertEqual(ref_values[0], act_values[0]) # computer name
+                    self.assertEqual(ref_values[1], act_values[1]) # group
+                    self.assertEqual(ref_values[2], act_values[2]) # subject name
+                    self.assertEqual(ref_values[3], act_values[3]) # subject number
+                    self.assertEqual(ref_values[4], act_values[4]) # asrt type
+                    self.assertEqual(ref_values[5], act_values[5]) # pcode
+                    self.assertEqual(ref_values[6], act_values[6]) # output_line
+                    self.assertEqual(ref_values[7], act_values[7]) # session
+                    self.assertEqual(ref_values[8], act_values[8]) # epoch
+                    self.assertEqual(ref_values[9], act_values[9]) # block
+                    self.assertEqual(ref_values[10], act_values[10]) # trial
+                    self.assertAlmostEqual(float(ref_values[11].replace(',', '.')), float(act_values[11].replace(',', '.')), delta = 0.01) # RSI time
+                    # frame_rate
+                    # frame_time
+                    # frame_sd
+                    # date
+                    # time
+                    self.assertEqual(ref_values[17], act_values[17]) # stimulus color
+                    self.assertEqual(ref_values[18], act_values[18]) # PR
+                    self.assertEqual(ref_values[19], act_values[19]) # RT
+                    self.assertEqual(ref_values[20], act_values[20]) # error
+                    # stimulus
+                    # stimbutton
+                    self.assertEqual(ref_values[23], act_values[23]) # quitlog
+
+    def testSimpleTestCase(self):
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        asrt.main(self.work_dir)
+
+        self.checkOutputFile()
+
+if __name__ == "__main__":
+    unittest.main() # run all tests

@@ -871,19 +871,11 @@ def stim_bg(mywindow, colors, dict_pos):
 def show_feedback(number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list,
                   RT_pattern_list, stim_sessionN, N, exp_settings, instruction_helper, mywindow):
 
-    try:
-        acc_for_the_whole = 100*float( Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
-        acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',')
+    acc_for_the_whole = 100*float( Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
+    acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',')
 
-    except:
-        acc_for_the_whole = 0
-        acc_for_the_whole_str = 'N/A'
-
-    try:
-        rt_mean = float( sum(RT_all_list)) / len(RT_all_list)
-        rt_mean_str = str(rt_mean)[:5].replace('.',',')
-    except:
-        rt_mean_str = 'N/A'
+    rt_mean = float( sum(RT_all_list)) / len(RT_all_list)
+    rt_mean_str = str(rt_mean)[:5].replace('.',',')
 
     if exp_settings.asrt_types[stim_sessionN[N-1]] == 'explicit':
 
@@ -1070,15 +1062,12 @@ def presentation(mywindow, exp_settings, instruction_helper, person_data_handler
 
     return last_N, stim_output_line
 
-# some constants and dictionaries
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # vezerles
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-def main():
+def main(thispath):
     dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
-    thispath = os.path.split(os.path.abspath(__file__))[0]
 
     ensure_dir(os.path.join(thispath, "logs"))
     ensure_dir(os.path.join(thispath, "settings"))
@@ -1099,28 +1088,29 @@ def main():
     group, subject_nr, identif, person_data_handler, PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, last_N,  end_at, stim_colorN, stimpr = participant_id(thispath, exp_settings, dict_accents)
 
     # Ablak és ingerek felépítése az ismert beállítások szerint
-    mywindow = visual.Window (size = my_monitor.getSizePix(), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm")
+    with visual.Window (size = my_monitor.getSizePix(), color = colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as mywindow:
 
-    pressed_dict ={exp_settings.key1:1,exp_settings.key2:2,exp_settings.key3:3,exp_settings.key4:4}
+        pressed_dict ={exp_settings.key1:1,exp_settings.key2:2,exp_settings.key3:3,exp_settings.key4:4}
 
-    frame_time, frame_sd, frame_rate = frame_check(mywindow)
-
-
-    dict_pos = { 1:  ( float(exp_settings.asrt_distance)*(-1.5), 0),
-                 2:  ( float(exp_settings.asrt_distance)*(-0.5), 0),
-                 3:  ( float(exp_settings.asrt_distance)*  0.5,   0),
-                 4:  ( float(exp_settings.asrt_distance)*  1.5,   0) }
+        frame_time, frame_sd, frame_rate = frame_check(mywindow)
 
 
-    last_N, stim_output_line = presentation(mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
-                                            last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
-                                            group, identif, subject_nr, frame_rate, frame_time, frame_sd)
-    person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
+        dict_pos = { 1:  ( float(exp_settings.asrt_distance)*(-1.5), 0),
+                     2:  ( float(exp_settings.asrt_distance)*(-0.5), 0),
+                     3:  ( float(exp_settings.asrt_distance)*  0.5,   0),
+                     4:  ( float(exp_settings.asrt_distance)*  1.5,   0) }
 
-    person_data_handler.append_to_output_file('sessionend_planned_quit')
 
-    instruction_helper.show_ending(mywindow, exp_settings)
+        last_N, stim_output_line = presentation(mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
+                                                last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
+                                                group, identif, subject_nr, frame_rate, frame_time, frame_sd)
+        person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
+
+        person_data_handler.append_to_output_file('sessionend_planned_quit')
+
+        instruction_helper.show_ending(mywindow, exp_settings)
 
 if __name__ == "__main__":
-    main()
+    thispath = os.path.split(os.path.abspath(__file__))[0]
+    main(thispath)
 
