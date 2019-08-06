@@ -38,6 +38,28 @@ dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o
 
 class presentationTest(unittest.TestCase):
 
+    def setUp(self):
+        # Init work directory
+        filepath = os.path.abspath(__file__)
+        (filepath, trail) = os.path.split(filepath)
+        test_name = self.id().split(".")[2]
+        self.current_dir = os.path.join(filepath, "data", "presentation", test_name)
+        self.work_dir = os.path.join(self.current_dir, "workdir")
+        asrt.ensure_dir(self.work_dir)
+        self.clearDir(self.work_dir)
+        self.copyFilesToWorkdir()
+
+    def tearDown(self):
+        self.clearDir(self.work_dir)
+
+    def copyFilesToWorkdir(self):
+        this_path = self.current_dir
+
+        for file in os.listdir(self.current_dir):
+            file_path = os.path.join(self.current_dir, file)
+            if os.path.isfile(file_path):
+                shutil.copyfile(file_path, os.path.join(self.work_dir, file))
+
     def clearDir(self, dir_path):
         for file in os.listdir(dir_path):
             file_path = os.path.join(dir_path, file)
@@ -49,7 +71,7 @@ class presentationTest(unittest.TestCase):
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
         (filepath, trail) = os.path.split(filepath)
-        filepath = os.path.join(filepath, "data", "presentation", file_name)
+        filepath = os.path.join(filepath, "data", "presentation", file_name, "workdir")
         return filepath
 
     def testSimpleTestCase(self):
