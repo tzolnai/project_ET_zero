@@ -337,8 +337,6 @@ class PersonDataHandler:
                 experiment.stimpr = this_person_settings['stimpr']
                 experiment.last_N = this_person_settings['last_N']
                 experiment.end_at = this_person_settings['end_at']
-
-                experiment.stim_colorN = this_person_settings['stim_colorN']
         except:
             experiment.PCodes = {}
             experiment.stim_output_line = 0
@@ -350,7 +348,6 @@ class PersonDataHandler:
             experiment.stimpr = {}
             experiment.last_N = 0
             experiment.end_at = {}
-            experiment.stim_colorN = {}
 
     def save_person_settings(self, experiment):
         with shelve.open(self.all_settings_file_path, 'n') as this_person_settings:
@@ -366,7 +363,6 @@ class PersonDataHandler:
             this_person_settings[ 'stimpr' ] = experiment.stimpr
             this_person_settings[ 'last_N' ] = experiment.last_N
             this_person_settings[ 'end_at' ] = experiment.end_at
-            this_person_settings[ 'stim_colorN' ] = experiment.stim_colorN
 
     def update_subject_IDs_files(self):
         all_IDs = []
@@ -395,7 +391,7 @@ class PersonDataHandler:
             with codecs.open(self.output_file_path, 'a+', encoding = 'utf-8') as output_file:
                 output_file.write(string_to_append)
 
-    def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton):
+    def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor):
         output_data = [ experiment.settings.computer_name,
                         experiment.group,
                         experiment.identif,
@@ -417,7 +413,7 @@ class PersonDataHandler:
                         stim_RT_time,
                         stim_RT_date,
 
-                        experiment.stim_colorN[N],
+                        stimcolor,
                         experiment.stimpr[N],
                         stimRT,
                         stimACC,
@@ -622,7 +618,6 @@ class Experiment:
         self.stimlist = None
         self.last_N = None
         self.end_at = None
-        self.stim_colorN = None
         self.stimpr = None
 
     def all_settings_def(self):
@@ -783,7 +778,6 @@ class Experiment:
                     current_stim = random.choice([1,2,3,4])
                     self.stimlist[all_trial_Nr] = current_stim
                     self.stimpr[all_trial_Nr] = "R"
-                    self.stim_colorN[all_trial_Nr] = self.settings.asrt_rcolor
                     self.stimtrial[all_trial_Nr] = current_trial_num
                     self.stimblock[all_trial_Nr] = block_num
                     self.stimepoch[all_trial_Nr] = epoch
@@ -815,14 +809,8 @@ class Experiment:
                         else:
                             current_stim = random.choice([1,2,3,4]) # first pattern stim is random
                         self.stimpr[all_trial_Nr] = "P"
-
-                        if asrt_type == 'explicit':
-                            self.stim_colorN[all_trial_Nr] = self.settings.asrt_pcolor
-                        elif asrt_type == "implicit" or asrt_type == 'noASRT':
-                            self.stim_colorN[all_trial_Nr] = self.settings.asrt_rcolor
                     else:
                         current_stim = random.choice([1,2,3,4])
-                        self.stim_colorN[all_trial_Nr] = self.settings.asrt_rcolor
                         self.stimpr[all_trial_Nr] = "R"
 
                     self.stimlist[all_trial_Nr] = current_stim
@@ -960,8 +948,10 @@ class Experiment:
                     stimP.fillColor =  self.colors['stimp']
                 else:
                     stimP.fillColor =  self.colors['stimr']
+                stimcolor = stimP.fillColor
                 stimP.setPos(self.dict_pos[self.stimlist[N]])
             else:
+                stimcolor = self.colors['stimr']
                 stimR.setPos(self.dict_pos[self.stimlist[N]])
 
             RSI.complete()
@@ -1033,7 +1023,7 @@ class Experiment:
                     RT_all_list.append(stimRT)
                 stim_allACC  = allACC
 
-                self.person_data.write_data_to_output(self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
+                self.person_data.write_data_to_output(self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
                 if stimACC== 0:
                     self.last_N = N

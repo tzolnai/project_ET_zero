@@ -71,7 +71,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
         experiment.last_N = 1
         experiment.end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
-        experiment.stim_colorN = {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'}
 
         person_data_handler.save_person_settings(experiment)
 
@@ -89,7 +88,6 @@ class personDataHandlerTest(unittest.TestCase):
         self.assertEqual(experiment.stimpr, {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'})
         self.assertEqual(experiment.last_N, 1)
         self.assertEqual(experiment.end_at, {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16})
-        self.assertEqual(experiment.stim_colorN, {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'})
 
     def testReadMissingPersonSettings(self):
         all_settings_file_path = self.constructFilePath("testReadMissingPersonSettings")
@@ -109,7 +107,6 @@ class personDataHandlerTest(unittest.TestCase):
         self.assertEqual(experiment.stimpr, {})
         self.assertEqual(experiment.last_N, 0)
         self.assertEqual(experiment.end_at, {})
-        self.assertEqual(experiment.stim_colorN, {})
 
     def testReadIncompletePersonSettings(self):
         all_settings_file_path = self.constructFilePath("testReadIncompletePersonSettings")
@@ -140,7 +137,6 @@ class personDataHandlerTest(unittest.TestCase):
         self.assertEqual(experiment.stimpr, {})
         self.assertEqual(experiment.last_N, 0)
         self.assertEqual(experiment.end_at, {})
-        self.assertEqual(experiment.stim_colorN, {})
 
     def testUpdateExistingPersonSettings(self):
         all_settings_file_path = self.constructFilePath("testUpdateExistingPersonSettings")
@@ -158,7 +154,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
         experiment.last_N = 1
         experiment.end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
-        experiment.stim_colorN = {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'}
 
         person_data_handler.save_person_settings(experiment)
 
@@ -303,7 +298,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.frame_sd = 1.3
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
-        experiment.stim_colorN = {0 : 'Orange'}
+        stimcolor = 'Orange'
         experiment.stimpr=  {0 : 'P'}
         stimRT = 321.2345
         stimACC = 0
@@ -311,7 +306,7 @@ class personDataHandlerTest(unittest.TestCase):
         stimbutton = 'z'
         N = 0
 
-        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         with codecs.open(output_file_path,'r', encoding = 'utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tGroup\tSubject_ID\tSubject_nr\tasrt_type\tPCode\toutput_line\t"
@@ -345,7 +340,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.frame_sd = 1.3
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
-        experiment.stim_colorN = {0 : 'Orange'}
+        stimcolor = 'Orange'
         experiment.stimpr=  {0 : 'P'}
         stimRT = 321.2345
         stimACC = 0
@@ -353,21 +348,21 @@ class personDataHandlerTest(unittest.TestCase):
         stimbutton = 'z'
         N = 0
 
-        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         experiment.stim_output_line = 13
         experiment.stimtrial[0] = 22
         stim_RSI = 0.111
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
-        experiment.stim_colorN[0] = "Green"
+        stimcolor = 'Green'
         experiment.stimpr[0] = "R"
         stimRT = 523.2345
         stimACC = 1
         experiment.stimlist[0] = 2
         stimbutton = 'b'
 
-        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         with codecs.open(output_file_path,'r', encoding = 'utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tGroup\tSubject_ID\tSubject_nr\tasrt_type\tPCode\toutput_line\t"
@@ -404,7 +399,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.frame_sd = 1.3
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%Y.%m.%d')
-        experiment.stim_colorN = {0 : 'Orange'}
+        stimcolor = 'Orange'
         experiment.stimpr=  {0 : 'P'}
         stimRT = 321.2345
         stimACC = 0
@@ -412,7 +407,7 @@ class personDataHandlerTest(unittest.TestCase):
         stimbutton = 'z'
         N = 0
 
-        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         with codecs.open(output_file_path,'r', encoding = 'utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tGroup\tSubject_ID\tSubject_nr\tasrt_type\tPCode\toutput_line\t"

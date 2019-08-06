@@ -48,7 +48,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "1st - 1234"
@@ -61,7 +60,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         for i in range(len(experiment.stim_sessionN)):
@@ -105,10 +103,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(count_2, 500)
         self.assertEqual(count_3, 500)
         self.assertEqual(oount_4, 500)
-
-        # implicit asrt
-        for i in range(len(experiment.stim_colorN)):
-            self.assertEqual(experiment.stim_colorN[i+1], "Orange")
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
@@ -137,7 +131,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "2nd - 1243"
@@ -150,7 +143,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         for i in range(len(experiment.stim_sessionN)):
@@ -195,14 +187,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(count_3, 500)
         self.assertEqual(oount_4, 500)
 
-        # implicit asrt
-        for i in range(len(experiment.stim_colorN)):
-            trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
-            if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stim_colorN[i+1], "Green")
-            else:
-                self.assertEqual(experiment.stim_colorN[i+1], "Orange")
-
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
@@ -229,7 +213,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "noPattern"
@@ -241,7 +224,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         # all trials are in the same session
@@ -280,10 +262,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertTrue(count_1 != count_2)
         self.assertTrue(count_3 != oount_4)
 
-        # implicit asrt
-        for i in range(len(experiment.stim_colorN)):
-            self.assertEqual(experiment.stim_colorN[i+1], "Orange")
-
         for i in range(len(experiment.stimpr)):
             self.assertEqual(experiment.stimpr[i+1], "R")
 
@@ -306,7 +284,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "1st - 1234"
@@ -318,7 +295,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         # all trials are in the same session
@@ -357,10 +333,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(count_2, 250)
         self.assertEqual(count_3, 250)
         self.assertEqual(oount_4, 250)
-
-        # implicit asrt
-        for i in range(len(experiment.stim_colorN)):
-            self.assertEqual(experiment.stim_colorN[i+1], "Orange")
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
@@ -388,7 +360,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "1st - 1234"
@@ -400,7 +371,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         # all trials are in the same session
@@ -418,10 +388,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimtrial)):
             self.assertEqual(experiment.stimtrial[i+1], i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
-
-        # random only
-        for i in range(len(experiment.stim_colorN)):
-            self.assertEqual(experiment.stim_colorN[i+1], "Orange")
 
         # random only
         for i in range(len(experiment.stimpr)):
@@ -446,7 +412,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "1st - 1234"
@@ -458,7 +423,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         # all trials are in the same session
@@ -498,10 +462,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(count_3, 250)
         self.assertEqual(oount_4, 250)
 
-        # implicit asrt
-        for i in range(len(experiment.stim_colorN)):
-            self.assertEqual(experiment.stim_colorN[i+1], "Orange")
-
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
@@ -528,7 +488,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "1st - 1234"
@@ -540,7 +499,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         # all trials are in the same session
@@ -581,10 +539,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertAlmostEqual(count_3, 237, delta=5)
         self.assertAlmostEqual(oount_4, 237, delta=5)
 
-        # implicit asrt
-        for i in range(len(experiment.stim_colorN)):
-            self.assertEqual(experiment.stim_colorN[i+1], "Orange")
-
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
@@ -613,7 +567,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimblock = {}
         experiment.stimtrial = {}
         experiment.stimlist = {}
-        experiment.stim_colorN = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
         experiment.PCodes [1] = "2nd - 1243"
@@ -627,7 +580,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(len(experiment.stimblock), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimtrial), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimlist), experiment.settings.get_maxtrial())
-        self.assertEqual(len(experiment.stim_colorN), experiment.settings.get_maxtrial())
         self.assertEqual(len(experiment.stimpr), experiment.settings.get_maxtrial())
 
         first_session_last_trial = experiment.settings.epochs[0] * experiment.settings.block_in_epochN * (experiment.settings.blockprepN + experiment.settings.blocklengthN)
@@ -696,16 +648,6 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertEqual(count_1, count_2)
         self.assertEqual(count_2, count_3)
         self.assertEqual(count_3, count_4)
-
-        for i in range(len(experiment.stim_colorN)):
-            trial_num_in_block = i % (experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
-            if i < first_session_last_trial: # explicit
-                if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                    self.assertEqual(experiment.stim_colorN[i+1], "Green")
-                else:
-                    self.assertEqual(experiment.stim_colorN[i+1], "Orange")
-            else: # imlicit or noASRT
-                self.assertEqual(experiment.stim_colorN[i+1], "Orange")
 
         for i in range(len(experiment.stimpr)):
             if i < second_session_last_trial: # explicit or implicit
