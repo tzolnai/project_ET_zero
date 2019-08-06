@@ -20,12 +20,10 @@
 # -*- coding: utf-8 -*-
 
 
-from psychopy import visual, core, event, gui, monitors, sound, prefs
-import shelve, random, codecs, os, time, matplotlib
+from psychopy import visual, core, event, gui, monitors
+import shelve, random, codecs, os, time
 import pyglet
 
-from os import listdir
-from os.path import isfile, join
 import numbers
 
 # This class handles all operation related to experiment settings
