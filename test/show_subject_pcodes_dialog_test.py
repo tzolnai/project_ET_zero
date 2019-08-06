@@ -33,15 +33,17 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.asrt_types = {}
-        exp_settings.asrt_types[1] = "implicit"
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
 
-        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
+        experiment.settings.numsessions = 1
+        experiment.settings.asrt_types = {}
+        experiment.settings.asrt_types[1] = "implicit"
 
-        self.assertEqual(len(PCodes), exp_settings.numsessions)
-        self.assertEqual(PCodes[1], "")
+        experiment.show_subject_PCodes_dialog()
+
+        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(experiment.PCodes[1], "")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -55,37 +57,41 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['1st'])
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.asrt_types = {}
-        exp_settings.asrt_types[1] = "implicit"
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
 
-        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
+        experiment.settings.numsessions = 1
+        experiment.settings.asrt_types = {}
+        experiment.settings.asrt_types[1] = "implicit"
 
-        self.assertEqual(len(PCodes), exp_settings.numsessions)
-        self.assertEqual(PCodes[1], "1st")
+        experiment.show_subject_PCodes_dialog()
+
+        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(experiment.PCodes[1], "1st")
 
     def testMoreSessionsCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['2nd', '1st', '6th', '3rd', '1st'])
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 5
-        exp_settings.asrt_types = {}
-        exp_settings.asrt_types[1] = "implicit"
-        exp_settings.asrt_types[2] = "implicit"
-        exp_settings.asrt_types[3] = "implicit"
-        exp_settings.asrt_types[4] = "implicit"
-        exp_settings.asrt_types[5] = "implicit"
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
 
-        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
+        experiment.settings.numsessions = 5
+        experiment.settings.asrt_types = {}
+        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types[2] = "implicit"
+        experiment.settings.asrt_types[3] = "implicit"
+        experiment.settings.asrt_types[4] = "implicit"
+        experiment.settings.asrt_types[5] = "implicit"
 
-        self.assertEqual(len(PCodes), exp_settings.numsessions)
-        self.assertEqual(PCodes[1], "2nd")
-        self.assertEqual(PCodes[2], "1st")
-        self.assertEqual(PCodes[3], "6th")
-        self.assertEqual(PCodes[4], "3rd")
-        self.assertEqual(PCodes[5], "1st")
+        experiment.show_subject_PCodes_dialog()
+
+        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(experiment.PCodes[1], "2nd")
+        self.assertEqual(experiment.PCodes[2], "1st")
+        self.assertEqual(experiment.PCodes[3], "6th")
+        self.assertEqual(experiment.PCodes[4], "3rd")
+        self.assertEqual(experiment.PCodes[5], "1st")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -103,35 +109,37 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.asrt_types = {}
-        exp_settings.asrt_types[1] = "implicit"
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.numsessions = 1
+        experiment.settings.asrt_types = {}
+        experiment.settings.asrt_types[1] = "implicit"
 
         with self.assertRaises(SystemExit):
-            PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
+            experiment.show_subject_PCodes_dialog()
 
     def testNoASRTSussions(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['2nd', '1st', 'noPattern', '3rd', 'noPattern'])
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 5
-        exp_settings.asrt_types = {}
-        exp_settings.asrt_types[1] = "implicit"
-        exp_settings.asrt_types[2] = "implicit"
-        exp_settings.asrt_types[3] = "noASRT"
-        exp_settings.asrt_types[4] = "implicit"
-        exp_settings.asrt_types[5] = "noASRT"
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.numsessions = 5
+        experiment.settings.asrt_types = {}
+        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types[2] = "implicit"
+        experiment.settings.asrt_types[3] = "noASRT"
+        experiment.settings.asrt_types[4] = "implicit"
+        experiment.settings.asrt_types[5] = "noASRT"
 
-        PCodes = asrt.show_subject_PCodes_dialog(exp_settings)
+        experiment.show_subject_PCodes_dialog()
 
-        self.assertEqual(len(PCodes), exp_settings.numsessions)
-        self.assertEqual(PCodes[1], "2nd")
-        self.assertEqual(PCodes[2], "1st")
-        self.assertEqual(PCodes[3], "noPattern")
-        self.assertEqual(PCodes[4], "3rd")
-        self.assertEqual(PCodes[5], "noPattern")
+        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(experiment.PCodes[1], "2nd")
+        self.assertEqual(experiment.PCodes[2], "1st")
+        self.assertEqual(experiment.PCodes[3], "noPattern")
+        self.assertEqual(experiment.PCodes[4], "3rd")
+        self.assertEqual(experiment.PCodes[5], "noPattern")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)

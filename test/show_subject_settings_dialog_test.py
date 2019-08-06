@@ -28,22 +28,19 @@ import asrt
 
 import psychopy_gui_mock as pgm
 
-dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
-
 class showSubjectSettingsDialogTest(unittest.TestCase):
 
     def testDefaults(self):
-        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock = pgm.PsychoPyGuiMock()        
+        
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
+        experiment.show_subject_settings_dialog()
 
-        groups = ["kontrol", "exp1"]
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
-
-        self.assertEqual(identif, "alattomos-aladar")
-        self.assertEqual(subject_nr, 0)
-        self.assertEqual(group, '')
+        self.assertEqual(experiment.identif, "alattomos-aladar")
+        self.assertEqual(experiment.subject_nr, 0)
+        self.assertEqual(experiment.group, '')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -63,65 +60,63 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        groups = ["kontrol", "exp1"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
         with self.assertRaises(SystemExit):
-            subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
+            experiment.show_subject_settings_dialog()
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Béla', 10, 'kontrol'])
 
-        groups = ["kontrol", "exp1"]
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
+        subject_settings = experiment.show_subject_settings_dialog()
 
-        self.assertEqual(identif, "toth-bela")
-        self.assertEqual(subject_nr, 10)
-        self.assertEqual(group, 'kontrol')
+        self.assertEqual(experiment.identif, "toth-bela")
+        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.group, 'kontrol')
 
     def testAccentCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ', 10, 'kontrol'])
 
-        groups = ["kontrol", "exp1"]
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
+        experiment.show_subject_settings_dialog()
 
-        self.assertEqual(identif, "aaeeiioooouuuuaaeeiioooouuuu")
-        self.assertEqual(subject_nr, 10)
-        self.assertEqual(group, 'kontrol')
+        self.assertEqual(experiment.identif, "aaeeiioooouuuuaaeeiioooouuuu")
+        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.group, 'kontrol')
 
     def testSpecialCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['áaée íióoőö úuűüÁA ÉEÍIÓOŐÖ ÚUŰÜ', 10, 'kontrol'])
 
-        groups = ["kontrol", "exp1"]
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
+        experiment.show_subject_settings_dialog()
 
-        self.assertEqual(identif, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
-        self.assertEqual(subject_nr, 10)
-        self.assertEqual(group, 'kontrol')
+        self.assertEqual(experiment.identif, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
+        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.group, 'kontrol')
 
     def testInvalidSubjectNumber(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Csaba', 'x', 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
 
-        groups = ["kontrol", "exp1"]
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
+        experiment.show_subject_settings_dialog()
 
-        self.assertEqual(identif, "toth-csaba")
-        self.assertEqual(subject_nr, 10)
-        self.assertEqual(group, 'kontrol')
+        self.assertEqual(experiment.identif, "toth-csaba")
+        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
         list_of_texts = gui_mock.getListOfTexts()
@@ -135,15 +130,14 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Csaba', -10, 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
 
-        groups = ["kontrol", "exp1"]
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = ["kontrol", "exp1"]
+        experiment.show_subject_settings_dialog()
 
-        self.assertEqual(identif, "toth-csaba")
-        self.assertEqual(subject_nr, 10)
-        self.assertEqual(group, 'kontrol')
+        self.assertEqual(experiment.identif, "toth-csaba")
+        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
         list_of_texts = gui_mock.getListOfTexts()
@@ -156,15 +150,14 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
     def testNoGroups(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        groups = []
-        subject_settings = asrt.show_subject_settings_dialog(groups, dict_accents)
-        identif = subject_settings["identif"]
-        subject_nr = subject_settings["subject_nr"]
-        group = subject_settings["group"]
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.groups = []
+        experiment.show_subject_settings_dialog()
 
-        self.assertEqual(identif, "alattomos-aladar")
-        self.assertEqual(subject_nr, 0)
-        self.assertEqual(group, '')
+        self.assertEqual(experiment.identif, "alattomos-aladar")
+        self.assertEqual(experiment.subject_nr, 0)
+        self.assertEqual(experiment.group, '')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)

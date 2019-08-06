@@ -53,10 +53,11 @@ class integrationTest(unittest.TestCase):
         self.copyFilesToWorkdir()
 
         # override this method to get the stimlist to be able to generate the keylist
-        self.calculate_stim_properties = asrt.calculate_stim_properties
-        asrt.calculate_stim_properties = self.calculate_stim_properties_override
-        self.frame_check = asrt.frame_check
-        asrt.frame_check = self.frame_check_override
+        self.experiment = asrt.Experiment(self.work_dir)
+        self.calculate_stim_properties = self.experiment.calculate_stim_properties
+        self.experiment.calculate_stim_properties = self.calculate_stim_properties_override
+        self.frame_check = self.experiment.frame_check
+        self.experiment.frame_check = self.frame_check_override
 
         # override static period to avoid waiting time
         class DummyStaticPeriod:
@@ -69,16 +70,12 @@ class integrationTest(unittest.TestCase):
         self.StaticPeriod = core.StaticPeriod
         core.StaticPeriod = DummyStaticPeriod
 
-        dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
-        settings_path = os.path.join(self.work_dir, "settings", "settings")
-        self.exp_settings = asrt.ExperimentSettings(settings_path, "")
-        asrt.all_settings_def(self.exp_settings, dict_accents)
 
     def tearDown(self):
-        self.clearDir(self.work_dir)        
-        
-        asrt.calculate_stim_properties = self.calculate_stim_properties
-        asrt.frame_check = self.frame_check        
+        self.clearDir(self.work_dir)
+
+        self.experiment.calculate_stim_properties = self.calculate_stim_properties
+        self.experiment.frame_check = self.frame_check
         core.StaticPeriod = self.StaticPeriod
 
     def copyFilesToWorkdir(self):
@@ -109,43 +106,43 @@ class integrationTest(unittest.TestCase):
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
 
-    def calculate_stim_properties_override(self, stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
-        self.calculate_stim_properties(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings)
-        self.stimtrial = stimtrial
-
+    def calculate_stim_properties_override(self):
+        self.calculate_stim_properties()
         # There are some instructions first
-        self.key_list = [self.exp_settings.key1, self.exp_settings.key1, self.exp_settings.key1]
+        self.key_list = [self.experiment.settings.key1, self.experiment.settings.key1, self.experiment.settings.key1]
 
         # Then we have the stimuli
         trial = 1
-        for stim in stimlist.values():
+        for stim in self.experiment.stimlist.values():
             if stim == 1:
-                self.key_list.append(self.exp_settings.key1)
+                self.key_list.append(self.experiment.settings.key1)
             elif stim == 2:
-                self.key_list.append(self.exp_settings.key2)
+                self.key_list.append(self.experiment.settings.key2)
             elif stim == 3:
-                self.key_list.append(self.exp_settings.key3)
+                self.key_list.append(self.experiment.settings.key3)
             elif stim == 4:
-                self.key_list.append(self.exp_settings.key4)
+                self.key_list.append(self.experiment.settings.key4)
 
             trial += 1
 
             # feedback at the end of the block
-            if trial in experiment_settings.get_block_starts():
-                    self.key_list.append(self.exp_settings.key1)
+            if trial in self.experiment.settings.get_block_starts():
+                    self.key_list.append(self.experiment.settings.key1)
 
-            if trial == end_at[trial - 1]:
+            if trial == self.experiment.end_at[trial - 1]:
                 # ending screen
-                self.key_list.append(self.exp_settings.key1)
+                self.key_list.append(self.experiment.settings.key1)
                 # next session's instructions
-                self.key_list.append(self.exp_settings.key1)
-                self.key_list.append(self.exp_settings.key1)
-                self.key_list.append(self.exp_settings.key1)
+                self.key_list.append(self.experiment.settings.key1)
+                self.key_list.append(self.experiment.settings.key1)
+                self.key_list.append(self.experiment.settings.key1)
 
         self.visual_mock.setReturnKeyList(self.key_list)
 
-    def frame_check_override(self, mywindow):
-        return 0.0, 0.0, 60.0
+    def frame_check_override(self):
+        self.experiment.frame_time = 0.0
+        self.experiment.frame_sd = 0.0
+        self.experiment.frame_rate = 60.0
 
     def checkOutputFile(self):
         reference_file_path = os.path.join(self.current_dir, "reference", "toth-bela_10__log.txt")
@@ -202,17 +199,17 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
 
-    def calculate_stim_properties_override_quit(self, stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
-        self.calculate_stim_properties_override(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings)
-        self.key_list[10] = self.exp_settings.key_quit
+    def calculate_stim_properties_override_quit(self):
+        self.calculate_stim_properties_override()
+        self.key_list[10] = self.experiment.settings.key_quit
         self.visual_mock.setReturnKeyList(self.key_list)
 
     def testQuitInsideABlock(self):
-        asrt.calculate_stim_properties = self.calculate_stim_properties_override_quit
+        self.experiment.calculate_stim_properties = self.calculate_stim_properties_override_quit
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
@@ -221,7 +218,7 @@ class integrationTest(unittest.TestCase):
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         with self.assertRaises(SystemExit):
-            asrt.main(self.work_dir)
+            self.experiment.run()
 
         self.checkOutputFile()
 
@@ -232,17 +229,17 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
 
-    def calculate_stim_properties_override_wrong_button(self, stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings):
-        self.calculate_stim_properties_override(stim_sessionN, end_at, stimepoch, stimblock, stimtrial, stimlist, stim_colorN, stimpr, PCodes, experiment_settings)
+    def calculate_stim_properties_override_wrong_button(self):
+        self.calculate_stim_properties_override()
         self.key_list = self.key_list[0:10] + [self.key_list[8]] + self.key_list[10:]
         self.visual_mock.setReturnKeyList(self.key_list)
 
     def testWrongPressedButton(self):
-        asrt.calculate_stim_properties = self.calculate_stim_properties_override_wrong_button
+        self.experiment.calculate_stim_properties = self.calculate_stim_properties_override_wrong_button
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
@@ -250,7 +247,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
 
@@ -261,7 +258,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
 
@@ -272,44 +269,39 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
 
-    def presentation_override(self, mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
-                              last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
-                              group, identif, subject_nr, frame_rate, frame_time, frame_sd):
-
+    def presentation_override(self):
         # There are some instructions first
-        self.key_list = [self.exp_settings.key1, self.exp_settings.key1, self.exp_settings.key1]
+        self.key_list = [self.experiment.settings.key1, self.experiment.settings.key1, self.experiment.settings.key1]
 
         # Then we have the stimuli
         trial = 1
-        for stim in stimlist.values():
+        for stim in self.experiment.stimlist.values():
             # ignore first sessions' trials
-            if trial > (exp_settings.blockprepN + exp_settings.blocklengthN) * exp_settings.epochs[0] * exp_settings.block_in_epochN:
+            if trial > (self.experiment.settings.blockprepN + self.experiment.settings.blocklengthN) * self.experiment.settings.epochs[0] * self.experiment.settings.block_in_epochN:
                 if stim == 1:
-                    self.key_list.append(self.exp_settings.key1)
+                    self.key_list.append(self.experiment.settings.key1)
                 elif stim == 2:
-                    self.key_list.append(self.exp_settings.key2)
+                    self.key_list.append(self.experiment.settings.key2)
                 elif stim == 3:
-                    self.key_list.append(self.exp_settings.key3)
+                    self.key_list.append(self.experiment.settings.key3)
                 elif stim == 4:
-                    self.key_list.append(self.exp_settings.key4)
+                    self.key_list.append(self.experiment.settings.key4)
 
             trial += 1
 
-            if trial - 1 > (exp_settings.blockprepN + exp_settings.blocklengthN) * exp_settings.epochs[0] * exp_settings.block_in_epochN:
+            if trial - 1 > (self.experiment.settings.blockprepN + self.experiment.settings.blocklengthN) * self.experiment.settings.epochs[0] * self.experiment.settings.block_in_epochN:
                 # feedback at the end of the block
-                if trial in exp_settings.get_block_starts():
-                        self.key_list.append(self.exp_settings.key1)
+                if trial in self.experiment.settings.get_block_starts():
+                        self.key_list.append(self.experiment.settings.key1)
 
         # ending screen
-        self.key_list += [self.exp_settings.key1]
+        self.key_list += [self.experiment.settings.key1]
         self.visual_mock.setReturnKeyList(self.key_list)
-        return self.presentation(mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
-                                 last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
-                                 group, identif, subject_nr, frame_rate, frame_time, frame_sd)
+        return self.presentation()
 
     def testContinueWithSecondSession(self):
         # for setting participant data
@@ -317,51 +309,47 @@ class integrationTest(unittest.TestCase):
         gui_mock.addFieldValues(['Tóth Béla', 10])
 
         # override this method to get the stimlist to be able to generate the keylist
-        self.presentation = asrt.presentation
-        asrt.presentation = self.presentation_override
+        self.presentation = self.experiment.presentation
+        self.experiment.presentation = self.presentation_override
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
-        
-        asrt.presentation = self.presentation
 
-    def presentation_override_unexpected_quit(self, mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
-                              last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
-                              group, identif, subject_nr, frame_rate, frame_time, frame_sd):
+        self.experiment.presentation = self.presentation
+
+    def presentation_override_unexpected_quit(self):
 
         # There is one screen about the continuation
-        self.key_list = [self.exp_settings.key1]
+        self.key_list = [self.experiment.settings.key1]
 
         # Then we have the stimuli
         trial = 1
-        for stim in stimlist.values():
+        for stim in self.experiment.stimlist.values():
             # ignore first sessions' trials
-            if trial > last_N:
+            if trial > self.experiment.last_N:
                 if stim == 1:
-                    self.key_list.append(self.exp_settings.key1)
+                    self.key_list.append(self.experiment.settings.key1)
                 elif stim == 2:
-                    self.key_list.append(self.exp_settings.key2)
+                    self.key_list.append(self.experiment.settings.key2)
                 elif stim == 3:
-                    self.key_list.append(self.exp_settings.key3)
+                    self.key_list.append(self.experiment.settings.key3)
                 elif stim == 4:
-                    self.key_list.append(self.exp_settings.key4)
+                    self.key_list.append(self.experiment.settings.key4)
 
             trial += 1
 
-            if trial - 1 > last_N:
+            if trial - 1 > self.experiment.last_N:
                 # feedback at the end of the block
-                if trial in exp_settings.get_block_starts():
-                        self.key_list.append(self.exp_settings.key1)
+                if trial in self.experiment.settings.get_block_starts():
+                        self.key_list.append(self.experiment.settings.key1)
 
         # ending screen
-        self.key_list += [self.exp_settings.key1]
+        self.key_list += [self.experiment.settings.key1]
         self.visual_mock.setReturnKeyList(self.key_list)
-        return self.presentation(mywindow, exp_settings, instruction_helper, person_data_handler, colors, dict_pos, PCodes, pressed_dict,
-                                 last_N, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, end_at, stim_colorN,
-                                 group, identif, subject_nr, frame_rate, frame_time, frame_sd)
+        return self.presentation()
 
     def testContinueAfterUnexpectedQuit(self):
         # for setting participant data
@@ -369,16 +357,16 @@ class integrationTest(unittest.TestCase):
         gui_mock.addFieldValues(['Tóth Béla', 10])
 
         # override this method to get the stimlist to be able to generate the keylist
-        self.presentation = asrt.presentation
-        asrt.presentation = self.presentation_override_unexpected_quit
+        self.presentation = self.experiment.presentation
+        self.experiment.presentation = self.presentation_override_unexpected_quit
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        asrt.main(self.work_dir)
+        self.experiment.run()
 
         self.checkOutputFile()
-        
-        asrt.presentation = self.presentation
+
+        self.experiment.presentation = self.presentation
 
     def testMoreSessionsSubsequently(self):
         # for setting participant data
@@ -388,7 +376,7 @@ class integrationTest(unittest.TestCase):
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         for i in range(1,5):
-            asrt.main(self.work_dir)
+            self.experiment.run()
 
         self.checkOutputFile()
 

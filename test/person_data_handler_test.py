@@ -59,57 +59,63 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath("testRoundTripSettings")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
 
-        PCodes = {1: '3rd - 1324'}
-        stim_output_line = 1
-        stim_sessionN = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
-        stimepoch = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
-        stimblock = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
-        stimtrial = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15}
-        stimlist = {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2}
-        stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
-        last_N = 1
-        end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
-        stim_colorN = {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'}
+        experiment = asrt.Experiment("")
 
-        person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
+        experiment.PCodes = {1: '3rd - 1324'}
+        experiment.stim_output_line = 1
+        experiment.stim_sessionN = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
+        experiment.stimepoch = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
+        experiment.stimblock = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
+        experiment.stimtrial = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15}
+        experiment.stimlist = {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2}
+        experiment.stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
+        experiment.last_N = 1
+        experiment.end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
+        experiment.stim_colorN = {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'}
+
+        person_data_handler.save_person_settings(experiment)
 
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
 
-        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
+        person_data_handler.load_person_settings(experiment)
 
-        self.assertEqual(PCodes, {1: '3rd - 1324'})
-        self.assertEqual(stim_output_line, 1)
-        self.assertEqual(stim_sessionN, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1})
-        self.assertEqual(stimepoch, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1})
-        self.assertEqual(stimblock, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1})
-        self.assertEqual(stimtrial, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15})
-        self.assertEqual(stimlist, {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2})
-        self.assertEqual(stimpr, {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'})
-        self.assertEqual(last_N, 1)
-        self.assertEqual(end_at, {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16})
-        self.assertEqual(stim_colorN, {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'})
+        self.assertEqual(experiment.PCodes, {1: '3rd - 1324'})
+        self.assertEqual(experiment.stim_output_line, 1)
+        self.assertEqual(experiment.stim_sessionN, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1})
+        self.assertEqual(experiment.stimepoch, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1})
+        self.assertEqual(experiment.stimblock, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1})
+        self.assertEqual(experiment.stimtrial, {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15})
+        self.assertEqual(experiment.stimlist, {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2})
+        self.assertEqual(experiment.stimpr, {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'})
+        self.assertEqual(experiment.last_N, 1)
+        self.assertEqual(experiment.end_at, {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16})
+        self.assertEqual(experiment.stim_colorN, {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'})
 
     def testReadMissingPersonSettings(self):
         all_settings_file_path = self.constructFilePath("testReadMissingPersonSettings")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
 
-        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
+        experiment = asrt.Experiment("")
 
-        self.assertEqual(PCodes, {})
-        self.assertEqual(stim_output_line, 0)
-        self.assertEqual(stim_sessionN, {})
-        self.assertEqual(stimepoch, {})
-        self.assertEqual(stimblock, {})
-        self.assertEqual(stimtrial, {})
-        self.assertEqual(stimlist, {})
-        self.assertEqual(stimpr, {})
-        self.assertEqual(last_N, 0)
-        self.assertEqual(end_at, {})
-        self.assertEqual(stim_colorN, {})
+        person_data_handler.load_person_settings(experiment)
+
+        self.assertEqual(experiment.PCodes, {})
+        self.assertEqual(experiment.stim_output_line, 0)
+        self.assertEqual(experiment.stim_sessionN, {})
+        self.assertEqual(experiment.stimepoch, {})
+        self.assertEqual(experiment.stimblock, {})
+        self.assertEqual(experiment.stimtrial, {})
+        self.assertEqual(experiment.stimlist, {})
+        self.assertEqual(experiment.stimpr, {})
+        self.assertEqual(experiment.last_N, 0)
+        self.assertEqual(experiment.end_at, {})
+        self.assertEqual(experiment.stim_colorN, {})
 
     def testReadIncompletePersonSettings(self):
         all_settings_file_path = self.constructFilePath("testReadIncompletePersonSettings")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
+
+        experiment = asrt.Experiment("")
 
         # save something, but not all settings
         with shelve.open(all_settings_file_path, 'n') as all_settings_file:
@@ -122,46 +128,48 @@ class personDataHandlerTest(unittest.TestCase):
 
             all_settings_file['all_settings'] = all_settings
 
-        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
+        person_data_handler.load_person_settings(experiment)
 
-        self.assertEqual(PCodes, {})
-        self.assertEqual(stim_output_line, 0)
-        self.assertEqual(stim_sessionN, {})
-        self.assertEqual(stimepoch, {})
-        self.assertEqual(stimblock, {})
-        self.assertEqual(stimtrial, {})
-        self.assertEqual(stimlist, {})
-        self.assertEqual(stimpr, {})
-        self.assertEqual(last_N, 0)
-        self.assertEqual(end_at, {})
-        self.assertEqual(stim_colorN, {})
+        self.assertEqual(experiment.PCodes, {})
+        self.assertEqual(experiment.stim_output_line, 0)
+        self.assertEqual(experiment.stim_sessionN, {})
+        self.assertEqual(experiment.stimepoch, {})
+        self.assertEqual(experiment.stimblock, {})
+        self.assertEqual(experiment.stimtrial, {})
+        self.assertEqual(experiment.stimlist, {})
+        self.assertEqual(experiment.stimpr, {})
+        self.assertEqual(experiment.last_N, 0)
+        self.assertEqual(experiment.end_at, {})
+        self.assertEqual(experiment.stim_colorN, {})
 
     def testUpdateExistingPersonSettings(self):
         all_settings_file_path = self.constructFilePath("testUpdateExistingPersonSettings")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
 
-        PCodes = {1: '3rd - 1324'}
-        stim_output_line = 1
-        stim_sessionN = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
-        stimepoch = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
-        stimblock = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
-        stimtrial = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15}
-        stimlist = {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2}
-        stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
-        last_N = 1
-        end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
-        stim_colorN = {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'}
+        experiment = asrt.Experiment("")
 
-        person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
+        experiment.PCodes = {1: '3rd - 1324'}
+        experiment.stim_output_line = 1
+        experiment.stim_sessionN = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
+        experiment.stimepoch = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
+        experiment.stimblock = {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1}
+        experiment.stimtrial = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15}
+        experiment.stimlist = {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2}
+        experiment.stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
+        experiment.last_N = 1
+        experiment.end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
+        experiment.stim_colorN = {1: 'Orange', 2: 'Orange', 3: 'Orange', 4: 'Orange', 5: 'Orange', 6: 'Orange', 7: 'Orange', 8: 'Orange', 9: 'Orange', 10: 'Orange', 11: 'Orange', 12: 'Orange', 13: 'Orange', 14: 'Orange', 15: 'Orange'}
 
-        stim_output_line = 41
-        last_N = 32
-        person_data_handler.save_person_settings(PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN)
+        person_data_handler.save_person_settings(experiment)
 
-        PCodes, stim_output_line, stim_sessionN, stimepoch, stimblock, stimtrial, stimlist, stimpr, last_N, end_at, stim_colorN = person_data_handler.load_person_settings()
+        experiment.stim_output_line = 41
+        experiment.last_N = 32
+        person_data_handler.save_person_settings(experiment)
 
-        self.assertEqual(stim_output_line, 41)
-        self.assertEqual(last_N, 32)
+        person_data_handler.load_person_settings(experiment)
+
+        self.assertEqual(experiment.stim_output_line, 41)
+        self.assertEqual(experiment.last_N, 32)
 
     def testCreateIDsFiles(self):
         all_IDs_file_path = self.constructFilePath("testCreateIDsFiles")
@@ -275,33 +283,35 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath("testWriteEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", "", "", "", output_file_path)
 
-        computer_name = "Laposka"
-        group = "group1"
-        identif = "alattomos-aladar"
-        subject_nr = 333
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+
+        experiment.settings.computer_name = "Laposka"
+        experiment.group = "group1"
+        experiment.identif = "alattomos-aladar"
+        experiment.subject_nr = 333
         asrt_type = "implicit"
         PCode = "1234"
-        stim_output_line = 12
-        session = 1
-        epoch = 2
-        block = 12
-        trial = 21
+        experiment.stim_output_line = 12
+        experiment.stim_sessionN = {0 : 1}
+        experiment.stimepoch = {0 : 2}
+        experiment.stimblock = {0 : 12}
+        experiment.stimtrial = {0 : 21}
         stim_RSI = 0.123
-        frame_rate = 59.1
-        frame_time = 16.56
-        frame_sd = 1.3
+        experiment.frame_rate = 59.1
+        experiment.frame_time = 16.56
+        experiment.frame_sd = 1.3
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
-        stim_color = "Orange"
-        stimpr = "P"
+        experiment.stim_colorN = {0 : 'Orange'}
+        experiment.stimpr=  {0 : 'P'}
         stimRT = 321.2345
         stimACC = 0
-        stimulus = 1
+        experiment.stimlist =  {0 : 1}
         stimbutton = 'z'
+        N = 0
 
-        person_data_handler.write_data_to_output(computer_name, group, identif, subject_nr, asrt_type, PCode, stim_output_line,
-                             session, epoch, block, trial, stim_RSI, frame_rate, frame_time, frame_sd, stim_RT_time,
-                             stim_RT_date, stim_color, stimpr, stimRT, stimACC, stimulus, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
 
         with codecs.open(output_file_path,'r', encoding = 'utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tGroup\tSubject_ID\tSubject_nr\tasrt_type\tPCode\toutput_line\t"
@@ -315,49 +325,49 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath("testWriteExistingOutput.txt")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", "", "", "", output_file_path)
 
-        computer_name = "Laposka"
-        group = "group1"
-        identif = "alattomos-aladar"
-        subject_nr = 333
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+
+        experiment.settings.computer_name = "Laposka"
+        experiment.group = "group1"
+        experiment.identif = "alattomos-aladar"
+        experiment.subject_nr = 333
         asrt_type = "implicit"
         PCode = "1234"
-        stim_output_line = 12
-        session = 1
-        epoch = 2
-        block = 12
-        trial = 21
+        experiment.stim_output_line = 12
+        experiment.stim_sessionN = {0 : 1}
+        experiment.stimepoch = {0 : 2}
+        experiment.stimblock = {0 : 12}
+        experiment.stimtrial = {0 : 21}
         stim_RSI = 0.123
-        frame_rate = 59.1
-        frame_time = 16.56
-        frame_sd = 1.3
+        experiment.frame_rate = 59.1
+        experiment.frame_time = 16.56
+        experiment.frame_sd = 1.3
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
-        stim_color = "Orange"
-        stimpr = "P"
+        experiment.stim_colorN = {0 : 'Orange'}
+        experiment.stimpr=  {0 : 'P'}
         stimRT = 321.2345
         stimACC = 0
-        stimulus = 1
+        experiment.stimlist =  {0 : 1}
         stimbutton = 'z'
+        N = 0
 
-        person_data_handler.write_data_to_output(computer_name, group, identif, subject_nr, asrt_type, PCode, stim_output_line,
-                             session, epoch, block, trial, stim_RSI, frame_rate, frame_time, frame_sd, stim_RT_time,
-                             stim_RT_date, stim_color, stimpr, stimRT, stimACC, stimulus, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
 
-        stim_output_line = 13
-        trial = 22
+        experiment.stim_output_line = 13
+        experiment.stimtrial[0] = 22
         stim_RSI = 0.111
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
-        stim_color = "Green"
-        stimpr = "R"
+        experiment.stim_colorN[0] = "Green"
+        experiment.stimpr[0] = "R"
         stimRT = 523.2345
         stimACC = 1
-        stimulus = 2
+        experiment.stimlist[0] = 2
         stimbutton = 'b'
 
-        person_data_handler.write_data_to_output(computer_name, group, identif, subject_nr, asrt_type, PCode, stim_output_line,
-                             session, epoch, block, trial, stim_RSI, frame_rate, frame_time, frame_sd, stim_RT_time,
-                             stim_RT_date, stim_color, stimpr, stimRT, stimACC, stimulus, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
 
         with codecs.open(output_file_path,'r', encoding = 'utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tGroup\tSubject_ID\tSubject_nr\tasrt_type\tPCode\toutput_line\t"
@@ -374,33 +384,35 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath("testPointInComputerName.txt")
         person_data_handler = asrt.PersonDataHandler("alattomos-aladar_333_group1", "", "", "", output_file_path)
 
-        computer_name = "I. Richárd"
-        group = "group1"
-        identif = "alattomos-aladar"
-        subject_nr = 333
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+
+        experiment.settings.computer_name = "I. Richárd"
+        experiment.group = "group1"
+        experiment.identif = "alattomos-aladar"
+        experiment.subject_nr = 333
         asrt_type = "implicit"
         PCode = "1234"
-        stim_output_line = 12
-        session = 1
-        epoch = 2
-        block = 12
-        trial = 21
+        experiment.stim_output_line = 12
+        experiment.stim_sessionN = {0 : 1}
+        experiment.stimepoch = {0 : 2}
+        experiment.stimblock = {0 : 12}
+        experiment.stimtrial = {0 : 21}
         stim_RSI = 0.123
-        frame_rate = 59.1
-        frame_time = 16.56
-        frame_sd = 1.3
+        experiment.frame_rate = 59.1
+        experiment.frame_time = 16.56
+        experiment.frame_sd = 1.3
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%Y.%m.%d')
-        stim_color = "Orange"
-        stimpr = "P"
+        experiment.stim_colorN = {0 : 'Orange'}
+        experiment.stimpr=  {0 : 'P'}
         stimRT = 321.2345
         stimACC = 0
-        stimulus = 1
+        experiment.stimlist =  {0 : 1}
         stimbutton = 'z'
+        N = 0
 
-        person_data_handler.write_data_to_output(computer_name, group, identif, subject_nr, asrt_type, PCode, stim_output_line,
-                             session, epoch, block, trial, stim_RSI, frame_rate, frame_time, frame_sd, stim_RT_time,
-                             stim_RT_date, stim_color, stimpr, stimRT, stimACC, stimulus, stimbutton)
+        person_data_handler.write_data_to_output(experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton)
 
         with codecs.open(output_file_path,'r', encoding = 'utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tGroup\tSubject_ID\tSubject_nr\tasrt_type\tPCode\toutput_line\t"

@@ -29,29 +29,33 @@ import asrt
 class whichCodeTest(unittest.TestCase):
 
     def testRightPatterns(self):
-        PCodes = { 1: "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
+        experiment = asrt.Experiment("")
+        experiment.PCodes = { 1: "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
 
-        self.assertEqual(asrt.which_code(1, PCodes), "1432")
-        self.assertEqual(asrt.which_code(2, PCodes), "1342")
-        self.assertEqual(asrt.which_code(3, PCodes), "1423")
-        self.assertEqual(asrt.which_code(4, PCodes), "1324")
-        self.assertEqual(asrt.which_code(5, PCodes), "1234")
-        self.assertEqual(asrt.which_code(6, PCodes), "1243")
+        self.assertEqual(experiment.which_code(1), "1432")
+        self.assertEqual(experiment.which_code(2), "1342")
+        self.assertEqual(experiment.which_code(3), "1423")
+        self.assertEqual(experiment.which_code(4), "1324")
+        self.assertEqual(experiment.which_code(5), "1234")
+        self.assertEqual(experiment.which_code(6), "1243")
 
     def testTypoInPCode(self):
-        PCodes = {1 : "6tj - 1432"}
-        self.assertEqual(asrt.which_code(1, PCodes), "noPattern")
+        experiment = asrt.Experiment("")
+        experiment.PCodes = {1 : "6tj - 1432"}
+        self.assertEqual(experiment.which_code(1), "noPattern")
 
     def testNoPattern(self):
-        PCodes = {1 : "noPattern"}
-        self.assertEqual(asrt.which_code(1, PCodes), "noPattern")
+        experiment = asrt.Experiment("")
+        experiment.PCodes = {1 : "noPattern"}
+        self.assertEqual(experiment.which_code(1), "noPattern")
 
     def testWrongSession(self):
-        PCodes = {1 : "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
+        experiment = asrt.Experiment("")
+        experiment.PCodes = {1 : "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
         with self.assertRaises(KeyError):
-            asrt.which_code(7, PCodes)
+            experiment.which_code(7)
         with self.assertRaises(KeyError):
-            asrt.which_code(0, PCodes)
+            experiment.which_code(0)
 
 if __name__ == "__main__":
     unittest.main() # run all tests

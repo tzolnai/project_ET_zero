@@ -31,29 +31,29 @@ import psychopy_gui_mock as pgm
 class showSubjectContinuationDialogTest(unittest.TestCase):
 
     def testFinishedSession(self):
-
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.blockprepN = 5
-        exp_settings.blocklengthN = 80
-        exp_settings.block_in_epochN = 5
-        exp_settings.epochN = 5
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.numsessions = 1
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.block_in_epochN = 5
+        experiment.settings.epochN = 5
 
-        stim_sessionN = {}
-        stimepoch = {}
-        stimblock = {}
-        stimtrial = {}
-        last_N = exp_settings.get_maxtrial()
-        for i in range(1, exp_settings.get_maxtrial() + 1):
-            stim_sessionN[i] = 1
-            stimepoch[i] = i / 5
-            stimblock[i] = i / (exp_settings.blockprepN + exp_settings.blocklengthN)
-            stimtrial[i] = i % (exp_settings.blockprepN + exp_settings.blocklengthN)
+        experiment.stim_sessionN = {}
+        experiment.stimepoch = {}
+        experiment.stimblock = {}
+        experiment.stimtrial = {}
+        experiment.last_N = experiment.settings.get_maxtrial()
+        for i in range(1, experiment.settings.get_maxtrial() + 1):
+            experiment.stim_sessionN[i] = 1
+            experiment.stimepoch[i] = i / 5
+            experiment.stimblock[i] = i / (experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         with self.assertRaises(SystemExit):
-            asrt.show_subject_continuation_dialog(stim_sessionN, stimepoch, stimblock, stimtrial, last_N, exp_settings)
+            experiment.show_subject_continuation_dialog()
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -61,28 +61,28 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[1], "A személy végigcsinálta a feladatot.")
 
     def testNullTrial(self):
-
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.blockprepN = 5
-        exp_settings.blocklengthN = 80
-        exp_settings.block_in_epochN = 5
-        exp_settings.epochN = 5
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.numsessions = 1
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.block_in_epochN = 5
+        experiment.settings.epochN = 5
 
-        stim_sessionN = {}
-        stimepoch = {}
-        stimblock = {}
-        stimtrial = {}
-        last_N = 0
-        for i in range(1, exp_settings.get_maxtrial() + 1):
-            stim_sessionN[i] = 1
-            stimepoch[i] = i // 5 + 1
-            stimblock[i] = i // (exp_settings.blockprepN + exp_settings.blocklengthN) + 1
-            stimtrial[i] = i % (exp_settings.blockprepN + exp_settings.blocklengthN)
+        experiment.stim_sessionN = {}
+        experiment.stimepoch = {}
+        experiment.stimblock = {}
+        experiment.stimtrial = {}
+        experiment.last_N = 0
+        for i in range(1, experiment.settings.get_maxtrial() + 1):
+            experiment.stim_sessionN[i] = 1
+            experiment.stimepoch[i] = i // 5 + 1
+            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
-        asrt.show_subject_continuation_dialog(stim_sessionN, stimepoch, stimblock, stimtrial, last_N, exp_settings)
+        experiment.show_subject_continuation_dialog()
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 6)
@@ -94,28 +94,28 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[5], "Trial: 1")
 
     def testInnerTrial(self):
-
         gui_mock = pgm.PsychoPyGuiMock()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.blockprepN = 5
-        exp_settings.blocklengthN = 80
-        exp_settings.block_in_epochN = 5
-        exp_settings.epochN = 5
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.numsessions = 1
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.block_in_epochN = 5
+        experiment.settings.epochN = 5
 
-        stim_sessionN = {}
-        stimepoch = {}
-        stimblock = {}
-        stimtrial = {}
-        last_N = exp_settings.get_maxtrial() // 2
-        for i in range(1, exp_settings.get_maxtrial() + 1):
-            stim_sessionN[i] = 1
-            stimepoch[i] = i // ((exp_settings.blockprepN + exp_settings.blocklengthN) * exp_settings.block_in_epochN) + 1
-            stimblock[i] = i // (exp_settings.blockprepN + exp_settings.blocklengthN) + 1
-            stimtrial[i] = i % (exp_settings.blockprepN + exp_settings.blocklengthN)
+        experiment.stim_sessionN = {}
+        experiment.stimepoch = {}
+        experiment.stimblock = {}
+        experiment.stimtrial = {}
+        experiment.last_N = experiment.settings.get_maxtrial() // 2
+        for i in range(1, experiment.settings.get_maxtrial() + 1):
+            experiment.stim_sessionN[i] = 1
+            experiment.stimepoch[i] = i // ((experiment.settings.blockprepN + experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1
+            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
-        asrt.show_subject_continuation_dialog(stim_sessionN, stimepoch, stimblock, stimtrial, last_N, exp_settings)
+        experiment.show_subject_continuation_dialog()
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 6)
@@ -131,26 +131,27 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.numsessions = 1
-        exp_settings.blockprepN = 5
-        exp_settings.blocklengthN = 80
-        exp_settings.block_in_epochN = 5
-        exp_settings.epochN = 5
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.numsessions = 1
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.block_in_epochN = 5
+        experiment.settings.epochN = 5
 
-        stim_sessionN = {}
-        stimepoch = {}
-        stimblock = {}
-        stimtrial = {}
-        last_N = 0
-        for i in range(1, exp_settings.get_maxtrial() + 1):
-            stim_sessionN[i] = 1
-            stimepoch[i] = i // 5 + 1
-            stimblock[i] = i // (exp_settings.blockprepN + exp_settings.blocklengthN) + 1
-            stimtrial[i] = i % (exp_settings.blockprepN + exp_settings.blocklengthN)
+        experiment.stim_sessionN = {}
+        experiment.stimepoch = {}
+        experiment.stimblock = {}
+        experiment.stimtrial = {}
+        experiment.last_N = 0
+        for i in range(1, experiment.settings.get_maxtrial() + 1):
+            experiment.stim_sessionN[i] = 1
+            experiment.stimepoch[i] = i // 5 + 1
+            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         with self.assertRaises(SystemExit):
-            asrt.show_subject_continuation_dialog(stim_sessionN, stimepoch, stimblock, stimtrial, last_N, exp_settings)
+            experiment.show_subject_continuation_dialog()
 
 if __name__ == "__main__":
     unittest.main() # run all tests
