@@ -35,11 +35,11 @@ def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
 
-# This class handles all operation related to experiment settings
-# These settings apply to all subjects in the specific experiment
-
 
 class ExperimentSettings:
+    """ This class handles all operation related to experiment settings
+        These settings apply to all subjects in the specific experiment
+    """
 
     def __init__(self, settings_file_path, reminder_file_path):
         self.numsessions = None         # number of sessions (e.g. 10)
@@ -222,10 +222,9 @@ class ExperimentSettings:
 
         return self.sessionstarts
 
-# Class for handle instruction strings (reading from file, storing and displaying)
-
 
 class InstructionHelper:
+    """ Class for handle instruction strings (reading from file, storing and displaying)"""
 
     def __init__(self, instructions_file_path):
         self.insts = []                 # instructions in the beginning of the experiment
@@ -243,8 +242,9 @@ class InstructionHelper:
 
         self.instructions_file_path = instructions_file_path
 
-    # Be aware of that line endings are preserved during reading instructions
     def read_insts_from_file(self):
+        """Be aware of that line endings are preserved during reading instructions."""
+
         try:
             with codecs.open(self.instructions_file_path, 'r', encoding='utf-8') as inst_feedback:
                 all_inst_feedback = inst_feedback.read().split('***')
@@ -269,14 +269,16 @@ class InstructionHelper:
                 elif 'unexpected quit' in all[0]:
                     self.unexp_quit.append(all[1])
 
-    # Display given string in the given window
     def __print_to_screen(self, mytext, mywindow):
+        """Display given string in the given window."""
+
         text_stim = visual.TextStim(
             mywindow, text=mytext, units='cm', height=0.6, color='black')
         text_stim.draw()
 
-    # Display simple instructions on the screen
     def __show_message(self, instruction_list, mywindow, expriment_settings):
+        """Display simple instructions on the screen."""
+
         # There can be more instructions to display successively
         for inst in instruction_list:
             self.__print_to_screen(inst, mywindow)
@@ -501,10 +503,10 @@ class PersonDataHandler:
 
 # Settings dialogs
 
-# Ask the user to specify the number of groups and the number of sessions
-
 
 def show_basic_settings_dialog(expriment_settings):
+    """ Ask the user to specify the number of groups and the number of sessions."""
+
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(
         u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
@@ -521,11 +523,11 @@ def show_basic_settings_dialog(expriment_settings):
     else:
         core.quit()
 
-# Ask the user to specify the name of the groups
-# Returns the list of group names
-
 
 def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
+    """Ask the user to specify the name of the groups.
+       Returns the list of group names.
+    """
 
     if numgroups > 1:
         expriment_settings.groups = []
@@ -548,11 +550,12 @@ def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
     else:
         expriment_settings.groups = ['nincsenek csoportok']
 
-# Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
-# epoch number and asrt type in the different sessions
-
 
 def show_epoch_and_block_settings_dialog(expriment_settings):
+    """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
+       epoch number and asrt type in the different sessions.
+    """
+
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(u'Kísérlet felépítése ')
     settings_dialog.addField(
@@ -581,11 +584,12 @@ def show_epoch_and_block_settings_dialog(expriment_settings):
     else:
         core.quit()
 
-# Ask the user specific infromation about the computer
-# and also change display settings
-
 
 def show_computer_and_display_settings_dialog(possible_colors, expriment_settings):
+    """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
+       epoch number and asrt type in the different sessions.
+    """
+
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(u'A számítógépről...')
     settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
@@ -614,11 +618,10 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
     else:
         core.quit()
 
-# Ask the user to specify the keys used during the experiement
-# and also set options related to the displayed feedback.
-
 
 def show_key_and_feedback_settings_dialog(expriment_settings):
+    """Ask the user to specify the keys used during the experiement and also set options related to the displayed feedback."""
+
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(u'Válaszbillentyűk')
     settings_dialog.addField(u'Bal szelso:', 'y')
@@ -716,8 +719,9 @@ class Experiment:
             # write out a text file with the experiment settings data, so the user can check settings in a human readable form
             self.settings.write_out_reminder()
 
-    # Ask the user to specify the subject's attributes (name, subject number, group)
     def show_subject_settings_dialog(self):
+        """Ask the user to specify the subject's attributes (name, subject number, group)."""
+
         warningtext = ''
         itsOK = False
         while not itsOK:
