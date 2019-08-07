@@ -16,17 +16,16 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import asrt
-import pyglet
-from psychopy import visual, monitors, core
-import unittest
-
-import os
-
 import sys
-# Add the local path to the main script so we can import it.
+import os
+# Add the local path to the main script and external scripts so we can import them.
 sys.path = [".."] + \
     [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+
+import unittest
+from psychopy import visual, monitors, core
+import pyglet
+import asrt
 
 
 class frameRateTest(unittest.TestCase):

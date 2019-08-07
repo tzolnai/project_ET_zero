@@ -16,15 +16,13 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import asrt
-import unittest
-
-import os
-
 import sys
-# Add the local path to the main script so we can import it.
-sys.path = [".."] + \
-    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+import os
+# Add the local path to the main script and external scripts so we can import them.
+sys.path = [".."] + sys.path
+
+import unittest
+import asrt
 
 
 class readInstructionsTest(unittest.TestCase):

@@ -16,16 +16,15 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import psychopy_gui_mock as pgm
-import asrt
-import unittest
-
-import os
-
 import sys
-# Add the local path to the main script so we can import it.
+import os
+# Add the local path to the main script and external scripts so we can import them.
 sys.path = [".."] + \
     [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+
+import unittest
+import asrt
+import psychopy_gui_mock as pgm
 
 
 class showSubjectPCodesDialogTest(unittest.TestCase):

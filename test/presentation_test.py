@@ -16,19 +16,18 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-from psychopy import visual, logging
-import psychopy_gui_mock as pgm
-import psychopy_visual_mock as pvm
-import shutil
-import asrt
-import unittest
-
-import os
-
 import sys
-# Add the local path to the main script so we can import it.
+import os
+# Add the local path to the main script and external scripts so we can import them.
 sys.path = [".."] + \
     [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+
+import unittest
+import asrt
+import shutil
+import psychopy_visual_mock as pvm
+import psychopy_gui_mock as pgm
+from psychopy import visual, logging
 
 
 # ignore warnings comming from psychopy
@@ -116,10 +115,10 @@ class presentationTest(unittest.TestCase):
             # use dummy values
             experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
-                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
+            experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-1.5), 0),
+                                   2: (float(experiment.settings.asrt_distance) * (-0.5), 0),
+                                   3: (float(experiment.settings.asrt_distance) * 0.5, 0),
+                                   4: (float(experiment.settings.asrt_distance) * 1.5, 0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
@@ -251,10 +250,10 @@ class presentationTest(unittest.TestCase):
             # use dummy values
             experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
-                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
+            experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-1.5), 0),
+                                   2: (float(experiment.settings.asrt_distance) * (-0.5), 0),
+                                   3: (float(experiment.settings.asrt_distance) * 0.5, 0),
+                                   4: (float(experiment.settings.asrt_distance) * 1.5, 0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
@@ -392,10 +391,10 @@ class presentationTest(unittest.TestCase):
             # use dummy values
             experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
-                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
+            experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-1.5), 0),
+                                   2: (float(experiment.settings.asrt_distance) * (-0.5), 0),
+                                   3: (float(experiment.settings.asrt_distance) * 0.5, 0),
+                                   4: (float(experiment.settings.asrt_distance) * 1.5, 0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
@@ -525,10 +524,10 @@ class presentationTest(unittest.TestCase):
             # use dummy values
             experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
-                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
+            experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-1.5), 0),
+                                   2: (float(experiment.settings.asrt_distance) * (-0.5), 0),
+                                   3: (float(experiment.settings.asrt_distance) * 0.5, 0),
+                                   4: (float(experiment.settings.asrt_distance) * 1.5, 0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
@@ -696,10 +695,10 @@ class presentationTest(unittest.TestCase):
             # use dummy values
             experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
-                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
+            experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-1.5), 0),
+                                   2: (float(experiment.settings.asrt_distance) * (-0.5), 0),
+                                   3: (float(experiment.settings.asrt_distance) * 0.5, 0),
+                                   4: (float(experiment.settings.asrt_distance) * 1.5, 0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
@@ -822,10 +821,10 @@ class presentationTest(unittest.TestCase):
             # use dummy values
             experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
-                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
+            experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-1.5), 0),
+                                   2: (float(experiment.settings.asrt_distance) * (-0.5), 0),
+                                   3: (float(experiment.settings.asrt_distance) * 0.5, 0),
+                                   4: (float(experiment.settings.asrt_distance) * 1.5, 0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 

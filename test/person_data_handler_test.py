@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import codecs
-import dbm
-import shelve
-import time
-import asrt
-import os
-import unittest
-
 import sys
+import os
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
+
+import unittest
+import asrt
+import time
+import shelve
+import dbm
+import codecs
 
 
 class personDataHandlerTest(unittest.TestCase):

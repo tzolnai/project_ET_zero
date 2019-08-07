@@ -16,14 +16,13 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import asrt
-import unittest
-
-import os
-
 import sys
+import os
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
+
+import unittest
+import asrt
 
 
 class calculateStimpropertiesTest(unittest.TestCase):
@@ -71,29 +70,29 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stim_sessionN)):
             if i < experiment.settings.get_maxtrial() / 2:
-                self.assertEqual(experiment.stim_sessionN[i+1], 1)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 1)
             else:
-                self.assertEqual(experiment.stim_sessionN[i+1], 2)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 2)
 
         for i in range(len(experiment.end_at)):
             if i < experiment.settings.get_maxtrial() / 2:
                 self.assertEqual(
-                    experiment.end_at[i+1], experiment.settings.get_maxtrial() / 2 + 1)
+                    experiment.end_at[i + 1], experiment.settings.get_maxtrial() / 2 + 1)
             else:
                 self.assertEqual(
-                    experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                    experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -101,15 +100,15 @@ class calculateStimpropertiesTest(unittest.TestCase):
         oount_4 = 0
         for i in range(len(experiment.stimlist)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     oount_4 += 1
 
         self.assertEqual(count_1, 500)
@@ -119,11 +118,11 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i+1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "P")
             else:
-                self.assertEqual(experiment.stimpr[i+1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testExplicitASRT(self):
         experiment = asrt.Experiment("")
@@ -168,29 +167,29 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stim_sessionN)):
             if i < experiment.settings.get_maxtrial() / 2:
-                self.assertEqual(experiment.stim_sessionN[i+1], 1)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 1)
             else:
-                self.assertEqual(experiment.stim_sessionN[i+1], 2)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 2)
 
         for i in range(len(experiment.end_at)):
             if i < experiment.settings.get_maxtrial() / 2:
                 self.assertEqual(
-                    experiment.end_at[i+1], experiment.settings.get_maxtrial() / 2 + 1)
+                    experiment.end_at[i + 1], experiment.settings.get_maxtrial() / 2 + 1)
             else:
                 self.assertEqual(
-                    experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                    experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -198,15 +197,15 @@ class calculateStimpropertiesTest(unittest.TestCase):
         oount_4 = 0
         for i in range(len(experiment.stimlist)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     oount_4 += 1
 
         self.assertEqual(count_1, 500)
@@ -216,11 +215,11 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i+1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "P")
             else:
-                self.assertEqual(experiment.stimpr[i+1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testNoASRT(self):
         experiment = asrt.Experiment("")
@@ -263,23 +262,23 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         # all trials are in the same session
         for i in range(len(experiment.stim_sessionN)):
-            self.assertEqual(experiment.stim_sessionN[i+1], 1)
+            self.assertEqual(experiment.stim_sessionN[i + 1], 1)
 
         for i in range(len(experiment.end_at)):
             self.assertEqual(
-                experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -287,15 +286,15 @@ class calculateStimpropertiesTest(unittest.TestCase):
         oount_4 = 0
         for i in range(len(experiment.stimlist)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     oount_4 += 1
 
         # randomized data
@@ -303,7 +302,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertTrue(count_3 != oount_4)
 
         for i in range(len(experiment.stimpr)):
-            self.assertEqual(experiment.stimpr[i+1], "R")
+            self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testASRTWithoutPractice(self):
         experiment = asrt.Experiment("")
@@ -346,23 +345,23 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         # all trials are in the same session
         for i in range(len(experiment.stim_sessionN)):
-            self.assertEqual(experiment.stim_sessionN[i+1], 1)
+            self.assertEqual(experiment.stim_sessionN[i + 1], 1)
 
         for i in range(len(experiment.end_at)):
             self.assertEqual(
-                experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -370,15 +369,15 @@ class calculateStimpropertiesTest(unittest.TestCase):
         oount_4 = 0
         for i in range(len(experiment.stimlist)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     oount_4 += 1
 
         self.assertEqual(count_1, 250)
@@ -388,11 +387,11 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i+1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "P")
             else:
-                self.assertEqual(experiment.stimpr[i+1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testASRTWithoutReal(self):
         experiment = asrt.Experiment("")
@@ -435,27 +434,27 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         # all trials are in the same session
         for i in range(len(experiment.stim_sessionN)):
-            self.assertEqual(experiment.stim_sessionN[i+1], 1)
+            self.assertEqual(experiment.stim_sessionN[i + 1], 1)
 
         for i in range(len(experiment.end_at)):
             self.assertEqual(
-                experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         # random only
         for i in range(len(experiment.stimpr)):
-            self.assertEqual(experiment.stimpr[i+1], "R")
+            self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testWithEvenPracticeTrials(self):
         experiment = asrt.Experiment("")
@@ -498,23 +497,23 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         # all trials are in the same session
         for i in range(len(experiment.stim_sessionN)):
-            self.assertEqual(experiment.stim_sessionN[i+1], 1)
+            self.assertEqual(experiment.stim_sessionN[i + 1], 1)
 
         for i in range(len(experiment.end_at)):
             self.assertEqual(
-                experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -522,15 +521,15 @@ class calculateStimpropertiesTest(unittest.TestCase):
         oount_4 = 0
         for i in range(len(experiment.stimlist)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     oount_4 += 1
 
         self.assertEqual(count_1, 250)
@@ -540,11 +539,11 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i+1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "P")
             else:
-                self.assertEqual(experiment.stimpr[i+1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testWithOddRealTrials(self):
         experiment = asrt.Experiment("")
@@ -587,23 +586,23 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         # all trials are in the same session
         for i in range(len(experiment.stim_sessionN)):
-            self.assertEqual(experiment.stim_sessionN[i+1], 1)
+            self.assertEqual(experiment.stim_sessionN[i + 1], 1)
 
         for i in range(len(experiment.end_at)):
             self.assertEqual(
-                experiment.end_at[i+1], experiment.settings.get_maxtrial() + 1)
+                experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -611,15 +610,15 @@ class calculateStimpropertiesTest(unittest.TestCase):
         oount_4 = 0
         for i in range(len(experiment.stimlist)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     oount_4 += 1
 
         # there are some variance in the number, becuase some pattern trials are cut down at the end of the blocks
@@ -630,11 +629,11 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i+1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "P")
             else:
-                self.assertEqual(experiment.stimpr[i+1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "R")
 
     def testMoreSessionsWithDifferentProperties(self):
         experiment = asrt.Experiment("")
@@ -690,34 +689,34 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stim_sessionN)):
             if i < first_session_last_trial:
-                self.assertEqual(experiment.stim_sessionN[i+1], 1)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 1)
             elif i < second_session_last_trial:
-                self.assertEqual(experiment.stim_sessionN[i+1], 2)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 2)
             else:
-                self.assertEqual(experiment.stim_sessionN[i+1], 3)
+                self.assertEqual(experiment.stim_sessionN[i + 1], 3)
 
         for i in range(len(experiment.end_at)):
             if i < first_session_last_trial:
                 self.assertEqual(
-                    experiment.end_at[i+1], first_session_last_trial + 1)
+                    experiment.end_at[i + 1], first_session_last_trial + 1)
             elif i < second_session_last_trial:
                 self.assertEqual(
-                    experiment.end_at[i+1], second_session_last_trial + 1)
+                    experiment.end_at[i + 1], second_session_last_trial + 1)
             else:
                 self.assertEqual(
-                    experiment.end_at[i+1], third_session_last_trial + 1)
+                    experiment.end_at[i + 1], third_session_last_trial + 1)
 
         for i in range(len(experiment.stimepoch)):
-            self.assertEqual(experiment.stimepoch[i+1], i // ((experiment.settings.blockprepN +
-                                                               experiment.settings.blocklengthN)*experiment.settings.block_in_epochN) + 1)
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
 
         for i in range(len(experiment.stimblock)):
-            self.assertEqual(experiment.stimblock[i+1], i // (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         for i in range(len(experiment.stimtrial)):
-            self.assertEqual(experiment.stimtrial[i+1], i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1)
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
 
         count_1 = 0
         count_2 = 0
@@ -729,21 +728,21 @@ class calculateStimpropertiesTest(unittest.TestCase):
                 break
 
             trial_num_in_block = i % (
-                experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block == 1:
                 sequence = ""
 
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                if experiment.stimlist[i+1] == 1:
+                if experiment.stimlist[i + 1] == 1:
                     count_1 += 1
                     sequence += "1"
-                elif experiment.stimlist[i+1] == 2:
+                elif experiment.stimlist[i + 1] == 2:
                     count_2 += 1
                     sequence += "2"
-                elif experiment.stimlist[i+1] == 3:
+                elif experiment.stimlist[i + 1] == 3:
                     count_3 += 1
                     sequence += "3"
-                elif experiment.stimlist[i+1] == 4:
+                elif experiment.stimlist[i + 1] == 4:
                     count_4 += 1
                     sequence += "4"
                 sequence = sequence[-4:]
@@ -763,13 +762,13 @@ class calculateStimpropertiesTest(unittest.TestCase):
         for i in range(len(experiment.stimpr)):
             if i < second_session_last_trial:  # explicit or implicit
                 trial_num_in_block = i % (
-                    experiment.settings.blockprepN+experiment.settings.blocklengthN) + 1
+                    experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
                 if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                    self.assertEqual(experiment.stimpr[i+1], "P")
+                    self.assertEqual(experiment.stimpr[i + 1], "P")
                 else:
-                    self.assertEqual(experiment.stimpr[i+1], "R")
+                    self.assertEqual(experiment.stimpr[i + 1], "R")
             else:  # noASRT
-                self.assertEqual(experiment.stimpr[i+1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "R")
 
 
 if __name__ == "__main__":

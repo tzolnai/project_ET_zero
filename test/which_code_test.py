@@ -16,14 +16,13 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import asrt
-import unittest
-
-import os
-
 import sys
+import os
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
+
+import unittest
+import asrt
 
 
 class whichCodeTest(unittest.TestCase):

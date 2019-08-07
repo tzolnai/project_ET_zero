@@ -16,17 +16,16 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
-import psychopy_visual_mock as pvm
-import asrt
-from psychopy import monitors, visual, core, logging
-import unittest
-
-import os
-
 import sys
-# Add the local path to the main script so we can import it.
+import os
+# Add the local path to the main script and external scripts so we can import them.
 sys.path = [".."] + \
     [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+
+import unittest
+from psychopy import monitors, visual, core, logging
+import asrt
+import psychopy_visual_mock as pvm
 
 
 # ignore warnings comming from psychopy
