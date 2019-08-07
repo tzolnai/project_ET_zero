@@ -161,25 +161,25 @@ class ExperimentSettings:
         with codecs.open(self.reminder_file_path, 'w', encoding='utf-8') as reminder_file:
             reminder_file.write(u'Beállítások \n' +
                                 '\n' +
-                                'Monitor Width: ' + '\t' + str(self.monitor_width).replace('.', ',')+'\n' +
-                                'Computer Name: ' + '\t' + self.computer_name+'\n' +
-                                'Response keys: ' + '\t' + self.key1+', ' + self.key2+', ' + self.key3+', ' + self.key4+'.'+'\n' +
+                                'Monitor Width: ' + '\t' + str(self.monitor_width).replace('.', ',') + '\n' +
+                                'Computer Name: ' + '\t' + self.computer_name + '\n' +
+                                'Response keys: ' + '\t' + self.key1 + ', ' + self.key2 + ', ' + self.key3 + ', ' + self.key4 + '.' + '\n' +
                                 'Quit key: ' + '\t' + self.key_quit + '\n' +
-                                'Warning (speed, accuracy): ' + '\t' + str(self.whether_warning)+'\n' +
-                                'Speed warning at:' + '\t' + str(self.speed_warning)+'\n' +
-                                'Acc warning at:' + '\t' + str(self.acc_warning)+'\n' +
-                                'Groups:' + '\t' + str(self.groups)[1:-1].replace("u'", '').replace("'", '')+'\n' +
-                                'Sessions:' + '\t' + str(self.numsessions)+'\n' +
-                                'Epochs in sessions:' + '\t' + str(self.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n' +
-                                'Blocks in epochs:' + '\t' + str(self.block_in_epochN)+'\n' +
-                                'Preparatory Trials\\Block:' + '\t' + str(self.blockprepN)+'\n' +
-                                'Trials\\Block:' + '\t' + str(self.blocklengthN)+'\n' +
-                                'RSI:' + '\t' + str(self.RSI_time).replace('.', ',')+'\n' +
-                                'Asrt stim distance:' + '\t' + str(self.asrt_distance)+'\n' +
-                                'Asrt stim size:' + '\t' + str(self.asrt_size)+'\n' +
-                                'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor+'\n' +
-                                'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor+'\n' +
-                                'Background color:' + '\t' + self.asrt_background+'\n' +
+                                'Warning (speed, accuracy): ' + '\t' + str(self.whether_warning) + '\n' +
+                                'Speed warning at:' + '\t' + str(self.speed_warning) + '\n' +
+                                'Acc warning at:' + '\t' + str(self.acc_warning) + '\n' +
+                                'Groups:' + '\t' + str(self.groups)[1:-1].replace("u'", '').replace("'", '') + '\n' +
+                                'Sessions:' + '\t' + str(self.numsessions) + '\n' +
+                                'Epochs in sessions:' + '\t' + str(self.epochs)[1:-1].replace("u'", '').replace("'", '') + '\n' +
+                                'Blocks in epochs:' + '\t' + str(self.block_in_epochN) + '\n' +
+                                'Preparatory Trials\\Block:' + '\t' + str(self.blockprepN) + '\n' +
+                                'Trials\\Block:' + '\t' + str(self.blocklengthN) + '\n' +
+                                'RSI:' + '\t' + str(self.RSI_time).replace('.', ',') + '\n' +
+                                'Asrt stim distance:' + '\t' + str(self.asrt_distance) + '\n' +
+                                'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n' +
+                                'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
+                                'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
+                                'Background color:' + '\t' + self.asrt_background + '\n' +
                                 '\n' +
                                 'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
 
@@ -765,9 +765,12 @@ class Experiment:
             expstart11.addText(u'Folytatás innen...')
             expstart11.addText(
                 'Session: ' + str(self.stim_sessionN[self.last_N + 1]))
-            expstart11.addText('Epoch: '+str(self.stimepoch[self.last_N + 1]))
-            expstart11.addText('Block: '+str(self.stimblock[self.last_N + 1]))
-            expstart11.addText('Trial: '+str(self.stimtrial[self.last_N + 1]))
+            expstart11.addText(
+                'Epoch: ' + str(self.stimepoch[self.last_N + 1]))
+            expstart11.addText(
+                'Block: ' + str(self.stimblock[self.last_N + 1]))
+            expstart11.addText(
+                'Trial: ' + str(self.stimtrial[self.last_N + 1]))
             expstart11.show()
             if not expstart11.OK:
                 core.quit()
@@ -782,11 +785,11 @@ class Experiment:
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText('')
         for z in range(self.settings.numsessions):
-            if self.settings.asrt_types[z+1] == "noASRT":
+            if self.settings.asrt_types[z + 1] == "noASRT":
                 settings_dialog.addFixedField(
-                    u'Session ' + str(z+1) + ' PCode', 'noPattern')
+                    u'Session ' + str(z + 1) + ' PCode', 'noPattern')
             else:
-                settings_dialog.addField(u'Session ' + str(z+1) + ' PCode', choices=[
+                settings_dialog.addField(u'Session ' + str(z + 1) + ' PCode', choices=[
                                          '1st - 1234', '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
 
         returned_data = settings_dialog.show()
@@ -794,7 +797,7 @@ class Experiment:
             self.PCodes = {}
 
             for zz in range(self.settings.numsessions):
-                self.PCodes[zz+1] = returned_data[zz]
+                self.PCodes[zz + 1] = returned_data[zz]
 
             return self.PCodes
         else:
@@ -823,20 +826,20 @@ class Experiment:
         block_num = 0
 
         sessionsstarts = self.settings.get_session_starts()
-        for trial_num in range(1, self.settings.get_maxtrial()+1):
+        for trial_num in range(1, self.settings.get_maxtrial() + 1):
             for session_num in range(1, len(sessionsstarts)):
-                if trial_num >= sessionsstarts[session_num-1] and trial_num < sessionsstarts[session_num]:
+                if trial_num >= sessionsstarts[session_num - 1] and trial_num < sessionsstarts[session_num]:
                     self.stim_sessionN[trial_num] = session_num
                     self.end_at[trial_num] = sessionsstarts[session_num]
 
-        for epoch in range(1, self.settings.epochN+1):
+        for epoch in range(1, self.settings.epochN + 1):
 
-            for block in range(1, self.settings.block_in_epochN+1):
+            for block in range(1, self.settings.block_in_epochN + 1):
                 block_num += 1
                 current_trial_num = 0
 
                 # practice
-                for practice in range(1, self.settings.blockprepN+1):
+                for practice in range(1, self.settings.blockprepN + 1):
                     current_trial_num += 1
 
                     all_trial_Nr += 1
@@ -850,7 +853,7 @@ class Experiment:
                     self.stimepoch[all_trial_Nr] = epoch
 
                 # real
-                for real in range(1, self.settings.blocklengthN+1):
+                for real in range(1, self.settings.blocklengthN + 1):
 
                     current_trial_num += 1
                     all_trial_Nr += 1
@@ -873,7 +876,7 @@ class Experiment:
                     if current_trial_num % 2 == mod_pattern and asrt_type != "noASRT":
                         if all_trial_Nr > 2:
                             current_stim = int(
-                                dict_HL[str(self.stimlist[all_trial_Nr-2])])
+                                dict_HL[str(self.stimlist[all_trial_Nr - 2])])
                         else:
                             # first pattern stim is random
                             current_stim = random.choice([1, 2, 3, 4])
@@ -901,7 +904,7 @@ class Experiment:
         output_file_path = os.path.join(
             self.thispath, "logs", subject_id + '_log.txt')
         self.person_data = PersonDataHandler(
-            subject_id,  all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
+            subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
 
         self.person_data.update_subject_IDs_files()
 
@@ -961,7 +964,7 @@ class Experiment:
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
         rt_mean_str = str(rt_mean)[:5].replace('.', ',')
 
-        if self.settings.asrt_types[self.stim_sessionN[N-1]] == 'explicit':
+        if self.settings.asrt_types[self.stim_sessionN[N - 1]] == 'explicit':
 
             try:
                 rt_mean_p = float(sum(RT_pattern_list)) / len(RT_pattern_list)
@@ -1083,7 +1086,7 @@ class Experiment:
                     self.stim_output_line -= 1
 
                     if N >= 1:
-                        self.last_N = N-1
+                        self.last_N = N - 1
 
                     self.person_data.save_person_settings(self)
                     core.quit()
@@ -1134,7 +1137,7 @@ class Experiment:
                     self.person_data.append_to_output_file('userquit')
 
                     if N >= 1:
-                        self.last_N = N-1
+                        self.last_N = N - 1
 
                     self.person_data.save_person_settings(self)
                     core.quit()
@@ -1148,7 +1151,7 @@ class Experiment:
 
                 accs_in_block = []
 
-            if N == self.end_at[N-1]:
+            if N == self.end_at[N - 1]:
                 break
 
     def run(self):
