@@ -34,7 +34,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 1
-        asrt.show_epoch_and_block_settings_dialog(exp_settings)
+        exp_settings.show_epoch_and_block_settings_dialog()
 
         self.assertEqual(exp_settings.blockprepN, 5)
         self.assertEqual(exp_settings.blocklengthN, 80)
@@ -72,14 +72,14 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         exp_settings.numsessions = 1
 
         with self.assertRaises(SystemExit):
-            asrt.show_epoch_and_block_settings_dialog(exp_settings)
+            exp_settings.show_epoch_and_block_settings_dialog()
 
     def testNoSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 0
-        asrt.show_epoch_and_block_settings_dialog(exp_settings)
+        exp_settings.show_epoch_and_block_settings_dialog()
 
         self.assertEqual(exp_settings.blockprepN, 5)
         self.assertEqual(exp_settings.blocklengthN, 80)
@@ -108,7 +108,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 3
-        asrt.show_epoch_and_block_settings_dialog(exp_settings)
+        exp_settings.show_epoch_and_block_settings_dialog()
 
         self.assertEqual(exp_settings.blockprepN, 5)
         self.assertEqual(exp_settings.blocklengthN, 80)
@@ -154,7 +154,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 3
-        asrt.show_epoch_and_block_settings_dialog(exp_settings)
+        exp_settings.show_epoch_and_block_settings_dialog()
 
         self.assertEqual(exp_settings.blockprepN, 12)
         self.assertEqual(exp_settings.blocklengthN, 79)

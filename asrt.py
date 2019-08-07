@@ -222,6 +222,152 @@ class ExperimentSettings:
 
         return self.sessionstarts
 
+    def show_basic_settings_dialog(self):
+        """ Ask the user to specify the number of groups and the number of sessions."""
+
+        settings_dialog = gui.Dlg(title=u'Beállítások')
+        settings_dialog.addText(
+            u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
+        settings_dialog.addText(
+            u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
+        settings_dialog.addField(
+            u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
+        settings_dialog.addText(u'Hány ülés (session) lesz a kísérletben?')
+        settings_dialog.addField(u'Ulesek szama', 2)
+        returned_data = settings_dialog.show()
+        if settings_dialog.OK:
+            self.numsessions = returned_data[1]
+            return returned_data[0]
+        else:
+            core.quit()
+
+    def show_group_settings_dialog(self, numgroups, dict_accents):
+        """Ask the user to specify the name of the groups.
+           Returns the list of group names.
+        """
+
+        if numgroups > 1:
+            self.groups = []
+            settings_dialog = gui.Dlg(title=u'Beállítások')
+            settings_dialog.addText(
+                u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
+            for i in range(numgroups):
+                settings_dialog.addField(u'Csoport ' + str(i + 1))
+            returned_data = settings_dialog.show()
+            if settings_dialog.OK:
+                for ii in returned_data:
+                    ii = ii.lower()
+                    ii = ii.replace(' ', '_')
+                    ii = ii.replace('-', '_')
+                    for accent in dict_accents.keys():
+                        ii = ii.replace(accent, dict_accents[accent])
+                    self.groups.append(ii)
+            else:
+                core.quit()
+        else:
+            self.groups = ['nincsenek csoportok']
+
+    def show_epoch_and_block_settings_dialog(self):
+        """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
+           epoch number and asrt type in the different sessions.
+        """
+
+        settings_dialog = gui.Dlg(title=u'Beállítások')
+        settings_dialog.addText(u'Kísérlet felépítése ')
+        settings_dialog.addField(
+            u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
+        settings_dialog.addField(u'Eles probak a blokkban:', 80)
+        settings_dialog.addField(u'Blokkok szama egy epochban:', 5)
+        for i in range(self.numsessions):
+            settings_dialog.addField(
+                u'Session ' + str(i + 1) + u' epochok szama', 5)
+        for i in range(self.numsessions):
+            settings_dialog.addField(
+                u'Session ' + str(i + 1) + u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
+        returned_data = settings_dialog.show()
+        if settings_dialog.OK:
+            self.blockprepN = returned_data[0]
+            self.blocklengthN = returned_data[1]
+            self.block_in_epochN = returned_data[2]
+            self.epochN = 0
+            self.epochs = []
+            self.asrt_types = {}
+            for k in range(self.numsessions):
+                self.epochN += returned_data[3 + k]
+                self.epochs.append(returned_data[3 + k])
+            for k in range(self.numsessions):
+                self.asrt_types[k + 1] = returned_data[3 +
+                                                       self.numsessions + k]
+        else:
+            core.quit()
+
+    def show_computer_and_display_settings_dialog(self):
+        """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
+           epoch number and asrt type in the different sessions.
+        """
+        possible_colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen",
+                           "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]
+
+        settings_dialog = gui.Dlg(title=u'Beállítások')
+        settings_dialog.addText(u'A számítógépről...')
+        settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
+        settings_dialog.addField(
+            u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
+        settings_dialog.addText(u'Megjelenés..')
+        settings_dialog.addField(
+            u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+        settings_dialog.addField(u'Ingerek sugara (cm)', 1)
+        settings_dialog.addField(
+            u'ASRT inger szine (elsodleges, R)', choices=possible_colors, initial="Orange")
+        settings_dialog.addField(
+            u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices=possible_colors, initial="Green")
+        settings_dialog.addField(
+            u'Hatter szine', choices=possible_colors, initial="Ivory")
+        settings_dialog.addField(u'RSI (ms)', 120)
+        returned_data = settings_dialog.show()
+        if settings_dialog.OK:
+            self.monitor_width = returned_data[0]
+            self.computer_name = returned_data[1]
+            self.asrt_distance = returned_data[2]
+            self.asrt_size = returned_data[3]
+            self.asrt_rcolor = returned_data[4]
+            self.asrt_pcolor = returned_data[5]
+            self.asrt_background = returned_data[6]
+            self.RSI_time = float(returned_data[7]) / 1000
+        else:
+            core.quit()
+
+    def show_key_and_feedback_settings_dialog(self):
+        """Ask the user to specify the keys used during the experiement and also set options related to the displayed feedback."""
+
+        settings_dialog = gui.Dlg(title=u'Beállítások')
+        settings_dialog.addText(u'Válaszbillentyűk')
+        settings_dialog.addField(u'Bal szelso:', 'y')
+        settings_dialog.addField(u'Bal kozep', 'c')
+        settings_dialog.addField(u'Jobb kozep', 'b')
+        settings_dialog.addField(u'Jobb szelso', 'm')
+        settings_dialog.addField(u'Kilepes', 'q')
+        settings_dialog.addField(
+            u'Figyelmeztetes pontossagra/sebessegre:', True)
+        settings_dialog.addText(
+            u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
+        settings_dialog.addField(
+            u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
+        settings_dialog.addField(
+            u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
+        returned_data = settings_dialog.show()
+        if settings_dialog.OK:
+            self.key1 = returned_data[0]
+            self.key2 = returned_data[1]
+            self.key3 = returned_data[2]
+            self.key4 = returned_data[3]
+            self.key_quit = returned_data[4]
+            self.whether_warning = returned_data[5]
+            self.speed_warning = returned_data[6]
+            self.acc_warning = returned_data[7]
+        else:
+            core.quit()
+
 
 class InstructionHelper:
     """ Class for handle instruction strings (reading from file, storing and displaying)"""
@@ -501,153 +647,6 @@ class PersonDataHandler:
         for h in heading_list:
             output_file.write(h + '\t')
 
-# Settings dialogs
-
-
-def show_basic_settings_dialog(expriment_settings):
-    """ Ask the user to specify the number of groups and the number of sessions."""
-
-    settings_dialog = gui.Dlg(title=u'Beállítások')
-    settings_dialog.addText(
-        u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
-    settings_dialog.addText(
-        u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
-    settings_dialog.addField(
-        u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
-    settings_dialog.addText(u'Hány ülés (session) lesz a kísérletben?')
-    settings_dialog.addField(u'Ulesek szama', 2)
-    returned_data = settings_dialog.show()
-    if settings_dialog.OK:
-        expriment_settings.numsessions = returned_data[1]
-        return returned_data[0]
-    else:
-        core.quit()
-
-
-def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
-    """Ask the user to specify the name of the groups.
-       Returns the list of group names.
-    """
-
-    if numgroups > 1:
-        expriment_settings.groups = []
-        settings_dialog = gui.Dlg(title=u'Beállítások')
-        settings_dialog.addText(
-            u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
-        for i in range(numgroups):
-            settings_dialog.addField(u'Csoport '+str(i+1))
-        returned_data = settings_dialog.show()
-        if settings_dialog.OK:
-            for ii in returned_data:
-                ii = ii.lower()
-                ii = ii.replace(' ', '_')
-                ii = ii.replace('-', '_')
-                for accent in dict_accents.keys():
-                    ii = ii.replace(accent, dict_accents[accent])
-                expriment_settings.groups.append(ii)
-        else:
-            core.quit()
-    else:
-        expriment_settings.groups = ['nincsenek csoportok']
-
-
-def show_epoch_and_block_settings_dialog(expriment_settings):
-    """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
-       epoch number and asrt type in the different sessions.
-    """
-
-    settings_dialog = gui.Dlg(title=u'Beállítások')
-    settings_dialog.addText(u'Kísérlet felépítése ')
-    settings_dialog.addField(
-        u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
-    settings_dialog.addField(u'Eles probak a blokkban:', 80)
-    settings_dialog.addField(u'Blokkok szama egy epochban:', 5)
-    for i in range(expriment_settings.numsessions):
-        settings_dialog.addField(u'Session '+str(i+1)+u' epochok szama', 5)
-    for i in range(expriment_settings.numsessions):
-        settings_dialog.addField(
-            u'Session '+str(i+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
-    returned_data = settings_dialog.show()
-    if settings_dialog.OK:
-        expriment_settings.blockprepN = returned_data[0]
-        expriment_settings.blocklengthN = returned_data[1]
-        expriment_settings.block_in_epochN = returned_data[2]
-        expriment_settings.epochN = 0
-        expriment_settings.epochs = []
-        expriment_settings.asrt_types = {}
-        for k in range(expriment_settings.numsessions):
-            expriment_settings.epochN += returned_data[3+k]
-            expriment_settings.epochs.append(returned_data[3+k])
-        for k in range(expriment_settings.numsessions):
-            expriment_settings.asrt_types[k+1] = returned_data[3 +
-                                                               expriment_settings.numsessions+k]
-    else:
-        core.quit()
-
-
-def show_computer_and_display_settings_dialog(possible_colors, expriment_settings):
-    """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
-       epoch number and asrt type in the different sessions.
-    """
-
-    settings_dialog = gui.Dlg(title=u'Beállítások')
-    settings_dialog.addText(u'A számítógépről...')
-    settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
-    settings_dialog.addField(
-        u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
-    settings_dialog.addText(u'Megjelenés..')
-    settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
-    settings_dialog.addField(u'Ingerek sugara (cm)', 1)
-    settings_dialog.addField(
-        u'ASRT inger szine (elsodleges, R)', choices=possible_colors, initial="Orange")
-    settings_dialog.addField(
-        u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices=possible_colors, initial="Green")
-    settings_dialog.addField(
-        u'Hatter szine', choices=possible_colors, initial="Ivory")
-    settings_dialog.addField(u'RSI (ms)', 120)
-    returned_data = settings_dialog.show()
-    if settings_dialog.OK:
-        expriment_settings.monitor_width = returned_data[0]
-        expriment_settings.computer_name = returned_data[1]
-        expriment_settings.asrt_distance = returned_data[2]
-        expriment_settings.asrt_size = returned_data[3]
-        expriment_settings.asrt_rcolor = returned_data[4]
-        expriment_settings.asrt_pcolor = returned_data[5]
-        expriment_settings.asrt_background = returned_data[6]
-        expriment_settings.RSI_time = float(returned_data[7])/1000
-    else:
-        core.quit()
-
-
-def show_key_and_feedback_settings_dialog(expriment_settings):
-    """Ask the user to specify the keys used during the experiement and also set options related to the displayed feedback."""
-
-    settings_dialog = gui.Dlg(title=u'Beállítások')
-    settings_dialog.addText(u'Válaszbillentyűk')
-    settings_dialog.addField(u'Bal szelso:', 'y')
-    settings_dialog.addField(u'Bal kozep', 'c')
-    settings_dialog.addField(u'Jobb kozep', 'b')
-    settings_dialog.addField(u'Jobb szelso', 'm')
-    settings_dialog.addField(u'Kilepes', 'q')
-    settings_dialog.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
-    settings_dialog.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
-    settings_dialog.addField(
-        u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
-    settings_dialog.addField(
-        u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
-    returned_data = settings_dialog.show()
-    if settings_dialog.OK:
-        expriment_settings.key1 = returned_data[0]
-        expriment_settings.key2 = returned_data[1]
-        expriment_settings.key3 = returned_data[2]
-        expriment_settings.key4 = returned_data[3]
-        expriment_settings.key_quit = returned_data[4]
-        expriment_settings.whether_warning = returned_data[5]
-        expriment_settings.speed_warning = returned_data[6]
-        expriment_settings.acc_warning = returned_data[7]
-    else:
-        core.quit()
-
 
 class Experiment:
 
@@ -692,26 +691,21 @@ class Experiment:
 
         # if there is no settings file, we ask the user to specfiy the settings
         except:
-            possible_colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen",
-                               "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]
-
             # get the number of groups and number of sessions
-            numgroups = show_basic_settings_dialog(self.settings)
+            numgroups = self.settings.show_basic_settings_dialog()
 
             # get the group names from the user
-            show_group_settings_dialog(
-                numgroups, self.dict_accents, self.settings)
+            self.settings.show_group_settings_dialog(
+                numgroups, self.dict_accents)
 
             # get epoch and block settings (block number, trial number, epoch number, etc)
-            epoch_block_result = show_epoch_and_block_settings_dialog(
-                self.settings)
+            self.settings.show_epoch_and_block_settings_dialog()
 
             # get montior / computer settings, and also options about displaying (stimulus size, stimulus distance, etc)
-            show_computer_and_display_settings_dialog(
-                possible_colors, self.settings)
+            self.settings.show_computer_and_display_settings_dialog()
 
             # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
-            show_key_and_feedback_settings_dialog(self.settings)
+            self.settings.show_key_and_feedback_settings_dialog()
 
             # save the settings sepcifed by the user in the different dialogs
             self.settings.write_to_file()

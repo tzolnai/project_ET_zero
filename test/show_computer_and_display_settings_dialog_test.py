@@ -22,9 +22,6 @@ import os
 sys.path = [".."] + \
     [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-
-possible_colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen",
-                   "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]
 import unittest
 import asrt
 import psychopy_gui_mock as pgm
@@ -36,8 +33,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
 
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_computer_and_display_settings_dialog(
-            possible_colors, exp_settings)
+        exp_settings.show_computer_and_display_settings_dialog()
 
         self.assertEqual(exp_settings.monitor_width, 34.2)
         self.assertEqual(exp_settings.computer_name, "Laposka")
@@ -83,8 +79,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
 
         with self.assertRaises(SystemExit):
             exp_settings = asrt.ExperimentSettings("", "")
-            asrt.show_computer_and_display_settings_dialog(
-                possible_colors, exp_settings)
+            exp_settings.show_computer_and_display_settings_dialog()
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -92,8 +87,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
             [17, "Alma", 2.3, 1.2, "Black", "White", "Green", 205])
 
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_computer_and_display_settings_dialog(
-            possible_colors, exp_settings)
+        exp_settings.show_computer_and_display_settings_dialog()
 
         self.assertEqual(exp_settings.monitor_width, 17)
         self.assertEqual(exp_settings.computer_name, "Alma")

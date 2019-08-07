@@ -33,7 +33,7 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
 
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_key_and_feedback_settings_dialog(exp_settings)
+        exp_settings.show_key_and_feedback_settings_dialog()
 
         self.assertEqual(exp_settings.key1, 'y')
         self.assertEqual(exp_settings.key2, 'c')
@@ -79,14 +79,14 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
         exp_settings = asrt.ExperimentSettings("", "")
 
         with self.assertRaises(SystemExit):
-            asrt.show_key_and_feedback_settings_dialog(exp_settings)
+            exp_settings.show_key_and_feedback_settings_dialog()
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['a', 's', 'd', 'w', 'k', False, 80, 70])
 
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_key_and_feedback_settings_dialog(exp_settings)
+        exp_settings.show_key_and_feedback_settings_dialog()
 
         self.assertEqual(exp_settings.key1, 'a')
         self.assertEqual(exp_settings.key2, 's')

@@ -37,7 +37,7 @@ class showGroupSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
 
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_group_settings_dialog(2, dict_accents, exp_settings)
+        exp_settings.show_group_settings_dialog(2, dict_accents)
 
         self.assertEqual(len(exp_settings.groups), 2)
 
@@ -55,7 +55,7 @@ class showGroupSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         numgroups = 3
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
+        exp_settings.show_group_settings_dialog(numgroups, dict_accents)
 
         self.assertEqual(len(exp_settings.groups), numgroups)
 
@@ -74,7 +74,7 @@ class showGroupSettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         numgroups = 0
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
+        exp_settings.show_group_settings_dialog(numgroups, dict_accents)
 
         self.assertEqual(len(exp_settings.groups), 1)
         self.assertEqual(exp_settings.groups[0], "nincsenek csoportok")
@@ -92,15 +92,14 @@ class showGroupSettingsDialogTest(unittest.TestCase):
         exp_settings = asrt.ExperimentSettings("", "")
 
         with self.assertRaises(SystemExit):
-            asrt.show_group_settings_dialog(
-                numgroups, dict_accents, exp_settings)
+            exp_settings.show_group_settings_dialog(numgroups, dict_accents)
 
     def testAccentCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(["áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ", "kontrol"])
         numgroups = 2
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
+        exp_settings.show_group_settings_dialog(numgroups, dict_accents)
 
         self.assertEqual(len(exp_settings.groups), numgroups)
         self.assertEqual(
@@ -113,7 +112,7 @@ class showGroupSettingsDialogTest(unittest.TestCase):
             ["áaéeíió-oőö-úuű-üÁ AÉEÍ IÓOŐ ÖÚUŰÜ", "kontrol"])
         numgroups = 2
         exp_settings = asrt.ExperimentSettings("", "")
-        asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
+        exp_settings.show_group_settings_dialog(numgroups, dict_accents)
 
         self.assertEqual(len(exp_settings.groups), numgroups)
         self.assertEqual(
