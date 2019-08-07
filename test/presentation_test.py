@@ -16,25 +16,27 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+from psychopy import visual, logging
+import psychopy_gui_mock as pgm
+import psychopy_visual_mock as pvm
+import shutil
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-import shutil
-
-import psychopy_visual_mock as pvm
-import psychopy_gui_mock as pgm
-from psychopy import visual, logging
 
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
-dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
+dict_accents = {u'á': u'a', u'é': u'e', u'í': u'i', u'ó': u'o',
+                u'ő': u'o', u'ö': u'o', u'ú': u'u', u'ű': u'u', u'ü': u'u'}
+
 
 class presentationTest(unittest.TestCase):
 
@@ -43,7 +45,8 @@ class presentationTest(unittest.TestCase):
         filepath = os.path.abspath(__file__)
         (filepath, trail) = os.path.split(filepath)
         test_name = self.id().split(".")[2]
-        self.current_dir = os.path.join(filepath, "data", "presentation", test_name)
+        self.current_dir = os.path.join(
+            filepath, "data", "presentation", test_name)
         self.work_dir = os.path.join(self.current_dir, "workdir")
         asrt.ensure_dir(self.work_dir)
         self.clearDir(self.work_dir)
@@ -71,7 +74,8 @@ class presentationTest(unittest.TestCase):
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
         (filepath, trail) = os.path.split(filepath)
-        filepath = os.path.join(filepath, "data", "presentation", file_name, "workdir")
+        filepath = os.path.join(
+            filepath, "data", "presentation", file_name, "workdir")
         return filepath
 
     def testSimpleTestCase(self):
@@ -79,12 +83,14 @@ class presentationTest(unittest.TestCase):
         thispath = os.path.join(self.constructFilePath("testSimpleTestCase"))
         experiment = asrt.Experiment(thispath)
         # load settings
-        settings_path = os.path.join(self.constructFilePath("testSimpleTestCase"), "settings")
+        settings_path = os.path.join(
+            self.constructFilePath("testSimpleTestCase"), "settings")
         experiment.settings = asrt.ExperimentSettings(settings_path, "")
         experiment.all_settings_def()
 
         # load instructions
-        inst_feedback_path = os.path.join(self.constructFilePath("testSimpleTestCase"), "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.constructFilePath(
+            "testSimpleTestCase"), "inst_and_feedback.txt")
         experiment.instructions = asrt.InstructionHelper(inst_feedback_path)
         experiment.instructions.read_insts_from_file()
 
@@ -100,25 +106,28 @@ class presentationTest(unittest.TestCase):
 
         # monitor settings
         my_monitor = experiment.monitor_settings()
-        experiment.colors = { 'wincolor' : experiment.settings.asrt_background, 'linecolor':'black', 'stimp':experiment.settings.asrt_pcolor, 'stimr':experiment.settings.asrt_rcolor}
-        with visual.Window (size = my_monitor.getSizePix(), color = experiment.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as experiment.mywindow:
+        experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
+                             'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
 
-            experiment.pressed_dict = {experiment.settings.key1:1,experiment.settings.key2:2,experiment.settings.key3:3,experiment.settings.key4:4}
+            experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
+                                       experiment.settings.key3: 3, experiment.settings.key4: 4}
 
-            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23 # use dummy values
+            # use dummy values
+            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-
-            experiment.dict_pos = { 1:  ( float(experiment.settings.asrt_distance)*(-1.5), 0),
-                                    2:  ( float(experiment.settings.asrt_distance)*(-0.5), 0),
-                                    3:  ( float(experiment.settings.asrt_distance)*  0.5,   0),
-                                    4:  ( float(experiment.settings.asrt_distance)*  1.5,   0) }
+            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
+                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
+                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
+                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
             # generate the right keys
             key_list = []
             # There are some instructions first
-            key_list = [experiment.settings.key1, experiment.settings.key1, experiment.settings.key1]
+            key_list = [experiment.settings.key1,
+                        experiment.settings.key1, experiment.settings.key1]
 
             # Then we have the stimuli
             for stim in experiment.stimlist.values():
@@ -141,9 +150,9 @@ class presentationTest(unittest.TestCase):
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
             self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                                                "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                                                "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
@@ -164,14 +173,16 @@ class presentationTest(unittest.TestCase):
                 # empty cycles
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
                 # empty cycles again
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + 4 + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
@@ -179,12 +190,14 @@ class presentationTest(unittest.TestCase):
                 stim_circle = drawing_list[j + 8]
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
-                self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_rcolor)
+                self.assertEqual(stim_circle.fillColor,
+                                 experiment.settings.asrt_rcolor)
 
             # saving screen
             saving = drawing_list[102]
             self.assertTrue(isinstance(saving, pvm.TextStim))
-            self.assertEqual(saving.text, "Adatok mentése és visszajelzés előkészítése...")
+            self.assertEqual(
+                saving.text, "Adatok mentése és visszajelzés előkészítése...")
 
             # feedback screen
             feedback = drawing_list[103]
@@ -194,7 +207,8 @@ class presentationTest(unittest.TestCase):
                                             "Átlagos reakcióidőd: 0,0 másodperc\r\n\r\n"
                                             "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
-            self.assertTrue(os.path.join(thispath, "settings", "toth-bela_10__log.txt"))
+            self.assertTrue(os.path.join(
+                thispath, "settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
         self.clearDir(os.path.join(thispath, "logs"))
@@ -204,12 +218,14 @@ class presentationTest(unittest.TestCase):
         thispath = os.path.join(self.constructFilePath("testExplixitASRT"))
         experiment = asrt.Experiment(thispath)
         # load settings
-        settings_path = os.path.join(self.constructFilePath("testExplixitASRT"), "settings")
+        settings_path = os.path.join(
+            self.constructFilePath("testExplixitASRT"), "settings")
         experiment.settings = asrt.ExperimentSettings(settings_path, "")
         experiment.all_settings_def()
 
         # load instructions
-        inst_feedback_path = os.path.join(self.constructFilePath("testExplixitASRT"), "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.constructFilePath(
+            "testExplixitASRT"), "inst_and_feedback.txt")
         experiment.instructions = asrt.InstructionHelper(inst_feedback_path)
         experiment.instructions.read_insts_from_file()
 
@@ -223,28 +239,30 @@ class presentationTest(unittest.TestCase):
         gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
         experiment.participant_id()
 
-
         # monitor settings
         my_monitor = experiment.monitor_settings()
-        experiment.colors = { 'wincolor' : experiment.settings.asrt_background, 'linecolor':'black', 'stimp':experiment.settings.asrt_pcolor, 'stimr':experiment.settings.asrt_rcolor}
-        with visual.Window (size = my_monitor.getSizePix(), color = experiment.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as experiment.mywindow:
+        experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
+                             'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
 
-            experiment.pressed_dict = {experiment.settings.key1:1,experiment.settings.key2:2,experiment.settings.key3:3,experiment.settings.key4:4}
+            experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
+                                       experiment.settings.key3: 3, experiment.settings.key4: 4}
 
-            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23 # use dummy values
+            # use dummy values
+            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-
-            experiment.dict_pos = { 1:  ( float(experiment.settings.asrt_distance)*(-1.5), 0),
-                         2:  ( float(experiment.settings.asrt_distance)*(-0.5), 0),
-                         3:  ( float(experiment.settings.asrt_distance)*  0.5,   0),
-                         4:  ( float(experiment.settings.asrt_distance)*  1.5,   0) }
+            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
+                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
+                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
+                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
             # generate the right keys
             key_list = []
             # There are some instructions first
-            key_list = [experiment.settings.key1, experiment.settings.key1, experiment.settings.key1]
+            key_list = [experiment.settings.key1,
+                        experiment.settings.key1, experiment.settings.key1]
 
             # Then we have the stimuli
             for stim in experiment.stimlist.values():
@@ -267,9 +285,9 @@ class presentationTest(unittest.TestCase):
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
             self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                                                "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                                                "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
@@ -290,14 +308,16 @@ class presentationTest(unittest.TestCase):
                 # empty cycles
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
                 # empty cycles again
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + 4 + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
@@ -306,14 +326,17 @@ class presentationTest(unittest.TestCase):
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
                 if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_pcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_pcolor)
                 else:
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_rcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_rcolor)
 
             # saving screen
             saving = drawing_list[102]
             self.assertTrue(isinstance(saving, pvm.TextStim))
-            self.assertEqual(saving.text, "Adatok mentése és visszajelzés előkészítése...")
+            self.assertEqual(
+                saving.text, "Adatok mentése és visszajelzés előkészítése...")
 
             # feedback screen
             feedback = drawing_list[103]
@@ -325,7 +348,8 @@ class presentationTest(unittest.TestCase):
                                             "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
                                             "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
-            self.assertTrue(os.path.join(thispath, "settings", "toth-bela_10__log.txt"))
+            self.assertTrue(os.path.join(
+                thispath, "settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
         self.clearDir(os.path.join(thispath, "logs"))
@@ -335,12 +359,14 @@ class presentationTest(unittest.TestCase):
         thispath = os.path.join(self.constructFilePath("testQuitInsideABlock"))
         experiment = asrt.Experiment(thispath)
         # load settings
-        settings_path = os.path.join(self.constructFilePath("testQuitInsideABlock"), "settings")
+        settings_path = os.path.join(self.constructFilePath(
+            "testQuitInsideABlock"), "settings")
         experiment.settings = asrt.ExperimentSettings(settings_path, "")
         experiment.all_settings_def()
 
         # load instructions
-        inst_feedback_path = os.path.join(self.constructFilePath("testQuitInsideABlock"), "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.constructFilePath(
+            "testQuitInsideABlock"), "inst_and_feedback.txt")
         experiment.instructions = asrt.InstructionHelper(inst_feedback_path)
         experiment.instructions.read_insts_from_file()
 
@@ -356,25 +382,28 @@ class presentationTest(unittest.TestCase):
 
         # monitor settings
         my_monitor = experiment.monitor_settings()
-        experiment.colors = { 'wincolor' : experiment.settings.asrt_background, 'linecolor':'black', 'stimp':experiment.settings.asrt_pcolor, 'stimr':experiment.settings.asrt_rcolor}
-        with visual.Window (size = my_monitor.getSizePix(), color = experiment.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as experiment.mywindow:
+        experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
+                             'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
 
-            experiment.pressed_dict = {experiment.settings.key1:1,experiment.settings.key2:2,experiment.settings.key3:3,experiment.settings.key4:4}
+            experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
+                                       experiment.settings.key3: 3, experiment.settings.key4: 4}
 
-            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23 # use dummy values
+            # use dummy values
+            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-
-            experiment.dict_pos = { 1:  ( float(experiment.settings.asrt_distance)*(-1.5), 0),
-                         2:  ( float(experiment.settings.asrt_distance)*(-0.5), 0),
-                         3:  ( float(experiment.settings.asrt_distance)*  0.5,   0),
-                         4:  ( float(experiment.settings.asrt_distance)*  1.5,   0) }
+            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
+                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
+                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
+                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
             # generate the right keys
             key_list = []
             # There are some instructions first
-            key_list = [experiment.settings.key1, experiment.settings.key1, experiment.settings.key1]
+            key_list = [experiment.settings.key1,
+                        experiment.settings.key1, experiment.settings.key1]
 
             # Then we have the stimuli
             for stim in experiment.stimlist.values():
@@ -399,9 +428,9 @@ class presentationTest(unittest.TestCase):
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
             self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                                                "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                                                "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
@@ -422,14 +451,16 @@ class presentationTest(unittest.TestCase):
                 # empty cycles
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
                 # empty cycles again
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + 4 + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
@@ -438,31 +469,37 @@ class presentationTest(unittest.TestCase):
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
                 if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_pcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_pcolor)
                 else:
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_rcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_rcolor)
 
             # quiting screen
             quit = drawing_list[48]
             self.assertTrue(isinstance(quit, pvm.TextStim))
             self.assertEqual(quit.text, "Quit...\nSaving data...")
 
-            self.assertTrue(os.path.join(thispath, "settings", "toth-bela_10__log.txt"))
+            self.assertTrue(os.path.join(
+                thispath, "settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
     def testWrongPressedButton(self):
         visual_mock = pvm.PsychoPyVisualMock()
-        thispath = os.path.join(self.constructFilePath("testWrongPressedButton"))
+        thispath = os.path.join(
+            self.constructFilePath("testWrongPressedButton"))
         experiment = asrt.Experiment(thispath)
         # load settings
-        settings_path = os.path.join(self.constructFilePath("testWrongPressedButton"), "settings")
+        settings_path = os.path.join(self.constructFilePath(
+            "testWrongPressedButton"), "settings")
         experiment.settings = asrt.ExperimentSettings(settings_path, "")
         experiment.all_settings_def()
 
         # load instructions
-        inst_feedback_path = os.path.join(self.constructFilePath("testWrongPressedButton"), "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.constructFilePath(
+            "testWrongPressedButton"), "inst_and_feedback.txt")
         experiment.instructions = asrt.InstructionHelper(inst_feedback_path)
         experiment.instructions.read_insts_from_file()
 
@@ -478,25 +515,28 @@ class presentationTest(unittest.TestCase):
 
         # monitor settings
         my_monitor = experiment.monitor_settings()
-        experiment.colors = { 'wincolor' : experiment.settings.asrt_background, 'linecolor':'black', 'stimp':experiment.settings.asrt_pcolor, 'stimr':experiment.settings.asrt_rcolor}
-        with visual.Window (size = my_monitor.getSizePix(), color = experiment.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as experiment.mywindow:
+        experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
+                             'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
 
-            experiment.pressed_dict = {experiment.settings.key1:1,experiment.settings.key2:2,experiment.settings.key3:3,experiment.settings.key4:4}
+            experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
+                                       experiment.settings.key3: 3, experiment.settings.key4: 4}
 
-            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23 # use dummy values
+            # use dummy values
+            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-
-            experiment.dict_pos = { 1:  ( float(experiment.settings.asrt_distance)*(-1.5), 0),
-                         2:  ( float(experiment.settings.asrt_distance)*(-0.5), 0),
-                         3:  ( float(experiment.settings.asrt_distance)*  0.5,   0),
-                         4:  ( float(experiment.settings.asrt_distance)*  1.5,   0) }
+            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
+                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
+                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
+                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
             # generate the right keys
             key_list = []
             # There are some instructions first
-            key_list = [experiment.settings.key1, experiment.settings.key1, experiment.settings.key1]
+            key_list = [experiment.settings.key1,
+                        experiment.settings.key1, experiment.settings.key1]
 
             # Then we have the stimuli
             for stim in experiment.stimlist.values():
@@ -520,9 +560,9 @@ class presentationTest(unittest.TestCase):
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
             self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                                                "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                                                "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
@@ -543,14 +583,16 @@ class presentationTest(unittest.TestCase):
                 # empty cycles
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
                 # empty cycles again
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + 4 + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
@@ -559,9 +601,11 @@ class presentationTest(unittest.TestCase):
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
                 if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_pcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_pcolor)
                 else:
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_rcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_rcolor)
 
             # last stimuli is displayed again
             # empty cycles
@@ -575,12 +619,14 @@ class presentationTest(unittest.TestCase):
             stim_circle = drawing_list[97]
             self.assertTrue(isinstance(stim_circle, pvm.Circle))
             self.assertEqual(stim_circle.lineColor, 'black')
-            self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_pcolor)
+            self.assertEqual(stim_circle.fillColor,
+                             experiment.settings.asrt_pcolor)
 
             # saving screen
             saving = drawing_list[107]
             self.assertTrue(isinstance(saving, pvm.TextStim))
-            self.assertEqual(saving.text, "Adatok mentése és visszajelzés előkészítése...")
+            self.assertEqual(
+                saving.text, "Adatok mentése és visszajelzés előkészítése...")
 
             # feedback screen
             feedback = drawing_list[108]
@@ -591,22 +637,26 @@ class presentationTest(unittest.TestCase):
                                             "Pontosságod a bejósolható elemeknél: 75,0 %\r\n"
                                             "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n\r\n")
 
-            self.assertTrue(os.path.join(thispath, "settings", "toth-bela_10__log.txt"))
+            self.assertTrue(os.path.join(
+                thispath, "settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
     def testContinueAfterQuit(self):
         visual_mock = pvm.PsychoPyVisualMock()
-        thispath = os.path.join(self.constructFilePath("testContinueAfterQuit"))
+        thispath = os.path.join(
+            self.constructFilePath("testContinueAfterQuit"))
         experiment = asrt.Experiment(thispath)
         # load settings
-        settings_path = os.path.join(self.constructFilePath("testContinueAfterQuit"), "settings")
+        settings_path = os.path.join(self.constructFilePath(
+            "testContinueAfterQuit"), "settings")
         experiment.settings = asrt.ExperimentSettings(settings_path, "")
         experiment.all_settings_def()
 
         # load instructions
-        inst_feedback_path = os.path.join(self.constructFilePath("testContinueAfterQuit"), "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.constructFilePath(
+            "testContinueAfterQuit"), "inst_and_feedback.txt")
         experiment.instructions = asrt.InstructionHelper(inst_feedback_path)
         experiment.instructions.read_insts_from_file()
 
@@ -617,12 +667,18 @@ class presentationTest(unittest.TestCase):
         self.clearDir(os.path.join(thispath, "logs"))
 
         # copy participant settings file
-        shutil.copyfile(os.path.join(thispath, "participant_settings.bak"), os.path.join(thispath, "settings", "participant_settings.bak"))
-        shutil.copyfile(os.path.join(thispath, "participant_settings.dat"), os.path.join(thispath, "settings", "participant_settings.dat"))
-        shutil.copyfile(os.path.join(thispath, "participant_settings.dir"), os.path.join(thispath, "settings", "participant_settings.dir"))
-        shutil.copyfile(os.path.join(thispath, "toth-bela_10_.bak"), os.path.join(thispath, "settings", "toth-bela_10_.bak"))
-        shutil.copyfile(os.path.join(thispath, "toth-bela_10_.dat"), os.path.join(thispath, "settings", "toth-bela_10_.dat"))
-        shutil.copyfile(os.path.join(thispath, "toth-bela_10_.dir"), os.path.join(thispath, "settings", "toth-bela_10_.dir"))
+        shutil.copyfile(os.path.join(thispath, "participant_settings.bak"), os.path.join(
+            thispath, "settings", "participant_settings.bak"))
+        shutil.copyfile(os.path.join(thispath, "participant_settings.dat"), os.path.join(
+            thispath, "settings", "participant_settings.dat"))
+        shutil.copyfile(os.path.join(thispath, "participant_settings.dir"), os.path.join(
+            thispath, "settings", "participant_settings.dir"))
+        shutil.copyfile(os.path.join(thispath, "toth-bela_10_.bak"),
+                        os.path.join(thispath, "settings", "toth-bela_10_.bak"))
+        shutil.copyfile(os.path.join(thispath, "toth-bela_10_.dat"),
+                        os.path.join(thispath, "settings", "toth-bela_10_.dat"))
+        shutil.copyfile(os.path.join(thispath, "toth-bela_10_.dir"),
+                        os.path.join(thispath, "settings", "toth-bela_10_.dir"))
 
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Béla', 10])
@@ -630,18 +686,20 @@ class presentationTest(unittest.TestCase):
 
         # monitor settings
         my_monitor = experiment.monitor_settings()
-        experiment.colors = { 'wincolor' : experiment.settings.asrt_background, 'linecolor':'black', 'stimp':experiment.settings.asrt_pcolor, 'stimr':experiment.settings.asrt_rcolor}
-        with visual.Window (size = my_monitor.getSizePix(), color = experiment.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as experiment.mywindow:
+        experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
+                             'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
 
-            experiment.pressed_dict = {experiment.settings.key1:1,experiment.settings.key2:2,experiment.settings.key3:3,experiment.settings.key4:4}
+            experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
+                                       experiment.settings.key3: 3, experiment.settings.key4: 4}
 
-            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23 # use dummy values
+            # use dummy values
+            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-
-            experiment.dict_pos = { 1:  ( float(experiment.settings.asrt_distance)*(-1.5), 0),
-                         2:  ( float(experiment.settings.asrt_distance)*(-0.5), 0),
-                         3:  ( float(experiment.settings.asrt_distance)*  0.5,   0),
-                         4:  ( float(experiment.settings.asrt_distance)*  1.5,   0) }
+            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
+                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
+                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
+                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
@@ -651,7 +709,7 @@ class presentationTest(unittest.TestCase):
             key_list = [experiment.settings.key1]
 
             # Then we have the stimuli
-            for i in range (experiment.last_N + 1, 12):
+            for i in range(experiment.last_N + 1, 12):
                 stim = experiment.stimlist[i]
                 if stim == 1:
                     key_list.append(experiment.settings.key1)
@@ -671,21 +729,24 @@ class presentationTest(unittest.TestCase):
             # first we have one instruction screen about the continuation
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
+            self.assertEqual(
+                instruction_text.text, "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
 
             # then we have 11 trials
             for j in range(1, 28, 9):
                 # empty cycles
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
                 # empty cycles again
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + 4 + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
@@ -694,14 +755,17 @@ class presentationTest(unittest.TestCase):
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
                 if experiment.stimpr[((j - 1) / 9) + 9] == 'P':
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_pcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_pcolor)
                 else:
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_rcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_rcolor)
 
             # saving screen
             saving = drawing_list[28]
             self.assertTrue(isinstance(saving, pvm.TextStim))
-            self.assertEqual(saving.text, "Adatok mentése és visszajelzés előkészítése...")
+            self.assertEqual(
+                saving.text, "Adatok mentése és visszajelzés előkészítése...")
 
             # feedback screen
             feedback = drawing_list[29]
@@ -713,22 +777,26 @@ class presentationTest(unittest.TestCase):
                                             "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
                                             "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
-            self.assertTrue(os.path.join(thispath, "settings", "toth-bela_10__log.txt"))
+            self.assertTrue(os.path.join(
+                thispath, "settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "logs"))
         self.clearDir(os.path.join(thispath, "settings"))
 
     def testQuitOnFeedbackScreen(self):
         visual_mock = pvm.PsychoPyVisualMock()
-        thispath = os.path.join(self.constructFilePath("testQuitOnFeedbackScreen"))
+        thispath = os.path.join(
+            self.constructFilePath("testQuitOnFeedbackScreen"))
         experiment = asrt.Experiment(thispath)
         # load settings
-        settings_path = os.path.join(self.constructFilePath("testQuitOnFeedbackScreen"), "settings")
+        settings_path = os.path.join(self.constructFilePath(
+            "testQuitOnFeedbackScreen"), "settings")
         experiment.settings = asrt.ExperimentSettings(settings_path, "")
         experiment.all_settings_def()
 
         # load instructions
-        inst_feedback_path = os.path.join(self.constructFilePath("testQuitOnFeedbackScreen"), "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.constructFilePath(
+            "testQuitOnFeedbackScreen"), "inst_and_feedback.txt")
         experiment.instructions = asrt.InstructionHelper(inst_feedback_path)
         experiment.instructions.read_insts_from_file()
 
@@ -744,25 +812,28 @@ class presentationTest(unittest.TestCase):
 
         # monitor settings
         my_monitor = experiment.monitor_settings()
-        experiment.colors = { 'wincolor' : experiment.settings.asrt_background, 'linecolor':'black', 'stimp':experiment.settings.asrt_pcolor, 'stimr':experiment.settings.asrt_rcolor}
-        with visual.Window (size = my_monitor.getSizePix(), color = experiment.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as experiment.mywindow:
+        experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
+                             'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
 
-            experiment.pressed_dict = {experiment.settings.key1:1,experiment.settings.key2:2,experiment.settings.key3:3,experiment.settings.key4:4}
+            experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
+                                       experiment.settings.key3: 3, experiment.settings.key4: 4}
 
-            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23 # use dummy values
+            # use dummy values
+            experiment.frame_time, experiment.frame_sd, experiment.frame_rate = 1.0, 0.12, 0.23
 
-
-            experiment.dict_pos = { 1:  ( float(experiment.settings.asrt_distance)*(-1.5), 0),
-                         2:  ( float(experiment.settings.asrt_distance)*(-0.5), 0),
-                         3:  ( float(experiment.settings.asrt_distance)*  0.5,   0),
-                         4:  ( float(experiment.settings.asrt_distance)*  1.5,   0) }
+            experiment.dict_pos = {1:  (float(experiment.settings.asrt_distance)*(-1.5), 0),
+                                   2:  (float(experiment.settings.asrt_distance)*(-0.5), 0),
+                                   3:  (float(experiment.settings.asrt_distance) * 0.5,   0),
+                                   4:  (float(experiment.settings.asrt_distance) * 1.5,   0)}
 
             visual_mock = pvm.PsychoPyVisualMock()
 
             # generate the right keys
             key_list = []
             # There are some instructions first
-            key_list = [experiment.settings.key1, experiment.settings.key1, experiment.settings.key1]
+            key_list = [experiment.settings.key1,
+                        experiment.settings.key1, experiment.settings.key1]
 
             # Then we have the stimuli
             for stim in experiment.stimlist.values():
@@ -787,9 +858,9 @@ class presentationTest(unittest.TestCase):
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
             self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                                                "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                                                "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
@@ -810,14 +881,16 @@ class presentationTest(unittest.TestCase):
                 # empty cycles
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
                 # empty cycles again
                 for i in range(0, 4):
                     stim_background_circle = drawing_list[j + 4 + i]
-                    self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
+                    self.assertTrue(isinstance(
+                        stim_background_circle, pvm.Circle))
                     self.assertEqual(stim_background_circle.lineColor, 'black')
                     self.assertEqual(stim_background_circle.fillColor, None)
 
@@ -826,14 +899,17 @@ class presentationTest(unittest.TestCase):
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
                 if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_pcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_pcolor)
                 else:
-                    self.assertEqual(stim_circle.fillColor, experiment.settings.asrt_rcolor)
+                    self.assertEqual(stim_circle.fillColor,
+                                     experiment.settings.asrt_rcolor)
 
             # saving screen
             saving = drawing_list[102]
             self.assertTrue(isinstance(saving, pvm.TextStim))
-            self.assertEqual(saving.text, "Adatok mentése és visszajelzés előkészítése...")
+            self.assertEqual(
+                saving.text, "Adatok mentése és visszajelzés előkészítése...")
 
             # feedback screen
             feedback = drawing_list[103]
@@ -849,10 +925,12 @@ class presentationTest(unittest.TestCase):
             self.assertTrue(isinstance(quit, pvm.TextStim))
             self.assertEqual(quit.text, "Quit...\nSaving data...")
 
-            self.assertTrue(os.path.join(thispath, "settings", "toth-bela_10__log.txt"))
+            self.assertTrue(os.path.join(
+                thispath, "settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

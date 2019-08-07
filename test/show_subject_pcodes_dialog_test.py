@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class showSubjectPCodesDialogTest(unittest.TestCase):
 
@@ -42,7 +42,8 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
 
         experiment.show_subject_PCodes_dialog()
 
-        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(len(experiment.PCodes),
+                         experiment.settings.numsessions)
         self.assertEqual(experiment.PCodes[1], "")
 
         list_of_texts = gui_mock.getListOfTexts()
@@ -66,7 +67,8 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
 
         experiment.show_subject_PCodes_dialog()
 
-        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(len(experiment.PCodes),
+                         experiment.settings.numsessions)
         self.assertEqual(experiment.PCodes[1], "1st")
 
     def testMoreSessionsCustomValues(self):
@@ -86,7 +88,8 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
 
         experiment.show_subject_PCodes_dialog()
 
-        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(len(experiment.PCodes),
+                         experiment.settings.numsessions)
         self.assertEqual(experiment.PCodes[1], "2nd")
         self.assertEqual(experiment.PCodes[2], "1st")
         self.assertEqual(experiment.PCodes[3], "6th")
@@ -120,7 +123,8 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
 
     def testNoASRTSussions(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['2nd', '1st', 'noPattern', '3rd', 'noPattern'])
+        gui_mock.addFieldValues(
+            ['2nd', '1st', 'noPattern', '3rd', 'noPattern'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -134,7 +138,8 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
 
         experiment.show_subject_PCodes_dialog()
 
-        self.assertEqual(len(experiment.PCodes), experiment.settings.numsessions)
+        self.assertEqual(len(experiment.PCodes),
+                         experiment.settings.numsessions)
         self.assertEqual(experiment.PCodes[1], "2nd")
         self.assertEqual(experiment.PCodes[2], "1st")
         self.assertEqual(experiment.PCodes[3], "noPattern")
@@ -153,5 +158,6 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[3].label, "Session 4 PCode")
         self.assertEqual(list_of_fields[4].label, "Session 5 PCode")
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

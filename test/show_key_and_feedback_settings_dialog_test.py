@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
 
@@ -48,7 +48,8 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
         self.assertEqual(list_of_texts[0], "Válaszbillentyűk")
-        self.assertEqual(list_of_texts[1], "Ha be van kapcsolva a figyelmeztetés, akkor...:")
+        self.assertEqual(
+            list_of_texts[1], "Ha be van kapcsolva a figyelmeztetés, akkor...:")
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 8)
@@ -62,11 +63,14 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[3].initial, 'm')
         self.assertEqual(list_of_fields[4].label, "Kilepes")
         self.assertEqual(list_of_fields[4].initial, 'q')
-        self.assertEqual(list_of_fields[5].label, "Figyelmeztetes pontossagra/sebessegre:")
+        self.assertEqual(list_of_fields[5].label,
+                         "Figyelmeztetes pontossagra/sebessegre:")
         self.assertEqual(list_of_fields[5].initial, True)
-        self.assertEqual(list_of_fields[6].label, "Figyelmeztetes sebessegre ezen pontossag felett (%):")
+        self.assertEqual(
+            list_of_fields[6].label, "Figyelmeztetes sebessegre ezen pontossag felett (%):")
         self.assertEqual(list_of_fields[6].initial, 93)
-        self.assertEqual(list_of_fields[7].label, "Figyelmeztetes sebessegre ezen pontossag felett (%):")
+        self.assertEqual(
+            list_of_fields[7].label, "Figyelmeztetes sebessegre ezen pontossag felett (%):")
         self.assertEqual(list_of_fields[7].initial, 91)
 
     def testCancel(self):
@@ -94,5 +98,6 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.speed_warning, 80)
         self.assertEqual(exp_settings.acc_warning, 70)
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

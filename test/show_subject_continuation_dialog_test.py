@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class showSubjectContinuationDialogTest(unittest.TestCase):
 
@@ -49,8 +49,10 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i / 5
-            experiment.stimblock[i] = i / (experiment.settings.blockprepN + experiment.settings.blocklengthN)
-            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i / \
+                (experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimtrial[i] = i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         with self.assertRaises(SystemExit):
             experiment.show_subject_continuation_dialog()
@@ -58,7 +60,8 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
         self.assertEqual(list_of_texts[0], "A személy adatait beolvastam.")
-        self.assertEqual(list_of_texts[1], "A személy végigcsinálta a feladatot.")
+        self.assertEqual(list_of_texts[1],
+                         "A személy végigcsinálta a feladatot.")
 
     def testNullTrial(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -79,8 +82,10 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i // 5 + 1
-            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            experiment.stimtrial[i] = i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         experiment.show_subject_continuation_dialog()
 
@@ -111,9 +116,12 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         experiment.last_N = experiment.settings.get_maxtrial() // 2
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
-            experiment.stimepoch[i] = i // ((experiment.settings.blockprepN + experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1
-            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimepoch[i] = i // ((experiment.settings.blockprepN +
+                                             experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1
+            experiment.stimblock[i] = i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            experiment.stimtrial[i] = i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         experiment.show_subject_continuation_dialog()
 
@@ -147,11 +155,14 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i // 5 + 1
-            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            experiment.stimtrial[i] = i % (experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            experiment.stimtrial[i] = i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         with self.assertRaises(SystemExit):
             experiment.show_subject_continuation_dialog()
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

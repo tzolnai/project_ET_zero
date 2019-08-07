@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class allSettingsDefTest(unittest.TestCase):
 
@@ -52,8 +52,10 @@ class allSettingsDefTest(unittest.TestCase):
         filepath = os.path.abspath(__file__)
         (inst_and_feedback_path, trail) = os.path.split(filepath)
         inst_and_feedback_path = os.path.join(inst_and_feedback_path, "data")
-        inst_and_feedback_path = os.path.join(inst_and_feedback_path, "all_settings_def")
-        inst_and_feedback_path = os.path.join(inst_and_feedback_path, file_name)
+        inst_and_feedback_path = os.path.join(
+            inst_and_feedback_path, "all_settings_def")
+        inst_and_feedback_path = os.path.join(
+            inst_and_feedback_path, file_name)
         return inst_and_feedback_path
 
     def testLoadExistingSettings(self):
@@ -116,12 +118,15 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.acc_warning, 91)
         self.assertEqual(experiment.settings.get_maxtrial(), 2125)
         self.assertEqual(experiment.settings.get_session_starts(), [1, 2126])
-        self.assertEqual(experiment.settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
+        self.assertEqual(experiment.settings.get_block_starts(), [
+                         1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
 
     def testSettingsDialogsDefaultValues(self):
-        output_file = self.constructFilePath("testSettingsDialogsDefaultValues")
+        output_file = self.constructFilePath(
+            "testSettingsDialogsDefaultValues")
         experiment = asrt.Experiment("")
-        experiment.settings = asrt.ExperimentSettings(output_file, output_file + "_reminder.txt")
+        experiment.settings = asrt.ExperimentSettings(
+            output_file, output_file + "_reminder.txt")
 
         gui_mock = pgm.PsychoPyGuiMock()
         experiment.all_settings_def()
@@ -150,11 +155,12 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.speed_warning, 93)
         self.assertEqual(experiment.settings.acc_warning, 91)
         self.assertEqual(experiment.settings.get_maxtrial(), 4250)
-        self.assertEqual(experiment.settings.get_session_starts(), [1, 2126, 4251])
+        self.assertEqual(
+            experiment.settings.get_session_starts(), [1, 2126, 4251])
         self.assertEqual(experiment.settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
-                                                         1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
-                                                         2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
-                                                         3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
+                                                                  1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
+                                                                  2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
+                                                                  3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
         # output file exists
         self.assertTrue(os.path.exists(output_file + ".dat"))
         self.assertTrue(os.path.exists(output_file + "_reminder.txt"))
@@ -187,16 +193,18 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.speed_warning, 93)
         self.assertEqual(experiment.settings.acc_warning, 91)
         self.assertEqual(experiment.settings.get_maxtrial(), 4250)
-        self.assertEqual(experiment.settings.get_session_starts(), [1, 2126, 4251])
+        self.assertEqual(
+            experiment.settings.get_session_starts(), [1, 2126, 4251])
         self.assertEqual(experiment.settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
-                                                         1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
-                                                         2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
-                                                         3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
+                                                                  1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
+                                                                  2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
+                                                                  3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
 
     def testSettingsDialogsCustomValues(self):
         output_file = self.constructFilePath("testSettingsDialogsCustomValues")
         experiment = asrt.Experiment("")
-        experiment.settings = asrt.ExperimentSettings(output_file, output_file + "_reminder.txt")
+        experiment.settings = asrt.ExperimentSettings(
+            output_file, output_file + "_reminder.txt")
 
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues([1, 1, 10, 75, 7, 12, 'implicit', 29.1, "Alma", 4, 2, "Blue", "Red",
@@ -229,12 +237,12 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.get_maxtrial(), 7140)
         self.assertEqual(experiment.settings.get_session_starts(), [1, 7141])
         self.assertEqual(experiment.settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
-                                                         1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
-                                                         2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
-                                                         3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336, 4421, 4506,
-                                                         4591, 4676, 4761, 4846, 4931, 5016, 5101, 5186, 5271, 5356, 5441, 5526, 5611,
-                                                         5696, 5781, 5866, 5951, 6036, 6121, 6206, 6291, 6376, 6461, 6546, 6631, 6716,
-                                                         6801, 6886, 6971, 7056, 7141, 7226])
+                                                                  1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
+                                                                  2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
+                                                                  3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336, 4421, 4506,
+                                                                  4591, 4676, 4761, 4846, 4931, 5016, 5101, 5186, 5271, 5356, 5441, 5526, 5611,
+                                                                  5696, 5781, 5866, 5951, 6036, 6121, 6206, 6291, 6376, 6461, 6546, 6631, 6716,
+                                                                  6801, 6886, 6971, 7056, 7141, 7226])
         # output file exists
         self.assertTrue(os.path.exists(output_file + ".dat"))
         self.assertTrue(os.path.exists(output_file + "_reminder.txt"))
@@ -269,12 +277,13 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.get_maxtrial(), 7140)
         self.assertEqual(experiment.settings.get_session_starts(), [1, 7141])
         self.assertEqual(experiment.settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191,
-                                                         1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
-                                                         2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
-                                                         3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336, 4421, 4506,
-                                                         4591, 4676, 4761, 4846, 4931, 5016, 5101, 5186, 5271, 5356, 5441, 5526, 5611,
-                                                         5696, 5781, 5866, 5951, 6036, 6121, 6206, 6291, 6376, 6461, 6546, 6631, 6716,
-                                                         6801, 6886, 6971, 7056, 7141, 7226])
+                                                                  1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211, 2296,
+                                                                  2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
+                                                                  3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336, 4421, 4506,
+                                                                  4591, 4676, 4761, 4846, 4931, 5016, 5101, 5186, 5271, 5356, 5441, 5526, 5611,
+                                                                  5696, 5781, 5866, 5951, 6036, 6121, 6206, 6291, 6376, 6461, 6546, 6631, 6716,
+                                                                  6801, 6886, 6971, 7056, 7141, 7226])
+
 
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

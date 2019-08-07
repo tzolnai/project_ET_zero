@@ -16,15 +16,20 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-##!/usr/bin/env python
+# !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
 from psychopy import visual, core, event, gui, monitors
-import shelve, random, codecs, os, time
+import shelve
+import random
+import codecs
+import os
+import time
 import pyglet
 
 import numbers
+
 
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
@@ -32,21 +37,32 @@ def ensure_dir(dirpath):
 
 # This class handles all operation related to experiment settings
 # These settings apply to all subjects in the specific experiment
+
+
 class ExperimentSettings:
 
     def __init__(self, settings_file_path, reminder_file_path):
         self.numsessions = None         # number of sessions (e.g. 10)
-        self.groups = None              # list of group names (e.g. ["kontrol", "kiserleti"])
+        # list of group names (e.g. ["kontrol", "kiserleti"])
+        self.groups = None
 
-        self.blockprepN = None          # number of practice trials at the beginning of the block (e.g. 10)
-        self.blocklengthN = None        # number of trials in one block (e.g. 10)
-        self.block_in_epochN = None     # number of blocks in one epoch (e.g. 10)
-        self.epochN = None              # number of all epoch in all sessions (e.g. 12)
-        self.epochs = None              # list of epoch numbers of all sessions (e.g. [1, 2] (two sessions, first session has 1 epoch, the second has 2))
-        self.asrt_types = None          # list of asrt types of all sessions (e.g. ['implicit', 'explicit'] (two sessions, first session is an implicit asrt, the second one is explicit))
+        # number of practice trials at the beginning of the block (e.g. 10)
+        self.blockprepN = None
+        # number of trials in one block (e.g. 10)
+        self.blocklengthN = None
+        # number of blocks in one epoch (e.g. 10)
+        self.block_in_epochN = None
+        # number of all epoch in all sessions (e.g. 12)
+        self.epochN = None
+        # list of epoch numbers of all sessions (e.g. [1, 2] (two sessions, first session has 1 epoch, the second has 2))
+        self.epochs = None
+        # list of asrt types of all sessions (e.g. ['implicit', 'explicit'] (two sessions, first session is an implicit asrt, the second one is explicit))
+        self.asrt_types = None
 
-        self.monitor_width = None       # monitor's physical with in 'cm' (e.g. 29)
-        self.computer_name = None       # am imaginary name of the computer where the experiment is run
+        # monitor's physical with in 'cm' (e.g. 29)
+        self.monitor_width = None
+        # am imaginary name of the computer where the experiment is run
+        self.computer_name = None
         self.asrt_distance = None
         self.asrt_size = None
         self.asrt_rcolor = None
@@ -55,13 +71,19 @@ class ExperimentSettings:
         self.RSI_time = None
 
         self.key1 = None                # key for the first stimulus (e.g. 'z')
-        self.key2 = None                # key for the second stimulus (e.g. 'v')
+        # key for the second stimulus (e.g. 'v')
+        self.key2 = None
         self.key3 = None                # key for the third stimulus (e.g. 'b')
-        self.key4 = None                # key for the fourth stimulus (e.g. 'm')
-        self.key_quit = None            # key used to quit the running script (e.g. 'q')
-        self.whether_warning = None     # whether display any feedback about speed and accuracy (e.g. True)
-        self.speed_warning = None       # an accuracy value, warn if the current accuracy is bigger than this value (e.g. 93)
-        self.acc_warning = None         # an accuracy value, warn if the current accuracy is smaller than this value (e.g. 91)
+        # key for the fourth stimulus (e.g. 'm')
+        self.key4 = None
+        # key used to quit the running script (e.g. 'q')
+        self.key_quit = None
+        # whether display any feedback about speed and accuracy (e.g. True)
+        self.whether_warning = None
+        # an accuracy value, warn if the current accuracy is bigger than this value (e.g. 93)
+        self.speed_warning = None
+        # an accuracy value, warn if the current accuracy is smaller than this value (e.g. 91)
+        self.acc_warning = None
 
         self.sessionstarts = None
         self.blockstarts = None
@@ -76,8 +98,8 @@ class ExperimentSettings:
                 self.groups = settings_file['groups']
 
                 self.blockprepN = settings_file['blockprepN']
-                self.blocklengthN= settings_file['blocklengthN']
-                self.block_in_epochN= settings_file['block_in_epochN']
+                self.blocklengthN = settings_file['blocklengthN']
+                self.block_in_epochN = settings_file['block_in_epochN']
                 self.epochN = settings_file['epochN']
                 self.epochs = settings_file['epochs']
 
@@ -136,41 +158,41 @@ class ExperimentSettings:
             settings_file['acc_warning'] = self.acc_warning
 
     def write_out_reminder(self):
-        with codecs.open(self.reminder_file_path,'w', encoding = 'utf-8') as reminder_file:
-            reminder_file.write(u'Beállítások \n'+
-                                '\n'+
-                                'Monitor Width: '+ '\t'+ str(self.monitor_width).replace('.',',')+'\n'+
-                                'Computer Name: '+ '\t'+ self.computer_name+'\n'+
-                                'Response keys: '+ '\t'+ self.key1+', '+ self.key2+', '+ self.key3+', '+ self.key4+'.'+'\n'+
-                                'Quit key: '+ '\t'+ self.key_quit +'\n'+
-                                'Warning (speed, accuracy): '+ '\t'+ str(self.whether_warning)+'\n'+
-                                'Speed warning at:'+ '\t'+ str(self.speed_warning)+'\n'+
-                                'Acc warning at:'+ '\t'+ str(self.acc_warning)+'\n'+
-                                'Groups:'+ '\t'+ str(self.groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                'Sessions:'+ '\t'+ str(self.numsessions)+'\n'+
-                                'Epochs in sessions:'+ '\t'+ str(self.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                'Blocks in epochs:'+ '\t'+ str(self.block_in_epochN)+'\n'+
-                                'Preparatory Trials\\Block:'+ '\t'+ str(self.blockprepN)+'\n'+
-                                'Trials\\Block:'+ '\t'+ str(self.blocklengthN)+'\n'+
-                                'RSI:'+ '\t'+ str(self.RSI_time).replace('.',',')+'\n'+
-                                'Asrt stim distance:'+ '\t'+ str(self.asrt_distance)+'\n'+
-                                'Asrt stim size:'+ '\t'+ str(self.asrt_size)+'\n'+
-                                'Asrt stim color (implicit):'+ '\t'+ self.asrt_rcolor+'\n'+
-                                'Asrt stim color (explicit, cued):'+ '\t'+ self.asrt_pcolor+'\n'+
-                                'Background color:'+ '\t'+ self.asrt_background+'\n'+
-                                '\n'+
-                                'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n'+
+        with codecs.open(self.reminder_file_path, 'w', encoding='utf-8') as reminder_file:
+            reminder_file.write(u'Beállítások \n' +
+                                '\n' +
+                                'Monitor Width: ' + '\t' + str(self.monitor_width).replace('.', ',')+'\n' +
+                                'Computer Name: ' + '\t' + self.computer_name+'\n' +
+                                'Response keys: ' + '\t' + self.key1+', ' + self.key2+', ' + self.key3+', ' + self.key4+'.'+'\n' +
+                                'Quit key: ' + '\t' + self.key_quit + '\n' +
+                                'Warning (speed, accuracy): ' + '\t' + str(self.whether_warning)+'\n' +
+                                'Speed warning at:' + '\t' + str(self.speed_warning)+'\n' +
+                                'Acc warning at:' + '\t' + str(self.acc_warning)+'\n' +
+                                'Groups:' + '\t' + str(self.groups)[1:-1].replace("u'", '').replace("'", '')+'\n' +
+                                'Sessions:' + '\t' + str(self.numsessions)+'\n' +
+                                'Epochs in sessions:' + '\t' + str(self.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n' +
+                                'Blocks in epochs:' + '\t' + str(self.block_in_epochN)+'\n' +
+                                'Preparatory Trials\\Block:' + '\t' + str(self.blockprepN)+'\n' +
+                                'Trials\\Block:' + '\t' + str(self.blocklengthN)+'\n' +
+                                'RSI:' + '\t' + str(self.RSI_time).replace('.', ',')+'\n' +
+                                'Asrt stim distance:' + '\t' + str(self.asrt_distance)+'\n' +
+                                'Asrt stim size:' + '\t' + str(self.asrt_size)+'\n' +
+                                'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor+'\n' +
+                                'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor+'\n' +
+                                'Background color:' + '\t' + self.asrt_background+'\n' +
+                                '\n' +
+                                'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
 
-                                'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n'+
-                                'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n'+
-                                'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n'+
-                                'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n'+
+                                'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
+                                'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n' +
+                                'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n' +
+                                'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
 
-                                'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n'+
-                                'beállítások vannak elmentve.\n\n'+
+                                'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n' +
+                                'beállítások vannak elmentve.\n\n' +
 
-                                'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n'+
-                                'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n'+
+                                'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
+                                'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
                                 'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
     def get_maxtrial(self):
@@ -180,7 +202,8 @@ class ExperimentSettings:
         if self.blockstarts == None:
             self.blockstarts = [1]
             for i in range(1, self.epochN * self.block_in_epochN + 2):
-                self.blockstarts.append(i * (self.blocklengthN + self.blockprepN) + 1)
+                self.blockstarts.append(
+                    i * (self.blocklengthN + self.blockprepN) + 1)
 
         return self.blockstarts
 
@@ -194,31 +217,39 @@ class ExperimentSettings:
                 epochs_cumulative.append(e_temp)
 
             for e in epochs_cumulative:
-                self.sessionstarts.append(e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1)
+                self.sessionstarts.append(
+                    e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1)
 
         return self.sessionstarts
 
 # Class for handle instruction strings (reading from file, storing and displaying)
+
+
 class InstructionHelper:
 
     def __init__(self, instructions_file_path):
         self.insts = []                 # instructions in the beginning of the experiment
-        self.feedback_exp = []          # feedback for the subject about speed and accuracy in the explicit asrt case
-        self.feedback_imp = []          # feedback for the subject about speed and accuracy in the explicit asrt case
-        self.feedback_speed = []        # speed feedback line embedded into feedback_imp / feedback_exp
-        self.feedback_accuracy = []     # accuracy feedback line embedded into feedback_imp / feedback_exp
+        # feedback for the subject about speed and accuracy in the explicit asrt case
+        self.feedback_exp = []
+        # feedback for the subject about speed and accuracy in the explicit asrt case
+        self.feedback_imp = []
+        # speed feedback line embedded into feedback_imp / feedback_exp
+        self.feedback_speed = []
+        # accuracy feedback line embedded into feedback_imp / feedback_exp
+        self.feedback_accuracy = []
         self.ending = []                # message in the end of the experiment
-        self.unexp_quit = []            # shown message when continuing sessions after the previous data recoding was quited
+        # shown message when continuing sessions after the previous data recoding was quited
+        self.unexp_quit = []
 
         self.instructions_file_path = instructions_file_path
 
     # Be aware of that line endings are preserved during reading instructions
     def read_insts_from_file(self):
         try:
-            with codecs.open(self.instructions_file_path, 'r', encoding = 'utf-8') as inst_feedback:
+            with codecs.open(self.instructions_file_path, 'r', encoding='utf-8') as inst_feedback:
                 all_inst_feedback = inst_feedback.read().split('***')
         except:
-            all_inst_feedback=[]
+            all_inst_feedback = []
 
         for all in all_inst_feedback:
             all = all.split('#')
@@ -240,7 +271,8 @@ class InstructionHelper:
 
     # Display given string in the given window
     def __print_to_screen(self, mytext, mywindow):
-        text_stim = visual.TextStim(mywindow, text = mytext, units = 'cm', height = 0.6, color = 'black')
+        text_stim = visual.TextStim(
+            mywindow, text=mytext, units='cm', height=0.6, color='black')
         text_stim.draw()
 
     # Display simple instructions on the screen
@@ -249,7 +281,8 @@ class InstructionHelper:
         for inst in instruction_list:
             self.__print_to_screen(inst, mywindow)
             mywindow.flip()
-            tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
+                                              expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
             if expriment_settings.key_quit in tempkey:
                 core.quit()
 
@@ -282,7 +315,8 @@ class InstructionHelper:
 
             self.__print_to_screen(l, mywindow)
             mywindow.flip()
-            tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
+                                              expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
         if expriment_settings.key_quit in tempkey:
             return 'quit'
         else:
@@ -306,11 +340,13 @@ class InstructionHelper:
 
             self.__print_to_screen(i, mywindow)
             mywindow.flip()
-            tempkey = event.waitKeys(keyList= [expriment_settings.key1, expriment_settings.key2, expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
+                                              expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
         if expriment_settings.key_quit in tempkey:
             return 'quit'
         else:
             return 'continue'
+
 
 class PersonDataHandler:
 
@@ -351,18 +387,18 @@ class PersonDataHandler:
 
     def save_person_settings(self, experiment):
         with shelve.open(self.all_settings_file_path, 'n') as this_person_settings:
-            this_person_settings[ 'PCodes' ] = experiment.PCodes
-            this_person_settings[ 'stim_output_line' ] = experiment.stim_output_line
+            this_person_settings['PCodes'] = experiment.PCodes
+            this_person_settings['stim_output_line'] = experiment.stim_output_line
 
-            this_person_settings[ 'stim_sessionN' ] = experiment.stim_sessionN
-            this_person_settings[ 'stimepoch' ] = experiment.stimepoch
-            this_person_settings[ 'stimblock' ] = experiment.stimblock
-            this_person_settings[ 'stimtrial' ] = experiment.stimtrial
+            this_person_settings['stim_sessionN'] = experiment.stim_sessionN
+            this_person_settings['stimepoch'] = experiment.stimepoch
+            this_person_settings['stimblock'] = experiment.stimblock
+            this_person_settings['stimtrial'] = experiment.stimtrial
 
-            this_person_settings[ 'stimlist' ] = experiment.stimlist
-            this_person_settings[ 'stimpr' ] = experiment.stimpr
-            this_person_settings[ 'last_N' ] = experiment.last_N
-            this_person_settings[ 'end_at' ] = experiment.end_at
+            this_person_settings['stimlist'] = experiment.stimlist
+            this_person_settings['stimpr'] = experiment.stimpr
+            this_person_settings['last_N'] = experiment.last_N
+            this_person_settings['end_at'] = experiment.end_at
 
     def update_subject_IDs_files(self):
         all_IDs = []
@@ -376,7 +412,7 @@ class PersonDataHandler:
                 all_IDs.append(self.subject_id)
                 all_IDs_file['ids'] = all_IDs
 
-        with codecs.open(self.subject_list_file_path, 'w', encoding = 'utf-8') as subject_list_file:
+        with codecs.open(self.subject_list_file_path, 'w', encoding='utf-8') as subject_list_file:
             for id in all_IDs:
                 id_segmented = id.replace('_', '\t', 2)
                 subject_list_file.write(id_segmented)
@@ -384,93 +420,98 @@ class PersonDataHandler:
 
     def append_to_output_file(self, string_to_append):
         if not os.path.isfile(self.output_file_path):
-            with codecs.open(self.output_file_path, 'w', encoding = 'utf-8') as output_file:
+            with codecs.open(self.output_file_path, 'w', encoding='utf-8') as output_file:
                 self.add_heading_to_output(output_file)
                 output_file.write(string_to_append)
         else:
-            with codecs.open(self.output_file_path, 'a+', encoding = 'utf-8') as output_file:
+            with codecs.open(self.output_file_path, 'a+', encoding='utf-8') as output_file:
                 output_file.write(string_to_append)
 
     def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor):
-        output_data = [ experiment.settings.computer_name,
-                        experiment.group,
-                        experiment.identif,
-                        experiment.subject_nr,
-                        asrt_type,
-                        PCode,
+        output_data = [experiment.settings.computer_name,
+                       experiment.group,
+                       experiment.identif,
+                       experiment.subject_nr,
+                       asrt_type,
+                       PCode,
 
-                        experiment.stim_output_line,
+                       experiment.stim_output_line,
 
-                        experiment.stim_sessionN[N],
-                        experiment.stimepoch[N],
-                        experiment.stimblock[N],
-                        experiment.stimtrial[N],
+                       experiment.stim_sessionN[N],
+                       experiment.stimepoch[N],
+                       experiment.stimblock[N],
+                       experiment.stimtrial[N],
 
-                        stim_RSI,
-                        experiment.frame_rate,
-                        experiment.frame_time,
-                        experiment.frame_sd,
-                        stim_RT_time,
-                        stim_RT_date,
+                       stim_RSI,
+                       experiment.frame_rate,
+                       experiment.frame_time,
+                       experiment.frame_sd,
+                       stim_RT_time,
+                       stim_RT_date,
 
-                        stimcolor,
-                        experiment.stimpr[N],
-                        stimRT,
-                        stimACC,
+                       stimcolor,
+                       experiment.stimpr[N],
+                       stimRT,
+                       stimACC,
 
-                        experiment.stimlist[N],
-                        stimbutton]
+                       experiment.stimlist[N],
+                       stimbutton]
         output = "\n"
         for data in output_data:
             if isinstance(data, numbers.Number):
                 data = str(data)
-                data = data.replace('.',',')
+                data = data.replace('.', ',')
             else:
                 data = str(data)
             output += data + '\t'
         self.append_to_output_file(output)
 
     def add_heading_to_output(self, output_file):
-        heading_list = [ 'computer_name',
-                         'Group',
-                         'Subject_ID',
-                         'Subject_nr',
-                         'asrt_type',
-                         'PCode',
+        heading_list = ['computer_name',
+                        'Group',
+                        'Subject_ID',
+                        'Subject_nr',
+                        'asrt_type',
+                        'PCode',
 
-                         'output_line',
+                        'output_line',
 
-                         'session',
-                         'epoch',
-                         'block',
-                         'trial',
+                        'session',
+                        'epoch',
+                        'block',
+                        'trial',
 
-                         'RSI_time',
-                         'frame_rate',
-                         'frame_time',
-                         'frame_sd',
-                         'date',
-                         'time',
+                        'RSI_time',
+                        'frame_rate',
+                        'frame_time',
+                        'frame_sd',
+                        'date',
+                        'time',
 
-                         'stimulus_color',
-                         'PR',
-                         'RT',
-                         'error',
-                         'stimulus',
-                         'stimbutton',
-                         'quit_log']
+                        'stimulus_color',
+                        'PR',
+                        'RT',
+                        'error',
+                        'stimulus',
+                        'stimbutton',
+                        'quit_log']
 
         for h in heading_list:
             output_file.write(h + '\t')
 
-### Settings dialogs
+# Settings dialogs
 
 # Ask the user to specify the number of groups and the number of sessions
+
+
 def show_basic_settings_dialog(expriment_settings):
     settings_dialog = gui.Dlg(title=u'Beállítások')
-    settings_dialog.addText(u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
-    settings_dialog.addText(u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
-    settings_dialog.addField(u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
+    settings_dialog.addText(
+        u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
+    settings_dialog.addText(
+        u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
+    settings_dialog.addField(
+        u'Kiserleti + Kontrollcsoportok szama osszesen', 2)
     settings_dialog.addText(u'Hány ülés (session) lesz a kísérletben?')
     settings_dialog.addField(u'Ulesek szama', 2)
     returned_data = settings_dialog.show()
@@ -482,12 +523,15 @@ def show_basic_settings_dialog(expriment_settings):
 
 # Ask the user to specify the name of the groups
 # Returns the list of group names
+
+
 def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
 
-    if numgroups>1:
+    if numgroups > 1:
         expriment_settings.groups = []
         settings_dialog = gui.Dlg(title=u'Beállítások')
-        settings_dialog.addText(u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
+        settings_dialog.addText(
+            u'A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ')
         for i in range(numgroups):
             settings_dialog.addField(u'Csoport '+str(i+1))
         returned_data = settings_dialog.show()
@@ -506,16 +550,20 @@ def show_group_settings_dialog(numgroups, dict_accents, expriment_settings):
 
 # Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
 # epoch number and asrt type in the different sessions
+
+
 def show_epoch_and_block_settings_dialog(expriment_settings):
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(u'Kísérlet felépítése ')
-    settings_dialog.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
+    settings_dialog.addField(
+        u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
     settings_dialog.addField(u'Eles probak a blokkban:', 80)
     settings_dialog.addField(u'Blokkok szama egy epochban:', 5)
     for i in range(expriment_settings.numsessions):
         settings_dialog.addField(u'Session '+str(i+1)+u' epochok szama', 5)
     for i in range(expriment_settings.numsessions):
-        settings_dialog.addField(u'Session '+str(i+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
+        settings_dialog.addField(
+            u'Session '+str(i+1)+u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
     returned_data = settings_dialog.show()
     if settings_dialog.OK:
         expriment_settings.blockprepN = returned_data[0]
@@ -528,23 +576,30 @@ def show_epoch_and_block_settings_dialog(expriment_settings):
             expriment_settings.epochN += returned_data[3+k]
             expriment_settings.epochs.append(returned_data[3+k])
         for k in range(expriment_settings.numsessions):
-            expriment_settings.asrt_types[k+1] = returned_data[3+expriment_settings.numsessions+k]
+            expriment_settings.asrt_types[k+1] = returned_data[3 +
+                                                               expriment_settings.numsessions+k]
     else:
         core.quit()
 
 # Ask the user specific infromation about the computer
 # and also change display settings
+
+
 def show_computer_and_display_settings_dialog(possible_colors, expriment_settings):
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(u'A számítógépről...')
     settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
-    settings_dialog.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
+    settings_dialog.addField(
+        u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
     settings_dialog.addText(u'Megjelenés..')
     settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
     settings_dialog.addField(u'Ingerek sugara (cm)', 1)
-    settings_dialog.addField(u'ASRT inger szine (elsodleges, R)', choices = possible_colors, initial = "Orange")
-    settings_dialog.addField(u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices = possible_colors, initial = "Green")
-    settings_dialog.addField(u'Hatter szine', choices = possible_colors, initial = "Ivory")
+    settings_dialog.addField(
+        u'ASRT inger szine (elsodleges, R)', choices=possible_colors, initial="Orange")
+    settings_dialog.addField(
+        u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices=possible_colors, initial="Green")
+    settings_dialog.addField(
+        u'Hatter szine', choices=possible_colors, initial="Ivory")
     settings_dialog.addField(u'RSI (ms)', 120)
     returned_data = settings_dialog.show()
     if settings_dialog.OK:
@@ -561,6 +616,8 @@ def show_computer_and_display_settings_dialog(possible_colors, expriment_setting
 
 # Ask the user to specify the keys used during the experiement
 # and also set options related to the displayed feedback.
+
+
 def show_key_and_feedback_settings_dialog(expriment_settings):
     settings_dialog = gui.Dlg(title=u'Beállítások')
     settings_dialog.addText(u'Válaszbillentyűk')
@@ -571,8 +628,10 @@ def show_key_and_feedback_settings_dialog(expriment_settings):
     settings_dialog.addField(u'Kilepes', 'q')
     settings_dialog.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
     settings_dialog.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
-    settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
-    settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
+    settings_dialog.addField(
+        u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
+    settings_dialog.addField(
+        u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
     returned_data = settings_dialog.show()
     if settings_dialog.OK:
         expriment_settings.key1 = returned_data[0]
@@ -586,11 +645,13 @@ def show_key_and_feedback_settings_dialog(expriment_settings):
     else:
         core.quit()
 
+
 class Experiment:
 
     def __init__(self, thispath):
         self.thispath = thispath
-        self.dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
+        self.dict_accents = {u'á': u'a', u'é': u'e', u'í': u'i', u'ó': u'o',
+                             u'ő': u'o', u'ö': u'o', u'ú': u'u', u'ű': u'u', u'ü': u'u'}
 
         self.colors = None
         self.settings = None
@@ -628,19 +689,23 @@ class Experiment:
 
         # if there is no settings file, we ask the user to specfiy the settings
         except:
-            possible_colors = ["AliceBlue","AntiqueWhite","Aqua","Aquamarine","Azure","Beige","Bisque","Black","BlanchedAlmond","Blue","BlueViolet","Brown","BurlyWood","CadetBlue","Chartreuse","Chocolate","Coral","CornflowerBlue","Cornsilk","Crimson","Cyan","DarkBlue","DarkCyan","DarkGoldenRod","DarkGray","DarkGrey","DarkGreen","DarkKhaki","DarkMagenta","DarkOliveGreen","DarkOrange","DarkOrchid","DarkRed","DarkSalmon","DarkSeaGreen","DarkSlateBlue","DarkSlateGray","DarkSlateGrey","DarkTurquoise","DarkViolet","DeepPink","DeepSkyBlue","DimGray","DimGrey","DodgerBlue","FireBrick","FloralWhite","ForestGreen","Fuchsia","Gainsboro","GhostWhite","Gold","GoldenRod","Gray","Grey","Green","GreenYellow","HoneyDew","HotPink","IndianRed","Indigo","Ivory","Khaki","Lavender","LavenderBlush","LawnGreen","LemonChiffon","LightBlue","LightCoral","LightCyan","LightGoldenRodYellow","LightGray","LightGrey","LightGreen","LightPink","LightSalmon","LightSeaGreen","LightSkyBlue","LightSlateGray","LightSlateGrey","LightSteelBlue","LightYellow","Lime","LimeGreen","Linen","Magenta","Maroon","MediumAquaMarine","MediumBlue","MediumOrchid","MediumPurple","MediumSeaGreen","MediumSlateBlue","MediumSpringGreen","MediumTurquoise","MediumVioletRed","MidnightBlue","MintCream","MistyRose","Moccasin","NavajoWhite","Navy","OldLace","Olive","OliveDrab","Orange","OrangeRed","Orchid","PaleGoldenRod","PaleGreen","PaleTurquoise","PaleVioletRed","PapayaWhip","PeachPuff","Peru","Pink","Plum","PowderBlue","Purple","RebeccaPurple","Red","RosyBrown","RoyalBlue","SaddleBrown","Salmon","SandyBrown","SeaGreen","SeaShell","Sienna","Silver","SkyBlue","SlateBlue","SlateGray","SlateGrey","Snow","SpringGreen","SteelBlue","Tan","Teal","Thistle","Tomato","Turquoise","Violet","Wheat","White","WhiteSmoke","Yellow","YellowGreen"]
+            possible_colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen",
+                               "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]
 
             # get the number of groups and number of sessions
             numgroups = show_basic_settings_dialog(self.settings)
 
             # get the group names from the user
-            show_group_settings_dialog(numgroups, self.dict_accents, self.settings)
+            show_group_settings_dialog(
+                numgroups, self.dict_accents, self.settings)
 
             # get epoch and block settings (block number, trial number, epoch number, etc)
-            epoch_block_result = show_epoch_and_block_settings_dialog(self.settings)
+            epoch_block_result = show_epoch_and_block_settings_dialog(
+                self.settings)
 
             # get montior / computer settings, and also options about displaying (stimulus size, stimulus distance, etc)
-            show_computer_and_display_settings_dialog(possible_colors, self.settings)
+            show_computer_and_display_settings_dialog(
+                possible_colors, self.settings)
 
             # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
             show_key_and_feedback_settings_dialog(self.settings)
@@ -662,7 +727,8 @@ class Experiment:
             settings_dialog.addField(u'Nev', u"Alattomos Aladar")
             settings_dialog.addField(u'Sorszam', "0")
             if len(self.settings.groups) > 1:
-                settings_dialog.addField(u'Csoport', choices = self.settings.groups)
+                settings_dialog.addField(
+                    u'Csoport', choices=self.settings.groups)
 
             returned_data = settings_dialog.show()
             if settings_dialog.OK:
@@ -696,10 +762,11 @@ class Experiment:
 
     def show_subject_continuation_dialog(self):
         if self.last_N + 1 <= self.settings.get_maxtrial():
-            expstart11=gui.Dlg(title=u'Feladat indítása...')
+            expstart11 = gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
             expstart11.addText(u'Folytatás innen...')
-            expstart11.addText('Session: '+ str(self.stim_sessionN[self.last_N + 1]))
+            expstart11.addText(
+                'Session: ' + str(self.stim_sessionN[self.last_N + 1]))
             expstart11.addText('Epoch: '+str(self.stimepoch[self.last_N + 1]))
             expstart11.addText('Block: '+str(self.stimblock[self.last_N + 1]))
             expstart11.addText('Trial: '+str(self.stimtrial[self.last_N + 1]))
@@ -707,7 +774,7 @@ class Experiment:
             if not expstart11.OK:
                 core.quit()
         else:
-            expstart11=gui.Dlg(title=u'Feladat indítása...')
+            expstart11 = gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
             expstart11.addText(u'A személy végigcsinálta a feladatot.')
             expstart11.show()
@@ -718,9 +785,11 @@ class Experiment:
         settings_dialog.addText('')
         for z in range(self.settings.numsessions):
             if self.settings.asrt_types[z+1] == "noASRT":
-                settings_dialog.addFixedField(u'Session ' + str(z+1) + ' PCode', 'noPattern')
+                settings_dialog.addFixedField(
+                    u'Session ' + str(z+1) + ' PCode', 'noPattern')
             else:
-                settings_dialog.addField(u'Session ' + str(z+1) + ' PCode', choices = ['1st - 1234' , '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
+                settings_dialog.addField(u'Session ' + str(z+1) + ' PCode', choices=[
+                                         '1st - 1234', '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -762,7 +831,7 @@ class Experiment:
                     self.stim_sessionN[trial_num] = session_num
                     self.end_at[trial_num] = sessionsstarts[session_num]
 
-        for epoch in range(1,self.settings.epochN+1):
+        for epoch in range(1, self.settings.epochN+1):
 
             for block in range(1, self.settings.block_in_epochN+1):
                 block_num += 1
@@ -775,7 +844,7 @@ class Experiment:
                     all_trial_Nr += 1
                     asrt_type = self.settings.asrt_types[self.stim_sessionN[all_trial_Nr]]
 
-                    current_stim = random.choice([1,2,3,4])
+                    current_stim = random.choice([1, 2, 3, 4])
                     self.stimlist[all_trial_Nr] = current_stim
                     self.stimpr[all_trial_Nr] = "R"
                     self.stimtrial[all_trial_Nr] = current_trial_num
@@ -798,19 +867,21 @@ class Experiment:
                         dict_HL[PCode[2]] = PCode[3]
                         dict_HL[PCode[3]] = PCode[0]
 
-                    if self.settings.blockprepN%2 == 1:
+                    if self.settings.blockprepN % 2 == 1:
                         mod_pattern = 0
                     else:
                         mod_pattern = 1
 
-                    if current_trial_num%2 == mod_pattern and asrt_type != "noASRT":
+                    if current_trial_num % 2 == mod_pattern and asrt_type != "noASRT":
                         if all_trial_Nr > 2:
-                            current_stim = int( dict_HL[ str(self.stimlist[all_trial_Nr-2]) ] )
+                            current_stim = int(
+                                dict_HL[str(self.stimlist[all_trial_Nr-2])])
                         else:
-                            current_stim = random.choice([1,2,3,4]) # first pattern stim is random
+                            # first pattern stim is random
+                            current_stim = random.choice([1, 2, 3, 4])
                         self.stimpr[all_trial_Nr] = "P"
                     else:
-                        current_stim = random.choice([1,2,3,4])
+                        current_stim = random.choice([1, 2, 3, 4])
                         self.stimpr[all_trial_Nr] = "R"
 
                     self.stimlist[all_trial_Nr] = current_stim
@@ -821,12 +892,18 @@ class Experiment:
     def participant_id(self):
         self.show_subject_settings_dialog()
 
-        subject_id = self.identif + '_' + str(self.subject_nr) + '_' + self.group
-        all_settings_file_path = os.path.join(self.thispath, "settings", subject_id)
-        all_IDs_file_path = os.path.join(self.thispath, "settings", "participant_settings")
-        subject_list_file_path = os.path.join(self.thispath, "settings", "participants_in_experiment.txt")
-        output_file_path =  os.path.join(self.thispath, "logs", subject_id + '_log.txt')
-        self.person_data = PersonDataHandler(subject_id,  all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
+        subject_id = self.identif + '_' + \
+            str(self.subject_nr) + '_' + self.group
+        all_settings_file_path = os.path.join(
+            self.thispath, "settings", subject_id)
+        all_IDs_file_path = os.path.join(
+            self.thispath, "settings", "participant_settings")
+        subject_list_file_path = os.path.join(
+            self.thispath, "settings", "participants_in_experiment.txt")
+        output_file_path = os.path.join(
+            self.thispath, "logs", subject_id + '_log.txt')
+        self.person_data = PersonDataHandler(
+            subject_id,  all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
 
         self.person_data.update_subject_IDs_files()
 
@@ -845,68 +922,78 @@ class Experiment:
     def monitor_settings(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
 
-        ## Monitor beállítása
+        # Monitor beállítása
         my_monitor = monitors.Monitor('myMon')
-        my_monitor.setSizePix( [screen.width, screen.height] )
-        my_monitor.setWidth(self.settings.monitor_width) # cm-ben
+        my_monitor.setSizePix([screen.width, screen.height])
+        my_monitor.setWidth(self.settings.monitor_width)  # cm-ben
         my_monitor.saveMon()
 
         return my_monitor
 
     def print_to_screen(self, mytext):
-        xtext = visual.TextStim(self.mywindow, text = mytext, units = "cm", height = 0.6, color = "black")
+        xtext = visual.TextStim(
+            self.mywindow, text=mytext, units="cm", height=0.6, color="black")
         xtext.draw()
 
     def frame_check(self):
         # monitorral kapcsolatos informáciok
-        self.print_to_screen(u'Adatok előkészítése folyamatban. \nEz eltarthat pár másodpercig. \nAddig semmit sem fogsz látni a képernyőn...')
+        self.print_to_screen(
+            u'Adatok előkészítése folyamatban. \nEz eltarthat pár másodpercig. \nAddig semmit sem fogsz látni a képernyőn...')
         self.mywindow.flip()
         core.wait(2)
 
-        ms_per_frame = self.mywindow.getMsPerFrame(nFrames = 120)
+        ms_per_frame = self.mywindow.getMsPerFrame(nFrames=120)
         self.frame_time = ms_per_frame[0]
         self.frame_sd = ms_per_frame[1]
         self.frame_rate = self.mywindow.getActualFrameRate()
 
     def stim_bg(self):
-        stimbg = visual.Circle( win = self.mywindow, radius = 1, units = "cm", fillColor = None, lineColor = self.colors['linecolor'])
-        for i in range(1,5):
+        stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm",
+                               fillColor=None, lineColor=self.colors['linecolor'])
+        for i in range(1, 5):
             stimbg.pos = self.dict_pos[i]
             stimbg.draw()
 
     def show_feedback(self, N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list):
 
-        acc_for_the_whole = 100*float( Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
-        acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.',',')
+        acc_for_the_whole = 100 * \
+            float(Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
+        acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.', ',')
 
-        rt_mean = float( sum(RT_all_list)) / len(RT_all_list)
-        rt_mean_str = str(rt_mean)[:5].replace('.',',')
+        rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
+        rt_mean_str = str(rt_mean)[:5].replace('.', ',')
 
         if self.settings.asrt_types[self.stim_sessionN[N-1]] == 'explicit':
 
             try:
-                rt_mean_p =  float( sum(RT_pattern_list)) / len(RT_pattern_list)
-                rt_mean_p_str = str(rt_mean_p)[:5].replace('.',',')
+                rt_mean_p = float(sum(RT_pattern_list)) / len(RT_pattern_list)
+                rt_mean_p_str = str(rt_mean_p)[:5].replace('.', ',')
             except:
                 rt_mean_p_str = 'N/A'
 
             try:
-                acc_for_patterns = 100*float( number_of_patterns - patternERR) / number_of_patterns
-                acc_for_patterns_str = str(acc_for_patterns)[0:5].replace('.',',')
+                acc_for_patterns = 100 * \
+                    float(number_of_patterns - patternERR) / number_of_patterns
+                acc_for_patterns_str = str(acc_for_patterns)[
+                    0:5].replace('.', ',')
             except:
                 acc_for_patterns_str = 'N/A'
 
-            whatnow = self.instructions.feedback_explicit(rt_mean_str, rt_mean_p_str, acc_for_patterns_str, acc_for_the_whole, acc_for_the_whole_str, self.mywindow, self.settings)
+            whatnow = self.instructions.feedback_explicit(
+                rt_mean_str, rt_mean_p_str, acc_for_patterns_str, acc_for_the_whole, acc_for_the_whole_str, self.mywindow, self.settings)
         else:
-            whatnow = self.instructions.feedback_implicit(rt_mean_str, acc_for_the_whole, acc_for_the_whole_str, self.mywindow, self.settings)
+            whatnow = self.instructions.feedback_implicit(
+                rt_mean_str, acc_for_the_whole, acc_for_the_whole_str, self.mywindow, self.settings)
 
         return whatnow
 
     def presentation(self):
 
         # Init circle stimulus
-        stimP = visual.Circle( win = self.mywindow, radius = self.settings.asrt_size, units = "cm", fillColor = self.colors['stimp'], lineColor = self.colors['linecolor'], pos = self.dict_pos[1])
-        stimR = visual.Circle( win = self.mywindow, radius = self.settings.asrt_size, units = "cm", fillColor = self.colors['stimr'], lineColor = self.colors['linecolor'], pos = self.dict_pos[1])
+        stimP = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
+                              fillColor=self.colors['stimp'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
+        stimR = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
+                              fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
 
         RSI_timer = 0.0
         N = self.last_N + 1
@@ -919,7 +1006,7 @@ class Experiment:
             self.instructions.show_unexp_quit(self.mywindow, self.settings)
 
         Npressed_in_block = 0
-        accs_in_block  = []
+        accs_in_block = []
 
         asrt_type = self.settings.asrt_types[self.stim_sessionN[N]]
         PCode = self.which_code(self.stim_sessionN[N])
@@ -941,13 +1028,13 @@ class Experiment:
             self.mywindow.flip()
 
             RSI_clock.reset()
-            RSI.start( self.settings.RSI_time)
+            RSI.start(self.settings.RSI_time)
 
             if self.stimpr[N] == 'P':
                 if self.settings.asrt_types[self.stim_sessionN[N]] == 'explicit':
-                    stimP.fillColor =  self.colors['stimp']
+                    stimP.fillColor = self.colors['stimp']
                 else:
-                    stimP.fillColor =  self.colors['stimr']
+                    stimP.fillColor = self.colors['stimr']
                 stimcolor = stimP.fillColor
                 stimP.setPos(self.dict_pos[self.stimlist[N]])
             else:
@@ -973,7 +1060,8 @@ class Experiment:
                     RSI_timer = RSI_clock.getTime()
 
                 trial_clock.reset()
-                press = event.waitKeys(keyList = [self. settings.key1,self.settings.key2,self.settings.key3,self.settings.key4, self.settings.key_quit], timeStamped = trial_clock)
+                press = event.waitKeys(keyList=[self. settings.key1, self.settings.key2, self.settings.key3,
+                                                self.settings.key4, self.settings.key_quit], timeStamped=trial_clock)
 
                 stim_RT_time = time.strftime('%H:%M:%S')
                 stim_RT_date = time.strftime('%d/%m/%Y')
@@ -985,7 +1073,7 @@ class Experiment:
                 if cycle == 1:
                     stim_first_RT = press[0][1]
 
-                stimbutton = press [0][0]
+                stimbutton = press[0][0]
                 stim_RSI = RSI_timer
 
                 if press[0][0] == self.settings.key_quit:
@@ -996,7 +1084,7 @@ class Experiment:
 
                     self.stim_output_line -= 1
 
-                    if N>=1:
+                    if N >= 1:
                         self.last_N = N-1
 
                     self.person_data.save_person_settings(self)
@@ -1007,7 +1095,7 @@ class Experiment:
                     accs_in_block.append(0)
 
                     if self.stimpr[N] == 'P':
-                        number_of_patterns +=1
+                        number_of_patterns += 1
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
 
@@ -1017,26 +1105,29 @@ class Experiment:
                     accs_in_block.append(1)
 
                     if self.stimpr[N] == 'P':
-                        patternERR +=1
-                        number_of_patterns +=1
+                        patternERR += 1
+                        number_of_patterns += 1
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
-                stim_allACC  = allACC
+                stim_allACC = allACC
 
-                self.person_data.write_data_to_output(self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
+                self.person_data.write_data_to_output(
+                    self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
-                if stimACC== 0:
+                if stimACC == 0:
                     self.last_N = N
                     N += 1
 
                     break
 
-            if N in self.settings.get_block_starts(): # n+1 volt
+            if N in self.settings.get_block_starts():  # n+1 volt
 
-                self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
+                self.print_to_screen(
+                    u"Adatok mentése és visszajelzés előkészítése...")
                 self.mywindow.flip()
 
-                whatnow = self.show_feedback(N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
+                whatnow = self.show_feedback(
+                    N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
 
                 if whatnow == 'quit':
                     self.print_to_screen("Quit...\nSaving data...")
@@ -1044,7 +1135,7 @@ class Experiment:
 
                     self.person_data.append_to_output_file('userquit')
 
-                    if N>=1:
+                    if N >= 1:
                         self.last_N = N-1
 
                     self.person_data.save_person_settings(self)
@@ -1057,9 +1148,9 @@ class Experiment:
                 RT_pattern_list = []
                 RT_all_list = []
 
-                accs_in_block  = []
+                accs_in_block = []
 
-            if N  == self.end_at[N-1]:
+            if N == self.end_at[N-1]:
                 break
 
     def run(self):
@@ -1067,28 +1158,30 @@ class Experiment:
         ensure_dir(os.path.join(self.thispath, "settings"))
 
         # Load settings if exist or ask the user to specify them
-        all_settings_file_path = os.path.join(self.thispath, "settings", "settings")
-        reminder_file_path = os.path.join(self.thispath, "settings", "settings_reminder.txt")
-        self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
+        all_settings_file_path = os.path.join(
+            self.thispath, "settings", "settings")
+        reminder_file_path = os.path.join(
+            self.thispath, "settings", "settings_reminder.txt")
+        self.settings = ExperimentSettings(
+            all_settings_file_path, reminder_file_path)
         self.all_settings_def()
 
-
-        self.colors = { 'wincolor' : self.settings.asrt_background,
-                        'linecolor':'black',
-                        'stimp':self.settings.asrt_pcolor,
-                        'stimr':self.settings.asrt_rcolor}
-        self.pressed_dict = {self.settings.key1:1,
-                             self.settings.key2:2,
-                             self.settings.key3:3,
-                             self.settings.key4:4}
-        self.dict_pos = {1: ( float(self.settings.asrt_distance) * (-1.5), 0),
-                         2: ( float(self.settings.asrt_distance) * (-0.5), 0),
-                         3: ( float(self.settings.asrt_distance) * 0.5, 0),
-                         4: ( float(self.settings.asrt_distance) * 1.5, 0)}
-
+        self.colors = {'wincolor': self.settings.asrt_background,
+                       'linecolor': 'black',
+                       'stimp': self.settings.asrt_pcolor,
+                       'stimr': self.settings.asrt_rcolor}
+        self.pressed_dict = {self.settings.key1: 1,
+                             self.settings.key2: 2,
+                             self.settings.key3: 3,
+                             self.settings.key4: 4}
+        self.dict_pos = {1: (float(self.settings.asrt_distance) * (-1.5), 0),
+                         2: (float(self.settings.asrt_distance) * (-0.5), 0),
+                         3: (float(self.settings.asrt_distance) * 0.5, 0),
+                         4: (float(self.settings.asrt_distance) * 1.5, 0)}
 
         # Read instruction strings
-        inst_feedback_path = os.path.join(self.thispath, "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(
+            self.thispath, "inst_and_feedback.txt")
         self.instructions = InstructionHelper(inst_feedback_path)
         self.instructions.read_insts_from_file()
 
@@ -1096,7 +1189,7 @@ class Experiment:
 
         # Init window
         my_monitor = self.monitor_settings()
-        with visual.Window (size = my_monitor.getSizePix(), color = self.colors['wincolor'], fullscr = False, monitor = my_monitor, units = "cm") as self.mywindow:
+        with visual.Window(size=my_monitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as self.mywindow:
             # Check frame rate
             self.frame_check()
 
@@ -1109,6 +1202,7 @@ class Experiment:
 
             # Show ending screen
             self.instructions.show_ending(self.mywindow, self.settings)
+
 
 if __name__ == "__main__":
     thispath = os.path.split(os.path.abspath(__file__))[0]

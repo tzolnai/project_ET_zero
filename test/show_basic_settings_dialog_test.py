@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class showBasicSettingsDialogTest(unittest.TestCase):
 
@@ -39,13 +39,17 @@ class showBasicSettingsDialogTest(unittest.TestCase):
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 3)
-        self.assertEqual(list_of_texts[0], "Még nincsenek beállítások mentve ehhez a kísérlethez...")
-        self.assertEqual(list_of_texts[1], "A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.")
-        self.assertEqual(list_of_texts[2], "Hány ülés (session) lesz a kísérletben?")
+        self.assertEqual(
+            list_of_texts[0], "Még nincsenek beállítások mentve ehhez a kísérlethez...")
+        self.assertEqual(
+            list_of_texts[1], "A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.")
+        self.assertEqual(
+            list_of_texts[2], "Hány ülés (session) lesz a kísérletben?")
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 2)
-        self.assertEqual(list_of_fields[0].label, "Kiserleti + Kontrollcsoportok szama osszesen")
+        self.assertEqual(
+            list_of_fields[0].label, "Kiserleti + Kontrollcsoportok szama osszesen")
         self.assertEqual(list_of_fields[0].initial, 2)
         self.assertEqual(list_of_fields[1].label, "Ulesek szama")
         self.assertEqual(list_of_fields[1].initial, 2)
@@ -67,5 +71,6 @@ class showBasicSettingsDialogTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             asrt.show_basic_settings_dialog(exp_settings)
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

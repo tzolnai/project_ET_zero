@@ -16,6 +16,7 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import asrt
 import unittest
 
 import os
@@ -24,13 +25,13 @@ import sys
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
 
-import asrt
 
 class whichCodeTest(unittest.TestCase):
 
     def testRightPatterns(self):
         experiment = asrt.Experiment("")
-        experiment.PCodes = { 1: "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
+        experiment.PCodes = {1: "6th - 1432", 2: '4th - 1342',
+                             3: '5th - 1423', 4: '3rd - 1324', 5: '1st - 1234', 6: '2nd - 1243'}
 
         self.assertEqual(experiment.which_code(1), "1432")
         self.assertEqual(experiment.which_code(2), "1342")
@@ -41,21 +42,23 @@ class whichCodeTest(unittest.TestCase):
 
     def testTypoInPCode(self):
         experiment = asrt.Experiment("")
-        experiment.PCodes = {1 : "6tj - 1432"}
+        experiment.PCodes = {1: "6tj - 1432"}
         self.assertEqual(experiment.which_code(1), "noPattern")
 
     def testNoPattern(self):
         experiment = asrt.Experiment("")
-        experiment.PCodes = {1 : "noPattern"}
+        experiment.PCodes = {1: "noPattern"}
         self.assertEqual(experiment.which_code(1), "noPattern")
 
     def testWrongSession(self):
         experiment = asrt.Experiment("")
-        experiment.PCodes = {1 : "6th - 1432", 2 : '4th - 1342', 3 : '5th - 1423', 4 : '3rd - 1324', 5 : '1st - 1234', 6 : '2nd - 1243'}
+        experiment.PCodes = {1: "6th - 1432", 2: '4th - 1342',
+                             3: '5th - 1423', 4: '3rd - 1324', 5: '1st - 1234', 6: '2nd - 1243'}
         with self.assertRaises(KeyError):
             experiment.which_code(7)
         with self.assertRaises(KeyError):
             experiment.which_code(0)
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

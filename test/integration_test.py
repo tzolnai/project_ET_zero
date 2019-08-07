@@ -16,28 +16,31 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+from psychopy import visual, logging, core
+import psychopy_gui_mock as pgm
+import psychopy_visual_mock as pvm
+import shutil
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-import shutil
-
-import psychopy_visual_mock as pvm
-import psychopy_gui_mock as pgm
-from psychopy import visual, logging, core
 
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
+
 def DummyFunction(*argv):
     pass
 
+
 core.wait = DummyFunction
+
 
 class integrationTest(unittest.TestCase):
 
@@ -46,7 +49,8 @@ class integrationTest(unittest.TestCase):
         filepath = os.path.abspath(__file__)
         (filepath, trail) = os.path.split(filepath)
         test_name = self.id().split(".")[2]
-        self.current_dir = os.path.join(filepath, "data", "integration", test_name)
+        self.current_dir = os.path.join(
+            filepath, "data", "integration", test_name)
         self.work_dir = os.path.join(self.current_dir, "workdir")
         asrt.ensure_dir(self.work_dir)
         self.clearDir(self.work_dir)
@@ -63,13 +67,14 @@ class integrationTest(unittest.TestCase):
         class DummyStaticPeriod:
             def __init__(self, screenHz=None, win=None, name='StaticPeriod'):
                 pass
+
             def start(self, duration):
                 pass
+
             def complete(self):
                 pass
         self.StaticPeriod = core.StaticPeriod
         core.StaticPeriod = DummyStaticPeriod
-
 
     def tearDown(self):
         self.clearDir(self.work_dir)
@@ -94,9 +99,11 @@ class integrationTest(unittest.TestCase):
                 for sub_file in os.listdir(file_path):
                     sub_file_path = os.path.join(file_path, sub_file)
                     if "settings" in sub_file_path:
-                        shutil.copyfile(sub_file_path, os.path.join(self.work_dir, "settings", sub_file))
+                        shutil.copyfile(sub_file_path, os.path.join(
+                            self.work_dir, "settings", sub_file))
                     else:
-                        shutil.copyfile(sub_file_path, os.path.join(self.work_dir, "logs", sub_file))
+                        shutil.copyfile(sub_file_path, os.path.join(
+                            self.work_dir, "logs", sub_file))
 
     def clearDir(self, dir_path):
         for file in os.listdir(dir_path):
@@ -109,7 +116,8 @@ class integrationTest(unittest.TestCase):
     def calculate_stim_properties_override(self):
         self.calculate_stim_properties()
         # There are some instructions first
-        self.key_list = [self.experiment.settings.key1, self.experiment.settings.key1, self.experiment.settings.key1]
+        self.key_list = [self.experiment.settings.key1,
+                         self.experiment.settings.key1, self.experiment.settings.key1]
 
         # Then we have the stimuli
         trial = 1
@@ -127,7 +135,7 @@ class integrationTest(unittest.TestCase):
 
             # feedback at the end of the block
             if trial in self.experiment.settings.get_block_starts():
-                    self.key_list.append(self.experiment.settings.key1)
+                self.key_list.append(self.experiment.settings.key1)
 
             if trial == self.experiment.end_at[trial - 1]:
                 # ending screen
@@ -145,8 +153,10 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_rate = 60.0
 
     def checkOutputFile(self):
-        reference_file_path = os.path.join(self.current_dir, "reference", "toth-bela_10__log.txt")
-        workdir_output = os.path.join(self.work_dir, "logs", "toth-bela_10__log.txt")
+        reference_file_path = os.path.join(
+            self.current_dir, "reference", "toth-bela_10__log.txt")
+        workdir_output = os.path.join(
+            self.work_dir, "logs", "toth-bela_10__log.txt")
 
         with open(reference_file_path, "r") as ref_file:
             with open(workdir_output, "r") as output_file:
@@ -164,33 +174,42 @@ class integrationTest(unittest.TestCase):
                     act_values = output_line.split("\t")
 
                     if ref_values[0] == "computer_name":
-                        self.assertEqual(ref_line, output_line) # first line is equal (headers)
+                        # first line is equal (headers)
+                        self.assertEqual(ref_line, output_line)
                         continue
 
-                    self.assertEqual(ref_values[0], act_values[0]) # computer name
-                    self.assertEqual(ref_values[1], act_values[1]) # group
-                    self.assertEqual(ref_values[2], act_values[2]) # subject name
-                    self.assertEqual(ref_values[3], act_values[3]) # subject number
-                    self.assertEqual(ref_values[4], act_values[4]) # asrt type
-                    self.assertEqual(ref_values[5], act_values[5]) # pcode
-                    self.assertEqual(ref_values[6], act_values[6]) # output_line
-                    self.assertEqual(ref_values[7], act_values[7]) # session
-                    self.assertEqual(ref_values[8], act_values[8]) # epoch
-                    self.assertEqual(ref_values[9], act_values[9]) # block
-                    self.assertEqual(ref_values[10], act_values[10]) # trial
+                    # computer name
+                    self.assertEqual(ref_values[0], act_values[0])
+                    self.assertEqual(ref_values[1], act_values[1])  # group
+                    # subject name
+                    self.assertEqual(ref_values[2], act_values[2])
+                    # subject number
+                    self.assertEqual(ref_values[3], act_values[3])
+                    self.assertEqual(ref_values[4], act_values[4])  # asrt type
+                    self.assertEqual(ref_values[5], act_values[5])  # pcode
+                    self.assertEqual(
+                        ref_values[6], act_values[6])  # output_line
+                    self.assertEqual(ref_values[7], act_values[7])  # session
+                    self.assertEqual(ref_values[8], act_values[8])  # epoch
+                    self.assertEqual(ref_values[9], act_values[9])  # block
+                    self.assertEqual(ref_values[10], act_values[10])  # trial
                     # RSI time
-                    self.assertEqual(ref_values[12], act_values[12]) # frame_rate
-                    self.assertEqual(ref_values[13], act_values[13]) # frame_time
-                    self.assertEqual(ref_values[14], act_values[14]) # frame_sd
+                    self.assertEqual(
+                        ref_values[12], act_values[12])  # frame_rate
+                    self.assertEqual(
+                        ref_values[13], act_values[13])  # frame_time
+                    self.assertEqual(
+                        ref_values[14], act_values[14])  # frame_sd
                     # date
                     # time
-                    self.assertEqual(ref_values[17], act_values[17]) # stimulus color
-                    self.assertEqual(ref_values[18], act_values[18]) # PR
-                    self.assertEqual(ref_values[19], act_values[19]) # RT
-                    self.assertEqual(ref_values[20], act_values[20]) # error
+                    # stimulus color
+                    self.assertEqual(ref_values[17], act_values[17])
+                    self.assertEqual(ref_values[18], act_values[18])  # PR
+                    self.assertEqual(ref_values[19], act_values[19])  # RT
+                    self.assertEqual(ref_values[20], act_values[20])  # error
                     # stimulus
                     # stimbutton
-                    self.assertEqual(ref_values[23], act_values[23]) # quitlog
+                    self.assertEqual(ref_values[23], act_values[23])  # quitlog
 
     def testSimpleTestCase(self):
         # for setting participant data
@@ -235,7 +254,8 @@ class integrationTest(unittest.TestCase):
 
     def calculate_stim_properties_override_wrong_button(self):
         self.calculate_stim_properties_override()
-        self.key_list = self.key_list[0:10] + [self.key_list[8]] + self.key_list[10:]
+        self.key_list = self.key_list[0:10] + \
+            [self.key_list[8]] + self.key_list[10:]
         self.visual_mock.setReturnKeyList(self.key_list)
 
     def testWrongPressedButton(self):
@@ -265,7 +285,8 @@ class integrationTest(unittest.TestCase):
     def testMoreSessions(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', '3rd - 1324', '3rd - 1324'])
+        gui_mock.addFieldValues(
+            ['Tóth Béla', 10, '3rd - 1324', '3rd - 1324', '3rd - 1324'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -275,7 +296,8 @@ class integrationTest(unittest.TestCase):
 
     def presentation_override(self):
         # There are some instructions first
-        self.key_list = [self.experiment.settings.key1, self.experiment.settings.key1, self.experiment.settings.key1]
+        self.key_list = [self.experiment.settings.key1,
+                         self.experiment.settings.key1, self.experiment.settings.key1]
 
         # Then we have the stimuli
         trial = 1
@@ -296,7 +318,7 @@ class integrationTest(unittest.TestCase):
             if trial - 1 > (self.experiment.settings.blockprepN + self.experiment.settings.blocklengthN) * self.experiment.settings.epochs[0] * self.experiment.settings.block_in_epochN:
                 # feedback at the end of the block
                 if trial in self.experiment.settings.get_block_starts():
-                        self.key_list.append(self.experiment.settings.key1)
+                    self.key_list.append(self.experiment.settings.key1)
 
         # ending screen
         self.key_list += [self.experiment.settings.key1]
@@ -344,7 +366,7 @@ class integrationTest(unittest.TestCase):
             if trial - 1 > self.experiment.last_N:
                 # feedback at the end of the block
                 if trial in self.experiment.settings.get_block_starts():
-                        self.key_list.append(self.experiment.settings.key1)
+                    self.key_list.append(self.experiment.settings.key1)
 
         # ending screen
         self.key_list += [self.experiment.settings.key1]
@@ -371,15 +393,16 @@ class integrationTest(unittest.TestCase):
     def testMoreSessionsSubsequently(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', '5th - 1423', 'noPattern', '1st - 1234', 'Tóth Béla', 10, 'Tóth Béla', 10, 'Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', '5th - 1423', 'noPattern',
+                                 '1st - 1234', 'Tóth Béla', 10, 'Tóth Béla', 10, 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        for i in range(1,5):
+        for i in range(1, 5):
             self.experiment.run()
 
         self.checkOutputFile()
 
 
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

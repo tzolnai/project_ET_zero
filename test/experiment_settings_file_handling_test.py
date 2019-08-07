@@ -16,15 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import codecs
+import dbm
+import shelve
+import asrt
+import os
 import unittest
 
 import sys
 # Add the local path to the main script so we can import it.
 sys.path = [".."] + sys.path
 
-import os
-import shelve, dbm, codecs
-import asrt
 
 class experimentSettingsFileHandlingTest(unittest.TestCase):
 
@@ -50,8 +52,10 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         filepath = os.path.abspath(__file__)
         (inst_and_feedback_path, trail) = os.path.split(filepath)
         inst_and_feedback_path = os.path.join(inst_and_feedback_path, "data")
-        inst_and_feedback_path = os.path.join(inst_and_feedback_path, "experiment_settings")
-        inst_and_feedback_path = os.path.join(inst_and_feedback_path, file_name)
+        inst_and_feedback_path = os.path.join(
+            inst_and_feedback_path, "experiment_settings")
+        inst_and_feedback_path = os.path.join(
+            inst_and_feedback_path, file_name)
         return inst_and_feedback_path
 
     def testRoundTripInitialState(self):
@@ -154,7 +158,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.acc_warning, 91)
         self.assertEqual(exp_settings.get_maxtrial(), 2125)
         self.assertEqual(exp_settings.get_session_starts(), [1, 2126])
-        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851, 936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851,
+                                                           936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
 
     def testReadEmptyFile(self):
         output_file = self.constructFilePath("testReadEmptyFile")
@@ -231,43 +236,44 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
 
         exp_settings.write_out_reminder()
 
-        with codecs.open(output_file,'r', encoding = 'utf-8') as reminder_file:
+        with codecs.open(output_file, 'r', encoding='utf-8') as reminder_file:
             self.assertEqual(reminder_file.read(),
-                                u'Beállítások \n'+
-                                '\n'+
-                                'Monitor Width: '+ '\t'+ str(exp_settings.monitor_width).replace('.',',')+'\n'+
-                                'Computer Name: '+ '\t'+ exp_settings.computer_name+'\n'+
-                                'Response keys: '+ '\t'+ exp_settings.key1+', '+ exp_settings.key2+', '+ exp_settings.key3+', '+ exp_settings.key4+'.'+'\n'+
-                                'Quit key: '+ '\t'+ exp_settings.key_quit +'\n'+
-                                'Warning (speed, accuracy): '+ '\t'+ str(exp_settings.whether_warning)+'\n'+
-                                'Speed warning at:'+ '\t'+ str(exp_settings.speed_warning)+'\n'+
-                                'Acc warning at:'+ '\t'+ str(exp_settings.acc_warning)+'\n'+
-                                'Groups:'+ '\t'+ str(exp_settings.groups)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                'Sessions:'+ '\t'+ str(exp_settings.numsessions)+'\n'+
-                                'Epochs in sessions:'+ '\t'+ str(exp_settings.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n'+
-                                'Blocks in epochs:'+ '\t'+ str(exp_settings.block_in_epochN)+'\n'+
-                                'Preparatory Trials\\Block:'+ '\t'+ str(exp_settings.blockprepN)+'\n'+
-                                'Trials\\Block:'+ '\t'+ str(exp_settings.blocklengthN)+'\n'+
-                                'RSI:'+ '\t'+ str(exp_settings.RSI_time).replace('.',',')+'\n'+
-                                'Asrt stim distance:'+ '\t'+ str(exp_settings.asrt_distance)+'\n'+
-                                'Asrt stim size:'+ '\t'+ str(exp_settings.asrt_size)+'\n'+
-                                'Asrt stim color (implicit):'+ '\t'+ exp_settings.asrt_rcolor+'\n'+
-                                'Asrt stim color (explicit, cued):'+ '\t'+ exp_settings.asrt_pcolor+'\n'+
-                                'Background color:'+ '\t'+ exp_settings.asrt_background+'\n'+
-                                '\n'+
-                                'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n'+
+                             u'Beállítások \n' +
+                             '\n' +
+                             'Monitor Width: ' + '\t' + str(exp_settings.monitor_width).replace('.', ',')+'\n' +
+                             'Computer Name: ' + '\t' + exp_settings.computer_name+'\n' +
+                             'Response keys: ' + '\t' + exp_settings.key1+', ' + exp_settings.key2+', ' + exp_settings.key3+', ' + exp_settings.key4+'.'+'\n' +
+                             'Quit key: ' + '\t' + exp_settings.key_quit + '\n' +
+                             'Warning (speed, accuracy): ' + '\t' + str(exp_settings.whether_warning)+'\n' +
+                             'Speed warning at:' + '\t' + str(exp_settings.speed_warning)+'\n' +
+                             'Acc warning at:' + '\t' + str(exp_settings.acc_warning)+'\n' +
+                             'Groups:' + '\t' + str(exp_settings.groups)[1:-1].replace("u'", '').replace("'", '')+'\n' +
+                             'Sessions:' + '\t' + str(exp_settings.numsessions)+'\n' +
+                             'Epochs in sessions:' + '\t' + str(exp_settings.epochs)[1:-1].replace("u'", '').replace("'", '')+'\n' +
+                             'Blocks in epochs:' + '\t' + str(exp_settings.block_in_epochN)+'\n' +
+                             'Preparatory Trials\\Block:' + '\t' + str(exp_settings.blockprepN)+'\n' +
+                             'Trials\\Block:' + '\t' + str(exp_settings.blocklengthN)+'\n' +
+                             'RSI:' + '\t' + str(exp_settings.RSI_time).replace('.', ',')+'\n' +
+                             'Asrt stim distance:' + '\t' + str(exp_settings.asrt_distance)+'\n' +
+                             'Asrt stim size:' + '\t' + str(exp_settings.asrt_size)+'\n' +
+                             'Asrt stim color (implicit):' + '\t' + exp_settings.asrt_rcolor+'\n' +
+                             'Asrt stim color (explicit, cued):' + '\t' + exp_settings.asrt_pcolor+'\n' +
+                             'Background color:' + '\t' + exp_settings.asrt_background+'\n' +
+                             '\n' +
+                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
 
-                                'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n'+
-                                'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n'+
-                                'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n'+
-                                'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n'+
+                             'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
+                             'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n' +
+                             'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n' +
+                             'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
 
-                                'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n'+
-                                'beállítások vannak elmentve.\n\n'+
+                             'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n' +
+                             'beállítások vannak elmentve.\n\n' +
 
-                                'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n'+
-                                'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n'+
-                                'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+                             'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
+                             'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
+                             'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+
 
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

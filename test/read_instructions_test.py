@@ -16,22 +16,24 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
 
 class readInstructionsTest(unittest.TestCase):
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
         (inst_feedback_path, trail) = os.path.split(filepath)
-        inst_feedback_path = os.path.join(inst_feedback_path, "data", "instr_and_feedback", file_name)
+        inst_feedback_path = os.path.join(
+            inst_feedback_path, "data", "instr_and_feedback", file_name)
         return inst_feedback_path
 
     def testDefaultInstructionSet(self):
@@ -73,11 +75,14 @@ class readInstructionsTest(unittest.TestCase):
                                                              "Átlagos reakcióidőd a bejósolható elemeknél: *MEANRTP* másodperc\r\n"
                                                              "*SPEEDACC*\r\n\r\n")
 
-        self.assertEqual(instruction_helper.feedback_speed[0], "\r\nLegyél gyorsabb!\r\n\r\n")
+        self.assertEqual(
+            instruction_helper.feedback_speed[0], "\r\nLegyél gyorsabb!\r\n\r\n")
 
-        self.assertEqual(instruction_helper.feedback_accuracy[0], "\r\nLegyél pontosabb!\r\n\r\n")
+        self.assertEqual(
+            instruction_helper.feedback_accuracy[0], "\r\nLegyél pontosabb!\r\n\r\n")
 
-        self.assertEqual(instruction_helper.unexp_quit[0], "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
+        self.assertEqual(
+            instruction_helper.unexp_quit[0], "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
 
     def testOneInstruction(self):
         inst_feedback_path = self.constructFilePath("one_instruction.txt")
@@ -94,7 +99,8 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
     def testTypoInInstructionName(self):
-        inst_feedback_path = self.constructFilePath("typo_in_instruction_name.txt")
+        inst_feedback_path = self.constructFilePath(
+            "typo_in_instruction_name.txt")
 
         instruction_helper = asrt.InstructionHelper(inst_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -108,12 +114,14 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
     def testWeirdButWorkingInstruction(self):
-        inst_feedback_path = self.constructFilePath("weird_but_working_instruction.txt")
+        inst_feedback_path = self.constructFilePath(
+            "weird_but_working_instruction.txt")
 
         instruction_helper = asrt.InstructionHelper(inst_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        self.assertEqual(len(instruction_helper.insts), 1) # instagram is recognized as an 'inst'
+        # instagram is recognized as an 'inst'
+        self.assertEqual(len(instruction_helper.insts), 1)
         self.assertEqual(len(instruction_helper.feedback_exp), 0)
         self.assertEqual(len(instruction_helper.feedback_imp), 0)
         self.assertEqual(len(instruction_helper.feedback_speed), 0)
@@ -136,7 +144,8 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
     def testMoreInstructionsWithTheSameType(self):
-        inst_feedback_path = self.constructFilePath("more_instructions_with_the_same_type.txt")
+        inst_feedback_path = self.constructFilePath(
+            "more_instructions_with_the_same_type.txt")
 
         instruction_helper = asrt.InstructionHelper(inst_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -191,10 +200,12 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.ending), 0)
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
-        self.assertEqual(instruction_helper.insts[0], "Üdvözlünk a feladatban!")
+        self.assertEqual(
+            instruction_helper.insts[0], "Üdvözlünk a feladatban!")
 
     def testKeywordWithoutContent(self):
-        inst_feedback_path = self.constructFilePath("keyword_without_content.txt")
+        inst_feedback_path = self.constructFilePath(
+            "keyword_without_content.txt")
 
         instruction_helper = asrt.InstructionHelper(inst_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -207,5 +218,6 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.ending), 0)
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

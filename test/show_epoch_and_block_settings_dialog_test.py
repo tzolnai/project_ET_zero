@@ -16,17 +16,17 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
@@ -52,11 +52,13 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 5)
-        self.assertEqual(list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
+        self.assertEqual(
+            list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
         self.assertEqual(list_of_fields[0].initial, 5)
         self.assertEqual(list_of_fields[1].label, "Eles probak a blokkban:")
         self.assertEqual(list_of_fields[1].initial, 80)
-        self.assertEqual(list_of_fields[2].label, "Blokkok szama egy epochban:")
+        self.assertEqual(list_of_fields[2].label,
+                         "Blokkok szama egy epochban:")
         self.assertEqual(list_of_fields[2].initial, 5)
         self.assertEqual(list_of_fields[3].label, "Session 1 epochok szama")
         self.assertEqual(list_of_fields[3].initial, 5)
@@ -93,11 +95,13 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 3)
-        self.assertEqual(list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
+        self.assertEqual(
+            list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
         self.assertEqual(list_of_fields[0].initial, 5)
         self.assertEqual(list_of_fields[1].label, "Eles probak a blokkban:")
         self.assertEqual(list_of_fields[1].initial, 80)
-        self.assertEqual(list_of_fields[2].label, "Blokkok szama egy epochban:")
+        self.assertEqual(list_of_fields[2].label,
+                         "Blokkok szama egy epochban:")
         self.assertEqual(list_of_fields[2].initial, 5)
 
     def testMoreSessions(self):
@@ -123,11 +127,13 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 9)
-        self.assertEqual(list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
+        self.assertEqual(
+            list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
         self.assertEqual(list_of_fields[0].initial, 5)
         self.assertEqual(list_of_fields[1].label, "Eles probak a blokkban:")
         self.assertEqual(list_of_fields[1].initial, 80)
-        self.assertEqual(list_of_fields[2].label, "Blokkok szama egy epochban:")
+        self.assertEqual(list_of_fields[2].label,
+                         "Blokkok szama egy epochban:")
         self.assertEqual(list_of_fields[2].initial, 5)
         self.assertEqual(list_of_fields[3].label, "Session 1 epochok szama")
         self.assertEqual(list_of_fields[3].initial, 5)
@@ -144,7 +150,8 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues([12, 79, 2, 3, 12, 7, 'implicit', 'explicit', 'noASRT'])
+        gui_mock.addFieldValues(
+            [12, 79, 2, 3, 12, 7, 'implicit', 'explicit', 'noASRT'])
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.numsessions = 3
@@ -163,5 +170,6 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_types[2], 'explicit')
         self.assertEqual(exp_settings.asrt_types[3], 'noASRT')
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

@@ -16,19 +16,21 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")] + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
 
-import psychopy_gui_mock as pgm
+dict_accents = {u'á': u'a', u'é': u'e', u'í': u'i', u'ó': u'o',
+                u'ő': u'o', u'ö': u'o', u'ú': u'u', u'ű': u'u', u'ü': u'u'}
 
-dict_accents = {u'á':u'a',u'é':u'e',u'í':u'i',u'ó':u'o',u'ő':u'o',u'ö':u'o',u'ú':u'u',u'ű':u'u',u'ü':u'u'}
 
 class showGroupSettingsDialogTest(unittest.TestCase):
 
@@ -42,7 +44,8 @@ class showGroupSettingsDialogTest(unittest.TestCase):
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
-        self.assertEqual(list_of_texts[0], "A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ")
+        self.assertEqual(
+            list_of_texts[0], "A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ")
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 2)
@@ -59,7 +62,8 @@ class showGroupSettingsDialogTest(unittest.TestCase):
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
-        self.assertEqual(list_of_texts[0], "A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ")
+        self.assertEqual(
+            list_of_texts[0], "A csoportok megnevezése a következő (pl. kísérleti, kontroll, ....) ")
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), numgroups)
@@ -89,7 +93,8 @@ class showGroupSettingsDialogTest(unittest.TestCase):
         exp_settings = asrt.ExperimentSettings("", "")
 
         with self.assertRaises(SystemExit):
-            asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
+            asrt.show_group_settings_dialog(
+                numgroups, dict_accents, exp_settings)
 
     def testAccentCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -99,19 +104,23 @@ class showGroupSettingsDialogTest(unittest.TestCase):
         asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
 
         self.assertEqual(len(exp_settings.groups), numgroups)
-        self.assertEqual(exp_settings.groups[0], "aaeeiioooouuuuaaeeiioooouuuu")
+        self.assertEqual(
+            exp_settings.groups[0], "aaeeiioooouuuuaaeeiioooouuuu")
         self.assertEqual(exp_settings.groups[1], "kontrol")
 
     def testSpecialCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(["áaéeíió-oőö-úuű-üÁ AÉEÍ IÓOŐ ÖÚUŰÜ", "kontrol"])
+        gui_mock.addFieldValues(
+            ["áaéeíió-oőö-úuű-üÁ AÉEÍ IÓOŐ ÖÚUŰÜ", "kontrol"])
         numgroups = 2
         exp_settings = asrt.ExperimentSettings("", "")
         asrt.show_group_settings_dialog(numgroups, dict_accents, exp_settings)
 
         self.assertEqual(len(exp_settings.groups), numgroups)
-        self.assertEqual(exp_settings.groups[0], "aaeeiio_ooo_uuu_ua_aeei_iooo_ouuuu")
+        self.assertEqual(
+            exp_settings.groups[0], "aaeeiio_ooo_uuu_ua_aeei_iooo_ouuuu")
         self.assertEqual(exp_settings.groups[1], "kontrol")
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests
+    unittest.main()  # run all tests

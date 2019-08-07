@@ -16,23 +16,23 @@
 #!\\usr\\bin\\env python
 # -*- coding: utf-8 -*-
 
+import psychopy_gui_mock as pgm
+import asrt
 import unittest
 
 import os
 
 import sys
 # Add the local path to the main script so we can import it.
-sys.path = [".."] + [os.path.join("..", "externals", "psychopy_mock")]  + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
-import asrt
-
-import psychopy_gui_mock as pgm
 
 class showSubjectSettingsDialogTest(unittest.TestCase):
 
     def testDefaults(self):
-        gui_mock = pgm.PsychoPyGuiMock()        
-        
+        gui_mock = pgm.PsychoPyGuiMock()
+
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
@@ -81,7 +81,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
     def testAccentCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ', 10, 'kontrol'])
+        gui_mock.addFieldValues(
+            ['áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -94,20 +95,23 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
     def testSpecialCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['áaée íióoőö úuűüÁA ÉEÍIÓOŐÖ ÚUŰÜ', 10, 'kontrol'])
+        gui_mock.addFieldValues(
+            ['áaée íióoőö úuűüÁA ÉEÍIÓOŐÖ ÚUŰÜ', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
+        self.assertEqual(experiment.identif,
+                         "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
         self.assertEqual(experiment.subject_nr, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
     def testInvalidSubjectNumber(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Csaba', 'x', 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
+        gui_mock.addFieldValues(
+            ['Tóth Csaba', 'x', 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -124,11 +128,13 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[0], "")
         self.assertEqual(list_of_texts[1], "")
         self.assertEqual(list_of_texts[2], "")
-        self.assertEqual(list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
+        self.assertEqual(
+            list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
 
     def testInvalidSubjectNumber2(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Csaba', -10, 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
+        gui_mock.addFieldValues(
+            ['Tóth Csaba', -10, 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -145,8 +151,9 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[0], "")
         self.assertEqual(list_of_texts[1], "")
         self.assertEqual(list_of_texts[2], "")
-        self.assertEqual(list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
-        
+        self.assertEqual(
+            list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
+
     def testNoGroups(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
@@ -171,5 +178,6 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[1].label, "Sorszam")
         self.assertEqual(list_of_fields[1].initial, '0')
 
+
 if __name__ == "__main__":
-    unittest.main() # run all tests 
+    unittest.main()  # run all tests
