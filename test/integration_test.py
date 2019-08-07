@@ -151,7 +151,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
 
-    def checkOutputFile(self):
+    def checkOutputFile(self, check_timing = False):
         reference_file_path = os.path.join(
             self.current_dir, "reference", "toth-bela_10__log.txt")
         workdir_output = os.path.join(
@@ -192,7 +192,9 @@ class integrationTest(unittest.TestCase):
                     self.assertEqual(ref_values[8], act_values[8])  # epoch
                     self.assertEqual(ref_values[9], act_values[9])  # block
                     self.assertEqual(ref_values[10], act_values[10])  # trial
-                    # RSI time
+                    if check_timing:
+                        # RSI time, keep this low so the program will be precise inside a trial
+                        self.assertAlmostEqual(float(act_values[11].replace(",", ".")), 0.0, delta = 0.002)
                     self.assertEqual(
                         ref_values[12], act_values[12])  # frame_rate
                     self.assertEqual(
@@ -219,7 +221,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
     def calculate_stim_properties_override_quit(self):
         self.calculate_stim_properties_override()
@@ -238,7 +240,7 @@ class integrationTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
     def testExplicitASRT(self):
         # for setting participant data
@@ -249,7 +251,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
     def calculate_stim_properties_override_wrong_button(self):
         self.calculate_stim_properties_override()
@@ -268,7 +270,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
     def testMoreBlocks(self):
         # for setting participant data
@@ -279,7 +281,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
     def testMoreSessions(self):
         # for setting participant data
@@ -291,7 +293,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
     def presentation_override(self):
         # There are some instructions first
@@ -337,7 +339,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
         self.experiment.presentation = self.presentation
 
@@ -385,7 +387,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile()
+        self.checkOutputFile(True)
 
         self.experiment.presentation = self.presentation
 
