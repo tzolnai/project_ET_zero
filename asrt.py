@@ -262,6 +262,9 @@ class ExperimentSettings:
 
         return self.sessionstarts
 
+    def get_key_list(self):
+        return [self.key1, self.key2, self.key3, self.key4, self.key_quit]
+
     def show_basic_settings_dialog(self):
         """ Ask the user to specify the number of groups and the number of sessions."""
 
@@ -458,8 +461,7 @@ class InstructionHelper:
         # There can be more instructions to display successively
         for inst in instruction_list:
             self.__print_to_screen(inst, mywindow)
-            tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
-                                              expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
             if expriment_settings.key_quit in tempkey:
                 core.quit()
 
@@ -497,8 +499,7 @@ class InstructionHelper:
                 l = l.replace('*SPEEDACC*', '')
 
             self.__print_to_screen(l, mywindow)
-            tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
-                                              expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
         if expriment_settings.key_quit in tempkey:
             return 'quit'
         else:
@@ -526,8 +527,7 @@ class InstructionHelper:
                 i = i.replace('*SPEEDACC*', '')
 
             self.__print_to_screen(i, mywindow)
-            tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
-                                              expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
+            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
         if expriment_settings.key_quit in tempkey:
             return 'quit'
         else:
@@ -1102,8 +1102,8 @@ class Experiment:
                         stim_RSI = RSI_clock.getTime()
 
                 trial_clock.reset()
-                press = event.waitKeys(keyList=[self. settings.key1, self.settings.key2, self.settings.key3,
-                                                self.settings.key4, self.settings.key_quit], timeStamped=trial_clock)
+                press = event.waitKeys(keyList=self.settings.get_key_list(),
+                                       timeStamped=trial_clock)
 
                 RSI_clock.reset()
                 RSI.start(self.settings.RSI_time)
