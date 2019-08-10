@@ -36,6 +36,17 @@ def ensure_dir(dirpath):
         os.makedirs(dirpath)
 
 
+def normalize_string(string, blank_char):
+    dict_accents = {u'á': u'a', u'é': u'e', u'í': u'i', u'ó': u'o',
+                    u'ő': u'o', u'ö': u'o', u'ú': u'u', u'ű': u'u', u'ü': u'u'}
+    string = string.lower()
+    string = string.replace(' ', blank_char)
+    for accent in dict_accents.keys():
+        string = string.replace(accent, dict_accents[accent])
+
+    return string
+
+
 class ExperimentSettings:
     """This class handles all operation related to experiment settings.
        These settings apply to all subjects in the specific experiment.
@@ -270,7 +281,7 @@ class ExperimentSettings:
         else:
             core.quit()
 
-    def show_group_settings_dialog(self, numgroups, dict_accents):
+    def show_group_settings_dialog(self, numgroups):
         """Ask the user to specify the name of the groups.
            Returns the list of group names.
         """
@@ -285,11 +296,8 @@ class ExperimentSettings:
             returned_data = settings_dialog.show()
             if settings_dialog.OK:
                 for ii in returned_data:
-                    ii = ii.lower()
-                    ii = ii.replace(' ', '_')
-                    ii = ii.replace('-', '_')
-                    for accent in dict_accents.keys():
-                        ii = ii.replace(accent, dict_accents[accent])
+                    ii = normalize_string(ii, "_")
+                    ii = ii.replace("-", "_")
                     self.groups.append(ii)
             else:
                 core.quit()
@@ -714,8 +722,6 @@ class Experiment:
 
     def __init__(self, thispath):
         self.thispath = thispath
-        self.dict_accents = {u'á': u'a', u'é': u'e', u'í': u'i', u'ó': u'o',
-                             u'ő': u'o', u'ö': u'o', u'ú': u'u', u'ű': u'u', u'ü': u'u'}
 
         self.colors = None
         self.settings = None
@@ -757,8 +763,7 @@ class Experiment:
             numgroups = self.settings.show_basic_settings_dialog()
 
             # get the group names from the user
-            self.settings.show_group_settings_dialog(
-                numgroups, self.dict_accents)
+            self.settings.show_group_settings_dialog(numgroups)
 
             # get epoch and block settings (block number, trial number, epoch number, etc)
             self.settings.show_epoch_and_block_settings_dialog()
@@ -793,11 +798,8 @@ class Experiment:
             returned_data = settings_dialog.show()
             if settings_dialog.OK:
                 name = returned_data[0]
-                name = name.lower()
-                name = name.replace(' ', '-')
-                name = name.replace('_', '-')
-                for accent in self.dict_accents.keys():
-                    name = name.replace(accent, self.dict_accents[accent])
+                name = normalize_string(name, "-")
+                name = name.replace("_", "-")
                 self.subject_name = name
 
                 subject_number = returned_data[1]
