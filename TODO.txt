@@ -14,3 +14,4 @@ simplify possible colors?
 don't continue with a block after a quit, but start from the beginning of the block
 measure how much time it takes to run one trial (without RSI and RT) -> can be optimized based on this value
 rt in case of wrong button
+psychopy monitor setWidth, there is now setHeight?!
