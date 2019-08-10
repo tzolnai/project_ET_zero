@@ -37,18 +37,19 @@ def ensure_dir(dirpath):
 
 
 class ExperimentSettings:
-    """ This class handles all operation related to experiment settings
-        These settings apply to all subjects in the specific experiment
+    """This class handles all operation related to experiment settings.
+       These settings apply to all subjects in the specific experiment.
     """
 
     def __init__(self, settings_file_path, reminder_file_path):
-        self.numsessions = None         # number of sessions (e.g. 10)
+        # number of sessions (e.g. 10)
+        self.numsessions = None
         # list of group names (e.g. ["kontrol", "kiserleti"])
         self.groups = None
 
         # number of practice trials at the beginning of the block (e.g. 10)
         self.blockprepN = None
-        # number of trials in one block (e.g. 10)
+        # number of real trials in one block (e.g. 10)
         self.blocklengthN = None
         # number of blocks in one epoch (e.g. 10)
         self.block_in_epochN = None
@@ -59,21 +60,29 @@ class ExperimentSettings:
         # list of asrt types of all sessions (e.g. ['implicit', 'explicit'] (two sessions, first session is an implicit asrt, the second one is explicit))
         self.asrt_types = None
 
-        # monitor's physical with in 'cm' (e.g. 29)
+        # monitor's physical width in 'cm' (e.g. 29)
         self.monitor_width = None
-        # am imaginary name of the computer where the experiment is run
+        # an imaginary name of the computer where the experiment is run (e.g. Laposka)
         self.computer_name = None
+        # distance of the neighbour stimulus circles in cm (center to center distance)
         self.asrt_distance = None
+        # radius of the stimulus circle in cm (e.g. 1)
         self.asrt_size = None
+        # fill color of the random stimulus or all stimulus in case of implicit asrt (e.g. "Orange")
         self.asrt_rcolor = None
+        # fill color of the "pattern" stimulus in case of explicit asrt (e.g. "Orange")
         self.asrt_pcolor = None
+        # background color behind the stimulus circles  (e.g. "Ivory")
         self.asrt_background = None
+        # response-to-next-stimulus time in millisecond (e.g. 120)
         self.RSI_time = None
 
-        self.key1 = None                # key for the first stimulus (e.g. 'z')
+        # key for the first stimulus (e.g. 'z')
+        self.key1 = None
         # key for the second stimulus (e.g. 'v')
         self.key2 = None
-        self.key3 = None                # key for the third stimulus (e.g. 'b')
+        # key for the third stimulus (e.g. 'b')
+        self.key3 = None
         # key for the fourth stimulus (e.g. 'm')
         self.key4 = None
         # key used to quit the running script (e.g. 'q')
@@ -85,13 +94,23 @@ class ExperimentSettings:
         # an accuracy value, warn if the current accuracy is smaller than this value (e.g. 91)
         self.acc_warning = None
 
+        # list of trial numbers indicating the first trials of the different sessions (calulcated number, e.g [1, 86, 171])
         self.sessionstarts = None
+        # list of trial numbers indicating the first trials of the different blocks (calulcated number, e.g [1, 86, 171])
         self.blockstarts = None
 
+        # settings shelve file's path
         self.settings_file_path = settings_file_path
+        # settings reminder text file's path
         self.reminder_file_path = reminder_file_path
 
     def read_from_file(self):
+        """Open settings shelve file in read-only mode and read all settings from it.
+
+           This method expects that all known settings are in the file.
+           If something is missing all read settings are dropped and also
+           an exception is raised.
+        """
         try:
             with shelve.open(self.settings_file_path, 'r') as settings_file:
                 self.numsessions = settings_file['numsessions']
@@ -122,11 +141,13 @@ class ExperimentSettings:
                 self.whether_warning = settings_file['whether_warning']
                 self.speed_warning = settings_file['speed_warning']
                 self.acc_warning = settings_file['acc_warning']
-        except Exception as exc:
+        except Exception as exception:
             self.__init__(self.settings_file_path, self.reminder_file_path)
-            raise exc
+            raise exception
 
     def write_to_file(self):
+        """Create a new settings file and write all settings into it."""
+
         with shelve.open(self.settings_file_path, 'n') as settings_file:
             settings_file['numsessions'] = self.numsessions
             settings_file['groups'] = self.groups
@@ -158,6 +179,8 @@ class ExperimentSettings:
             settings_file['acc_warning'] = self.acc_warning
 
     def write_out_reminder(self):
+        """Write out a short summary of the settings into a text file."""
+
         with codecs.open(self.reminder_file_path, 'w', encoding='utf-8') as reminder_file:
             reminder_file.write(u'Beállítások \n' +
                                 '\n' +
@@ -196,9 +219,13 @@ class ExperimentSettings:
                                 'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
     def get_maxtrial(self):
+        """Get number of all trials in the whole experiment (in all sessions)."""
+
         return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
 
     def get_block_starts(self):
+        """Return with a list of numbers indicating the first trials of the different blocks."""
+
         if self.blockstarts == None:
             self.blockstarts = [1]
             for i in range(1, self.epochN * self.block_in_epochN + 2):
@@ -208,6 +235,8 @@ class ExperimentSettings:
         return self.blockstarts
 
     def get_session_starts(self):
+        """Return with a list of numbers indicating the first trials of the different sessions."""
+
         if self.sessionstarts == None:
             self.sessionstarts = [1]
             epochs_cumulative = []
@@ -302,9 +331,8 @@ class ExperimentSettings:
             core.quit()
 
     def show_computer_and_display_settings_dialog(self):
-        """Ask the user to specify preparation trials' number, block length, number of blocks in an epoch
-           epoch number and asrt type in the different sessions.
-        """
+        """Ask the user specific infromation about the computer and also change display settings."""
+
         possible_colors = ["AliceBlue", "AntiqueWhite", "Aqua", "Aquamarine", "Azure", "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", "DarkOrange", "DarkOrchid", "DarkRed", "DarkSalmon", "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", "DimGray", "DimGrey", "DodgerBlue", "FireBrick", "FloralWhite", "ForestGreen", "Fuchsia", "Gainsboro", "GhostWhite", "Gold", "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", "HoneyDew", "HotPink", "IndianRed", "Indigo", "Ivory", "Khaki", "Lavender", "LavenderBlush", "LawnGreen", "LemonChiffon", "LightBlue", "LightCoral", "LightCyan", "LightGoldenRodYellow", "LightGray", "LightGrey", "LightGreen",
                            "LightPink", "LightSalmon", "LightSeaGreen", "LightSkyBlue", "LightSlateGray", "LightSlateGrey", "LightSteelBlue", "LightYellow", "Lime", "LimeGreen", "Linen", "Magenta", "Maroon", "MediumAquaMarine", "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", "MediumVioletRed", "MidnightBlue", "MintCream", "MistyRose", "Moccasin", "NavajoWhite", "Navy", "OldLace", "Olive", "OliveDrab", "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", "Peru", "Pink", "Plum", "PowderBlue", "Purple", "RebeccaPurple", "Red", "RosyBrown", "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", "SeaShell", "Sienna", "Silver", "SkyBlue", "SlateBlue", "SlateGray", "SlateGrey", "Snow", "SpringGreen", "SteelBlue", "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", "White", "WhiteSmoke", "Yellow", "YellowGreen"]
 
@@ -373,23 +401,27 @@ class InstructionHelper:
     """ Class for handle instruction strings (reading from file, storing and displaying)"""
 
     def __init__(self, instructions_file_path):
-        self.insts = []                 # instructions in the beginning of the experiment
-        # feedback for the subject about speed and accuracy in the explicit asrt case
+        # instructions in the beginning of the experiment (might have more elements)
+        self.insts = []
+        # feedback for the subject about speed and accuracy in the explicit asrt case (might be empty)
         self.feedback_exp = []
-        # feedback for the subject about speed and accuracy in the explicit asrt case
+        # feedback for the subject about speed and accuracy in the implicit asrt case
         self.feedback_imp = []
         # speed feedback line embedded into feedback_imp / feedback_exp
         self.feedback_speed = []
         # accuracy feedback line embedded into feedback_imp / feedback_exp
         self.feedback_accuracy = []
-        self.ending = []                # message in the end of the experiment
+        # message in the end of the experiment
+        self.ending = []
         # shown message when continuing sessions after the previous data recoding was quited
         self.unexp_quit = []
 
         self.instructions_file_path = instructions_file_path
 
     def read_insts_from_file(self):
-        """Be aware of that line endings are preserved during reading instructions."""
+        """Read instruction strings from the instruction file using the special structure of this file.
+           Be aware of that line endings are preserved during reading instructions.
+        """
 
         try:
             with codecs.open(self.instructions_file_path, 'r', encoding='utf-8') as inst_feedback:
@@ -444,6 +476,12 @@ class InstructionHelper:
         self.__show_message(self.ending, mywindow, expriment_settings)
 
     def feedback_explicit(self, rt_mean, rt_mean_p, acc_for_pattern, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
+        """Display feedback screen in case of an explicit ASRT.
+
+           The feedback string contains placeholders for reaction time and accuracy.
+           Based on the settings the feedback might contain extra warning
+           about the speed or accuray.
+        """
 
         for l in self.feedback_exp:
             l = l.replace('*MEANRT*', rt_mean)
@@ -470,7 +508,12 @@ class InstructionHelper:
             return 'continue'
 
     def feedback_implicit(self, rt_mean, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
+        """Display feedback screen in case of an implicit ASRT.
 
+           The feedback string contains placeholders for reaction time and accuracy.
+           Based on the settings the feedback might contain extra warning
+           about the speed or accuray.
+        """
         for i in self.feedback_imp:
             i = i.replace('*MEANRT*', rt_mean)
             i = i.replace('*PERCACC*', acc_for_the_whole_str)
@@ -495,15 +538,23 @@ class InstructionHelper:
 
 
 class PersonDataHandler:
+    """Class for handle subject related settings and data."""
 
     def __init__(self, subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path):
+        # generated, unique ID of the subject (consist of a name, a number and an optional group name
         self.subject_id = subject_id
+        # path to the settings file of the current subject storing the state of the experiment
         self.all_settings_file_path = all_settings_file_path
+        # path to the file containing the IDs for all subjects
         self.all_IDs_file_path = all_IDs_file_path
+        # path to a text file containing a list of all subjects
         self.subject_list_file_path = subject_list_file_path
+        # output text file for the measured data of the current subject
         self.output_file_path = output_file_path
 
     def load_person_settings(self, experiment):
+        """Open settings file of the current subject and read the current state."""
+
         try:
             with shelve.open(self.all_settings_file_path, 'r') as this_person_settings:
 
@@ -532,6 +583,9 @@ class PersonDataHandler:
             experiment.end_at = {}
 
     def save_person_settings(self, experiment):
+        """Write out the current state of the experiment run with current subject,
+           so we can continue the experiment from that point where the subject finished it."""
+
         with shelve.open(self.all_settings_file_path, 'n') as this_person_settings:
             this_person_settings['PCodes'] = experiment.PCodes
             this_person_settings['stim_output_line'] = experiment.stim_output_line
@@ -547,6 +601,10 @@ class PersonDataHandler:
             this_person_settings['end_at'] = experiment.end_at
 
     def update_subject_IDs_files(self):
+        """Add the new subject ID into the list of all IDs and save it to the IDs file.
+           Also generate a text file with the list of all subjects participating in the experiment
+        """
+
         all_IDs = []
         with shelve.open(self.all_IDs_file_path) as all_IDs_file:
             try:
@@ -565,6 +623,8 @@ class PersonDataHandler:
                 subject_list_file.write('\n')
 
     def append_to_output_file(self, string_to_append):
+        """ Append a string to the end on the output text file."""
+
         if not os.path.isfile(self.output_file_path):
             with codecs.open(self.output_file_path, 'w', encoding='utf-8') as output_file:
                 self.add_heading_to_output(output_file)
@@ -574,6 +634,8 @@ class PersonDataHandler:
                 output_file.write(string_to_append)
 
     def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor):
+        """ Write out the ouptut date of the current trial into the output text file."""
+
         output_data = [experiment.settings.computer_name,
                        experiment.group,
                        experiment.identif,
@@ -613,6 +675,8 @@ class PersonDataHandler:
         self.append_to_output_file(output)
 
     def add_heading_to_output(self, output_file):
+        """Add the first line to the ouput with the names of the different variables."""
+
         heading_list = ['computer_name',
                         'Group',
                         'Subject_ID',
@@ -992,7 +1056,8 @@ class Experiment:
         stimR = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
                               fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
 
-        stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm", fillColor=None, lineColor=self.colors['linecolor'])
+        stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm",
+                               fillColor=None, lineColor=self.colors['linecolor'])
 
         RSI_timer = 0.0
         N = self.last_N + 1
