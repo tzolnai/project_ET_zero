@@ -37,8 +37,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "alattomos-aladar")
-        self.assertEqual(experiment.subject_nr, 0)
+        self.assertEqual(experiment.subject_name, "alattomos-aladar")
+        self.assertEqual(experiment.subject_number, 0)
         self.assertEqual(experiment.group, '')
 
         list_of_texts = gui_mock.getListOfTexts()
@@ -74,8 +74,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         subject_settings = experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "toth-bela")
-        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.subject_name, "toth-bela")
+        self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
     def testAccentCharacters(self):
@@ -88,8 +88,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "aaeeiioooouuuuaaeeiioooouuuu")
-        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.subject_name, "aaeeiioooouuuuaaeeiioooouuuu")
+        self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
     def testSpecialCharacters(self):
@@ -102,9 +102,9 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif,
+        self.assertEqual(experiment.subject_name,
                          "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
-        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
     def testInvalidSubjectNumber(self):
@@ -117,8 +117,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "toth-csaba")
-        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.subject_name, "toth-csaba")
+        self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
@@ -140,8 +140,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "toth-csaba")
-        self.assertEqual(experiment.subject_nr, 10)
+        self.assertEqual(experiment.subject_name, "toth-csaba")
+        self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
@@ -161,8 +161,8 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings.groups = []
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.identif, "alattomos-aladar")
-        self.assertEqual(experiment.subject_nr, 0)
+        self.assertEqual(experiment.subject_name, "alattomos-aladar")
+        self.assertEqual(experiment.subject_number, 0)
         self.assertEqual(experiment.group, '')
 
         list_of_texts = gui_mock.getListOfTexts()

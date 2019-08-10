@@ -638,8 +638,8 @@ class PersonDataHandler:
 
         output_data = [experiment.settings.computer_name,
                        experiment.group,
-                       experiment.identif,
-                       experiment.subject_nr,
+                       experiment.subject_name,
+                       experiment.subject_number,
                        asrt_type,
                        PCode,
 
@@ -679,8 +679,8 @@ class PersonDataHandler:
 
         heading_list = ['computer_name',
                         'Group',
-                        'Subject_ID',
-                        'Subject_nr',
+                        'subject_name',
+                        'subject_number',
                         'asrt_type',
                         'PCode',
 
@@ -729,8 +729,8 @@ class Experiment:
         self.frame_rate = None
 
         self.group = None
-        self.subject_nr = None
-        self.identif = None
+        self.subject_number = None
+        self.subject_name = None
 
         self.person_data = None
 
@@ -798,7 +798,7 @@ class Experiment:
                 name = name.replace('_', '-')
                 for accent in self.dict_accents.keys():
                     name = name.replace(accent, self.dict_accents[accent])
-                self.identif = name
+                self.subject_name = name
 
                 subject_number = returned_data[1]
                 if len(self.settings.groups) > 1:
@@ -810,7 +810,7 @@ class Experiment:
                     subject_number = int(subject_number)
                     if subject_number >= 0:
                         itsOK = 1
-                        self.subject_nr = subject_number
+                        self.subject_number = subject_number
                     else:
                         warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
 
@@ -955,8 +955,8 @@ class Experiment:
     def participant_id(self):
         self.show_subject_settings_dialog()
 
-        subject_id = self.identif + '_' + \
-            str(self.subject_nr) + '_' + self.group
+        subject_id = self.subject_name + '_' + \
+            str(self.subject_number) + '_' + self.group
         all_settings_file_path = os.path.join(
             self.thispath, "settings", subject_id)
         all_IDs_file_path = os.path.join(
