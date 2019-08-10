@@ -421,6 +421,7 @@ class InstructionHelper:
         text_stim = visual.TextStim(
             mywindow, text=mytext, units='cm', height=0.6, color='black')
         text_stim.draw()
+        mywindow.flip()
 
     def __show_message(self, instruction_list, mywindow, expriment_settings):
         """Display simple instructions on the screen."""
@@ -428,7 +429,6 @@ class InstructionHelper:
         # There can be more instructions to display successively
         for inst in instruction_list:
             self.__print_to_screen(inst, mywindow)
-            mywindow.flip()
             tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
                                               expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
             if expriment_settings.key_quit in tempkey:
@@ -462,7 +462,6 @@ class InstructionHelper:
                 l = l.replace('*SPEEDACC*', '')
 
             self.__print_to_screen(l, mywindow)
-            mywindow.flip()
             tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
                                               expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
         if expriment_settings.key_quit in tempkey:
@@ -487,7 +486,6 @@ class InstructionHelper:
                 i = i.replace('*SPEEDACC*', '')
 
             self.__print_to_screen(i, mywindow)
-            mywindow.flip()
             tempkey = event.waitKeys(keyList=[expriment_settings.key1, expriment_settings.key2,
                                               expriment_settings.key3, expriment_settings.key4, expriment_settings.key_quit])
         if expriment_settings.key_quit in tempkey:
@@ -935,12 +933,12 @@ class Experiment:
         xtext = visual.TextStim(
             self.mywindow, text=mytext, units="cm", height=0.6, color="black")
         xtext.draw()
+        self.mywindow.flip()
 
     def frame_check(self):
         # monitorral kapcsolatos informáciok
         self.print_to_screen(
             u'Adatok előkészítése folyamatban. \nEz eltarthat pár másodpercig. \nAddig semmit sem fogsz látni a képernyőn...')
-        self.mywindow.flip()
         core.wait(2)
 
         ms_per_frame = self.mywindow.getMsPerFrame(nFrames=120)
@@ -1079,7 +1077,6 @@ class Experiment:
 
                 if press[0][0] == self.settings.key_quit:
                     self.print_to_screen("Quit...\nSaving data...")
-                    self.mywindow.flip()
 
                     self.person_data.append_to_output_file('userquit')
 
@@ -1125,14 +1122,12 @@ class Experiment:
 
                 self.print_to_screen(
                     u"Adatok mentése és visszajelzés előkészítése...")
-                self.mywindow.flip()
 
                 whatnow = self.show_feedback(
                     N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
 
                 if whatnow == 'quit':
                     self.print_to_screen("Quit...\nSaving data...")
-                    self.mywindow.flip()
 
                     self.person_data.append_to_output_file('userquit')
 
