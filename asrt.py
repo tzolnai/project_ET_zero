@@ -1062,13 +1062,12 @@ class Experiment:
         RSI_clock = core.Clock()
         trial_clock = core.Clock()
 
+        first_trial_in_block = True
+
         while True:
 
             self.stim_bg(stimbg)
             self.mywindow.flip()
-
-            RSI_clock.reset()
-            RSI.start(self.settings.RSI_time)
 
             if self.stimpr[N] == 'P':
                 if self.settings.asrt_types[self.stim_sessionN[N]] == 'explicit':
@@ -1081,7 +1080,8 @@ class Experiment:
                 stimcolor = self.colors['stimr']
                 stimR.setPos(self.dict_pos[self.stimlist[N]])
 
-            RSI.complete()
+            if not first_trial_in_block:
+                RSI.complete()
 
             cycle = 0
 
@@ -1096,11 +1096,17 @@ class Experiment:
                 self.mywindow.flip()
 
                 if cycle == 1:
-                    stim_RSI = RSI_clock.getTime()
+                    if first_trial_in_block:
+                        stim_RSI = 0.0
+                    else:
+                        stim_RSI = RSI_clock.getTime()
 
                 trial_clock.reset()
                 press = event.waitKeys(keyList=[self. settings.key1, self.settings.key2, self.settings.key3,
                                                 self.settings.key4, self.settings.key_quit], timeStamped=trial_clock)
+
+                RSI_clock.reset()
+                RSI.start(self.settings.RSI_time)
 
                 stim_RT_time = time.strftime('%H:%M:%S')
                 stim_RT_date = time.strftime('%d/%m/%Y')
@@ -1152,7 +1158,7 @@ class Experiment:
                 if stimACC == 0:
                     self.last_N = N
                     N += 1
-
+                    first_trial_in_block = False
                     break
 
             if N in self.settings.get_block_starts():  # n+1 volt
@@ -1180,6 +1186,8 @@ class Experiment:
                 RT_all_list = []
 
                 accs_in_block = []
+
+                first_trial_in_block = True
 
             if N == self.end_at[N - 1]:
                 break
