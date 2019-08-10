@@ -80,8 +80,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
     def testAccentCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(
-            ['áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ', 10, 'kontrol'])
+        gui_mock.addFieldValues(['áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -94,23 +93,20 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
     def testSpecialCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(
-            ['áaée íióoőö úuűüÁA ÉEÍIÓOŐÖ ÚUŰÜ', 10, 'kontrol'])
+        gui_mock.addFieldValues(['áaée íióoőö úuűüÁA ÉEÍIÓOŐÖ ÚUŰÜ', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_settings_dialog()
 
-        self.assertEqual(experiment.subject_name,
-                         "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
+        self.assertEqual(experiment.subject_name, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
         self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.group, 'kontrol')
 
     def testInvalidSubjectNumber(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(
-            ['Tóth Csaba', 'x', 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
+        gui_mock.addFieldValues(['Tóth Csaba', 'x', 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -127,13 +123,11 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[0], "")
         self.assertEqual(list_of_texts[1], "")
         self.assertEqual(list_of_texts[2], "")
-        self.assertEqual(
-            list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
+        self.assertEqual(list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
 
     def testInvalidSubjectNumber2(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(
-            ['Tóth Csaba', -10, 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
+        gui_mock.addFieldValues(['Tóth Csaba', -10, 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -150,8 +144,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[0], "")
         self.assertEqual(list_of_texts[1], "")
         self.assertEqual(list_of_texts[2], "")
-        self.assertEqual(
-            list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
+        self.assertEqual(list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
 
     def testNoGroups(self):
         gui_mock = pgm.PsychoPyGuiMock()

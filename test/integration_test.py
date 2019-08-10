@@ -151,7 +151,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
 
-    def checkOutputFile(self, check_timing = False):
+    def checkOutputFile(self, check_timing=False):
         reference_file_path = os.path.join(
             self.current_dir, "reference", "toth-bela_10__log.txt")
         workdir_output = os.path.join(
@@ -194,7 +194,8 @@ class integrationTest(unittest.TestCase):
                     self.assertEqual(ref_values[10], act_values[10])  # trial
                     if check_timing:
                         # RSI time, keep this low so the program will be precise inside a trial
-                        self.assertAlmostEqual(float(act_values[11].replace(",", ".")), 0.0, delta = 0.002)
+                        self.assertAlmostEqual(
+                            float(act_values[11].replace(",", ".")), 0.0, delta=0.002)
                     self.assertEqual(
                         ref_values[12], act_values[12])  # frame_rate
                     self.assertEqual(

@@ -311,16 +311,14 @@ class ExperimentSettings:
 
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText(u'Kísérlet felépítése ')
-        settings_dialog.addField(
-            u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
+        settings_dialog.addField(u'Randomok gyakorlaskent a blokk elejen (ennyi db):', 5)
         settings_dialog.addField(u'Eles probak a blokkban:', 80)
         settings_dialog.addField(u'Blokkok szama egy epochban:', 5)
         for i in range(self.numsessions):
-            settings_dialog.addField(
-                u'Session ' + str(i + 1) + u' epochok szama', 5)
+            settings_dialog.addField(u'Session ' + str(i + 1) + u' epochok szama', 5)
         for i in range(self.numsessions):
-            settings_dialog.addField(
-                u'Session ' + str(i + 1) + u' ASRT tipusa', choices=["implicit", "explicit", "noASRT"])
+            settings_dialog.addField(u'Session ' + str(i + 1) + u' ASRT tipusa',
+                                     choices=["implicit", "explicit", "noASRT"])
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.blockprepN = returned_data[0]
@@ -333,8 +331,7 @@ class ExperimentSettings:
                 self.epochN += returned_data[3 + k]
                 self.epochs.append(returned_data[3 + k])
             for k in range(self.numsessions):
-                self.asrt_types[k + 1] = returned_data[3 +
-                                                       self.numsessions + k]
+                self.asrt_types[k + 1] = returned_data[3 + self.numsessions + k]
         else:
             core.quit()
 
@@ -347,18 +344,15 @@ class ExperimentSettings:
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText(u'A számítógépről...')
         settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
-        settings_dialog.addField(
-            u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
+        settings_dialog.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
         settings_dialog.addText(u'Megjelenés..')
-        settings_dialog.addField(
-            u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+        settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
         settings_dialog.addField(u'Ingerek sugara (cm)', 1)
-        settings_dialog.addField(
-            u'ASRT inger szine (elsodleges, R)', choices=possible_colors, initial="Orange")
+        settings_dialog.addField(u'ASRT inger szine (elsodleges, R)',
+                                 choices=possible_colors, initial="Orange")
         settings_dialog.addField(
             u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices=possible_colors, initial="Green")
-        settings_dialog.addField(
-            u'Hatter szine', choices=possible_colors, initial="Ivory")
+        settings_dialog.addField(u'Hatter szine', choices=possible_colors, initial="Ivory")
         settings_dialog.addField(u'RSI (ms)', 120)
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -383,14 +377,10 @@ class ExperimentSettings:
         settings_dialog.addField(u'Jobb kozep', 'b')
         settings_dialog.addField(u'Jobb szelso', 'm')
         settings_dialog.addField(u'Kilepes', 'q')
-        settings_dialog.addField(
-            u'Figyelmeztetes pontossagra/sebessegre:', True)
-        settings_dialog.addText(
-            u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
-        settings_dialog.addField(
-            u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
-        settings_dialog.addField(
-            u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
+        settings_dialog.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
+        settings_dialog.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
+        settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
+        settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.key1 = returned_data[0]
@@ -458,8 +448,7 @@ class InstructionHelper:
     def __print_to_screen(self, mytext, mywindow):
         """Display given string in the given window."""
 
-        text_stim = visual.TextStim(
-            mywindow, text=mytext, units='cm', height=0.6, color='black')
+        text_stim = visual.TextStim(mywindow, text=mytext, units='cm', height=0.6, color='black')
         text_stim.draw()
         mywindow.flip()
 
@@ -792,8 +781,7 @@ class Experiment:
             settings_dialog.addField(u'Nev', u"Alattomos Aladar")
             settings_dialog.addField(u'Sorszam', "0")
             if len(self.settings.groups) > 1:
-                settings_dialog.addField(
-                    u'Csoport', choices=self.settings.groups)
+                settings_dialog.addField(u'Csoport', choices=self.settings.groups)
 
             returned_data = settings_dialog.show()
             if settings_dialog.OK:
@@ -827,14 +815,10 @@ class Experiment:
             expstart11 = gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
             expstart11.addText(u'Folytatás innen...')
-            expstart11.addText(
-                'Session: ' + str(self.stim_sessionN[self.last_N + 1]))
-            expstart11.addText(
-                'Epoch: ' + str(self.stimepoch[self.last_N + 1]))
-            expstart11.addText(
-                'Block: ' + str(self.stimblock[self.last_N + 1]))
-            expstart11.addText(
-                'Trial: ' + str(self.stimtrial[self.last_N + 1]))
+            expstart11.addText('Session: ' + str(self.stim_sessionN[self.last_N + 1]))
+            expstart11.addText('Epoch: ' + str(self.stimepoch[self.last_N + 1]))
+            expstart11.addText('Block: ' + str(self.stimblock[self.last_N + 1]))
+            expstart11.addText('Trial: ' + str(self.stimtrial[self.last_N + 1]))
             expstart11.show()
             if not expstart11.OK:
                 core.quit()
@@ -850,8 +834,7 @@ class Experiment:
         settings_dialog.addText('')
         for z in range(self.settings.numsessions):
             if self.settings.asrt_types[z + 1] == "noASRT":
-                settings_dialog.addFixedField(
-                    u'Session ' + str(z + 1) + ' PCode', 'noPattern')
+                settings_dialog.addFixedField(u'Session ' + str(z + 1) + ' PCode', 'noPattern')
             else:
                 settings_dialog.addField(u'Session ' + str(z + 1) + ' PCode', choices=[
                                          '1st - 1234', '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
@@ -957,16 +940,12 @@ class Experiment:
     def participant_id(self):
         self.show_subject_settings_dialog()
 
-        subject_id = self.subject_name + '_' + \
-            str(self.subject_number) + '_' + self.group
-        all_settings_file_path = os.path.join(
-            self.thispath, "settings", subject_id)
-        all_IDs_file_path = os.path.join(
-            self.thispath, "settings", "participant_settings")
+        subject_id = self.subject_name + '_' + str(self.subject_number) + '_' + self.group
+        all_settings_file_path = os.path.join(self.thispath, "settings", subject_id)
+        all_IDs_file_path = os.path.join(self.thispath, "settings", "participant_settings")
         subject_list_file_path = os.path.join(
             self.thispath, "settings", "participants_in_experiment.txt")
-        output_file_path = os.path.join(
-            self.thispath, "logs", subject_id + '_log.txt')
+        output_file_path = os.path.join(self.thispath, "logs", subject_id + '_log.txt')
         self.person_data = PersonDataHandler(
             subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
 
@@ -996,8 +975,7 @@ class Experiment:
         return my_monitor
 
     def print_to_screen(self, mytext):
-        xtext = visual.TextStim(
-            self.mywindow, text=mytext, units="cm", height=0.6, color="black")
+        xtext = visual.TextStim(self.mywindow, text=mytext, units="cm", height=0.6, color="black")
         xtext.draw()
         self.mywindow.flip()
 
@@ -1019,8 +997,7 @@ class Experiment:
 
     def show_feedback(self, N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list):
 
-        acc_for_the_whole = 100 * \
-            float(Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
+        acc_for_the_whole = 100 * float(Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
         acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.', ',')
 
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
@@ -1035,8 +1012,7 @@ class Experiment:
                 rt_mean_p_str = 'N/A'
 
             try:
-                acc_for_patterns = 100 * \
-                    float(number_of_patterns - patternERR) / number_of_patterns
+                acc_for_patterns = 100 * float(number_of_patterns - patternERR) / number_of_patterns
                 acc_for_patterns_str = str(acc_for_patterns)[
                     0:5].replace('.', ',')
             except:
@@ -1057,7 +1033,6 @@ class Experiment:
                               fillColor=self.colors['stimp'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
         stimR = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
                               fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
-
         stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm",
                                fillColor=None, lineColor=self.colors['linecolor'])
 
@@ -1187,8 +1162,7 @@ class Experiment:
 
             if N in self.settings.get_block_starts():  # n+1 volt
 
-                self.print_to_screen(
-                    u"Adatok mentése és visszajelzés előkészítése...")
+                self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
 
                 whatnow = self.show_feedback(
                     N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
@@ -1221,30 +1195,24 @@ class Experiment:
         ensure_dir(os.path.join(self.thispath, "settings"))
 
         # Load settings if exist or ask the user to specify them
-        all_settings_file_path = os.path.join(
-            self.thispath, "settings", "settings")
-        reminder_file_path = os.path.join(
-            self.thispath, "settings", "settings_reminder.txt")
-        self.settings = ExperimentSettings(
-            all_settings_file_path, reminder_file_path)
+        all_settings_file_path = os.path.join(self.thispath, "settings", "settings")
+        reminder_file_path = os.path.join(self.thispath, "settings", "settings_reminder.txt")
+        self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
         self.all_settings_def()
 
-        self.colors = {'wincolor': self.settings.asrt_background,
-                       'linecolor': 'black',
-                       'stimp': self.settings.asrt_pcolor,
-                       'stimr': self.settings.asrt_rcolor}
-        self.pressed_dict = {self.settings.key1: 1,
-                             self.settings.key2: 2,
-                             self.settings.key3: 3,
-                             self.settings.key4: 4}
+        self.colors = {'wincolor': self.settings.asrt_background, 'linecolor': 'black',
+                       'stimp': self.settings.asrt_pcolor, 'stimr': self.settings.asrt_rcolor}
+
+        self.pressed_dict = {self.settings.key1: 1, self.settings.key2: 2,
+                             self.settings.key3: 3, self.settings.key4: 4}
+
         self.dict_pos = {1: (float(self.settings.asrt_distance) * (-1.5), 0),
                          2: (float(self.settings.asrt_distance) * (-0.5), 0),
                          3: (float(self.settings.asrt_distance) * 0.5, 0),
                          4: (float(self.settings.asrt_distance) * 1.5, 0)}
 
         # Read instruction strings
-        inst_feedback_path = os.path.join(
-            self.thispath, "inst_and_feedback.txt")
+        inst_feedback_path = os.path.join(self.thispath, "inst_and_feedback.txt")
         self.instructions = InstructionHelper(inst_feedback_path)
         self.instructions.read_insts_from_file()
 
