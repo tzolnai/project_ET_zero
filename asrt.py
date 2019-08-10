@@ -1118,7 +1118,7 @@ class Experiment:
                 stim_RSI = RSI_timer
 
                 if press[0][0] == self.settings.key_quit:
-                    self.print_to_screen("Quit...\nSaving data...")
+                    self.print_to_screen("Kilépés...\nAdatok mentése...")
 
                     self.person_data.append_to_output_file('userquit')
 
@@ -1168,7 +1168,7 @@ class Experiment:
                     N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
 
                 if whatnow == 'quit':
-                    self.print_to_screen("Quit...\nSaving data...")
+                    self.print_to_screen("Kilépés...\nAdatok mentése...")
 
                     self.person_data.append_to_output_file('userquit')
 

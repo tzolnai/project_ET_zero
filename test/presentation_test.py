@@ -477,7 +477,7 @@ class presentationTest(unittest.TestCase):
             # quiting screen
             quit = drawing_list[48]
             self.assertTrue(isinstance(quit, pvm.TextStim))
-            self.assertEqual(quit.text, "Quit...\nSaving data...")
+            self.assertEqual(quit.text, "Kilépés...\nAdatok mentése...")
 
             self.assertTrue(os.path.join(
                 thispath, "settings", "toth-bela_10__log.txt"))
@@ -922,7 +922,7 @@ class presentationTest(unittest.TestCase):
             # quit screen
             quit = drawing_list[104]
             self.assertTrue(isinstance(quit, pvm.TextStim))
-            self.assertEqual(quit.text, "Quit...\nSaving data...")
+            self.assertEqual(quit.text, "Kilépés...\nAdatok mentése...")
 
             self.assertTrue(os.path.join(
                 thispath, "settings", "toth-bela_10__log.txt"))
