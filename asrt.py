@@ -1036,7 +1036,7 @@ class Experiment:
         stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm",
                                fillColor=None, lineColor=self.colors['linecolor'])
 
-        RSI_timer = 0.0
+        stim_RSI = 0.0
         N = self.last_N + 1
 
         # Show instructions or continuation message
@@ -1052,7 +1052,6 @@ class Experiment:
         asrt_type = self.settings.asrt_types[self.stim_sessionN[N]]
         PCode = self.which_code(self.stim_sessionN[N])
 
-        allACC = 0
         patternERR = 0
         number_of_patterns = 0
 
@@ -1085,7 +1084,6 @@ class Experiment:
             RSI.complete()
 
             cycle = 0
-            allACC = 0
 
             while True:
                 cycle += 1
@@ -1098,7 +1096,7 @@ class Experiment:
                 self.mywindow.flip()
 
                 if cycle == 1:
-                    RSI_timer = RSI_clock.getTime()
+                    stim_RSI = RSI_clock.getTime()
 
                 trial_clock.reset()
                 press = event.waitKeys(keyList=[self. settings.key1, self.settings.key2, self.settings.key3,
@@ -1115,7 +1113,6 @@ class Experiment:
                     stim_first_RT = press[0][1]
 
                 stimbutton = press[0][0]
-                stim_RSI = RSI_timer
 
                 if press[0][0] == self.settings.key_quit:
                     self.print_to_screen("Kilépés...\nAdatok mentése...")
@@ -1141,7 +1138,6 @@ class Experiment:
 
                 else:
                     stimACC = 1
-                    allACC += 1
                     accs_in_block.append(1)
 
                     if self.stimpr[N] == 'P':
@@ -1149,7 +1145,6 @@ class Experiment:
                         number_of_patterns += 1
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
-                stim_allACC = allACC
 
                 self.person_data.write_data_to_output(
                     self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
@@ -1179,7 +1174,6 @@ class Experiment:
                     core.quit()
 
                 patternERR = 0
-                allACC = 0
                 Npressed_in_block = 0
 
                 RT_pattern_list = []
