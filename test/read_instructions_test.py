@@ -23,9 +23,18 @@ sys.path = [".."] + sys.path
 
 import unittest
 import asrt
+import platform
 
 
 class readInstructionsTest(unittest.TestCase):
+
+    def assertEqualWithEOL(self, string1, string2):
+        if platform.system() == "Windows":
+            self.assertEqual(string1, string2)
+        else:
+            string1 = string1.replace("\r", "")
+            string2 = string2.replace("\r", "")
+            self.assertEqual(string1, string2)
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
@@ -48,38 +57,38 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.ending), 1)
         self.assertEqual(len(instruction_helper.unexp_quit), 1)
 
-        self.assertEqual(instruction_helper.insts[0], "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                                                      "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
-                                                      "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                                                      "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
-        self.assertEqual(instruction_helper.insts[1], "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                                                      "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                                                      "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                                                      "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                                                      "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
-        self.assertEqual(instruction_helper.insts[2], "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                                                      "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                                                      "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(instruction_helper.insts[0], "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                                             "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
+                                                             "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(instruction_helper.insts[1], "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                                             "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                                             "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                                             "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(instruction_helper.insts[2], "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                                             "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                                             "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
-        self.assertEqual(instruction_helper.feedback_imp[0], "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                             "Pontosságod: *PERCACC* %\r\n"
-                                                             "Átlagos reakcióidőd: *MEANRT* másodperc\r\n"
-                                                             "*SPEEDACC*\r\n\r\n")
+        self.assertEqualWithEOL(instruction_helper.feedback_imp[0], "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                                    "Pontosságod: *PERCACC* %\r\n"
+                                                                    "Átlagos reakcióidőd: *MEANRT* másodperc\r\n"
+                                                                    "*SPEEDACC*\r\n\r\n")
 
-        self.assertEqual(instruction_helper.feedback_exp[0], "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                             "Pontosságod általában: *PERCACC* %\r\n"
-                                                             "Átlagos reakcióidőd: *MEANRT* másodperc\r\n"
-                                                             "Pontosságod a bejósolható elemeknél: *PERCACCP* %\r\n"
-                                                             "Átlagos reakcióidőd a bejósolható elemeknél: *MEANRTP* másodperc\r\n"
-                                                             "*SPEEDACC*\r\n\r\n")
+        self.assertEqualWithEOL(instruction_helper.feedback_exp[0], "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                                    "Pontosságod általában: *PERCACC* %\r\n"
+                                                                    "Átlagos reakcióidőd: *MEANRT* másodperc\r\n"
+                                                                    "Pontosságod a bejósolható elemeknél: *PERCACCP* %\r\n"
+                                                                    "Átlagos reakcióidőd a bejósolható elemeknél: *MEANRTP* másodperc\r\n"
+                                                                    "*SPEEDACC*\r\n\r\n")
 
-        self.assertEqual(
+        self.assertEqualWithEOL(
             instruction_helper.feedback_speed[0], "\r\nLegyél gyorsabb!\r\n\r\n")
 
-        self.assertEqual(
+        self.assertEqualWithEOL(
             instruction_helper.feedback_accuracy[0], "\r\nLegyél pontosabb!\r\n\r\n")
 
-        self.assertEqual(
+        self.assertEqualWithEOL(
             instruction_helper.unexp_quit[0], "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
 
     def testOneInstruction(self):

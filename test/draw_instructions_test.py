@@ -26,6 +26,7 @@ import unittest
 from psychopy import monitors, visual, core, logging
 import asrt
 import psychopy_visual_mock as pvm
+import platform
 
 
 # ignore warnings comming from psychopy
@@ -41,11 +42,24 @@ class drawInstructionsTest(unittest.TestCase):
         if self.mywindow is not None:
             self.mywindow.close()
 
+    def assertEqualWithEOL(self, string1, string2):
+        if platform.system() == "Windows":
+            self.assertEqual(string1, string2)
+        else:
+            string1 = string1.replace("\r", "")
+            string2 = string2.replace("\r", "")
+            self.assertEqual(string1, string2)
+
     def initWindow(self):
         my_monitor = monitors.Monitor('myMon')
         my_monitor.setSizePix([1366, 768])
         my_monitor.setWidth(29)
         my_monitor.saveMon()
+
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
 
         self.mywindow = visual.Window(size=[1366, 768],
                                       pos=[0, 0],
@@ -53,8 +67,9 @@ class drawInstructionsTest(unittest.TestCase):
                                       fullscr=False,
                                       allowGUI=True,
                                       monitor=my_monitor,
-                                      winType='pyglet',
-                                      color='White')
+                                      winType=win_type,
+                                      color='White',
+                                      gammaRamp=256)
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
@@ -119,7 +134,7 @@ class drawInstructionsTest(unittest.TestCase):
         # color
         self.assertEqual(instruction_text.color, "black")
         # text
-        self.assertEqual(instruction_text.text, str(
+        self.assertEqualWithEOL(instruction_text.text, str(
             "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n"))
 
     def testQuitDisplay(self):
@@ -179,18 +194,18 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 3)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                         "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
-                         "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                         "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
-        self.assertEqual(drawing_list[1].text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                         "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                         "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                         "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                         "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
-        self.assertEqual(drawing_list[2].text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                         "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                         "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
+                                "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[1].text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[2].text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
     def testShowInstruction(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -211,18 +226,18 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 3)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                         "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
-                         "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                         "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
-        self.assertEqual(drawing_list[1].text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                         "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                         "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                         "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                         "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
-        self.assertEqual(drawing_list[2].text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                         "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                         "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
+                                "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[1].text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[2].text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
     def testShowUnexpectedQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -243,7 +258,7 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(
+        self.assertEqualWithEOL(
             drawing_list[0].text, "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
 
     def testShowEnding(self):
@@ -265,7 +280,7 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(
+        self.assertEqualWithEOL(
             drawing_list[0].text, "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n")
 
     def testShowImplicitFeedbackNoWarning(self):
@@ -291,9 +306,9 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod: 92.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                "Pontosságod: 92.123 %\r\n"
+                                "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n\r\n")
 
     def testShowImplicitFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -321,9 +336,9 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod: 92.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod: 92.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n\r\n")
 
     def testShowImplicitFeedbackAccuracyWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -348,10 +363,10 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod: 52.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
-                                               "Legyél pontosabb!\r\n\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod: 52.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
+                                                      "Legyél pontosabb!\r\n\r\n\r\n\r\n")
 
     def testShowImplicitFeedbackSpeedWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -376,10 +391,10 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod: 96.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
-                                               "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod: 96.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
+                                                      "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackNoWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -404,11 +419,11 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod általában: 92.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n"
-                                               "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod általában: 92.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n"
+                                                      "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
+                                                      "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -436,11 +451,11 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod általában: 92.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n"
-                                               "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod általában: 92.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n"
+                                                      "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
+                                                      "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackAccuracyWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -465,12 +480,12 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod általában: 52.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n"
-                                               "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
-                                               "Legyél pontosabb!\r\n\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod általában: 52.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n"
+                                                      "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
+                                                      "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
+                                                      "Legyél pontosabb!\r\n\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackSpeedWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -495,12 +510,12 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
 
-        self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod általában: 96.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n"
-                                               "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
-                                               "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod általában: 96.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n"
+                                                      "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
+                                                      "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
+                                                      "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackWithMoreScreens(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -532,12 +547,12 @@ class drawInstructionsTest(unittest.TestCase):
 
         self.assertEqual(drawing_list[0].text,
                          "Dummy string for the first screen")
-        self.assertEqual(drawing_list[1].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod általában: 96.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n"
-                                               "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
-                                               "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
-                                               "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[1].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod általában: 96.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n"
+                                                      "Pontosságod a bejósolható elemeknél: 90.123 %\r\n"
+                                                      "Átlagos reakcióidőd a bejósolható elemeknél: 410.2 másodperc\r\n\r\n"
+                                                      "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
     def testShowImplicitFeedbackWithMoreScreens(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -569,10 +584,10 @@ class drawInstructionsTest(unittest.TestCase):
 
         self.assertEqual(drawing_list[0].text,
                          "Dummy string for the first screen")
-        self.assertEqual(drawing_list[1].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                               "Pontosságod: 96.123 %\r\n"
-                                               "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
-                                               "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[1].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                      "Pontosságod: 96.123 %\r\n"
+                                                      "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
+                                                      "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
 
 if __name__ == "__main__":

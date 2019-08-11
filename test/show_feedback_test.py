@@ -26,6 +26,7 @@ import unittest
 from psychopy import monitors, visual, core, logging
 import asrt
 import psychopy_visual_mock as pvm
+import platform
 
 
 # ignore warnings comming from psychopy
@@ -34,11 +35,24 @@ logging.console.setLevel(logging.ERROR)
 
 class showFeedbackTest(unittest.TestCase):
 
+    def assertEqualWithEOL(self, string1, string2):
+        if platform.system() == "Windows":
+            self.assertEqual(string1, string2)
+        else:
+            string1 = string1.replace("\r", "")
+            string2 = string2.replace("\r", "")
+            self.assertEqual(string1, string2)
+
     def initWindow(self):
         my_monitor = monitors.Monitor('myMon')
         my_monitor.setSizePix([1366, 768])
         my_monitor.setWidth(29)
         my_monitor.saveMon()
+
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
 
         return visual.Window(size=[1366, 768],
                              pos=[0, 0],
@@ -46,7 +60,7 @@ class showFeedbackTest(unittest.TestCase):
                              fullscr=False,
                              allowGUI=True,
                              monitor=my_monitor,
-                             winType='pyglet',
+                             winType=win_type,
                              color='White')
 
     def constructFilePath(self, file_name):
@@ -94,9 +108,9 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 1)
 
-            self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                   "Pontosságod: 93,40 %\r\n"
-                                                   "Átlagos reakcióidőd: 0,432 másodperc\r\n\r\n\r\n")
+            self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                          "Pontosságod: 93,40 %\r\n"
+                                                          "Átlagos reakcióidőd: 0,432 másodperc\r\n\r\n\r\n")
 
     def testShowExplicitFeedback(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -136,11 +150,11 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 1)
 
-            self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                   "Pontosságod általában: 93,40 %\r\n"
-                                                   "Átlagos reakcióidőd: 0,432 másodperc\r\n"
-                                                   "Pontosságod a bejósolható elemeknél: 97,56 %\r\n"
-                                                   "Átlagos reakcióidőd a bejósolható elemeknél: 0,412 másodperc\r\n\r\n\r\n")
+            self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                          "Pontosságod általában: 93,40 %\r\n"
+                                                          "Átlagos reakcióidőd: 0,432 másodperc\r\n"
+                                                          "Pontosságod a bejósolható elemeknél: 97,56 %\r\n"
+                                                          "Átlagos reakcióidőd a bejósolható elemeknél: 0,412 másodperc\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -181,11 +195,11 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 1)
 
-            self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                   "Pontosságod általában: 93,40 %\r\n"
-                                                   "Átlagos reakcióidőd: 0,432 másodperc\r\n"
-                                                   "Pontosságod a bejósolható elemeknél: 97,56 %\r\n"
-                                                   "Átlagos reakcióidőd a bejósolható elemeknél: 0,412 másodperc\r\n\r\n\r\n")
+            self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                          "Pontosságod általában: 93,40 %\r\n"
+                                                          "Átlagos reakcióidőd: 0,432 másodperc\r\n"
+                                                          "Pontosságod a bejósolható elemeknél: 97,56 %\r\n"
+                                                          "Átlagos reakcióidőd a bejósolható elemeknél: 0,412 másodperc\r\n\r\n\r\n")
 
     def testShowImplicitFeedbackWithNoASRT(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -224,9 +238,9 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 1)
 
-            self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                   "Pontosságod: 91,39 %\r\n"
-                                                   "Átlagos reakcióidőd: 0,345 másodperc\r\n\r\n\r\n")
+            self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                          "Pontosságod: 91,39 %\r\n"
+                                                          "Átlagos reakcióidőd: 0,345 másodperc\r\n\r\n\r\n")
 
     def testShowExplicitFeedbackPracticeOnly(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -265,11 +279,11 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 1)
 
-            self.assertEqual(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                                   "Pontosságod általában: 90,90 %\r\n"
-                                                   "Átlagos reakcióidőd: 0,374 másodperc\r\n"
-                                                   "Pontosságod a bejósolható elemeknél: N/A %\r\n"
-                                                   "Átlagos reakcióidőd a bejósolható elemeknél: N/A másodperc\r\n\r\n\r\n")
+            self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                          "Pontosságod általában: 90,90 %\r\n"
+                                                          "Átlagos reakcióidőd: 0,374 másodperc\r\n"
+                                                          "Pontosságod a bejósolható elemeknél: N/A %\r\n"
+                                                          "Átlagos reakcióidőd a bejósolható elemeknél: N/A másodperc\r\n\r\n\r\n")
 
 
 if __name__ == "__main__":

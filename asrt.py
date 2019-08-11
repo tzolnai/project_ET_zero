@@ -25,6 +25,7 @@ import codecs
 import os
 import time
 import pyglet
+import platform
 
 import numbers
 
@@ -1220,7 +1221,11 @@ class Experiment:
 
         # Init window
         my_monitor = self.monitor_settings()
-        with visual.Window(size=my_monitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as self.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as self.mywindow:
             # Check frame rate
             self.frame_check()
 

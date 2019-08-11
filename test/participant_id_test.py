@@ -107,10 +107,10 @@ class participantIDTest(unittest.TestCase):
             thispath, "logs", experiment.person_data.subject_id + "_log.txt"))
 
         # Some files were created
-        self.assertTrue(os.path.isfile(
-            experiment.person_data.all_settings_file_path + ".dat"))
-        self.assertTrue(os.path.isfile(
-            experiment.person_data.all_IDs_file_path + ".dat"))
+        self.assertTrue(os.path.isfile(experiment.person_data.all_settings_file_path + ".dat") or
+                        os.path.isfile(experiment.person_data.all_settings_file_path))
+        self.assertTrue(os.path.isfile(experiment.person_data.all_IDs_file_path + ".dat") or
+                        os.path.isfile(experiment.person_data.all_IDs_file_path))
         self.assertTrue(os.path.isfile(
             experiment.person_data.subject_list_file_path))
 

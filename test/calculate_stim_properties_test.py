@@ -622,10 +622,10 @@ class calculateStimpropertiesTest(unittest.TestCase):
                     oount_4 += 1
 
         # there are some variance in the number, becuase some pattern trials are cut down at the end of the blocks
-        self.assertAlmostEqual(count_1, 237, delta=5)
-        self.assertAlmostEqual(count_2, 237, delta=5)
-        self.assertAlmostEqual(count_3, 237, delta=5)
-        self.assertAlmostEqual(oount_4, 237, delta=5)
+        self.assertAlmostEqual(count_1, 237, delta=20)
+        self.assertAlmostEqual(count_2, 237, delta=20)
+        self.assertAlmostEqual(count_3, 237, delta=20)
+        self.assertAlmostEqual(oount_4, 237, delta=20)
 
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (

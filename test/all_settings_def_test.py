@@ -161,7 +161,7 @@ class allSettingsDefTest(unittest.TestCase):
                                                                   2381, 2466, 2551, 2636, 2721, 2806, 2891, 2976, 3061, 3146, 3231, 3316, 3401,
                                                                   3486, 3571, 3656, 3741, 3826, 3911, 3996, 4081, 4166, 4251, 4336])
         # output file exists
-        self.assertTrue(os.path.exists(output_file + ".dat"))
+        self.assertTrue(os.path.exists(output_file + ".dat") or os.path.exists(output_file))
         self.assertTrue(os.path.exists(output_file + "_reminder.txt"))
 
         # reload saved data
@@ -243,7 +243,7 @@ class allSettingsDefTest(unittest.TestCase):
                                                                   5696, 5781, 5866, 5951, 6036, 6121, 6206, 6291, 6376, 6461, 6546, 6631, 6716,
                                                                   6801, 6886, 6971, 7056, 7141, 7226])
         # output file exists
-        self.assertTrue(os.path.exists(output_file + ".dat"))
+        self.assertTrue(os.path.exists(output_file + ".dat") or os.path.exists(output_file))
         self.assertTrue(os.path.exists(output_file + "_reminder.txt"))
 
         # reload saved data

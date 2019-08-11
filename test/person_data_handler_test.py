@@ -208,7 +208,8 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.update_subject_IDs_files()
 
         # output files exist
-        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat"))
+        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
+                        or os.path.exists(all_IDs_file_path))
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_IDs_file:
@@ -231,7 +232,8 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.update_subject_IDs_files()
 
         # output files exist
-        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat"))
+        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
+                        or os.path.exists(all_IDs_file_path))
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_IDs_file:
@@ -263,7 +265,8 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.update_subject_IDs_files()
 
         # output files exist
-        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat"))
+        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
+                        or os.path.exists(all_IDs_file_path))
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_IDs_file:
@@ -286,7 +289,8 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.update_subject_IDs_files()
 
         # output files exist
-        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat"))
+        self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
+                        or os.path.exists(all_IDs_file_path))
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_IDs_file:

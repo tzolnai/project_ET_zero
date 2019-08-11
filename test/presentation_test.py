@@ -28,6 +28,7 @@ import shutil
 import psychopy_visual_mock as pvm
 import psychopy_gui_mock as pgm
 from psychopy import visual, logging
+import platform
 
 
 # ignore warnings comming from psychopy
@@ -53,6 +54,14 @@ class presentationTest(unittest.TestCase):
 
     def tearDown(self):
         self.clearDir(self.work_dir)
+
+    def assertEqualWithEOL(self, string1, string2):
+        if platform.system() == "Windows":
+            self.assertEqual(string1, string2)
+        else:
+            string1 = string1.replace("\r", "")
+            string2 = string2.replace("\r", "")
+            self.assertEqual(string1, string2)
 
     def copyFilesToWorkdir(self):
         this_path = self.current_dir
@@ -107,7 +116,11 @@ class presentationTest(unittest.TestCase):
         my_monitor = experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -148,24 +161,24 @@ class presentationTest(unittest.TestCase):
             # first we have some instructions
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                    "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                                    "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                                                    "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                                                    "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                                                    "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                                           "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                                           "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                                           "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                                           "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[2]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                                                    "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                                                    "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                                           "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                                           "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             # then we have 11 trials
             for j in range(3, 102, 9):
@@ -201,10 +214,10 @@ class presentationTest(unittest.TestCase):
             # feedback screen
             feedback = drawing_list[103]
             self.assertTrue(isinstance(feedback, pvm.TextStim))
-            self.assertEqual(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                            "Pontosságod: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd: 0,0 másodperc\r\n\r\n"
-                                            "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+            self.assertEqualWithEOL(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                   "Pontosságod: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd: 0,0 másodperc\r\n\r\n"
+                                                   "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
                 thispath, "settings", "toth-bela_10__log.txt"))
@@ -242,7 +255,11 @@ class presentationTest(unittest.TestCase):
         my_monitor = experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -283,24 +300,24 @@ class presentationTest(unittest.TestCase):
             # first we have some instructions
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                    "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                                    "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                                                    "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                                                    "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                                                    "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                                           "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                                           "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                                           "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                                           "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[2]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                                                    "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                                                    "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                                           "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                                           "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             # then we have 11 trials
             for j in range(3, 102, 9):
@@ -340,12 +357,12 @@ class presentationTest(unittest.TestCase):
             # feedback screen
             feedback = drawing_list[103]
             self.assertTrue(isinstance(feedback, pvm.TextStim))
-            self.assertEqual(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                            "Pontosságod általában: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd: 0,0 másodperc\r\n"
-                                            "Pontosságod a bejósolható elemeknél: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
-                                            "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+            self.assertEqualWithEOL(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                   "Pontosságod általában: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd: 0,0 másodperc\r\n"
+                                                   "Pontosságod a bejósolható elemeknél: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
+                                                   "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
                 thispath, "settings", "toth-bela_10__log.txt"))
@@ -383,7 +400,11 @@ class presentationTest(unittest.TestCase):
         my_monitor = experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -426,24 +447,24 @@ class presentationTest(unittest.TestCase):
             # first we have some instructions
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                    "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                                    "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                                                    "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                                                    "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                                                    "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                                           "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                                           "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                                           "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                                           "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[2]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                                                    "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                                                    "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                                           "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                                           "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             # then we have 11 trials
             for j in range(3, 48, 9):
@@ -516,7 +537,11 @@ class presentationTest(unittest.TestCase):
         my_monitor = experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -558,24 +583,24 @@ class presentationTest(unittest.TestCase):
             # first we have some instructions
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                    "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                                    "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                                                    "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                                                    "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                                                    "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                                           "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                                           "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                                           "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                                           "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[2]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                                                    "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                                                    "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                                           "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                                           "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             # then we have 9 trials
             for j in range(3, 93, 9):
@@ -630,11 +655,11 @@ class presentationTest(unittest.TestCase):
             # feedback screen
             feedback = drawing_list[108]
             self.assertTrue(isinstance(feedback, pvm.TextStim))
-            self.assertEqual(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                            "Pontosságod általában: 91,66 %\r\n"
-                                            "Átlagos reakcióidőd: 0,0 másodperc\r\n"
-                                            "Pontosságod a bejósolható elemeknél: 75,0 %\r\n"
-                                            "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n\r\n")
+            self.assertEqualWithEOL(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                   "Pontosságod általában: 91,66 %\r\n"
+                                                   "Átlagos reakcióidőd: 0,0 másodperc\r\n"
+                                                   "Pontosságod a bejósolható elemeknél: 75,0 %\r\n"
+                                                   "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
                 thispath, "settings", "toth-bela_10__log.txt"))
@@ -687,7 +712,11 @@ class presentationTest(unittest.TestCase):
         my_monitor = experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -728,7 +757,7 @@ class presentationTest(unittest.TestCase):
             # first we have one instruction screen about the continuation
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(
+            self.assertEqualWithEOL(
                 instruction_text.text, "\r\n\r\nVáratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.")
 
             # then we have 11 trials
@@ -769,12 +798,12 @@ class presentationTest(unittest.TestCase):
             # feedback screen
             feedback = drawing_list[29]
             self.assertTrue(isinstance(feedback, pvm.TextStim))
-            self.assertEqual(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                            "Pontosságod általában: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd: 0,0 másodperc\r\n"
-                                            "Pontosságod a bejósolható elemeknél: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
-                                            "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+            self.assertEqualWithEOL(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                   "Pontosságod általában: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd: 0,0 másodperc\r\n"
+                                                   "Pontosságod a bejósolható elemeknél: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
+                                                   "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
                 thispath, "settings", "toth-bela_10__log.txt"))
@@ -813,7 +842,11 @@ class presentationTest(unittest.TestCase):
         my_monitor = experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm") as experiment.mywindow:
+        if platform.system() == "Linux":
+            win_type = 'pygame'
+        else:
+            win_type = 'pyglet'
+        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -856,24 +889,24 @@ class presentationTest(unittest.TestCase):
             # first we have some instructions
             instruction_text = drawing_list[0]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
-                             "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
-                             "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
-                             "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                    "A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.\r\n\r\n"
+                                    "Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[1]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
-                                                    "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
-                                                    "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
-                                                    "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
-                                                    "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                                           "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                                           "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                                           "Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                                           "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             instruction_text = drawing_list[2]
             self.assertTrue(isinstance(instruction_text, pvm.TextStim))
-            self.assertEqual(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
-                                                    "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
-                                                    "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+            self.assertEqualWithEOL(instruction_text.text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                                           "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                                           "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
             # then we have 11 trials
             for j in range(3, 102, 9):
@@ -913,12 +946,12 @@ class presentationTest(unittest.TestCase):
             # feedback screen
             feedback = drawing_list[103]
             self.assertTrue(isinstance(feedback, pvm.TextStim))
-            self.assertEqual(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
-                                            "Pontosságod általában: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd: 0,0 másodperc\r\n"
-                                            "Pontosságod a bejósolható elemeknél: 100,0 %\r\n"
-                                            "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
-                                            "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+            self.assertEqualWithEOL(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
+                                                   "Pontosságod általában: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd: 0,0 másodperc\r\n"
+                                                   "Pontosságod a bejósolható elemeknél: 100,0 %\r\n"
+                                                   "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n"
+                                                   "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
             # quit screen
             quit = drawing_list[104]
             self.assertTrue(isinstance(quit, pvm.TextStim))
