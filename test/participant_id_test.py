@@ -74,7 +74,7 @@ class participantIDTest(unittest.TestCase):
 
         experiment.participant_id()
 
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
         self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.subject_name, "toth-bela")
         self.assertEqual(experiment.PCodes, {1: '3rd - 1324', 2: '2nd - 1243'})
@@ -154,7 +154,7 @@ class participantIDTest(unittest.TestCase):
         # now load back the participant's settings with participant id function
         experiment.participant_id()
 
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
         self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.subject_name, "toth-bela")
         self.assertEqual(experiment.PCodes, {1: '3rd - 1324', 2: '2nd - 1243'})

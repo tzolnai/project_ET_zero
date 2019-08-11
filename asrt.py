@@ -633,7 +633,7 @@ class PersonDataHandler:
         """ Write out the ouptut date of the current trial into the output text file."""
 
         output_data = [experiment.settings.computer_name,
-                       experiment.group,
+                       experiment.subject_group,
                        experiment.subject_name,
                        experiment.subject_number,
                        asrt_type,
@@ -674,7 +674,7 @@ class PersonDataHandler:
         """Add the first line to the ouput with the names of the different variables."""
 
         heading_list = ['computer_name',
-                        'Group',
+                        'subject_group',
                         'subject_name',
                         'subject_number',
                         'asrt_type',
@@ -707,36 +707,62 @@ class PersonDataHandler:
 
 
 class Experiment:
+    """ Class for running the ASRT experiment."""
 
-    def __init__(self, thispath):
-        self.thispath = thispath
+    def __init__(self, workdir_path):
+        # working directory of the experiment, the script reads settings and writer output under this directory
+        self.workdir_path = workdir_path
 
-        self.colors = None
+        # all experiment settings globally used for all subjects
         self.settings = None
+        # instruction strings used to display messages during the experiment
         self.instructions = None
-        self.pressed_dict = None
-        self.dict_pos = None
-
-        self.mywindow = None
-        self.frame_time = None
-        self.frame_sd = None
-        self.frame_rate = None
-
-        self.group = None
-        self.subject_number = None
-        self.subject_name = None
-
+        # handler object for loadin and saving subject settings and output
         self.person_data = None
 
+        # a predefined list of colors used for stimulus presentation (e.g. stimuli color, window color)
+        self.colors = None
+        # pressed button -> stimulus number maping (e.g. {'z': 1, 'c' : 2, 'b' : 3, 'm' : 4}
+        self.pressed_dict = None
+        # positions of the four stimulus circle
+        self.dict_pos = None
+
+        # visual.Window object for displaying experiment
+        self.mywindow = None
+        # avarage time of displaying one frame on the screen in ms (e.g. 15.93 for 50 Hz)
+        self.frame_time = None
+        # standard deviation of displaying one frame on the screen in ms (e.g. 0.02)
+        self.frame_sd = None
+        # measured frame rate in Hz (e.g. 59.45)
+        self.frame_rate = None
+
+        # group of the current subject
+        self.subject_group = None
+        # serial number of the current subject
+        self.subject_number = None
+        # name of the current subject
+        self.subject_name = None
+
+        # a dictionary of pcodes for the different sessions (e.g. {1 : '1st - 1234', 2 : '5th - 1423'})
+        # pcode means pattern code, which defines the order of the pattern series, expected to be learnt by the subject
         self.PCodes = None
+        # serial number of the next line in the output file (e.g. 10)
         self.stim_output_line = None
+        # global trial number -> session number mapping (e.g. {1 : 1, 2 : 1, 3 : 2, 4 : 2} - two sessions with two trials in each)
         self.stim_sessionN = None
+        # global trial number -> epoch number mapping (e.g. {1 : 1, 2 : 2, 3 : 2, 4 : 2} - two epochs with two trials in each)
         self.stimepoch = None
+        # global trial number -> block number mapping (e.g. {1 : 1, 2 : 2, 3 : 2, 4 : 2} - two blocks with two trials in each)
         self.stimblock = None
+        # global trial number -> trial number inside the block mapping (e.g. {1 : 1, 2 : 2, 3 : 1, 4 : 2} - two blocks with two trials in each)
         self.stimtrial = None
+        # global trial number -> stimulus number mapping (e.g. {1 : 1, 2 : 2, 3 : 2, 4 : 4})
         self.stimlist = None
+        # number of the last trial (it is 0 in the beggining and it is always equal with the last displayed stimulus's serial number
         self.last_N = None
+        # global trial number -> first trial of the next session mapping (e. g.{1 : 3, 2 : 3, 3 : 5, 4 : 5} - two sessions with two trials in each)
         self.end_at = None
+        # global trial number -> pattern or random stimulus mapping (e. g.{1 : 'P', 2 : 'R', 3 : 'P', 4 : 'R'} - two sessions with two trials in each)
         self.stimpr = None
 
     def all_settings_def(self):
@@ -750,7 +776,7 @@ class Experiment:
             # get the number of groups and number of sessions
             numgroups = self.settings.show_basic_settings_dialog()
 
-            # get the group names from the user
+            # get the group names
             self.settings.show_group_settings_dialog(numgroups)
 
             # get epoch and block settings (block number, trial number, epoch number, etc)
@@ -762,7 +788,7 @@ class Experiment:
             # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
             self.settings.show_key_and_feedback_settings_dialog()
 
-            # save the settings sepcifed by the user in the different dialogs
+            # save the settings
             self.settings.write_to_file()
 
             # write out a text file with the experiment settings data, so the user can check settings in a human readable form
@@ -791,9 +817,9 @@ class Experiment:
 
                 subject_number = returned_data[1]
                 if len(self.settings.groups) > 1:
-                    self.group = returned_data[2]
+                    self.subject_group = returned_data[2]
                 else:
-                    self.group = ""
+                    self.subject_group = ""
 
                 try:
                     subject_number = int(subject_number)
@@ -810,6 +836,10 @@ class Experiment:
                 core.quit()
 
     def show_subject_continuation_dialog(self):
+        """Dialog shown after restart of the experiment for a subject.
+           Displays the state of the experiment for the given subject.
+        """
+
         if self.last_N + 1 <= self.settings.get_maxtrial():
             expstart11 = gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
@@ -829,6 +859,8 @@ class Experiment:
             core.quit()
 
     def show_subject_PCodes_dialog(self):
+        """Select pattern sequences for the different sessions for the current subject."""
+
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText('')
         for z in range(self.settings.numsessions):
@@ -850,6 +882,8 @@ class Experiment:
             core.quit()
 
     def which_code(self, session_number):
+        """Convert sessions pattern code to a raw code containing only the series of stimulus numbers."""
+
         pcode_raw = self.PCodes[session_number]
         PCode = 'noPattern'
 
@@ -868,6 +902,8 @@ class Experiment:
         return PCode
 
     def calculate_stim_properties(self):
+        """Calculate all variables used during the trials before the presentation starts."""
+
         all_trial_Nr = 0
         block_num = 0
 
@@ -921,8 +957,7 @@ class Experiment:
 
                     if current_trial_num % 2 == mod_pattern and asrt_type != "noASRT":
                         if all_trial_Nr > 2:
-                            current_stim = int(
-                                dict_HL[str(self.stimlist[all_trial_Nr - 2])])
+                            current_stim = int(dict_HL[str(self.stimlist[all_trial_Nr - 2])])
                         else:
                             # first pattern stim is random
                             current_stim = random.choice([1, 2, 3, 4])
@@ -937,49 +972,63 @@ class Experiment:
                     self.stimepoch[all_trial_Nr] = epoch
 
     def participant_id(self):
+        """Find out the current subject and read subject settings / progress if he/she already has any data."""
+
         self.show_subject_settings_dialog()
 
-        subject_id = self.subject_name + '_' + str(self.subject_number) + '_' + self.group
-        all_settings_file_path = os.path.join(self.thispath, "settings", subject_id)
-        all_IDs_file_path = os.path.join(self.thispath, "settings", "participant_settings")
-        subject_list_file_path = os.path.join(
-            self.thispath, "settings", "participants_in_experiment.txt")
-        output_file_path = os.path.join(self.thispath, "logs", subject_id + '_log.txt')
-        self.person_data = PersonDataHandler(
-            subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path)
+        # unique subject ID
+        subject_id = self.subject_name + '_' + str(self.subject_number) + '_' + self.subject_group
 
+        # init subject data handler with the rigth file paths
+        all_settings_file_path = os.path.join(self.workdir_path, "settings", subject_id)
+        all_IDs_file_path = os.path.join(self.workdir_path, "settings", "participant_settings")
+        subject_list_file_path = os.path.join(self.workdir_path, "settings",
+                                              "participants_in_experiment.txt")
+        output_file_path = os.path.join(self.workdir_path, "logs", subject_id + '_log.txt')
+        self.person_data = PersonDataHandler(subject_id, all_settings_file_path,
+                                             all_IDs_file_path, subject_list_file_path, output_file_path)
+
+        # update ID file containing all participating subject's ID
         self.person_data.update_subject_IDs_files()
 
+        # try to load settings and progress for the given subject ID
         self.person_data.load_person_settings(self)
 
         if self.last_N > 0:
+            # the current subject already started the experiment
             self.show_subject_continuation_dialog()
-
+        # we have a new subject
         else:
+            # ask about the pattern codes used in the different sessions
             self.show_subject_PCodes_dialog()
-
+            # calculate stimulus properties for the experiment
             self.calculate_stim_properties()
-
+            # save data of the new subject
             self.person_data.save_person_settings(self)
 
     def monitor_settings(self):
-        screen = pyglet.window.get_platform().get_default_display().get_default_screen()
+        """Specify monitor settings."""
 
-        # Monitor beállítása
+        # use default screen resolution
+        screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         my_monitor = monitors.Monitor('myMon')
         my_monitor.setSizePix([screen.width, screen.height])
-        my_monitor.setWidth(self.settings.monitor_width)  # cm-ben
+        # need to set monitor width in cm to be able to use cm unit for stimulus
+        my_monitor.setWidth(self.settings.monitor_width)
         my_monitor.saveMon()
 
         return my_monitor
 
     def print_to_screen(self, mytext):
+        """Display any string on the screen."""
+
         xtext = visual.TextStim(self.mywindow, text=mytext, units="cm", height=0.6, color="black")
         xtext.draw()
         self.mywindow.flip()
 
     def frame_check(self):
-        # monitorral kapcsolatos informáciok
+        """Measure the frame rate, using different measurements."""
+
         self.print_to_screen(
             u'Adatok előkészítése folyamatban.\n\nEz eltarthat pár másodpercig.\n\nAddig semmit sem fogsz látni a képernyőn...')
         core.wait(2)
@@ -990,11 +1039,14 @@ class Experiment:
         self.frame_rate = self.mywindow.getActualFrameRate()
 
     def stim_bg(self, stimbg):
+        """Draw empty stimulus circles."""
+
         for i in range(1, 5):
             stimbg.pos = self.dict_pos[i]
             stimbg.draw()
 
     def show_feedback(self, N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list):
+        """ Display feedback in the end of the blocks, showing some data about speed and accuracy."""
 
         acc_for_the_whole = 100 * float(Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
         acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.', ',')
@@ -1026,8 +1078,9 @@ class Experiment:
         return whatnow
 
     def presentation(self):
+        """The real experiment happens here. This method displays the stimulus window and records the reactions."""
 
-        # Init presented objects
+        # init presented objects
         stimP = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
                               fillColor=self.colors['stimp'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
         stimR = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
@@ -1038,7 +1091,7 @@ class Experiment:
         stim_RSI = 0.0
         N = self.last_N + 1
 
-        # Show instructions or continuation message
+        # show instructions or continuation message
         if N in self.settings.get_session_starts():
             self.instructions.show_instructions(self.mywindow, self.settings)
 
@@ -1064,10 +1117,11 @@ class Experiment:
         first_trial_in_block = True
 
         while True:
-
+            # four empty circles where the actual stimulus can be placed
             self.stim_bg(stimbg)
             self.mywindow.flip()
 
+            # set the actual stimulus' position and fill color
             if self.stimpr[N] == 'P':
                 if self.settings.asrt_types[self.stim_sessionN[N]] == 'explicit':
                     stimP.fillColor = self.colors['stimp']
@@ -1079,6 +1133,7 @@ class Experiment:
                 stimcolor = self.colors['stimr']
                 stimR.setPos(self.dict_pos[self.stimlist[N]])
 
+            # wait before the next stimulus to have the set RSI
             if not first_trial_in_block:
                 RSI.complete()
 
@@ -1088,12 +1143,14 @@ class Experiment:
                 cycle += 1
                 self.stim_bg(stimbg)
 
+                # display the actual stimulus
                 if self.stimpr[N] == 'P':
                     stimP.draw()
                 else:
                     stimR.draw()
                 self.mywindow.flip()
 
+                # we measure the actual RSI
                 if cycle == 1:
                     if first_trial_in_block:
                         stim_RSI = 0.0
@@ -1104,6 +1161,7 @@ class Experiment:
                 press = event.waitKeys(keyList=self.settings.get_key_list(),
                                        timeStamped=trial_clock)
 
+                # start of the RSI timer
                 RSI_clock.reset()
                 RSI.start(self.settings.RSI_time)
 
@@ -1119,6 +1177,7 @@ class Experiment:
 
                 stimbutton = press[0][0]
 
+                # quit during the experiment
                 if press[0][0] == self.settings.key_quit:
                     self.print_to_screen("Kilépés...\nAdatok mentése...")
 
@@ -1132,6 +1191,7 @@ class Experiment:
                     self.person_data.save_person_settings(self)
                     core.quit()
 
+                # right button was pushed
                 elif self.pressed_dict[press[0][0]] == self.stimlist[N]:
                     stimACC = 0
                     accs_in_block.append(0)
@@ -1141,6 +1201,7 @@ class Experiment:
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
 
+                # wrong button was pushed -> let's wait for the next key input
                 else:
                     stimACC = 1
                     accs_in_block.append(1)
@@ -1151,6 +1212,7 @@ class Experiment:
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
 
+                # save data of the last trial
                 self.person_data.write_data_to_output(
                     self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
@@ -1160,7 +1222,8 @@ class Experiment:
                     first_trial_in_block = False
                     break
 
-            if N in self.settings.get_block_starts():  # n+1 volt
+            # end of the block (show feedback and reinit variables for the next block)
+            if N in self.settings.get_block_starts():
 
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
 
@@ -1188,19 +1251,21 @@ class Experiment:
 
                 first_trial_in_block = True
 
+            # end of the sessions (one run of the experiment script stops at the end of the current session)
             if N == self.end_at[N - 1]:
                 break
 
     def run(self):
-        ensure_dir(os.path.join(self.thispath, "logs"))
-        ensure_dir(os.path.join(self.thispath, "settings"))
+        ensure_dir(os.path.join(self.workdir_path, "logs"))
+        ensure_dir(os.path.join(self.workdir_path, "settings"))
 
-        # Load settings if exist or ask the user to specify them
-        all_settings_file_path = os.path.join(self.thispath, "settings", "settings")
-        reminder_file_path = os.path.join(self.thispath, "settings", "settings_reminder.txt")
+        # load experiment settings if exist or ask the user to specify them
+        all_settings_file_path = os.path.join(self.workdir_path, "settings", "settings")
+        reminder_file_path = os.path.join(self.workdir_path, "settings", "settings_reminder.txt")
         self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
         self.all_settings_def()
 
+        # specify predefined dictionaries
         self.colors = {'wincolor': self.settings.asrt_background, 'linecolor': 'black',
                        'stimp': self.settings.asrt_pcolor, 'stimr': self.settings.asrt_rcolor}
 
@@ -1212,31 +1277,32 @@ class Experiment:
                          3: (float(self.settings.asrt_distance) * 0.5, 0),
                          4: (float(self.settings.asrt_distance) * 1.5, 0)}
 
-        # Read instruction strings
-        inst_feedback_path = os.path.join(self.thispath, "inst_and_feedback.txt")
+        # read instruction strings
+        inst_feedback_path = os.path.join(self.workdir_path, "inst_and_feedback.txt")
         self.instructions = InstructionHelper(inst_feedback_path)
         self.instructions.read_insts_from_file()
 
+        # find out the current subject
         self.participant_id()
 
-        # Init window
+        # init window
         my_monitor = self.monitor_settings()
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
         with visual.Window(size=my_monitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as self.mywindow:
-            # Check frame rate
+            # check frame rate
             self.frame_check()
 
-            # Show the experiment screen
+            # show experiment screen
             self.presentation()
 
-            # Save user data
+            # save user data
             self.person_data.save_person_settings(self)
             self.person_data.append_to_output_file('sessionend_planned_quit')
 
-            # Show ending screen
+            # show ending screen
             self.instructions.show_ending(self.mywindow, self.settings)
 
 

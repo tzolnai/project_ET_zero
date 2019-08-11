@@ -39,7 +39,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "alattomos-aladar")
         self.assertEqual(experiment.subject_number, 0)
-        self.assertEqual(experiment.group, '')
+        self.assertEqual(experiment.subject_group, '')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -76,7 +76,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "toth-bela")
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
 
     def testAccentCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -89,7 +89,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "aaeeiioooouuuuaaeeiioooouuuu")
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
 
     def testSpecialCharacters(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -102,7 +102,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
 
     def testInvalidSubjectNumber(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -115,7 +115,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "toth-csaba")
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
         list_of_texts = gui_mock.getListOfTexts()
@@ -136,7 +136,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "toth-csaba")
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.group, 'kontrol')
+        self.assertEqual(experiment.subject_group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
         list_of_texts = gui_mock.getListOfTexts()
@@ -156,7 +156,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_name, "alattomos-aladar")
         self.assertEqual(experiment.subject_number, 0)
-        self.assertEqual(experiment.group, '')
+        self.assertEqual(experiment.subject_group, '')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)

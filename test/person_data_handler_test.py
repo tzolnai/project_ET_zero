@@ -310,7 +310,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.append_to_output_file("something")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tGroup\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\tsomething")
 
@@ -325,7 +325,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.append_to_output_file("\nsomething3")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tGroup\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
@@ -339,7 +339,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.computer_name = "Laposka"
-        experiment.group = "group1"
+        experiment.subject_group = "group1"
         experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         asrt_type = "implicit"
@@ -367,7 +367,7 @@ class personDataHandlerTest(unittest.TestCase):
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tGroup\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
@@ -386,7 +386,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.computer_name = "Laposka"
-        experiment.group = "group1"
+        experiment.subject_group = "group1"
         experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         asrt_type = "implicit"
@@ -429,19 +429,19 @@ class personDataHandlerTest(unittest.TestCase):
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tGroup\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
-                             str(stim_RT_time) + "\t" +
-                             str(stim_RT_date) + "\t"
-                             "Orange\tP\t321,2345\t0\t1\tz\t\n"
+                                                 str(stim_RT_time) + "\t" +
+                                                 str(stim_RT_date) + "\t"
+                                                 "Orange\tP\t321,2345\t0\t1\tz\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t13\t1\t2\t"
                                                  "12\t22\t0,111\t59,1\t16,56\t1,3\t" +
-                             str(stim_RT_time) + "\t" +
-                             str(stim_RT_date) + "\t"
-                             "Green\tR\t523,2345\t1\t2\tb\t")
+                                                 str(stim_RT_time) + "\t" +
+                                                 str(stim_RT_date) + "\t"
+                                                 "Green\tR\t523,2345\t1\t2\tb\t")
 
     def testPointInComputerNameOrDate(self):
         output_file_path = self.constructFilePath(
@@ -453,7 +453,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.computer_name = "I. Richárd"
-        experiment.group = "group1"
+        experiment.subject_group = "group1"
         experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         asrt_type = "implicit"
@@ -481,7 +481,7 @@ class personDataHandlerTest(unittest.TestCase):
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tGroup\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
                                                  "I. Richárd\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"

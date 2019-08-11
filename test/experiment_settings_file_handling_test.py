@@ -238,7 +238,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
 
         with codecs.open(output_file, 'r', encoding='utf-8') as reminder_file:
             self.assertEqual(reminder_file.read(),
-                             u'Beállítások \n' +
+                             u'Beállítások\n' +
                              '\n' +
                              'Monitor Width: ' + '\t' + str(exp_settings.monitor_width).replace('.', ',') + '\n' +
                              'Computer Name: ' + '\t' + exp_settings.computer_name + '\n' +
