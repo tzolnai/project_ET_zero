@@ -192,7 +192,7 @@ class ExperimentSettings:
         """Write out a short summary of the settings into a text file."""
 
         with codecs.open(self.reminder_file_path, 'w', encoding='utf-8') as reminder_file:
-            reminder_file.write(u'Beállítások \n' +
+            reminder_file.write(u'Beállítások\n' +
                                 '\n' +
                                 'Monitor Width: ' + '\t' + str(self.monitor_width).replace('.', ',') + '\n' +
                                 'Computer Name: ' + '\t' + self.computer_name + '\n' +
@@ -981,7 +981,7 @@ class Experiment:
     def frame_check(self):
         # monitorral kapcsolatos informáciok
         self.print_to_screen(
-            u'Adatok előkészítése folyamatban. \nEz eltarthat pár másodpercig. \nAddig semmit sem fogsz látni a képernyőn...')
+            u'Adatok előkészítése folyamatban.\n\nEz eltarthat pár másodpercig.\n\nAddig semmit sem fogsz látni a képernyőn...')
         core.wait(2)
 
         ms_per_frame = self.mywindow.getMsPerFrame(nFrames=120)

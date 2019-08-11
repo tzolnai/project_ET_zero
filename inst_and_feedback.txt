@@ -67,4 +67,6 @@ Vége a gyakorlásnak!
 
 unexpected quit#
 
-Váratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.
+Váratlan kilépés történt a feladatból. Folytatás...
+
+A feladat indításához nyomd meg valamelyik válaszbillentyűt.
