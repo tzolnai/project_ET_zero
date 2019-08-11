@@ -1,3 +1,5 @@
+# !/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 #    ASRT script in Psychopy
 #    Copyright (C) <2018>  <Emese Szegedi-Hallgató>
@@ -15,10 +17,6 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# !/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 
 from psychopy import visual, core, event, gui, monitors
 import shelve
