@@ -26,7 +26,7 @@ import os
 import time
 import pyglet
 import platform
-
+import tobii_research as tobii
 import numbers
 
 
@@ -52,6 +52,8 @@ class ExperimentSettings:
     """
 
     def __init__(self, settings_file_path, reminder_file_path):
+        # type of the experiment (reaction time or eyetracking
+        self.experiment_type = None
         # number of sessions (e.g. 10)
         self.numsessions = None
         # list of group names (e.g. ["kontrol", "kiserleti"])
@@ -123,6 +125,7 @@ class ExperimentSettings:
         """
         try:
             with shelve.open(self.settings_file_path, 'r') as settings_file:
+                self.experiment_type = settings_file['experiment_type']
                 self.numsessions = settings_file['numsessions']
                 self.groups = settings_file['groups']
 
@@ -143,14 +146,18 @@ class ExperimentSettings:
                 self.asrt_background = settings_file['asrt_background']
                 self.RSI_time = settings_file['RSI_time']
 
-                self.key1 = settings_file['key1']
-                self.key2 = settings_file['key2']
-                self.key3 = settings_file['key3']
-                self.key4 = settings_file['key4']
-                self.key_quit = settings_file['key_quit']
-                self.whether_warning = settings_file['whether_warning']
-                self.speed_warning = settings_file['speed_warning']
-                self.acc_warning = settings_file['acc_warning']
+                if self.experiment_type == 'reaction-time':
+                    self.key1 = settings_file['key1']
+                    self.key2 = settings_file['key2']
+                    self.key3 = settings_file['key3']
+                    self.key4 = settings_file['key4']
+                    self.key_quit = settings_file['key_quit']
+                    self.whether_warning = settings_file['whether_warning']
+                    self.speed_warning = settings_file['speed_warning']
+                    self.acc_warning = settings_file['acc_warning']
+                elif self.experiment_type == 'eye-tracking':
+                    self.whether_warning = False
+                    self.key_quit = 'q'
         except Exception as exception:
             self.__init__(self.settings_file_path, self.reminder_file_path)
             raise exception
@@ -159,6 +166,7 @@ class ExperimentSettings:
         """Create a new settings file and write all settings into it."""
 
         with shelve.open(self.settings_file_path, 'n') as settings_file:
+            settings_file['experiment_type'] = self.experiment_type
             settings_file['numsessions'] = self.numsessions
             settings_file['groups'] = self.groups
 
@@ -179,54 +187,60 @@ class ExperimentSettings:
             settings_file['asrt_background'] = self.asrt_background
             settings_file['RSI_time'] = self.RSI_time
 
-            settings_file['key1'] = self.key1
-            settings_file['key2'] = self.key2
-            settings_file['key3'] = self.key3
-            settings_file['key4'] = self.key4
-            settings_file['key_quit'] = self.key_quit
-            settings_file['whether_warning'] = self.whether_warning
-            settings_file['speed_warning'] = self.speed_warning
-            settings_file['acc_warning'] = self.acc_warning
+            if self.experiment_type == 'reaction-time':
+                settings_file['key1'] = self.key1
+                settings_file['key2'] = self.key2
+                settings_file['key3'] = self.key3
+                settings_file['key4'] = self.key4
+                settings_file['key_quit'] = self.key_quit
+                settings_file['whether_warning'] = self.whether_warning
+                settings_file['speed_warning'] = self.speed_warning
+                settings_file['acc_warning'] = self.acc_warning
 
     def write_out_reminder(self):
         """Write out a short summary of the settings into a text file."""
 
         with codecs.open(self.reminder_file_path, 'w', encoding='utf-8') as reminder_file:
-            reminder_file.write(u'Beállítások\n' +
-                                '\n' +
-                                'Monitor Width: ' + '\t' + str(self.monitor_width).replace('.', ',') + '\n' +
-                                'Computer Name: ' + '\t' + self.computer_name + '\n' +
-                                'Response keys: ' + '\t' + self.key1 + ', ' + self.key2 + ', ' + self.key3 + ', ' + self.key4 + '.' + '\n' +
+            reminder = str('Beállítások\n' +
+                           '\n' +
+                           'Monitor Width: ' + '\t' + str(self.monitor_width).replace('.', ',') + '\n' +
+                           'Computer Name: ' + '\t' + self.computer_name + '\n' +
+                           'Experiment type:' + '\t' + self.experiment_type + '\n')
+            if self.experiment_type == 'reaction-time':
+                reminder += str('Response keys: ' + '\t' + self.key1 + ', ' + self.key2 + ', ' + self.key3 + ', ' + self.key4 + '.' + '\n' +
                                 'Quit key: ' + '\t' + self.key_quit + '\n' +
                                 'Warning (speed, accuracy): ' + '\t' + str(self.whether_warning) + '\n' +
                                 'Speed warning at:' + '\t' + str(self.speed_warning) + '\n' +
-                                'Acc warning at:' + '\t' + str(self.acc_warning) + '\n' +
-                                'Groups:' + '\t' + str(self.groups)[1:-1].replace("u'", '').replace("'", '') + '\n' +
-                                'Sessions:' + '\t' + str(self.numsessions) + '\n' +
-                                'Epochs in sessions:' + '\t' + str(self.epochs)[1:-1].replace("u'", '').replace("'", '') + '\n' +
-                                'Blocks in epochs:' + '\t' + str(self.block_in_epochN) + '\n' +
-                                'Preparatory Trials\\Block:' + '\t' + str(self.blockprepN) + '\n' +
-                                'Trials\\Block:' + '\t' + str(self.blocklengthN) + '\n' +
-                                'RSI:' + '\t' + str(self.RSI_time).replace('.', ',') + '\n' +
-                                'Asrt stim distance:' + '\t' + str(self.asrt_distance) + '\n' +
-                                'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n' +
-                                'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
-                                'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
-                                'Background color:' + '\t' + self.asrt_background + '\n' +
-                                '\n' +
-                                'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
+                                'Acc warning at:' + '\t' + str(self.acc_warning) + '\n')
 
-                                'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
-                                'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n' +
-                                'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n' +
-                                'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
+            reminder += str('Groups:' + '\t' + str(self.groups)[1:-1].replace("u'", '').replace("'", '') + '\n' +
+                            'Sessions:' + '\t' + str(self.numsessions) + '\n' +
+                            'Epochs in sessions:' + '\t' + str(self.epochs)[1:-1].replace("u'", '').replace("'", '') + '\n' +
+                            'Blocks in epochs:' + '\t' + str(self.block_in_epochN) + '\n' +
+                            'Preparatory Trials\\Block:' + '\t' + str(self.blockprepN) + '\n' +
+                            'Trials\\Block:' + '\t' + str(self.blocklengthN) + '\n' +
+                            'RSI:' + '\t' + str(self.RSI_time).replace('.', ',') + '\n' +
+                            'Asrt stim distance:' + '\t' + str(self.asrt_distance) + '\n' +
+                            'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n' +
+                            'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
+                            'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
+                            'Background color:' + '\t' + self.asrt_background + '\n' +
+                            '\n' +
+                            'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
 
-                                'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n' +
-                                'beállítások vannak elmentve.\n\n' +
+                            'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
+                            'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n' +
+                            'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n' +
+                            'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
 
-                                'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
-                                'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
-                                'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+                            'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n' +
+                            'beállítások vannak elmentve.\n\n' +
+
+                            'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
+                            'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
+                            'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+
+            reminder_file.write(reminder)
 
     def get_maxtrial(self):
         """Get number of all trials in the whole experiment (in all sessions)."""
@@ -262,7 +276,12 @@ class ExperimentSettings:
         return self.sessionstarts
 
     def get_key_list(self):
-        return [self.key1, self.key2, self.key3, self.key4, self.key_quit]
+        if self.experiment_type == 'reaction-time':
+            return [self.key1, self.key2, self.key3, self.key4, self.key_quit]
+        elif self.experiment_type == 'eye-tracking':
+            return ['return', self.key_quit]
+        else:
+            return None
 
     def show_basic_settings_dialog(self):
         """ Ask the user to specify the number of groups and the number of sessions."""
@@ -270,6 +289,8 @@ class ExperimentSettings:
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText(
             u'Még nincsenek beállítások mentve ehhez a kísérlethez...')
+        settings_dialog.addField(u'Kísérlet típusa:', choices=[
+                                 'reakció idő', 'eye-tracking'], initial="reakció idő")
         settings_dialog.addText(
             u'A logfile optimalizálása érdekében kérjük add meg, hányféle csoporttal tervezed az adatfelvételt.')
         settings_dialog.addField(
@@ -278,8 +299,12 @@ class ExperimentSettings:
         settings_dialog.addField(u'Ulesek szama', 2)
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
-            self.numsessions = returned_data[1]
-            return returned_data[0]
+            self.numsessions = returned_data[2]
+            if returned_data[0] == 'reakció idő':
+                self.experiment_type = 'reaction-time'
+            else:
+                self.experiment_type = 'eye-tracking'
+            return returned_data[1]
         else:
             core.quit()
 
@@ -727,8 +752,13 @@ class Experiment:
         # positions of the four stimulus circle
         self.dict_pos = None
 
+        # tobii EyeTracker object for handling eye-tracker input
+        self.eye_tracker = None
+        self.gaze_data_list = []
+
         # visual.Window object for displaying experiment
         self.mywindow = None
+        self.mymonitor = None
         # avarage time of displaying one frame on the screen in ms (e.g. 15.93 for 50 Hz)
         self.frame_time = None
         # standard deviation of displaying one frame on the screen in ms (e.g. 0.02)
@@ -773,7 +803,7 @@ class Experiment:
 
         # if there is no settings file, we ask the user to specfiy the settings
         except:
-            # get the number of groups and number of sessions
+            # get experiment type, the number of groups and number of sessions
             numgroups = self.settings.show_basic_settings_dialog()
 
             # get the group names
@@ -785,8 +815,9 @@ class Experiment:
             # get montior / computer settings, and also options about displaying (stimulus size, stimulus distance, etc)
             self.settings.show_computer_and_display_settings_dialog()
 
-            # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
-            self.settings.show_key_and_feedback_settings_dialog()
+            if self.settings.experiment_type == 'reaction-time':
+                # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
+                self.settings.show_key_and_feedback_settings_dialog()
 
             # save the settings
             self.settings.write_to_file()
@@ -1006,18 +1037,101 @@ class Experiment:
             # save data of the new subject
             self.person_data.save_person_settings(self)
 
+    def init_eyetracker(self):
+        # Sometimes the eyetracker is not identified for the first time. Try more times.
+        loopCount = 1
+        allTrackers = tobii.find_all_eyetrackers()
+        while not allTrackers and loopCount < 50:
+            allTrackers = tobii.find_all_eyetrackers()
+            pcore.wait(0.02)
+            loopCount += 1
+
+        if len(allTrackers) < 1:
+            print("Cannot find any eyetrackers.")
+            core.quit()
+
+        self.eye_tracker = allTrackers[0]
+
+    def eye_data_callback(self, gazeData):
+        max_length = 5
+
+        left_gaze_XYZ = gazeData['left_gaze_point_on_display_area']
+        right_gaze_XYZ = gazeData['right_gaze_point_on_display_area']
+        left_gaze_valid = gazeData['left_gaze_point_validity']
+        right_gaze_valid = gazeData['right_gaze_point_validity']
+
+        x_coord = None
+        y_coord = None
+        if left_gaze_valid and right_gaze_valid:
+            x_coord = (left_gaze_XYZ[0] + right_gaze_XYZ[0]) / 2
+            y_coord = (left_gaze_XYZ[1] + right_gaze_XYZ[1]) / 2
+        elif left_gaze_valid:
+            x_coord = left_gaze_XYZ[0]
+            y_coord = left_gaze_XYZ[1]
+        elif right_gaze_valid:
+            x_coord = right_gaze_XYZ[0]
+            y_coord = right_gaze_XYZ[1]
+
+        if x_coord != None and y_coord != None:
+            self.gaze_data_list.append((x_coord, y_coord))
+            if len(self.gaze_data_list) > max_length:
+                self.gaze_data_list.pop(0)
+
+    def point_is_in_rectangle(self, point, rect_center, rect_size):
+        if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
+            return True
+        else:
+            return False
+
+    def wait_for_eye_response(self):
+
+        while (True):
+
+            if 'q' in event.getKeys():
+                return -1
+
+            if len(self.gaze_data_list) == 0:
+                continue
+
+            # calculate avarage gage position
+            sum_x = 0
+            sum_y = 0
+            for pos in self.gaze_data_list:
+                sum_x += pos[0]
+                sum_y += pos[1]
+
+            # we have the pos in eye-tracker's display area normalized coordinates with the
+            # origin at the upper left corner
+            avg_pos_norm = (sum_x / len(self.gaze_data_list), sum_y / len(self.gaze_data_list))
+
+            # we need to convert it to psychopy cm coordinates, where the origin is at the
+            # center and y coordinates are mirrored.
+            aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+            monitor_width_cm = self.settings.monitor_width
+            monitor_height_cm = monitor_width_cm * aspect_ratio
+
+            # shift origin
+            shift_x = monitor_width_cm / 2
+            shift_y = monitor_height_cm / 2
+
+            # need to mirror the y coordinates
+            avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
+                          ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
+
+            for i in range(1, 5):
+                if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.asrt_size):
+                    return i
+
     def monitor_settings(self):
         """Specify monitor settings."""
 
         # use default screen resolution
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
-        my_monitor = monitors.Monitor('myMon')
-        my_monitor.setSizePix([screen.width, screen.height])
+        self.mymonitor = monitors.Monitor('myMon')
+        self.mymonitor.setSizePix([screen.width, screen.height])
         # need to set monitor width in cm to be able to use cm unit for stimulus
-        my_monitor.setWidth(self.settings.monitor_width)
-        my_monitor.saveMon()
-
-        return my_monitor
+        self.mymonitor.setWidth(self.settings.monitor_width)
+        self.mymonitor.saveMon()
 
     def print_to_screen(self, mytext):
         """Display any string on the screen."""
@@ -1077,6 +1191,29 @@ class Experiment:
 
         return whatnow
 
+    def wait_for_response(self, response_clock):
+        if self.settings.experiment_type == 'reaction-time':
+            press = event.waitKeys(keyList=self.settings.get_key_list(),
+                                   timeStamped=response_clock)
+            if press[0][0] == 'q':
+                return (-1, press[0][1])
+            return (self.pressed_dict[press[0][0]], press[0][1])
+        else:
+            response = self.wait_for_eye_response()
+            # this RT is not precise, but good enough to give a feedback for the subject
+            return (response, response_clock.getTime())
+
+    def quit_presentation(self):
+        self.print_to_screen("Kilépés...\nAdatok mentése...")
+
+        if self.eye_tracker is not None:
+            self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
+
+        self.person_data.append_to_output_file('userquit')
+
+        self.person_data.save_person_settings(self)
+        core.quit()
+
     def presentation(self):
         """The real experiment happens here. This method displays the stimulus window and records the reactions."""
 
@@ -1115,6 +1252,11 @@ class Experiment:
         trial_clock = core.Clock()
 
         first_trial_in_block = True
+
+        # start recording gaze data
+        if self.eye_tracker is not None:
+            self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA,
+                                          self.eye_data_callback, as_dictionary=True)
 
         while True:
             # four empty circles where the actual stimulus can be placed
@@ -1158,8 +1300,7 @@ class Experiment:
                         stim_RSI = RSI_clock.getTime()
 
                 trial_clock.reset()
-                press = event.waitKeys(keyList=self.settings.get_key_list(),
-                                       timeStamped=trial_clock)
+                (response, time_stamp) = self.wait_for_response(trial_clock)
 
                 # start of the RSI timer
                 RSI_clock.reset()
@@ -1167,32 +1308,27 @@ class Experiment:
 
                 stim_RT_time = time.strftime('%H:%M:%S')
                 stim_RT_date = time.strftime('%d/%m/%Y')
-                stimRT = press[0][1]
+                stimRT = time_stamp
 
                 self.stim_output_line += 1
                 Npressed_in_block += 1
 
                 if cycle == 1:
-                    stim_first_RT = press[0][1]
+                    stim_first_RT = stimRT
 
-                stimbutton = press[0][0]
+                stimbutton = response
 
                 # quit during the experiment
-                if press[0][0] == self.settings.key_quit:
-                    self.print_to_screen("Kilépés...\nAdatok mentése...")
-
-                    self.person_data.append_to_output_file('userquit')
-
+                if response == -1:
                     self.stim_output_line -= 1
 
                     if N >= 1:
                         self.last_N = N - 1
 
-                    self.person_data.save_person_settings(self)
-                    core.quit()
+                    self.quit_presentation()
 
                 # right button was pushed
-                elif self.pressed_dict[press[0][0]] == self.stimlist[N]:
+                elif response == self.stimlist[N]:
                     stimACC = 0
                     accs_in_block.append(0)
 
@@ -1231,15 +1367,10 @@ class Experiment:
                     N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
 
                 if whatnow == 'quit':
-                    self.print_to_screen("Kilépés...\nAdatok mentése...")
-
-                    self.person_data.append_to_output_file('userquit')
-
                     if N >= 1:
                         self.last_N = N - 1
 
-                    self.person_data.save_person_settings(self)
-                    core.quit()
+                    self.quit_presentation()
 
                 patternERR = 0
                 Npressed_in_block = 0
@@ -1272,10 +1403,18 @@ class Experiment:
         self.pressed_dict = {self.settings.key1: 1, self.settings.key2: 2,
                              self.settings.key3: 3, self.settings.key4: 4}
 
-        self.dict_pos = {1: (float(self.settings.asrt_distance) * (-1.5), 0),
-                         2: (float(self.settings.asrt_distance) * (-0.5), 0),
-                         3: (float(self.settings.asrt_distance) * 0.5, 0),
-                         4: (float(self.settings.asrt_distance) * 1.5, 0)}
+        # reaction-time exp: stimulus circles placed in one line
+        if self.settings.experiment_type == 'reaction-time':
+            self.dict_pos = {1: (float(self.settings.asrt_distance) * (-1.5), 0),
+                             2: (float(self.settings.asrt_distance) * (-0.5), 0),
+                             3: (float(self.settings.asrt_distance) * 0.5, 0),
+                             4: (float(self.settings.asrt_distance) * 1.5, 0)}
+        # eye-tracking exp: stimulus circles placed in a rectangle shape
+        else:
+            self.dict_pos = {1: (float(self.settings.asrt_distance) * (-0.5), float(self.settings.asrt_distance) * (-0.5)),
+                             2: (float(self.settings.asrt_distance) * 0.5, float(self.settings.asrt_distance) * (-0.5)),
+                             3: (float(self.settings.asrt_distance) * (-0.5), float(self.settings.asrt_distance) * 0.5),
+                             4: (float(self.settings.asrt_distance) * 0.5, float(self.settings.asrt_distance) * 0.5)}
 
         # read instruction strings
         inst_feedback_path = os.path.join(self.workdir_path, "inst_and_feedback.txt")
@@ -1285,18 +1424,27 @@ class Experiment:
         # find out the current subject
         self.participant_id()
 
+        # init eye-tracker if needed
+        if self.settings.experiment_type == 'eye-tracking':
+            self.init_eyetracker()
+
         # init window
-        my_monitor = self.monitor_settings()
+        self.monitor_settings()
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as self.mywindow:
+        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
             # check frame rate
             self.frame_check()
 
             # show experiment screen
             self.presentation()
+
+            # stop recoring gaze data
+            if self.eye_tracker is not None:
+                self.eye_tracker.unsubscribe_from(
+                    tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
 
             # save user data
             self.person_data.save_person_settings(self)

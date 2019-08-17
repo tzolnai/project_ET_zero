@@ -15,3 +15,5 @@ don't continue with a block after a quit, but start from the beginning of the bl
 measure how much time it takes to run one trial (without RSI and RT) -> can be optimized based on this value
 rt in case of wrong button
 psychopy monitor setWidth, there is now setHeight?!
+cleanup instructions, accent characters, ':' etc
+ET: AOI, output, setting defaults (RSI, distance)
