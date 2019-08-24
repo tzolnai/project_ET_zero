@@ -62,6 +62,7 @@ class allSettingsDefTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings(output_file, "")
 
+        experiment.settings.experiment_type = 'reaction-time'
         experiment.settings.numsessions = 1
         experiment.settings.groups = ["kontrol"]
         experiment.settings.blockprepN = 5
@@ -92,6 +93,7 @@ class allSettingsDefTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings(output_file, "")
         experiment.all_settings_def()
 
+        self.assertEqual(experiment.settings.experiment_type, 'reaction-time')
         self.assertEqual(experiment.settings.groups, ["kontrol"])
         self.assertEqual(experiment.settings.blockprepN, 5)
         self.assertEqual(experiment.settings.blocklengthN, 80)
@@ -130,6 +132,7 @@ class allSettingsDefTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         experiment.all_settings_def()
 
+        self.assertEqual(experiment.settings.experiment_type, 'reaction-time')
         self.assertEqual(experiment.settings.groups, ["", ""])
         self.assertEqual(experiment.settings.blockprepN, 5)
         self.assertEqual(experiment.settings.blocklengthN, 80)
@@ -168,6 +171,7 @@ class allSettingsDefTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings(output_file, "")
         experiment.all_settings_def()
 
+        self.assertEqual(experiment.settings.experiment_type, 'reaction-time')
         self.assertEqual(experiment.settings.groups, ["", ""])
         self.assertEqual(experiment.settings.blockprepN, 5)
         self.assertEqual(experiment.settings.blocklengthN, 80)
@@ -206,10 +210,11 @@ class allSettingsDefTest(unittest.TestCase):
             output_file, output_file + "_reminder.txt")
 
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues([1, 1, 10, 75, 7, 12, 'implicit', 29.1, "Alma", 4, 2, "Blue", "Red",
+        gui_mock.addFieldValues(['reakció idő', 1, 1, 10, 75, 7, 12, 'implicit', 29.1, "Alma", 4, 2, "Blue", "Red",
                                  "Yellow", 300, 'a', 's', 'd', 'f', 'g', False, 89, 78])
         experiment.all_settings_def()
 
+        self.assertEqual(experiment.settings.experiment_type, 'reaction-time')
         self.assertEqual(experiment.settings.groups, ['nincsenek csoportok'])
         self.assertEqual(experiment.settings.blockprepN, 10)
         self.assertEqual(experiment.settings.blocklengthN, 75)
@@ -250,6 +255,7 @@ class allSettingsDefTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings(output_file, "")
         experiment.all_settings_def()
 
+        self.assertEqual(experiment.settings.experiment_type, 'reaction-time')
         self.assertEqual(experiment.settings.groups, ['nincsenek csoportok'])
         self.assertEqual(experiment.settings.blockprepN, 10)
         self.assertEqual(experiment.settings.blocklengthN, 75)

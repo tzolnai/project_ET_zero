@@ -66,6 +66,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings = asrt.ExperimentSettings(output_file, "")
         exp_settings.read_from_file()
 
+        self.assertEqual(exp_settings.experiment_type, None)
         self.assertEqual(exp_settings.groups, None)
         self.assertEqual(exp_settings.blockprepN, None)
         self.assertEqual(exp_settings.blocklengthN, None)
@@ -103,6 +104,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         output_file = self.constructFilePath("testRoundTripCustomValues")
         exp_settings = asrt.ExperimentSettings(output_file, "")
 
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.numsessions = 1
         exp_settings.groups = ["kontrol"]
         exp_settings.blockprepN = 5
@@ -133,6 +135,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings = asrt.ExperimentSettings(output_file, "")
         exp_settings.read_from_file()
 
+        self.assertEqual(exp_settings.experiment_type, "reaction-time")
         self.assertEqual(exp_settings.groups, ["kontrol"])
         self.assertEqual(exp_settings.blockprepN, 5)
         self.assertEqual(exp_settings.blocklengthN, 80)
@@ -181,6 +184,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
             exp_settings.read_from_file()
 
         # exp_settings has the initial state
+        self.assertEqual(exp_settings.experiment_type, None)
         self.assertEqual(exp_settings.groups, None)
         self.assertEqual(exp_settings.blockprepN, None)
         self.assertEqual(exp_settings.blocklengthN, None)
@@ -209,6 +213,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         output_file = self.constructFilePath("testReminderTxtCustomValues")
         exp_settings = asrt.ExperimentSettings("", output_file)
 
+        exp_settings.experiment_type = "reaction-time"
         exp_settings.numsessions = 1
         exp_settings.groups = ["kontrol"]
         exp_settings.blockprepN = 5
@@ -242,6 +247,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                              '\n' +
                              'Monitor Width: ' + '\t' + str(exp_settings.monitor_width).replace('.', ',') + '\n' +
                              'Computer Name: ' + '\t' + exp_settings.computer_name + '\n' +
+                             'Experiment type:' + '\t' + exp_settings.experiment_type + '\n' +
                              'Response keys: ' + '\t' + exp_settings.key1 + ', ' + exp_settings.key2 + ', ' + exp_settings.key3 + ', ' + exp_settings.key4 + '.' + '\n' +
                              'Quit key: ' + '\t' + exp_settings.key_quit + '\n' +
                              'Warning (speed, accuracy): ' + '\t' + str(exp_settings.whether_warning) + '\n' +

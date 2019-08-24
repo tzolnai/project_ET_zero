@@ -110,6 +110,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -143,6 +144,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -159,6 +161,7 @@ class drawInstructionsTest(unittest.TestCase):
     def testDisplayEmptyInstructionList(self):
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -180,6 +183,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -213,6 +217,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -245,6 +250,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -267,6 +273,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -289,6 +296,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -316,6 +324,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -346,6 +355,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -374,6 +384,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -402,6 +413,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -431,6 +443,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -463,6 +476,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -493,6 +507,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper.read_insts_from_file()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -526,6 +541,7 @@ class drawInstructionsTest(unittest.TestCase):
             "Dummy string for the first screen"] + instruction_helper.feedback_exp
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -563,6 +579,7 @@ class drawInstructionsTest(unittest.TestCase):
             "Dummy string for the first screen"] + instruction_helper.feedback_imp
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'

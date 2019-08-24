@@ -78,6 +78,7 @@ class showFeedbackTest(unittest.TestCase):
         experiment.instructions.read_insts_from_file()
 
         experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
         experiment.settings.key1 = 'z'
         experiment.settings.key2 = 'c'
         experiment.settings.key3 = 'b'
@@ -120,6 +121,7 @@ class showFeedbackTest(unittest.TestCase):
         experiment.instructions.read_insts_from_file()
 
         experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
         experiment.settings.key1 = 'z'
         experiment.settings.key2 = 'c'
         experiment.settings.key3 = 'b'
@@ -164,6 +166,7 @@ class showFeedbackTest(unittest.TestCase):
         experiment.instructions.read_insts_from_file()
 
         experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
         experiment.settings.key1 = 'z'
         experiment.settings.key2 = 'c'
         experiment.settings.key3 = 'b'
@@ -209,6 +212,7 @@ class showFeedbackTest(unittest.TestCase):
         experiment.instructions.read_insts_from_file()
 
         experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
         experiment.settings.key1 = 'z'
         experiment.settings.key2 = 'c'
         experiment.settings.key3 = 'b'
@@ -250,6 +254,7 @@ class showFeedbackTest(unittest.TestCase):
         experiment.instructions.read_insts_from_file()
 
         experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
         experiment.settings.key1 = 'z'
         experiment.settings.key2 = 'c'
         experiment.settings.key3 = 'b'

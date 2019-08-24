@@ -113,14 +113,14 @@ class presentationTest(unittest.TestCase):
         experiment.participant_id()
 
         # monitor settings
-        my_monitor = experiment.monitor_settings()
+        experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -252,14 +252,14 @@ class presentationTest(unittest.TestCase):
         experiment.participant_id()
 
         # monitor settings
-        my_monitor = experiment.monitor_settings()
+        experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -397,14 +397,14 @@ class presentationTest(unittest.TestCase):
         experiment.participant_id()
 
         # monitor settings
-        my_monitor = experiment.monitor_settings()
+        experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -534,14 +534,14 @@ class presentationTest(unittest.TestCase):
         experiment.participant_id()
 
         # monitor settings
-        my_monitor = experiment.monitor_settings()
+        experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -709,14 +709,14 @@ class presentationTest(unittest.TestCase):
         experiment.participant_id()
 
         # monitor settings
-        my_monitor = experiment.monitor_settings()
+        experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -839,14 +839,14 @@ class presentationTest(unittest.TestCase):
         experiment.participant_id()
 
         # monitor settings
-        my_monitor = experiment.monitor_settings()
+        experiment.monitor_settings()
         experiment.colors = {'wincolor': experiment.settings.asrt_background, 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
         if platform.system() == "Linux":
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=my_monitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=my_monitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}

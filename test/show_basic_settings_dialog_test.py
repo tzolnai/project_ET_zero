@@ -46,19 +46,21 @@ class showBasicSettingsDialogTest(unittest.TestCase):
             list_of_texts[2], "Hány ülés (session) lesz a kísérletben?")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 2)
-        self.assertEqual(
-            list_of_fields[0].label, "Kiserleti + Kontrollcsoportok szama osszesen")
-        self.assertEqual(list_of_fields[0].initial, 2)
-        self.assertEqual(list_of_fields[1].label, "Ulesek szama")
+        self.assertEqual(len(list_of_fields), 3)
+        self.assertEqual(list_of_fields[0].label, "Kísérlet típusa:")
+        self.assertEqual(list_of_fields[0].initial, "reakció idő")
+        self.assertEqual(list_of_fields[1].label, "Kiserleti + Kontrollcsoportok szama osszesen")
         self.assertEqual(list_of_fields[1].initial, 2)
+        self.assertEqual(list_of_fields[2].label, "Ulesek szama")
+        self.assertEqual(list_of_fields[2].initial, 2)
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues([3, 3])
+        gui_mock.addFieldValues(['reakció idő', 3, 3])
 
         exp_settings = asrt.ExperimentSettings("", "")
         numgroups = exp_settings.show_basic_settings_dialog()
+        self.assertEqual(exp_settings.experiment_type, 'reaction-time')
         self.assertEqual(numgroups, 3)
         self.assertEqual(exp_settings.numsessions, 3)
 

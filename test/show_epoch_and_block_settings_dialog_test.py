@@ -16,7 +16,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import psychopy_gui_mock as pgm
 import sys
 import os
 # Add the local path to the main script and external scripts so we can import them.
@@ -24,6 +23,7 @@ sys.path = [".."] + \
     [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
 import unittest
+import psychopy_gui_mock as pgm
 import asrt
 
 
