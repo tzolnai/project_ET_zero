@@ -507,6 +507,32 @@ class InstructionHelper:
                 elif 'unexpected quit' in all[0]:
                     self.unexp_quit.append(all[1])
 
+    def validate_instructions(self, settings):
+        '''Do a minimal validation of the read instructions to get error messages early,
+           before a missing string actualy causes an issue.'''
+
+        if len(self.insts) == 0:
+            print("Starting instruction was not specified!")
+            core.quit()
+        if len(self.ending) == 0:
+            print("Ending message was not specified!")
+            core.quit()
+        if len(self.unexp_quit) == 0:
+            print("Unexpected quit message was not specified!")
+            core.quit()
+        if settings.whether_warning and len(self.feedback_speed) == 0:
+            print("Speed warning message was not specified, but warning is enabled in the settings!")
+            core.quit()
+        if settings.whether_warning and len(self.feedback_accuracy) == 0:
+            print("Accuracy warning message was not specified, but warning is enabled in the settings!")
+            core.quit()
+        if 'implicit' in settings.asrt_types and len(self.feedback_imp) == 0:
+            print("Implicit feedback message was not specified, but there is an implicit session in the experiment!")
+            core.quit()
+        if 'explicit' in settings.asrt_types and len(self.feedback_exp) == 0:
+            print("Explicit feedback message was not specified, but there is an explicit session in the experiment!")
+            core.quit()
+
     def __print_to_screen(self, mytext, mywindow):
         """Display given string in the given window."""
 
@@ -1454,6 +1480,7 @@ class Experiment:
         inst_feedback_path = os.path.join(self.workdir_path, "inst_and_feedback.txt")
         self.instructions = InstructionHelper(inst_feedback_path)
         self.instructions.read_insts_from_file()
+        self.instructions.validate_instructions(self.settings)
 
         # find out the current subject
         self.participant_id()
