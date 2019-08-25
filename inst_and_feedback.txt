@@ -2,9 +2,9 @@
 
 Üdvözlünk a feladatban!
 
-A képernyőn négy kör lesz, a kör egyika a többitől különböző színnel fog megjelenni.
+A képernyőn négy a közepén üres kört fogsz látni, az egyik kör időnként kap egy töltő színt.
 
-Az a feladatod, hogy az eltérő színű kör megjelenési helyének megfelelő gombot nyomd meg.
+Az a feladatod, hogy a beszínezett kör megjelenési helyének megfelelő gombot nyomd meg.
 
 A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
 
@@ -12,13 +12,13 @@ A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
 
 inst#
 
-A következő billenytűket kell használni: z, c, b, m
+A következő billenytűket kell használnod: z, c, b, m
 
 Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!
 
-Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.
+Ehhez mindkét kezedet használd, a középső és a mutatóujjaidat.
 
-Az eltérő színű kör egymás után többször ugyanazon a helyen is megjelenhet.
+A beszínezett kör egymás után többször ugyanazon a helyen is megjelenhet.
 
 A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!
 
