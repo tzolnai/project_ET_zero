@@ -80,6 +80,8 @@ class ExperimentSettings:
         self.asrt_distance = None
         # radius of the stimulus circle in cm (e.g. 1)
         self.asrt_size = None
+        # AOI (area of interest) is a suqare with the same origin as the stimuli, this size means the size of this square's side
+        self.AOI_size = None
         # fill color of the random stimulus or all stimulus in case of implicit asrt (e.g. "Orange")
         self.asrt_rcolor = None
         # fill color of the "pattern" stimulus in case of explicit asrt (e.g. "Orange")
@@ -141,6 +143,8 @@ class ExperimentSettings:
                 self.computer_name = settings_file['computer_name']
                 self.asrt_distance = settings_file['asrt_distance']
                 self.asrt_size = settings_file['asrt_size']
+                if self.experiment_type == 'eye-tracking':
+                    self.AOI_size = settings_file['AOI_size']
                 self.asrt_rcolor = settings_file['asrt_rcolor']
                 self.asrt_pcolor = settings_file['asrt_pcolor']
                 self.asrt_background = settings_file['asrt_background']
@@ -182,6 +186,8 @@ class ExperimentSettings:
             settings_file['computer_name'] = self.computer_name
             settings_file['asrt_distance'] = self.asrt_distance
             settings_file['asrt_size'] = self.asrt_size
+            if self.experiment_type == 'eye-tracking':
+                settings_file['AOI_size'] = self.AOI_size
             settings_file['asrt_rcolor'] = self.asrt_rcolor
             settings_file['asrt_pcolor'] = self.asrt_pcolor
             settings_file['asrt_background'] = self.asrt_background
@@ -221,8 +227,11 @@ class ExperimentSettings:
                             'Trials\\Block:' + '\t' + str(self.blocklengthN) + '\n' +
                             'RSI:' + '\t' + str(self.RSI_time).replace('.', ',') + '\n' +
                             'Asrt stim distance:' + '\t' + str(self.asrt_distance) + '\n' +
-                            'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n' +
-                            'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
+                            'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n')
+            if self.experiment_type == 'eye-tracking':
+                reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n')
+            
+            reminder += str('Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
                             'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
                             'Background color:' + '\t' + self.asrt_background + '\n' +
                             '\n' +
@@ -375,6 +384,8 @@ class ExperimentSettings:
         settings_dialog.addText(u'Megjelenés..')
         settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
         settings_dialog.addField(u'Ingerek sugara (cm)', 1)
+        if self.experiment_type == 'eye-tracking':
+            settings_dialog.addField(u'AOI négyzetek oldahossza (cm)', 3)
         settings_dialog.addField(u'ASRT inger szine (elsodleges, R)',
                                  choices=possible_colors, initial="Orange")
         settings_dialog.addField(
@@ -387,10 +398,15 @@ class ExperimentSettings:
             self.computer_name = returned_data[1]
             self.asrt_distance = returned_data[2]
             self.asrt_size = returned_data[3]
-            self.asrt_rcolor = returned_data[4]
-            self.asrt_pcolor = returned_data[5]
-            self.asrt_background = returned_data[6]
-            self.RSI_time = float(returned_data[7]) / 1000
+            rcolor_index = 4
+            if self.experiment_type == 'eye-tracking':
+                self.AOI_size = returned_data[4]
+                rcolor_index = 5
+            
+            self.asrt_rcolor = returned_data[rcolor_index]
+            self.asrt_pcolor = returned_data[rcolor_index + 1]
+            self.asrt_background = returned_data[rcolor_index + 2]
+            self.RSI_time = float(returned_data[rcolor_index + 3]) / 1000
         else:
             core.quit()
 
@@ -1119,7 +1135,7 @@ class Experiment:
                           ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
             for i in range(1, 5):
-                if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.asrt_size):
+                if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
                     return i
 
     def monitor_settings(self):
