@@ -156,12 +156,12 @@ class ExperimentSettings:
                     self.key3 = settings_file['key3']
                     self.key4 = settings_file['key4']
                     self.key_quit = settings_file['key_quit']
-                    self.whether_warning = settings_file['whether_warning']
-                    self.speed_warning = settings_file['speed_warning']
-                    self.acc_warning = settings_file['acc_warning']
                 elif self.experiment_type == 'eye-tracking':
-                    self.whether_warning = False
                     self.key_quit = 'q'
+
+                self.whether_warning = settings_file['whether_warning']
+                self.speed_warning = settings_file['speed_warning']
+                self.acc_warning = settings_file['acc_warning']
         except Exception as exception:
             self.__init__(self.settings_file_path, self.reminder_file_path)
             raise exception
@@ -199,9 +199,10 @@ class ExperimentSettings:
                 settings_file['key3'] = self.key3
                 settings_file['key4'] = self.key4
                 settings_file['key_quit'] = self.key_quit
-                settings_file['whether_warning'] = self.whether_warning
-                settings_file['speed_warning'] = self.speed_warning
-                settings_file['acc_warning'] = self.acc_warning
+
+            settings_file['whether_warning'] = self.whether_warning
+            settings_file['speed_warning'] = self.speed_warning
+            settings_file['acc_warning'] = self.acc_warning
 
     def write_out_reminder(self):
         """Write out a short summary of the settings into a text file."""
@@ -425,26 +426,33 @@ class ExperimentSettings:
         """Ask the user to specify the keys used during the experiement and also set options related to the displayed feedback."""
 
         settings_dialog = gui.Dlg(title=u'Beállítások')
-        settings_dialog.addText(u'Válaszbillentyűk')
-        settings_dialog.addField(u'Bal szelso:', 'y')
-        settings_dialog.addField(u'Bal kozep', 'c')
-        settings_dialog.addField(u'Jobb kozep', 'b')
-        settings_dialog.addField(u'Jobb szelso', 'm')
-        settings_dialog.addField(u'Kilepes', 'q')
+        if self.experiment_type == 'reaction-time':
+            settings_dialog.addText(u'Válaszbillentyűk')
+            settings_dialog.addField(u'Bal szelso:', 'y')
+            settings_dialog.addField(u'Bal kozep', 'c')
+            settings_dialog.addField(u'Jobb kozep', 'b')
+            settings_dialog.addField(u'Jobb szelso', 'm')
+            settings_dialog.addField(u'Kilepes', 'q')
         settings_dialog.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
         settings_dialog.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
         settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
         settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
-            self.key1 = returned_data[0]
-            self.key2 = returned_data[1]
-            self.key3 = returned_data[2]
-            self.key4 = returned_data[3]
-            self.key_quit = returned_data[4]
-            self.whether_warning = returned_data[5]
-            self.speed_warning = returned_data[6]
-            self.acc_warning = returned_data[7]
+            if self.experiment_type == 'reaction-time':
+                self.key1 = returned_data[0]
+                self.key2 = returned_data[1]
+                self.key3 = returned_data[2]
+                self.key4 = returned_data[3]
+                self.key_quit = returned_data[4]
+                self.whether_warning = returned_data[5]
+                self.speed_warning = returned_data[6]
+                self.acc_warning = returned_data[7]
+            else:  # 'eye-tracking'
+                self.whether_warning = returned_data[0]
+                self.speed_warning = returned_data[1]
+                self.acc_warning = returned_data[2]
+
         else:
             core.quit()
 
@@ -842,9 +850,8 @@ class Experiment:
             # get montior / computer settings, and also options about displaying (stimulus size, stimulus distance, etc)
             self.settings.show_computer_and_display_settings_dialog()
 
-            if self.settings.experiment_type == 'reaction-time':
-                # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
-                self.settings.show_key_and_feedback_settings_dialog()
+            # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
+            self.settings.show_key_and_feedback_settings_dialog()
 
             # save the settings
             self.settings.write_to_file()
