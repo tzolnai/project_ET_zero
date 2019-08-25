@@ -26,8 +26,13 @@ import os
 import time
 import pyglet
 import platform
-import tobii_research as tobii
 import numbers
+
+try:
+    import tobii_research as tobii
+    g_tobii_available = True
+except:
+    g_tobii_available = False
 
 
 def ensure_dir(dirpath):
@@ -314,6 +319,9 @@ class ExperimentSettings:
                 self.experiment_type = 'reaction-time'
             else:
                 self.experiment_type = 'eye-tracking'
+                if not g_tobii_available:
+                    print("For running the eye-tracking version of the experiment we need tobii_research module to be installed!")
+                    core.quit()
             return returned_data[1]
         else:
             core.quit()
