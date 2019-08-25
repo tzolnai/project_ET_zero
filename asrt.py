@@ -230,7 +230,7 @@ class ExperimentSettings:
                             'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n')
             if self.experiment_type == 'eye-tracking':
                 reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n')
-            
+
             reminder += str('Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
                             'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
                             'Background color:' + '\t' + self.asrt_background + '\n' +
@@ -382,16 +382,27 @@ class ExperimentSettings:
         settings_dialog.addField(u'Hasznos kepernyo szelessege (cm)', 34.2)
         settings_dialog.addField(u'Szamitogep fantazianeve (ekezet nelkul)', u'Laposka')
         settings_dialog.addText(u'Megjelenés..')
-        settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+
+        if self.experiment_type == 'reaction-time':
+            settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+        else:  # 'eye-tracking'
+            settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 10)
+
         settings_dialog.addField(u'Ingerek sugara (cm)', 1)
         if self.experiment_type == 'eye-tracking':
             settings_dialog.addField(u'AOI négyzetek oldahossza (cm)', 3)
+
         settings_dialog.addField(u'ASRT inger szine (elsodleges, R)',
                                  choices=possible_colors, initial="Orange")
         settings_dialog.addField(
             u'ASRT inger szine (masodlagos, P, explicit asrtnel)', choices=possible_colors, initial="Green")
         settings_dialog.addField(u'Hatter szine', choices=possible_colors, initial="Ivory")
-        settings_dialog.addField(u'RSI (ms)', 120)
+
+        if self.experiment_type == 'reaction-time':
+            settings_dialog.addField(u'RSI (ms)', 120)
+        else:  # 'eye-tracking'
+            settings_dialog.addField(u'RSI (ms)', 500)
+
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.monitor_width = returned_data[0]
@@ -402,7 +413,7 @@ class ExperimentSettings:
             if self.experiment_type == 'eye-tracking':
                 self.AOI_size = returned_data[4]
                 rcolor_index = 5
-            
+
             self.asrt_rcolor = returned_data[rcolor_index]
             self.asrt_pcolor = returned_data[rcolor_index + 1]
             self.asrt_background = returned_data[rcolor_index + 2]

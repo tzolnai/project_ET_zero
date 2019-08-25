@@ -33,6 +33,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
 
         exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
         exp_settings.show_computer_and_display_settings_dialog()
 
         self.assertEqual(exp_settings.monitor_width, 34.2)
