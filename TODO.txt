@@ -16,4 +16,5 @@ measure how much time it takes to run one trial (without RSI and RT) -> can be o
 rt in case of wrong button
 psychopy monitor setWidth, there is now setHeight?!
 cleanup instructions, accent characters, ':' etc
-ET: AOI, output, setting defaults (RSI, distance)
+ET: AOI, output
+explicit settings - check explicit instruction
