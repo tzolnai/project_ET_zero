@@ -1142,10 +1142,12 @@ class Experiment:
             x_coord = right_gaze_XYZ[0]
             y_coord = right_gaze_XYZ[1]
 
-        if x_coord != None and y_coord != None:
+        if x_coord == None or y_coord == None:
+            self.gaze_data_list.append((-1.0, -1.0))
+        else:
             self.gaze_data_list.append((x_coord, y_coord))
-            if len(self.gaze_data_list) > max_length:
-                self.gaze_data_list.pop(0)
+        if len(self.gaze_data_list) > max_length:
+            self.gaze_data_list.pop(0)
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
@@ -1160,43 +1162,38 @@ class Experiment:
             if 'q' in event.getKeys():
                 return -1
 
+
             if len(self.gaze_data_list) == 0:
                 continue
 
-            # calculate avarage gage position
-            sum_x = 0
-            sum_y = 0
-            for pos in self.gaze_data_list:
-                sum_x += pos[0]
-                sum_y += pos[1]
-
+            hit_AOIs = []
             # we have the pos in eye-tracker's display area normalized coordinates with the
             # origin at the upper left corner
-            avg_pos_norm = (sum_x / len(self.gaze_data_list), sum_y / len(self.gaze_data_list))
+            for pos_norm in self.gaze_data_list:
 
-            # we need to convert it to psychopy cm coordinates, where the origin is at the
-            # center and y coordinates are mirrored.
-            aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
-            monitor_width_cm = self.settings.monitor_width
-            monitor_height_cm = monitor_width_cm * aspect_ratio
+                # we need to convert it to psychopy cm coordinates, where the origin is at the
+                # center and y coordinates are mirrored.
+                aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+                monitor_width_cm = self.settings.monitor_width
+                monitor_height_cm = monitor_width_cm * aspect_ratio
 
-            # shift origin
-            shift_x = monitor_width_cm / 2
-            shift_y = monitor_height_cm / 2
+                # shift origin
+                shift_x = monitor_width_cm / 2
+                shift_y = monitor_height_cm / 2
 
-            # need to mirror the y coordinates
-            avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
-                          ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
+                # need to mirror the y coordinates
+                avg_pos_cm = ((pos_norm[0] * monitor_width_cm) - shift_x,
+                             ((pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
-            hit_any_AOI = False
-            for i in range(1, 5):
-                if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
-                    hit_any_AOI = True
-                    if self.last_hit_AOI != i:
-                        self.last_hit_AOI = i
-                        return i
+                for i in range(1, 5):
+                    if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
+                        hit_AOIs.append(i)
 
-            if not hit_any_AOI:
+            if len(hit_AOIs) == len(self.gaze_data_list) and all(x == hit_AOIs[0] for x in hit_AOIs):
+                if self.last_hit_AOI != hit_AOIs[0]:
+                    self.last_hit_AOI = hit_AOIs[0]
+                    return hit_AOIs[0]
+            elif len(hit_AOIs) == 0:
                 self.last_hit_AOI = -1
 
     def monitor_settings(self):
