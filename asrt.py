@@ -320,7 +320,8 @@ class ExperimentSettings:
             else:
                 self.experiment_type = 'eye-tracking'
                 if not g_tobii_available:
-                    print("For running the eye-tracking version of the experiment we need tobii_research module to be installed!")
+                    print(
+                        "For running the eye-tracking version of the experiment we need tobii_research module to be installed!")
                     core.quit()
             return returned_data[1]
         else:
@@ -824,6 +825,7 @@ class Experiment:
         # tobii EyeTracker object for handling eye-tracker input
         self.eye_tracker = None
         self.gaze_data_list = []
+        self.last_hit_AOI = -1
 
         # visual.Window object for displaying experiment
         self.mywindow = None
@@ -1186,9 +1188,16 @@ class Experiment:
             avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
                           ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
+            hit_any_AOI = False
             for i in range(1, 5):
                 if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
-                    return i
+                    hit_any_AOI = True
+                    if self.last_hit_AOI != i:
+                        self.last_hit_AOI = i
+                        return i
+
+            if not hit_any_AOI:
+                self.last_hit_AOI = -1
 
     def monitor_settings(self):
         """Specify monitor settings."""
@@ -1348,6 +1357,8 @@ class Experiment:
                 RSI.complete()
 
             cycle = 0
+
+            self.last_hit_AOI = -1
 
             while True:
                 cycle += 1
