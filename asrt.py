@@ -724,7 +724,7 @@ class PersonDataHandler:
             with codecs.open(self.output_file_path, 'a+', encoding='utf-8') as output_file:
                 output_file.write(string_to_append)
 
-    def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor):
+    def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor):
         """ Write out the ouptut date of the current trial into the output text file."""
 
         output_data = [experiment.settings.computer_name,
@@ -754,7 +754,7 @@ class PersonDataHandler:
                        stimACC,
 
                        experiment.stimlist[N],
-                       stimbutton]
+                       response]
         output = "\n"
         for data in output_data:
             if isinstance(data, numbers.Number):
@@ -794,7 +794,7 @@ class PersonDataHandler:
                         'RT',
                         'error',
                         'stimulus',
-                        'stimbutton',
+                        'response',
                         'quit_log']
 
         for h in heading_list:
@@ -1236,10 +1236,10 @@ class Experiment:
             stimbg.pos = self.dict_pos[i]
             stimbg.draw()
 
-    def show_feedback(self, N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list):
+    def show_feedback(self, N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list):
         """ Display feedback in the end of the blocks, showing some data about speed and accuracy."""
 
-        acc_for_the_whole = 100 * float(Npressed_in_block - sum(accs_in_block)) / Npressed_in_block
+        acc_for_the_whole = 100 * float(responses_in_block - sum(accs_in_block)) / responses_in_block
         acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.', ',')
 
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
@@ -1312,7 +1312,7 @@ class Experiment:
         else:
             self.instructions.show_unexp_quit(self.mywindow, self.settings)
 
-        Npressed_in_block = 0
+        responses_in_block = 0
         accs_in_block = []
 
         asrt_type = self.settings.asrt_types[self.stim_sessionN[N]]
@@ -1390,12 +1390,10 @@ class Experiment:
                 stimRT = time_stamp
 
                 self.stim_output_line += 1
-                Npressed_in_block += 1
+                responses_in_block += 1
 
                 if cycle == 1:
                     stim_first_RT = stimRT
-
-                stimbutton = response
 
                 # quit during the experiment
                 if response == -1:
@@ -1429,7 +1427,7 @@ class Experiment:
 
                 # save data of the last trial
                 self.person_data.write_data_to_output(
-                    self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
+                    self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
                 if stimACC == 0:
                     self.last_N = N
@@ -1443,7 +1441,7 @@ class Experiment:
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
 
                 whatnow = self.show_feedback(
-                    N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
+                    N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list)
 
                 if whatnow == 'quit':
                     if N >= 1:
@@ -1452,7 +1450,7 @@ class Experiment:
                     self.quit_presentation()
 
                 patternERR = 0
-                Npressed_in_block = 0
+                responses_in_block = 0
 
                 RT_pattern_list = []
                 RT_all_list = []

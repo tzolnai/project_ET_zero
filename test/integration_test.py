@@ -210,7 +210,7 @@ class integrationTest(unittest.TestCase):
                     self.assertEqual(ref_values[19], act_values[19])  # RT
                     self.assertEqual(ref_values[20], act_values[20])  # error
                     # stimulus
-                    # stimbutton
+                    # response
                     self.assertEqual(ref_values[23], act_values[23])  # quitlog
 
     def testSimpleTestCase(self):

@@ -312,7 +312,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\tsomething")
+                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
 
     def testAppendMoreTimesToOutput(self):
         output_file_path = self.constructFilePath(
@@ -327,7 +327,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
 
     def testWriteEmptyOutput(self):
@@ -360,16 +360,16 @@ class personDataHandlerTest(unittest.TestCase):
         stimRT = 321.2345
         stimACC = 0
         experiment.stimlist = {0: 1}
-        stimbutton = 'z'
+        response = 'z'
         N = 0
 
         person_data_handler.write_data_to_output(
-            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
+            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                              str(stim_RT_time) + "\t" +
@@ -407,11 +407,11 @@ class personDataHandlerTest(unittest.TestCase):
         stimRT = 321.2345
         stimACC = 0
         experiment.stimlist = {0: 1}
-        stimbutton = 'z'
+        response = 'z'
         N = 0
 
         person_data_handler.write_data_to_output(
-            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
+            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         experiment.stim_output_line = 13
         experiment.stimtrial[0] = 22
@@ -423,15 +423,15 @@ class personDataHandlerTest(unittest.TestCase):
         stimRT = 523.2345
         stimACC = 1
         experiment.stimlist[0] = 2
-        stimbutton = 'b'
+        response = 'b'
 
         person_data_handler.write_data_to_output(
-            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
+            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
@@ -474,16 +474,16 @@ class personDataHandlerTest(unittest.TestCase):
         stimRT = 321.2345
         stimACC = 0
         experiment.stimlist = {0: 1}
-        stimbutton = 'z'
+        response = 'z'
         N = 0
 
         person_data_handler.write_data_to_output(
-            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, stimbutton, stimcolor)
+            experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tstimbutton\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "I. Richárd\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                              str(stim_RT_time) + "\t" +

@@ -298,8 +298,13 @@ class calculateStimpropertiesTest(unittest.TestCase):
                     oount_4 += 1
 
         # randomized data
-        self.assertTrue(count_1 != count_2)
-        self.assertTrue(count_3 != oount_4)
+        valid_random = False
+        # it might happen that these counts are equal for randomized data
+        # but it's unlikely to happen for four times
+        for i in (1, 5):
+            if count_1 != count_2 and count_3 != oount_4:
+                valid_random = True
+        self.assertTrue(valid_random)
 
         for i in range(len(experiment.stimpr)):
             self.assertEqual(experiment.stimpr[i + 1], "R")
