@@ -195,7 +195,8 @@ class integrationTest(unittest.TestCase):
                     if check_timing:
                         # RSI time, keep this low so the program will be precise inside a trial
                         self.assertAlmostEqual(
-                            float(act_values[11].replace(",", ".")), 0.0, delta=0.04)
+                            float(ref_values[11].replace(",", ".")),
+                            float(act_values[11].replace(",", ".")), delta=0.04)
                     self.assertEqual(
                         ref_values[12], act_values[12])  # frame_rate
                     self.assertEqual(
@@ -405,6 +406,17 @@ class integrationTest(unittest.TestCase):
 
         self.checkOutputFile()
 
+    def testRSIInterval(self):
+        # reset StaticPeriod
+        core.StaticPeriod = self.StaticPeriod
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.run()
+
+        self.checkOutputFile(True)
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
