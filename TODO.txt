@@ -1,18 +1,12 @@
 Ideas for improvements:
-use red (or maybe yellow) warning message in dialogs
 use more input check and warning in settings dialog
 make that somehow clear that the set RSI won't be accurate (depends on refresh rate)
 make decimal point configurable (see replace(".", ",") lines)
-make the RSI static serios cover handling of output variables (everything what the code does after waitkeys)
-implement some basic output variable calculation in a post-process script
-use datetime for registering also the microsecond for the time stamp of pushing a button (if it does not take too much CPU time)
-bring back stimhr output variable
+implement some basic output variable calculation in a post-process script (stimhl)
 use a bit more readable variable names (both in name and in output). e.g. bad naming example: stimpr and "PR" in output (can pattern_or_random or someting like that)
 might be a good idea to make consitent the output variable: session, epoch, block, trial, how they are calculated, as global serial number or as inner serial number
 store both converted user id and the user name without changes
-simplify possible colors?
 don't continue with a block after a quit, but start from the beginning of the block
 measure how much time it takes to run one trial (without RSI and RT) -> can be optimized based on this value
-rt in case of wrong button
 cleanup instructions, accent characters, ':' etc
 ET: output
