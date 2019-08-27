@@ -23,10 +23,11 @@ import shelve
 import random
 import codecs
 import os
-import time
 import pyglet
 import platform
 import numbers
+from datetime import datetime
+
 
 try:
     import tobii_research as tobii
@@ -1383,8 +1384,9 @@ class Experiment:
                 RSI_clock.reset()
                 RSI.start(self.settings.RSI_time)
 
-                stim_RT_time = time.strftime('%H:%M:%S')
-                stim_RT_date = time.strftime('%d/%m/%Y')
+                now = datetime.now()
+                stim_RT_time = now.strftime('%H:%M:%S.%f')
+                stim_RT_date = now.strftime('%d/%m/%Y')
                 stimRT = time_stamp
 
                 self.stim_output_line += 1

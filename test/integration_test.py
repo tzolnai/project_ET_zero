@@ -196,7 +196,7 @@ class integrationTest(unittest.TestCase):
                         # RSI time, keep this low so the program will be precise inside a trial
                         self.assertAlmostEqual(
                             float(ref_values[11].replace(",", ".")),
-                            float(act_values[11].replace(",", ".")), delta=0.04)
+                            float(act_values[11].replace(",", ".")), delta=0.02)
                     self.assertEqual(
                         ref_values[12], act_values[12])  # frame_rate
                     self.assertEqual(
