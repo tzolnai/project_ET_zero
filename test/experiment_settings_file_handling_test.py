@@ -270,15 +270,15 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
 
                              'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
                              'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n' +
-                             'úgy az asrt.py és az instrukciókat tartalmazó .txt fájlt másold át egy másik könyvtárba is,\n' +
-                             'és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
+                             'úgy az asrt.py és az instrukciókat tartalmazó inst_and_feedback.txt fájlt másold át egy,\n' +
+                             'másik könyvtárba is, és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
 
                              'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n' +
                              'beállítások vannak elmentve.\n\n' +
 
-                             'A settings.dat fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
+                             'A settings/settings fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
                              'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
-                             'jelen .txt fájlt előtte másold, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
+                             'jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
 
 if __name__ == "__main__":
