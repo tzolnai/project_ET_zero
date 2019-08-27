@@ -1389,9 +1389,6 @@ class Experiment:
                 self.stim_output_line += 1
                 responses_in_block += 1
 
-                if cycle == 1:
-                    stim_first_RT = stimRT
-
                 # quit during the experiment
                 if response == -1:
                     self.stim_output_line -= 1
