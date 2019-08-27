@@ -418,5 +418,29 @@ class integrationTest(unittest.TestCase):
 
         self.checkOutputFile(True)
 
+    def calculate_stim_properties_override_RT(self):
+        self.calculate_stim_properties_override()
+        self.key_list = self.key_list[0:10] + \
+            [self.key_list[8]] + self.key_list[10:]
+
+        # add time stamps to the reactions
+        for i in range(0, len(self.key_list)):
+            self.key_list[i] = (self.key_list[i], ((i % 5)* 100) + 200)
+
+        self.visual_mock.setReturnKeyList(self.key_list)
+
+    def testRT(self):
+        self.experiment.calculate_stim_properties = self.calculate_stim_properties_override_RT
+
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.run()
+
+        self.checkOutputFile(True)
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
