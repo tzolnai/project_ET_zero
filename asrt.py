@@ -1399,7 +1399,7 @@ class Experiment:
 
                     self.quit_presentation()
 
-                # right button was pushed
+                # right response
                 elif response == self.stimlist[N]:
                     stimACC = 0
                     accs_in_block.append(0)
@@ -1409,7 +1409,7 @@ class Experiment:
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
 
-                # wrong button was pushed -> let's wait for the next key input
+                # wrong response -> let's wait for the next response
                 else:
                     stimACC = 1
                     accs_in_block.append(1)
