@@ -1375,7 +1375,8 @@ class Experiment:
                     else:
                         stim_RSI = RSI_clock.getTime()
 
-                trial_clock.reset()
+                if cycle == 1:
+                    trial_clock.reset()
                 (response, time_stamp) = self.wait_for_response(trial_clock)
 
                 # start of the RSI timer
