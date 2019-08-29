@@ -9,4 +9,4 @@ store both converted user id and the user name without changes
 don't continue with a block after a quit, but start from the beginning of the block
 measure how much time it takes to run one trial (without RSI and RT) -> can be optimized based on this value
 cleanup instructions, accent characters, ':' etc
-ET: output
+ET: output, fixation point, stim_bg

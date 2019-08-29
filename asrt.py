@@ -632,7 +632,7 @@ class InstructionHelper:
 class PersonDataHandler:
     """Class for handle subject related settings and data."""
 
-    def __init__(self, subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path):
+    def __init__(self, subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path, output_file_type):
         # generated, unique ID of the subject (consist of a name, a number and an optional group name
         self.subject_id = subject_id
         # path to the settings file of the current subject storing the state of the experiment
@@ -643,6 +643,8 @@ class PersonDataHandler:
         self.subject_list_file_path = subject_list_file_path
         # output text file for the measured data of the current subject
         self.output_file_path = output_file_path
+        # type of the experiment indicating the output variables ('reaction-time' or 'eye-tracking')
+        self.output_file_type = output_file_type
 
     def load_person_settings(self, experiment):
         """Open settings file of the current subject and read the current state."""
@@ -719,14 +721,18 @@ class PersonDataHandler:
 
         if not os.path.isfile(self.output_file_path):
             with codecs.open(self.output_file_path, 'w', encoding='utf-8') as output_file:
-                self.add_heading_to_output(output_file)
+                if self.output_file_type == 'reaction-time':
+                    self.add_RT_heading_to_output(output_file)
+                else:
+                    self.add_ET_heading_to_output(output_file)
                 output_file.write(string_to_append)
         else:
             with codecs.open(self.output_file_path, 'a+', encoding='utf-8') as output_file:
                 output_file.write(string_to_append)
 
-    def write_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor):
-        """ Write out the ouptut date of the current trial into the output text file."""
+    def write_RT_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor):
+        """ Write out the ouptut date of the current trial into the output text file (reaction-time exp. type)."""
+        assert self.output_file_type == 'reaction-time'
 
         output_data = [experiment.settings.computer_name,
                        experiment.subject_group,
@@ -766,8 +772,9 @@ class PersonDataHandler:
             output += data + '\t'
         self.append_to_output_file(output)
 
-    def add_heading_to_output(self, output_file):
-        """Add the first line to the ouput with the names of the different variables."""
+    def add_RT_heading_to_output(self, output_file):
+        """Add the first line to the ouput with the names of the different variables (reaction-time exp. type)."""
+        assert self.output_file_type == 'reaction-time'
 
         heading_list = ['computer_name',
                         'subject_group',
@@ -796,6 +803,100 @@ class PersonDataHandler:
                         'error',
                         'stimulus',
                         'response',
+                        'quit_log']
+
+        for h in heading_list:
+            output_file.write(h + '\t')
+
+    def write_gaze_data_to_output(self, experiment, left_gaze_data, right_gaze_data, left_gaze_validity, right_gaze_validity,
+                                  left_pupil_diameter, right_pupil_diameter, left_pupil_validity, right_pupil_validity):
+        """ Write out the ouptut date of the current trial into the output text file (eye-tracking exp. type)."""
+        assert self.output_file_type == 'eye-tracking'
+
+        N = experiment.last_N + 1
+        session = experiment.stim_sessionN[N]
+        PCode = experiment.which_code(session)
+        asrt_type = experiment.settings.asrt_types[session]
+        if experiment.stimpr[N] == 'P':
+            if experiment.settings.asrt_types[session] == 'explicit':
+                stimcolor = experiment.colors['stimp']
+            else:
+                stimcolor = experiment.colors['stimr']
+        else:
+            stimcolor = experiment.colors['stimr']
+
+        output_data = [experiment.settings.computer_name,
+                       experiment.subject_group,
+                       experiment.subject_name,
+                       experiment.subject_number,
+                       asrt_type,
+                       PCode,
+
+                       experiment.stim_sessionN[N],
+                       experiment.stimepoch[N],
+                       experiment.stimblock[N],
+                       experiment.stimtrial[N],
+
+                       experiment.last_RSI,
+                       experiment.frame_rate,
+                       experiment.frame_time,
+                       experiment.frame_sd,
+
+                       stimcolor,
+                       experiment.stimpr[N],
+                       experiment.stimlist[N],
+                       experiment.stimulus_on_screen,
+                       left_gaze_data,
+                       right_gaze_data,
+                       left_gaze_validity,
+                       right_gaze_validity,
+                       left_pupil_diameter,
+                       right_pupil_diameter,
+                       left_pupil_validity,
+                       right_pupil_validity]
+        output = "\n"
+        for data in output_data:
+            if isinstance(data, numbers.Number):
+                data = str(data)
+                data = data.replace('.', ',')
+            else:
+                data = str(data)
+            output += data + '\t'
+        self.append_to_output_file(output)
+
+    def add_ET_heading_to_output(self, output_file):
+        """Add the first line to the ouput with the names of the different variables (eye-tracking exp. type)."""
+        assert self.output_file_type == 'eye-tracking'
+
+        heading_list = ['computer_name',
+                        'subject_group',
+                        'subject_name',
+                        'subject_number',
+                        'asrt_type',
+                        'PCode',
+
+                        'session',
+                        'epoch',
+                        'block',
+                        'trial',
+
+                        'RSI_time',
+                        'frame_rate',
+                        'frame_time',
+                        'frame_sd',
+
+                        'stimulus_color',
+                        'PR',
+                        'stimulus',
+                        'stimulus_on_screen',
+                        'left_gaze_data',
+                        'right_gaze_data',
+                        'left_gaze_validity',
+                        'right_gaze_validity',
+                        'left_pupil_diameter',
+                        'right_pupil_diameter',
+                        'left_pupil_validity',
+                        'right_pupil_validity',
                         'quit_log']
 
         for h in heading_list:
@@ -860,12 +961,16 @@ class Experiment:
         self.stimtrial = None
         # global trial number -> stimulus number mapping (e.g. {1 : 1, 2 : 2, 3 : 2, 4 : 4})
         self.stimlist = None
-        # number of the last trial (it is 0 in the beggining and it is always equal with the last displayed stimulus's serial number
-        self.last_N = None
         # global trial number -> first trial of the next session mapping (e. g.{1 : 3, 2 : 3, 3 : 5, 4 : 5} - two sessions with two trials in each)
         self.end_at = None
         # global trial number -> pattern or random stimulus mapping (e. g.{1 : 'P', 2 : 'R', 3 : 'P', 4 : 'R'} - two sessions with two trials in each)
         self.stimpr = None
+        # number of the last trial (it is 0 in the beggining and it is always equal with the last displayed stimulus's serial number
+        self.last_N = None
+        # this variable has a meaning during presentation, current stimulus is on the screen or we are in the RSI interval
+        self.stimulus_on_screen = None
+        # this variable has a meaning during presentation, last measured RSI
+        self.last_RSI = None
 
     def all_settings_def(self):
 
@@ -1088,7 +1193,8 @@ class Experiment:
                                               "participants_in_experiment.txt")
         output_file_path = os.path.join(self.workdir_path, "logs", subject_id + '_log.txt')
         self.person_data = PersonDataHandler(subject_id, all_settings_file_path,
-                                             all_IDs_file_path, subject_list_file_path, output_file_path)
+                                             all_IDs_file_path, subject_list_file_path,
+                                             output_file_path, self.settings.experiment_type)
 
         # update ID file containing all participating subject's ID
         self.person_data.update_subject_IDs_files()
@@ -1131,6 +1237,11 @@ class Experiment:
         left_gaze_valid = gazeData['left_gaze_point_validity']
         right_gaze_valid = gazeData['right_gaze_point_validity']
 
+        left_pupil_diameter = gazeData['left_pupil_diameter']
+        right_pupil_diameter = gazeData['right_pupil_diameter']
+        left_pupil_validity = gazeData['left_pupil_validity']
+        right_pupil_validity = gazeData['right_pupil_validity']
+
         x_coord = None
         y_coord = None
         if left_gaze_valid and right_gaze_valid:
@@ -1150,6 +1261,10 @@ class Experiment:
         if len(self.gaze_data_list) > max_length:
             self.gaze_data_list.pop(0)
 
+        self.person_data.write_gaze_data_to_output(
+            self, left_gaze_XYZ, right_gaze_XYZ, left_gaze_valid, right_gaze_valid,
+            left_pupil_diameter, right_pupil_diameter, left_pupil_validity, right_pupil_validity)
+
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
             return True
@@ -1162,7 +1277,6 @@ class Experiment:
 
             if 'q' in event.getKeys():
                 return -1
-
 
             if len(self.gaze_data_list) == 0:
                 continue
@@ -1184,7 +1298,7 @@ class Experiment:
 
                 # need to mirror the y coordinates
                 avg_pos_cm = ((pos_norm[0] * monitor_width_cm) - shift_x,
-                             ((pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
+                              ((pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
                 for i in range(1, 5):
                     if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
@@ -1237,7 +1351,8 @@ class Experiment:
     def show_feedback(self, N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list):
         """ Display feedback in the end of the blocks, showing some data about speed and accuracy."""
 
-        acc_for_the_whole = 100 * float(responses_in_block - sum(accs_in_block)) / responses_in_block
+        acc_for_the_whole = 100 * float(responses_in_block -
+                                        sum(accs_in_block)) / responses_in_block
         acc_for_the_whole_str = str(acc_for_the_whole)[0:5].replace('.', ',')
 
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
@@ -1328,6 +1443,9 @@ class Experiment:
 
         first_trial_in_block = True
 
+        self.stimulus_on_screen = False
+        self.last_RSI = -1
+
         # start recording gaze data
         if self.eye_tracker is not None:
             self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA,
@@ -1337,6 +1455,8 @@ class Experiment:
             # four empty circles where the actual stimulus can be placed
             self.stim_bg(stimbg)
             self.mywindow.flip()
+            self.stimulus_on_screen = False
+            self.last_RSI = -1
 
             # set the actual stimulus' position and fill color
             if self.stimpr[N] == 'P':
@@ -1368,6 +1488,7 @@ class Experiment:
                 else:
                     stimR.draw()
                 self.mywindow.flip()
+                self.stimulus_on_screen = True
 
                 # we measure the actual RSI
                 if cycle == 1:
@@ -1375,6 +1496,7 @@ class Experiment:
                         stim_RSI = 0.0
                     else:
                         stim_RSI = RSI_clock.getTime()
+                self.last_RSI = stim_RSI
 
                 if cycle == 1:
                     trial_clock.reset()
@@ -1422,9 +1544,10 @@ class Experiment:
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
 
-                # save data of the last trial
-                self.person_data.write_data_to_output(
-                    self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
+                # save data of the last trial (for ET we save data for every sample)
+                if self.settings.experiment_type == 'reaction-time':
+                    self.person_data.write_RT_data_to_output(
+                        self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
                 if stimACC == 0:
                     self.last_N = N

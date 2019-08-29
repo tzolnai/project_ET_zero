@@ -39,6 +39,10 @@ class EyeTrackerMock:
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['left_gaze_point_validity'] = True
         gazeData['right_gaze_point_validity'] = True
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = True
+        gazeData['right_pupil_validity'] = True
         callback(gazeData)
         global gaze_data_callback
         gaze_data_callback = callback
@@ -63,6 +67,10 @@ def on_move(x, y):
         gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.1, yCoord)
         gazeData['left_gaze_point_validity'] = True
         gazeData['right_gaze_point_validity'] = True
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = True
+        gazeData['right_pupil_validity'] = True
         gaze_data_callback(gazeData)
 
 

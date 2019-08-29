@@ -61,7 +61,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testRoundTripSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
+            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -86,7 +86,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.save_person_settings(experiment)
 
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
+            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
 
         person_data_handler.load_person_settings(experiment)
 
@@ -112,7 +112,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testReadMissingPersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
+            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -133,7 +133,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testReadIncompletePersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
+            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -165,7 +165,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testUpdateExistingPersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "")
+            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -203,7 +203,7 @@ class personDataHandlerTest(unittest.TestCase):
         subject_list_file_path = self.constructFilePath(
             "testCreateIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "")
+            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
         person_data_handler.update_subject_IDs_files()
 
@@ -225,7 +225,7 @@ class personDataHandlerTest(unittest.TestCase):
         subject_list_file_path = self.constructFilePath(
             "testAddSameIDToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "")
+            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
         # call this twice simulating of running the experiment with the same subject more times
         person_data_handler.update_subject_IDs_files()
@@ -249,19 +249,19 @@ class personDataHandlerTest(unittest.TestCase):
         subject_list_file_path = self.constructFilePath(
             "testAddMoreIDsToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "")
+            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_subject_IDs_files()
 
         person_data_handler = asrt.PersonDataHandler(
-            "toth-csaba_111_group2", "", all_IDs_file_path, subject_list_file_path, "")
+            "toth-csaba_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_subject_IDs_files()
 
         person_data_handler = asrt.PersonDataHandler(
-            "kertesz-bela_222_group3", "", all_IDs_file_path, subject_list_file_path, "")
+            "kertesz-bela_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_subject_IDs_files()
 
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "")
+            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_subject_IDs_files()
 
         # output files exist
@@ -285,7 +285,7 @@ class personDataHandlerTest(unittest.TestCase):
         subject_list_file_path = self.constructFilePath(
             "testSaveSpecialGroupNameToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", all_IDs_file_path, subject_list_file_path, "")
+            "alattomos-aladar_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_subject_IDs_files()
 
         # output files exist
@@ -305,7 +305,7 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testAppendToEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", "", "", output_file_path)
+            "alattomos-aladar_333_group_1", "", "", "", output_file_path, "reaction-time")
 
         person_data_handler.append_to_output_file("something")
 
@@ -318,7 +318,7 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testAppendMoreTimesToOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", "", "", output_file_path)
+            "alattomos-aladar_333_group_1", "", "", "", output_file_path, "reaction-time")
 
         person_data_handler.append_to_output_file("\nsomething")
         person_data_handler.append_to_output_file("\nsomething2")
@@ -333,7 +333,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteEmptyOutput(self):
         output_file_path = self.constructFilePath("testWriteEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path)
+            "alattomos-aladar_333_group1", "", "", "", output_file_path, "reaction-time")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -363,7 +363,7 @@ class personDataHandlerTest(unittest.TestCase):
         response = 'z'
         N = 0
 
-        person_data_handler.write_data_to_output(
+        person_data_handler.write_RT_data_to_output(
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
@@ -380,7 +380,7 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testWriteExistingOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path)
+            "alattomos-aladar_333_group1", "", "", "", output_file_path, "reaction-time")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -410,7 +410,7 @@ class personDataHandlerTest(unittest.TestCase):
         response = 'z'
         N = 0
 
-        person_data_handler.write_data_to_output(
+        person_data_handler.write_RT_data_to_output(
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         experiment.stim_output_line = 13
@@ -425,7 +425,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimlist[0] = 2
         response = 'b'
 
-        person_data_handler.write_data_to_output(
+        person_data_handler.write_RT_data_to_output(
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
@@ -447,7 +447,7 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testPointInComputerName.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path)
+            "alattomos-aladar_333_group1", "", "", "", output_file_path, "reaction-time")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -477,7 +477,7 @@ class personDataHandlerTest(unittest.TestCase):
         response = 'z'
         N = 0
 
-        person_data_handler.write_data_to_output(
+        person_data_handler.write_RT_data_to_output(
             experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
