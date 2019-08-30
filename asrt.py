@@ -27,7 +27,7 @@ import pyglet
 import platform
 import numbers
 from datetime import datetime
-
+from io import StringIO
 
 try:
     import tobii_research as tobii
@@ -808,70 +808,76 @@ class PersonDataHandler:
         for h in heading_list:
             output_file.write(h + '\t')
 
-    def write_gaze_data_to_output(self, experiment, gazeData):
+    def write_gaze_data_to_output(self, experiment):
         """ Write out the ouptut date of the current trial into the output text file (eye-tracking exp. type)."""
         assert self.output_file_type == 'eye-tracking'
 
-        N = experiment.last_N + 1
-        session = experiment.stim_sessionN[N]
-        PCode = experiment.which_code(session)
-        asrt_type = experiment.settings.asrt_types[session]
-        if experiment.stimpr[N] == 'P':
-            if experiment.settings.asrt_types[session] == 'explicit':
-                stimcolor = experiment.colors['stimp']
+        output_buffer = StringIO()
+        for data in experiment.gaze_data_output:
+
+            N = data[0] + 1
+            session = experiment.stim_sessionN[N]
+            PCode = experiment.which_code(session)
+            asrt_type = experiment.settings.asrt_types[session]
+            if experiment.stimpr[N] == 'P':
+                if experiment.settings.asrt_types[session] == 'explicit':
+                    stimcolor = experiment.colors['stimp']
+                else:
+                    stimcolor = experiment.colors['stimr']
             else:
                 stimcolor = experiment.colors['stimr']
-        else:
-            stimcolor = experiment.colors['stimr']
 
-        left_gaze_data = gazeData['left_gaze_point_on_display_area']
-        right_gaze_data = gazeData['right_gaze_point_on_display_area']
-        left_gaze_validity = gazeData['left_gaze_point_validity']
-        right_gaze_validity = gazeData['right_gaze_point_validity']
+            left_gaze_data = data[3]['left_gaze_point_on_display_area']
+            right_gaze_data = data[3]['right_gaze_point_on_display_area']
+            left_gaze_validity = data[3]['left_gaze_point_validity']
+            right_gaze_validity = data[3]['right_gaze_point_validity']
 
-        left_pupil_diameter = gazeData['left_pupil_diameter']
-        right_pupil_diameter = gazeData['right_pupil_diameter']
-        left_pupil_validity = gazeData['left_pupil_validity']
-        right_pupil_validity = gazeData['right_pupil_validity']
+            left_pupil_diameter = data[3]['left_pupil_diameter']
+            right_pupil_diameter = data[3]['right_pupil_diameter']
+            left_pupil_validity = data[3]['left_pupil_validity']
+            right_pupil_validity = data[3]['right_pupil_validity']
 
-        output_data = [experiment.settings.computer_name,
-                       experiment.subject_group,
-                       experiment.subject_name,
-                       experiment.subject_number,
-                       asrt_type,
-                       PCode,
+            output_data = [experiment.settings.computer_name,
+                           experiment.subject_group,
+                           experiment.subject_name,
+                           experiment.subject_number,
+                           asrt_type,
+                           PCode,
 
-                       experiment.stim_sessionN[N],
-                       experiment.stimepoch[N],
-                       experiment.stimblock[N],
-                       experiment.stimtrial[N],
+                           experiment.stim_sessionN[N],
+                           experiment.stimepoch[N],
+                           experiment.stimblock[N],
+                           experiment.stimtrial[N],
 
-                       experiment.last_RSI,
-                       experiment.frame_rate,
-                       experiment.frame_time,
-                       experiment.frame_sd,
+                           data[1],
+                           experiment.frame_rate,
+                           experiment.frame_time,
+                           experiment.frame_sd,
 
-                       stimcolor,
-                       experiment.stimpr[N],
-                       experiment.stimlist[N],
-                       experiment.stimulus_on_screen,
-                       left_gaze_data,
-                       right_gaze_data,
-                       left_gaze_validity,
-                       right_gaze_validity,
-                       left_pupil_diameter,
-                       right_pupil_diameter,
-                       left_pupil_validity,
-                       right_pupil_validity]
-        output = "\n"
-        for data in output_data:
-            if isinstance(data, numbers.Number):
-                data = str(data)
-                data = data.replace('.', ',')
-            else:
-                data = str(data)
-            output += data + '\t'
-        self.append_to_output_file(output)
+                           stimcolor,
+                           experiment.stimpr[N],
+                           experiment.stimlist[N],
+                           data[2],
+                           left_gaze_data,
+                           right_gaze_data,
+                           left_gaze_validity,
+                           right_gaze_validity,
+                           left_pupil_diameter,
+                           right_pupil_diameter,
+                           left_pupil_validity,
+                           right_pupil_validity]
+
+            output_buffer.write("\n")
+            for data in output_data:
+                if isinstance(data, numbers.Number):
+                    data = str(data)
+                    data = data.replace('.', ',')
+                else:
+                    data = str(data)
+                output_buffer.write(data + '\t')
+
+        self.append_to_output_file(output_buffer.getvalue())
+        output_buffer.close()
 
     def add_ET_heading_to_output(self, output_file):
         """Add the first line to the ouput with the names of the different variables (eye-tracking exp. type)."""
@@ -936,6 +942,7 @@ class Experiment:
         # tobii EyeTracker object for handling eye-tracker input
         self.eye_tracker = None
         self.gaze_data_list = []
+        self.gaze_data_output = []
         self.last_hit_AOI = -1
 
         # visual.Window object for displaying experiment
@@ -1265,7 +1272,8 @@ class Experiment:
         if len(self.gaze_data_list) > max_length:
             self.gaze_data_list.pop(0)
 
-        self.person_data.write_gaze_data_to_output(self, gazeData)
+        self.gaze_data_output.append(
+            [self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
@@ -1403,7 +1411,8 @@ class Experiment:
 
         self.person_data.append_to_output_file('userquit')
 
-        self.person_data.save_person_settings(self)
+        if self.settings.experiment_type == 'reaction-time':
+            self.person_data.save_person_settings(self)
         core.quit()
 
     def presentation(self):
@@ -1561,6 +1570,11 @@ class Experiment:
             if N in self.settings.get_block_starts():
 
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
+
+                if self.settings.experiment_type == 'eye-tracking':
+                    self.person_data.write_gaze_data_to_output(self)
+                    self.gaze_data_output.clear()
+                    self.person_data.save_person_settings(self)
 
                 whatnow = self.show_feedback(
                     N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list)
