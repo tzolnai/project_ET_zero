@@ -1220,7 +1220,7 @@ class Experiment:
         allTrackers = tobii.find_all_eyetrackers()
         while not allTrackers and loopCount < 50:
             allTrackers = tobii.find_all_eyetrackers()
-            pcore.wait(0.02)
+            core.wait(0.02)
             loopCount += 1
 
         if len(allTrackers) < 1:
