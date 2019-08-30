@@ -808,8 +808,7 @@ class PersonDataHandler:
         for h in heading_list:
             output_file.write(h + '\t')
 
-    def write_gaze_data_to_output(self, experiment, left_gaze_data, right_gaze_data, left_gaze_validity, right_gaze_validity,
-                                  left_pupil_diameter, right_pupil_diameter, left_pupil_validity, right_pupil_validity):
+    def write_gaze_data_to_output(self, experiment, gazeData):
         """ Write out the ouptut date of the current trial into the output text file (eye-tracking exp. type)."""
         assert self.output_file_type == 'eye-tracking'
 
@@ -824,6 +823,16 @@ class PersonDataHandler:
                 stimcolor = experiment.colors['stimr']
         else:
             stimcolor = experiment.colors['stimr']
+
+        left_gaze_data = gazeData['left_gaze_point_on_display_area']
+        right_gaze_data = gazeData['right_gaze_point_on_display_area']
+        left_gaze_validity = gazeData['left_gaze_point_validity']
+        right_gaze_validity = gazeData['right_gaze_point_validity']
+
+        left_pupil_diameter = gazeData['left_pupil_diameter']
+        right_pupil_diameter = gazeData['right_pupil_diameter']
+        left_pupil_validity = gazeData['left_pupil_validity']
+        right_pupil_validity = gazeData['right_pupil_validity']
 
         output_data = [experiment.settings.computer_name,
                        experiment.subject_group,
@@ -1237,11 +1246,6 @@ class Experiment:
         left_gaze_valid = gazeData['left_gaze_point_validity']
         right_gaze_valid = gazeData['right_gaze_point_validity']
 
-        left_pupil_diameter = gazeData['left_pupil_diameter']
-        right_pupil_diameter = gazeData['right_pupil_diameter']
-        left_pupil_validity = gazeData['left_pupil_validity']
-        right_pupil_validity = gazeData['right_pupil_validity']
-
         x_coord = None
         y_coord = None
         if left_gaze_valid and right_gaze_valid:
@@ -1261,9 +1265,7 @@ class Experiment:
         if len(self.gaze_data_list) > max_length:
             self.gaze_data_list.pop(0)
 
-        self.person_data.write_gaze_data_to_output(
-            self, left_gaze_XYZ, right_gaze_XYZ, left_gaze_valid, right_gaze_valid,
-            left_pupil_diameter, right_pupil_diameter, left_pupil_validity, right_pupil_validity)
+        self.person_data.write_gaze_data_to_output(self, gazeData)
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
