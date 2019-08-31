@@ -26,7 +26,7 @@ def format_files_in_directory(dir_path):
             print("Formating file: " + file_path)
 
             # Run autopep8
-            os.system("autopep8 -i --ignore E402 --max-line-length 100 " + file_path)
+            os.system("autopep8 -i --ignore E402 --max-line-length 150 " + file_path)
 
             # Replace line endings (use Linux line endings consitently)
             with open(file_path, 'rb') as open_file:

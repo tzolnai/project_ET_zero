@@ -645,6 +645,8 @@ class PersonDataHandler:
         self.output_file_path = output_file_path
         # type of the experiment indicating the output variables ('reaction-time' or 'eye-tracking')
         self.output_file_type = output_file_type
+        # we store all neccessary data in this list of lists to be able to generate the output at the end of all blocks
+        self.output_data_buffer = []
 
     def load_person_settings(self, experiment):
         """Open settings file of the current subject and read the current state."""
@@ -730,47 +732,63 @@ class PersonDataHandler:
             with codecs.open(self.output_file_path, 'a+', encoding='utf-8') as output_file:
                 output_file.write(string_to_append)
 
-    def write_RT_data_to_output(self, experiment, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor):
+    def flush_data_to_output(self, experiment):
+        if self.output_file_type == 'reaction-time':
+            self.flush_RT_data_to_output(experiment)
+        else:
+            self.flush_ET_data_to_output(experiment)
+
+    def flush_RT_data_to_output(self, experiment):
         """ Write out the ouptut date of the current trial into the output text file (reaction-time exp. type)."""
         assert self.output_file_type == 'reaction-time'
 
-        output_data = [experiment.settings.computer_name,
-                       experiment.subject_group,
-                       experiment.subject_name,
-                       experiment.subject_number,
-                       asrt_type,
-                       PCode,
+        output_buffer = StringIO()
+        for data in self.output_data_buffer:
+            N = data[0]
+            session = experiment.stim_sessionN[N]
+            PCode = experiment.which_code(session)
+            asrt_type = experiment.settings.asrt_types[session]
 
-                       experiment.stim_output_line,
+            output_data = [experiment.settings.computer_name,
+                           experiment.subject_group,
+                           experiment.subject_name,
+                           experiment.subject_number,
+                           asrt_type,
+                           PCode,
 
-                       experiment.stim_sessionN[N],
-                       experiment.stimepoch[N],
-                       experiment.stimblock[N],
-                       experiment.stimtrial[N],
+                           data[8],
 
-                       stim_RSI,
-                       experiment.frame_rate,
-                       experiment.frame_time,
-                       experiment.frame_sd,
-                       stim_RT_time,
-                       stim_RT_date,
+                           experiment.stim_sessionN[N],
+                           experiment.stimepoch[N],
+                           experiment.stimblock[N],
+                           experiment.stimtrial[N],
 
-                       stimcolor,
-                       experiment.stimpr[N],
-                       stimRT,
-                       stimACC,
+                           data[1],
+                           experiment.frame_rate,
+                           experiment.frame_time,
+                           experiment.frame_sd,
+                           data[2],
+                           data[3],
 
-                       experiment.stimlist[N],
-                       response]
-        output = "\n"
-        for data in output_data:
-            if isinstance(data, numbers.Number):
-                data = str(data)
-                data = data.replace('.', ',')
-            else:
-                data = str(data)
-            output += data + '\t'
-        self.append_to_output_file(output)
+                           data[7],
+                           experiment.stimpr[N],
+                           data[4],
+                           data[5],
+
+                           experiment.stimlist[N],
+                           data[6]]
+            output_buffer.write("\n")
+            for data in output_data:
+                if isinstance(data, numbers.Number):
+                    data = str(data)
+                    data = data.replace('.', ',')
+                else:
+                    data = str(data)
+                output_buffer.write(data + '\t')
+
+        self.append_to_output_file(output_buffer.getvalue())
+        output_buffer.close()
+        self.output_data_buffer.clear()
 
     def add_RT_heading_to_output(self, output_file):
         """Add the first line to the ouput with the names of the different variables (reaction-time exp. type)."""
@@ -808,12 +826,12 @@ class PersonDataHandler:
         for h in heading_list:
             output_file.write(h + '\t')
 
-    def write_gaze_data_to_output(self, experiment):
+    def flush_ET_data_to_output(self, experiment):
         """ Write out the ouptut date of the current trial into the output text file (eye-tracking exp. type)."""
         assert self.output_file_type == 'eye-tracking'
 
         output_buffer = StringIO()
-        for data in experiment.gaze_data_output:
+        for data in self.output_data_buffer:
 
             N = data[0] + 1
             session = experiment.stim_sessionN[N]
@@ -880,6 +898,7 @@ class PersonDataHandler:
 
         self.append_to_output_file(output_buffer.getvalue())
         output_buffer.close()
+        self.output_data_buffer.clear()
 
     def add_ET_heading_to_output(self, output_file):
         """Add the first line to the ouput with the names of the different variables (eye-tracking exp. type)."""
@@ -946,7 +965,6 @@ class Experiment:
         # tobii EyeTracker object for handling eye-tracker input
         self.eye_tracker = None
         self.gaze_data_list = []
-        self.gaze_data_output = []
         self.last_hit_AOI = -1
 
         # visual.Window object for displaying experiment
@@ -1276,7 +1294,7 @@ class Experiment:
         if len(self.gaze_data_list) > max_length:
             self.gaze_data_list.pop(0)
 
-        self.gaze_data_output.append(
+        self.person_data.output_data_buffer.append(
             [self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
@@ -1414,9 +1432,6 @@ class Experiment:
             self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
 
         self.person_data.append_to_output_file('userquit')
-
-        if self.settings.experiment_type == 'reaction-time':
-            self.person_data.save_person_settings(self)
         core.quit()
 
     def presentation(self):
@@ -1561,8 +1576,8 @@ class Experiment:
 
                 # save data of the last trial (for ET we save data for every sample)
                 if self.settings.experiment_type == 'reaction-time':
-                    self.person_data.write_RT_data_to_output(
-                        self, asrt_type, PCode, N, stim_RSI, stim_RT_time, stim_RT_date, stimRT, stimACC, response, stimcolor)
+                    self.person_data.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date,
+                                                                stimRT, stimACC, response, stimcolor, self.stim_output_line])
 
                 if stimACC == 0:
                     self.last_N = N
@@ -1575,10 +1590,8 @@ class Experiment:
 
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
 
-                if self.settings.experiment_type == 'eye-tracking':
-                    self.person_data.write_gaze_data_to_output(self)
-                    self.gaze_data_output.clear()
-                    self.person_data.save_person_settings(self)
+                self.person_data.flush_data_to_output(self)
+                self.person_data.save_person_settings(self)
 
                 whatnow = self.show_feedback(
                     N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list)

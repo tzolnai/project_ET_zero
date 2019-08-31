@@ -151,7 +151,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
 
-    def checkOutputFile(self, check_timing=False):
+    def checkOutputFile(self, check_timing=False, RSI_delta=0.01):
         reference_file_path = os.path.join(
             self.current_dir, "reference", "toth-bela_10__log.txt")
         workdir_output = os.path.join(
@@ -196,7 +196,7 @@ class integrationTest(unittest.TestCase):
                         # RSI time, keep this low so the program will be precise inside a trial
                         self.assertAlmostEqual(
                             float(ref_values[11].replace(",", ".")),
-                            float(act_values[11].replace(",", ".")), delta=0.02)
+                            float(act_values[11].replace(",", ".")), delta=RSI_delta)
                     self.assertEqual(
                         ref_values[12], act_values[12])  # frame_rate
                     self.assertEqual(
@@ -416,7 +416,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile(True)
+        self.checkOutputFile(True, 0.03)
 
     def calculate_stim_properties_override_RT(self):
         self.calculate_stim_properties_override()
@@ -425,7 +425,7 @@ class integrationTest(unittest.TestCase):
 
         # add time stamps to the reactions
         for i in range(0, len(self.key_list)):
-            self.key_list[i] = (self.key_list[i], ((i % 5)* 100) + 200)
+            self.key_list[i] = (self.key_list[i], ((i % 5) * 100) + 200)
 
         self.visual_mock.setReturnKeyList(self.key_list)
 
@@ -441,6 +441,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.run()
 
         self.checkOutputFile(True)
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
