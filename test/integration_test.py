@@ -151,7 +151,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
 
-    def checkOutputFile(self, check_timing=False, RSI_delta=0.01):
+    def checkOutputFile(self, check_timing=False, RSI_delta=0.002):
         reference_file_path = os.path.join(
             self.current_dir, "reference", "toth-bela_10__log.txt")
         workdir_output = os.path.join(
