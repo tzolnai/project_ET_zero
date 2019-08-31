@@ -1092,7 +1092,6 @@ class Experiment:
             expstart11.addText('Session: ' + str(self.stim_sessionN[self.last_N + 1]))
             expstart11.addText('Epoch: ' + str(self.stimepoch[self.last_N + 1]))
             expstart11.addText('Block: ' + str(self.stimblock[self.last_N + 1]))
-            expstart11.addText('Trial: ' + str(self.stimtrial[self.last_N + 1]))
             expstart11.show()
             if not expstart11.OK:
                 core.quit()

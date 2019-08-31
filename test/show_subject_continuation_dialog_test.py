@@ -43,15 +43,11 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         experiment.stim_sessionN = {}
         experiment.stimepoch = {}
         experiment.stimblock = {}
-        experiment.stimtrial = {}
         experiment.last_N = experiment.settings.get_maxtrial()
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i / 5
-            experiment.stimblock[i] = i / \
-                (experiment.settings.blockprepN + experiment.settings.blocklengthN)
-            experiment.stimtrial[i] = i % (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i / (experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
         with self.assertRaises(SystemExit):
             experiment.show_subject_continuation_dialog()
@@ -59,8 +55,7 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
         self.assertEqual(list_of_texts[0], "A személy adatait beolvastam.")
-        self.assertEqual(list_of_texts[1],
-                         "A személy végigcsinálta a feladatot.")
+        self.assertEqual(list_of_texts[1], "A személy végigcsinálta a feladatot.")
 
     def testNullTrial(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -76,26 +71,21 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         experiment.stim_sessionN = {}
         experiment.stimepoch = {}
         experiment.stimblock = {}
-        experiment.stimtrial = {}
         experiment.last_N = 0
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i // 5 + 1
-            experiment.stimblock[i] = i // (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            experiment.stimtrial[i] = i % (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
 
         experiment.show_subject_continuation_dialog()
 
         list_of_texts = gui_mock.getListOfTexts()
-        self.assertEqual(len(list_of_texts), 6)
+        self.assertEqual(len(list_of_texts), 5)
         self.assertEqual(list_of_texts[0], "A személy adatait beolvastam.")
         self.assertEqual(list_of_texts[1], "Folytatás innen...")
         self.assertEqual(list_of_texts[2], "Session: 1")
         self.assertEqual(list_of_texts[3], "Epoch: 1")
         self.assertEqual(list_of_texts[4], "Block: 1")
-        self.assertEqual(list_of_texts[5], "Trial: 1")
 
     def testInnerTrial(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -117,21 +107,17 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i // ((experiment.settings.blockprepN +
                                              experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1
-            experiment.stimblock[i] = i // (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            experiment.stimtrial[i] = i % (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
 
         experiment.show_subject_continuation_dialog()
 
         list_of_texts = gui_mock.getListOfTexts()
-        self.assertEqual(len(list_of_texts), 6)
+        self.assertEqual(len(list_of_texts), 5)
         self.assertEqual(list_of_texts[0], "A személy adatait beolvastam.")
         self.assertEqual(list_of_texts[1], "Folytatás innen...")
         self.assertEqual(list_of_texts[2], "Session: 1")
         self.assertEqual(list_of_texts[3], "Epoch: 3")
         self.assertEqual(list_of_texts[4], "Block: 13")
-        self.assertEqual(list_of_texts[5], "Trial: 43")
 
     def testCancelDialog(self):
 
@@ -154,10 +140,7 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
         for i in range(1, experiment.settings.get_maxtrial() + 1):
             experiment.stim_sessionN[i] = 1
             experiment.stimepoch[i] = i // 5 + 1
-            experiment.stimblock[i] = i // (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            experiment.stimtrial[i] = i % (
-                experiment.settings.blockprepN + experiment.settings.blocklengthN)
+            experiment.stimblock[i] = i // (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
 
         with self.assertRaises(SystemExit):
             experiment.show_subject_continuation_dialog()
