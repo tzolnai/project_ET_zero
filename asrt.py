@@ -1252,22 +1252,22 @@ class Experiment:
     def eye_data_callback(self, gazeData):
         max_length = 5
 
-        left_gaze_XYZ = gazeData['left_gaze_point_on_display_area']
-        right_gaze_XYZ = gazeData['right_gaze_point_on_display_area']
+        left_gaze_XY = gazeData['left_gaze_point_on_display_area']
+        right_gaze_XY = gazeData['right_gaze_point_on_display_area']
         left_gaze_valid = gazeData['left_gaze_point_validity']
         right_gaze_valid = gazeData['right_gaze_point_validity']
 
         x_coord = None
         y_coord = None
         if left_gaze_valid and right_gaze_valid:
-            x_coord = (left_gaze_XYZ[0] + right_gaze_XYZ[0]) / 2
-            y_coord = (left_gaze_XYZ[1] + right_gaze_XYZ[1]) / 2
+            x_coord = (left_gaze_XY[0] + right_gaze_XY[0]) / 2
+            y_coord = (left_gaze_XY[1] + right_gaze_XY[1]) / 2
         elif left_gaze_valid:
-            x_coord = left_gaze_XYZ[0]
-            y_coord = left_gaze_XYZ[1]
+            x_coord = left_gaze_XY[0]
+            y_coord = left_gaze_XY[1]
         elif right_gaze_valid:
-            x_coord = right_gaze_XYZ[0]
-            y_coord = right_gaze_XYZ[1]
+            x_coord = right_gaze_XY[0]
+            y_coord = right_gaze_XY[1]
 
         if x_coord == None or y_coord == None:
             self.gaze_data_list.append((-1.0, -1.0))
