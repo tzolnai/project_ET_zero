@@ -449,20 +449,14 @@ class ExperimentSettings:
         settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
-            if self.experiment_type == 'reaction-time':
-                self.key1 = returned_data[0]
-                self.key2 = returned_data[1]
-                self.key3 = returned_data[2]
-                self.key4 = returned_data[3]
-                self.key_quit = returned_data[4]
-                self.whether_warning = returned_data[5]
-                self.speed_warning = returned_data[6]
-                self.acc_warning = returned_data[7]
-            else:  # 'eye-tracking'
-                self.whether_warning = returned_data[0]
-                self.speed_warning = returned_data[1]
-                self.acc_warning = returned_data[2]
-
+            self.key1 = returned_data[0]
+            self.key2 = returned_data[1]
+            self.key3 = returned_data[2]
+            self.key4 = returned_data[3]
+            self.key_quit = returned_data[4]
+            self.whether_warning = returned_data[5]
+            self.speed_warning = returned_data[6]
+            self.acc_warning = returned_data[7]
         else:
             core.quit()
 
@@ -569,7 +563,7 @@ class InstructionHelper:
     def show_ending(self, mywindow, expriment_settings):
         self.__show_message(self.ending, mywindow, expriment_settings)
 
-    def feedback_explicit(self, rt_mean, rt_mean_p, acc_for_pattern, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
+    def feedback_explicit_RT(self, rt_mean, rt_mean_p, acc_for_pattern, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
         """Display feedback screen in case of an explicit ASRT.
 
            The feedback string contains placeholders for reaction time and accuracy.
@@ -600,7 +594,7 @@ class InstructionHelper:
         else:
             return 'continue'
 
-    def feedback_implicit(self, rt_mean, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
+    def feedback_implicit_RT(self, rt_mean, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
         """Display feedback screen in case of an implicit ASRT.
 
            The feedback string contains placeholders for reaction time and accuracy.
@@ -621,6 +615,36 @@ class InstructionHelper:
             else:
                 i = i.replace('*SPEEDACC*', '')
 
+            self.__print_to_screen(i, mywindow)
+            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
+        if expriment_settings.key_quit in tempkey:
+            return 'quit'
+        else:
+            return 'continue'
+
+    def feedback_explicit_ET(self, rt_mean, rt_mean_p, mywindow, expriment_settings):
+        """Display feedback screen in case of an explicit ASRT.
+
+           The feedback string contains placeholders for reaction times.
+        """
+
+        for l in self.feedback_exp:
+            l = l.replace('*MEANRT*', rt_mean)
+            l = l.replace('*MEANRTP*', rt_mean_p)
+            self.__print_to_screen(l, mywindow)
+            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
+        if expriment_settings.key_quit in tempkey:
+            return 'quit'
+        else:
+            return 'continue'
+
+    def feedback_implicit_ET(self, rt_mean, mywindow, expriment_settings):
+        """Display feedback screen in case of an implicit ASRT.
+
+           The feedback string contains placeholders for reaction times.
+        """
+        for i in self.feedback_imp:
+            i = i.replace('*MEANRT*', rt_mean)
             self.__print_to_screen(i, mywindow)
             tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
         if expriment_settings.key_quit in tempkey:
@@ -965,7 +989,6 @@ class Experiment:
         # tobii EyeTracker object for handling eye-tracker input
         self.eye_tracker = None
         self.gaze_data_list = []
-        self.last_hit_AOI = -1
 
         # visual.Window object for displaying experiment
         self.mywindow = None
@@ -1031,7 +1054,8 @@ class Experiment:
             self.settings.show_computer_and_display_settings_dialog()
 
             # get keyboard settings (reaction keys and quit key) and also feedback settings (accuracy and speed feedback, etc)
-            self.settings.show_key_and_feedback_settings_dialog()
+            if self.settings.experiment_type == 'reaction-time':
+                self.settings.show_key_and_feedback_settings_dialog()
 
             # save the settings
             self.settings.write_to_file()
@@ -1267,7 +1291,7 @@ class Experiment:
         self.eye_tracker = allTrackers[0]
 
     def eye_data_callback(self, gazeData):
-        max_length = 5
+        max_length = 8
 
         left_gaze_XY = gazeData['left_gaze_point_on_display_area']
         right_gaze_XY = gazeData['right_gaze_point_on_display_area']
@@ -1300,14 +1324,15 @@ class Experiment:
         else:
             return False
 
-    def wait_for_eye_response(self):
+    def wait_for_eye_response(self, expected_response):
+        max_length = 8
 
         while (True):
 
             if 'q' in event.getKeys():
                 return -1
 
-            if len(self.gaze_data_list) == 0:
+            if len(self.gaze_data_list) < max_length:
                 continue
 
             # calculate avarage gage position
@@ -1335,16 +1360,8 @@ class Experiment:
             avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
                           ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
-            hit_any_AOI = False
-            for i in range(1, 5):
-                if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
-                    hit_any_AOI = True
-                    if self.last_hit_AOI != i:
-                        self.last_hit_AOI = i
-                        return i
-
-            if not hit_any_AOI:
-                self.last_hit_AOI = -1
+            if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[expected_response], self.settings.AOI_size):
+                return expected_response
 
     def monitor_settings(self):
         """Specify monitor settings."""
@@ -1383,7 +1400,7 @@ class Experiment:
             stimbg.pos = self.dict_pos[i]
             stimbg.draw()
 
-    def show_feedback(self, N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list):
+    def show_feedback_RT(self, N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list):
         """ Display feedback in the end of the blocks, showing some data about speed and accuracy."""
 
         acc_for_the_whole = 100 * float(responses_in_block -
@@ -1408,23 +1425,44 @@ class Experiment:
             except:
                 acc_for_patterns_str = 'N/A'
 
-            whatnow = self.instructions.feedback_explicit(
+            whatnow = self.instructions.feedback_explicit_RT(
                 rt_mean_str, rt_mean_p_str, acc_for_patterns_str, acc_for_the_whole, acc_for_the_whole_str, self.mywindow, self.settings)
         else:
-            whatnow = self.instructions.feedback_implicit(
+            whatnow = self.instructions.feedback_implicit_RT(
                 rt_mean_str, acc_for_the_whole, acc_for_the_whole_str, self.mywindow, self.settings)
 
         return whatnow
 
-    def wait_for_response(self, response_clock):
+    def show_feedback_ET(self, N, RT_all_list, RT_pattern_list):
+        """ Display feedback in the end of the blocks, showing some data about reaction time."""
+
+        rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
+        rt_mean_str = str(rt_mean)[:5].replace('.', ',')
+
+        if self.settings.asrt_types[self.stim_sessionN[N - 1]] == 'explicit':
+
+            try:
+                rt_mean_p = float(sum(RT_pattern_list)) / len(RT_pattern_list)
+                rt_mean_p_str = str(rt_mean_p)[:5].replace('.', ',')
+            except:
+                rt_mean_p_str = 'N/A'
+
+            whatnow = self.instructions.feedback_explicit_ET(rt_mean_str, rt_mean_p_str, self.mywindow, self.settings)
+        else:
+            whatnow = self.instructions.feedback_implicit_ET(rt_mean_str, self.mywindow, self.settings)
+
+        return whatnow
+
+    def wait_for_response(self, expected_response, response_clock):
         if self.settings.experiment_type == 'reaction-time':
             press = event.waitKeys(keyList=self.settings.get_key_list(),
                                    timeStamped=response_clock)
             if press[0][0] == 'q':
                 return (-1, press[0][1])
             return (self.pressed_dict[press[0][0]], press[0][1])
+        # for ET version we wait for getting the right response (there is no wrong answer)
         else:
-            response = self.wait_for_eye_response()
+            response = self.wait_for_eye_response(expected_response)
             # this RT is not precise, but good enough to give a feedback for the subject
             return (response, response_clock.getTime())
 
@@ -1509,8 +1547,6 @@ class Experiment:
 
             cycle = 0
 
-            self.last_hit_AOI = -1
-
             while True:
                 cycle += 1
                 self.stim_bg(stimbg)
@@ -1533,7 +1569,7 @@ class Experiment:
 
                 if cycle == 1:
                     trial_clock.reset()
-                (response, time_stamp) = self.wait_for_response(trial_clock)
+                (response, time_stamp) = self.wait_for_response(self.stimlist[N], trial_clock)
 
                 # start of the RSI timer
                 RSI_clock.reset()
@@ -1596,8 +1632,11 @@ class Experiment:
                 self.person_data.flush_data_to_output(self)
                 self.person_data.save_person_settings(self)
 
-                whatnow = self.show_feedback(
-                    N, number_of_patterns, patternERR, responses_in_block, accs_in_block, RT_all_list, RT_pattern_list)
+                if self.settings.experiment_type == 'reaction-time':
+                    whatnow = self.show_feedback_RT(N, number_of_patterns, patternERR, responses_in_block,
+                                                    accs_in_block, RT_all_list, RT_pattern_list)
+                else:
+                    whatnow = self.show_feedback_ET(N, RT_all_list, RT_pattern_list)
 
                 if whatnow == 'quit':
                     if N >= 1:
