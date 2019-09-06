@@ -86,8 +86,6 @@ class ExperimentSettings:
         self.asrt_distance = None
         # radius of the stimulus circle in cm (e.g. 1)
         self.asrt_size = None
-        # AOI (area of interest) is a suqare with the same origin as the stimuli, this size means the size of this square's side
-        self.AOI_size = None
         # fill color of the random stimulus or all stimulus in case of implicit asrt (e.g. "Orange")
         self.asrt_rcolor = None
         # fill color of the "pattern" stimulus in case of explicit asrt (e.g. "Orange")
@@ -96,6 +94,11 @@ class ExperimentSettings:
         self.asrt_background = None
         # response-to-next-stimulus time in millisecond (e.g. 120)
         self.RSI_time = None
+
+        # AOI (area of interest) is a suqare with the same origin as the stimuli, this size means the size of this square's side
+        self.AOI_size = None
+        # count of samples used to calculate the average eye position
+        self.look_at_sampling_window = None
 
         # key for the first stimulus (e.g. 'z')
         self.key1 = None
@@ -149,12 +152,14 @@ class ExperimentSettings:
                 self.computer_name = settings_file['computer_name']
                 self.asrt_distance = settings_file['asrt_distance']
                 self.asrt_size = settings_file['asrt_size']
-                if self.experiment_type == 'eye-tracking':
-                    self.AOI_size = settings_file['AOI_size']
                 self.asrt_rcolor = settings_file['asrt_rcolor']
                 self.asrt_pcolor = settings_file['asrt_pcolor']
                 self.asrt_background = settings_file['asrt_background']
                 self.RSI_time = settings_file['RSI_time']
+
+                if self.experiment_type == 'eye-tracking':
+                    self.AOI_size = settings_file['AOI_size']
+                    self.look_at_sampling_window = settings_file['look_at_sampling_window']
 
                 if self.experiment_type == 'reaction-time':
                     self.key1 = settings_file['key1']
@@ -162,12 +167,11 @@ class ExperimentSettings:
                     self.key3 = settings_file['key3']
                     self.key4 = settings_file['key4']
                     self.key_quit = settings_file['key_quit']
+                    self.whether_warning = settings_file['whether_warning']
+                    self.speed_warning = settings_file['speed_warning']
+                    self.acc_warning = settings_file['acc_warning']
                 elif self.experiment_type == 'eye-tracking':
                     self.key_quit = 'q'
-
-                self.whether_warning = settings_file['whether_warning']
-                self.speed_warning = settings_file['speed_warning']
-                self.acc_warning = settings_file['acc_warning']
         except Exception as exception:
             self.__init__(self.settings_file_path, self.reminder_file_path)
             raise exception
@@ -192,12 +196,14 @@ class ExperimentSettings:
             settings_file['computer_name'] = self.computer_name
             settings_file['asrt_distance'] = self.asrt_distance
             settings_file['asrt_size'] = self.asrt_size
-            if self.experiment_type == 'eye-tracking':
-                settings_file['AOI_size'] = self.AOI_size
             settings_file['asrt_rcolor'] = self.asrt_rcolor
             settings_file['asrt_pcolor'] = self.asrt_pcolor
             settings_file['asrt_background'] = self.asrt_background
             settings_file['RSI_time'] = self.RSI_time
+
+            if self.experiment_type == 'eye-tracking':
+                settings_file['AOI_size'] = self.AOI_size
+                settings_file['look_at_sampling_window'] = self.look_at_sampling_window
 
             if self.experiment_type == 'reaction-time':
                 settings_file['key1'] = self.key1
@@ -205,10 +211,9 @@ class ExperimentSettings:
                 settings_file['key3'] = self.key3
                 settings_file['key4'] = self.key4
                 settings_file['key_quit'] = self.key_quit
-
-            settings_file['whether_warning'] = self.whether_warning
-            settings_file['speed_warning'] = self.speed_warning
-            settings_file['acc_warning'] = self.acc_warning
+                settings_file['whether_warning'] = self.whether_warning
+                settings_file['speed_warning'] = self.speed_warning
+                settings_file['acc_warning'] = self.acc_warning
 
     def write_out_reminder(self):
         """Write out a short summary of the settings into a text file."""
@@ -234,14 +239,16 @@ class ExperimentSettings:
                             'Trials\\Block:' + '\t' + str(self.blocklengthN) + '\n' +
                             'RSI:' + '\t' + str(self.RSI_time).replace('.', ',') + '\n' +
                             'Asrt stim distance:' + '\t' + str(self.asrt_distance) + '\n' +
-                            'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n')
-            if self.experiment_type == 'eye-tracking':
-                reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n')
-
-            reminder += str('Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
+                            'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n' +
+                            'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
                             'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
-                            'Background color:' + '\t' + self.asrt_background + '\n' +
-                            '\n' +
+                            'Background color:' + '\t' + self.asrt_background + '\n')
+
+            if self.experiment_type == 'eye-tracking':
+                reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n' +
+                                'Loot at sampling window size:' + '\t' + str(self.look_at_sampling_window) + '\n')
+
+            reminder += str('\n' +
                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
 
                             'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
@@ -400,8 +407,6 @@ class ExperimentSettings:
             settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 10)
 
         settings_dialog.addField(u'Ingerek sugara (cm)', 1)
-        if self.experiment_type == 'eye-tracking':
-            settings_dialog.addField(u'AOI négyzetek oldahossza (cm)', 3)
 
         settings_dialog.addField(u'ASRT inger szine (elsodleges, R)',
                                  choices=possible_colors, initial="Orange")
@@ -414,21 +419,26 @@ class ExperimentSettings:
         else:  # 'eye-tracking'
             settings_dialog.addField(u'RSI (ms)', 500)
 
+        if self.experiment_type == 'eye-tracking':
+            settings_dialog.addText(u'Eye-tracking paraméterek...')
+            settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3)
+            settings_dialog.addField(u'Fixációs átlagoló ablak mérete (mintavételek száma):', 8)
+
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.monitor_width = returned_data[0]
             self.computer_name = returned_data[1]
             self.asrt_distance = returned_data[2]
             self.asrt_size = returned_data[3]
-            rcolor_index = 4
-            if self.experiment_type == 'eye-tracking':
-                self.AOI_size = returned_data[4]
-                rcolor_index = 5
+            self.asrt_rcolor = returned_data[4]
+            self.asrt_pcolor = returned_data[5]
+            self.asrt_background = returned_data[6]
+            self.RSI_time = float(returned_data[7]) / 1000
 
-            self.asrt_rcolor = returned_data[rcolor_index]
-            self.asrt_pcolor = returned_data[rcolor_index + 1]
-            self.asrt_background = returned_data[rcolor_index + 2]
-            self.RSI_time = float(returned_data[rcolor_index + 3]) / 1000
+            if self.experiment_type == 'eye-tracking':
+                self.AOI_size = returned_data[8]
+                self.look_at_sampling_window = returned_data[9]
+
         else:
             core.quit()
 
@@ -1312,7 +1322,7 @@ class Experiment:
 
         if x_coord != None and y_coord != None:
             self.gaze_data_list.append((x_coord, y_coord))
-            if len(self.gaze_data_list) > max_length:
+            if len(self.gaze_data_list) > self.settings.look_at_sampling_window:
                 self.gaze_data_list.pop(0)
 
         self.person_data.output_data_buffer.append(
@@ -1325,14 +1335,13 @@ class Experiment:
             return False
 
     def wait_for_eye_response(self, expected_response):
-        max_length = 8
 
         while (True):
 
             if 'q' in event.getKeys():
                 return -1
 
-            if len(self.gaze_data_list) < max_length:
+            if len(self.gaze_data_list) < self.settings.look_at_sampling_window:
                 continue
 
             # calculate avarage gage position
