@@ -306,7 +306,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        return_value = instruction_helper.feedback_implicit(
+        return_value = instruction_helper.feedback_implicit_RT(
             "450.2", 92.123, "92.123", self.mywindow, exp_settings)
 
         self.assertEqual(return_value, "continue")
@@ -337,7 +337,7 @@ class drawInstructionsTest(unittest.TestCase):
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
         self.initWindow()
-        return_value = instruction_helper.feedback_implicit(
+        return_value = instruction_helper.feedback_implicit_RT(
             "450.2", 92.123, "92.123", self.mywindow, exp_settings)
 
         self.assertEqual(return_value, "quit")
@@ -367,7 +367,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.feedback_implicit(
+        instruction_helper.feedback_implicit_RT(
             "450.2", 52.123, "52.123", self.mywindow, exp_settings)
 
         drawing_list = visual_mock.getListOfDrawings()
@@ -396,7 +396,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.feedback_implicit(
+        instruction_helper.feedback_implicit_RT(
             "450.2", 96.123, "96.123", self.mywindow, exp_settings)
 
         drawing_list = visual_mock.getListOfDrawings()
@@ -423,7 +423,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        return_value = instruction_helper.feedback_explicit(
+        return_value = instruction_helper.feedback_explicit_RT(
             "450.2", "410.2", "90.123", 92.123, "92.123", self.mywindow, exp_settings)
 
         self.assertEqual(return_value, "continue")
@@ -456,7 +456,7 @@ class drawInstructionsTest(unittest.TestCase):
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
         self.initWindow()
-        return_value = instruction_helper.feedback_explicit(
+        return_value = instruction_helper.feedback_explicit_RT(
             "450.2", "410.2", "90.123", 92.123, "92.123", self.mywindow, exp_settings)
 
         self.assertEqual(return_value, "quit")
@@ -488,7 +488,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.feedback_explicit(
+        instruction_helper.feedback_explicit_RT(
             "450.2", "410.2", "90.123", 52.123, "52.123", self.mywindow, exp_settings)
 
         drawing_list = visual_mock.getListOfDrawings()
@@ -519,7 +519,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.feedback_explicit(
+        instruction_helper.feedback_explicit_RT(
             "450.2", "410.2", "90.123", 96.123, "96.123", self.mywindow, exp_settings)
 
         drawing_list = visual_mock.getListOfDrawings()
@@ -554,7 +554,7 @@ class drawInstructionsTest(unittest.TestCase):
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c', 'q'])
         self.initWindow()
-        return_value = instruction_helper.feedback_explicit(
+        return_value = instruction_helper.feedback_explicit_RT(
             "450.2", "410.2", "90.123", 96.123, "96.123", self.mywindow, exp_settings)
         self.assertEqual(return_value, "quit")
 
@@ -592,7 +592,7 @@ class drawInstructionsTest(unittest.TestCase):
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['c', 'q'])
         self.initWindow()
-        return_value = instruction_helper.feedback_implicit(
+        return_value = instruction_helper.feedback_implicit_RT(
             "450.2", 96.123, "96.123", self.mywindow, exp_settings)
         self.assertEqual(return_value, "quit")
 

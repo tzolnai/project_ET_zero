@@ -102,7 +102,7 @@ class showFeedbackTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         with self.initWindow() as experiment.mywindow:
-            return_value = experiment.show_feedback(
+            return_value = experiment.show_feedback_RT(
                 N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
             self.assertEqual(return_value, "continue")
 
@@ -145,7 +145,7 @@ class showFeedbackTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         with self.initWindow() as experiment.mywindow:
-            return_value = experiment.show_feedback(
+            return_value = experiment.show_feedback_RT(
                 N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
             self.assertEqual(return_value, "continue")
 
@@ -191,7 +191,7 @@ class showFeedbackTest(unittest.TestCase):
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
         with self.initWindow() as experiment.mywindow:
-            return_value = experiment.show_feedback(
+            return_value = experiment.show_feedback_RT(
                 N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
             self.assertEqual(return_value, "quit")
 
@@ -235,7 +235,7 @@ class showFeedbackTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         with self.initWindow() as experiment.mywindow:
-            return_value = experiment.show_feedback(
+            return_value = experiment.show_feedback_RT(
                 N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
             self.assertEqual(return_value, "continue")
 
@@ -277,7 +277,7 @@ class showFeedbackTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         with self.initWindow() as experiment.mywindow:
-            return_value = experiment.show_feedback(
+            return_value = experiment.show_feedback_RT(
                 N, number_of_patterns, patternERR, Npressed_in_block, accs_in_block, RT_all_list, RT_pattern_list)
             self.assertEqual(return_value, "continue")
 
