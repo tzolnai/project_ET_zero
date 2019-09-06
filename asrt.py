@@ -1286,12 +1286,10 @@ class Experiment:
             x_coord = right_gaze_XY[0]
             y_coord = right_gaze_XY[1]
 
-        if x_coord == None or y_coord == None:
-            self.gaze_data_list.append((-1.0, -1.0))
-        else:
+        if x_coord != None and y_coord != None:
             self.gaze_data_list.append((x_coord, y_coord))
-        if len(self.gaze_data_list) > max_length:
-            self.gaze_data_list.pop(0)
+            if len(self.gaze_data_list) > max_length:
+                self.gaze_data_list.pop(0)
 
         self.person_data.output_data_buffer.append(
             [self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
@@ -1312,34 +1310,40 @@ class Experiment:
             if len(self.gaze_data_list) == 0:
                 continue
 
-            hit_AOIs = []
+            # calculate avarage gage position
+            sum_x = 0
+            sum_y = 0
+            for pos in self.gaze_data_list:
+                sum_x += pos[0]
+                sum_y += pos[1]
+
             # we have the pos in eye-tracker's display area normalized coordinates with the
             # origin at the upper left corner
-            for pos_norm in self.gaze_data_list:
+            avg_pos_norm = (sum_x / len(self.gaze_data_list), sum_y / len(self.gaze_data_list))
 
-                # we need to convert it to psychopy cm coordinates, where the origin is at the
-                # center and y coordinates are mirrored.
-                aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
-                monitor_width_cm = self.settings.monitor_width
-                monitor_height_cm = monitor_width_cm * aspect_ratio
+            # we need to convert it to psychopy cm coordinates, where the origin is at the
+            # center and y coordinates are mirrored.
+            aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+            monitor_width_cm = self.settings.monitor_width
+            monitor_height_cm = monitor_width_cm * aspect_ratio
 
-                # shift origin
-                shift_x = monitor_width_cm / 2
-                shift_y = monitor_height_cm / 2
+            # shift origin
+            shift_x = monitor_width_cm / 2
+            shift_y = monitor_height_cm / 2
 
-                # need to mirror the y coordinates
-                avg_pos_cm = ((pos_norm[0] * monitor_width_cm) - shift_x,
-                              ((pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
+            # need to mirror the y coordinates
+            avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
+                          ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
-                for i in range(1, 5):
-                    if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
-                        hit_AOIs.append(i)
+            hit_any_AOI = False
+            for i in range(1, 5):
+                if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[i], self.settings.AOI_size):
+                    hit_any_AOI = True
+                    if self.last_hit_AOI != i:
+                        self.last_hit_AOI = i
+                        return i
 
-            if len(hit_AOIs) == len(self.gaze_data_list) and all(x == hit_AOIs[0] for x in hit_AOIs):
-                if self.last_hit_AOI != hit_AOIs[0]:
-                    self.last_hit_AOI = hit_AOIs[0]
-                    return hit_AOIs[0]
-            elif len(hit_AOIs) == 0:
+            if not hit_any_AOI:
                 self.last_hit_AOI = -1
 
     def monitor_settings(self):
