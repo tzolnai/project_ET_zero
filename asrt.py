@@ -102,7 +102,7 @@ class ExperimentSettings:
         # count of samples used to calculate the average eye position for dedecting looking at the stimulus
         self.stim_sampling_window = None
         # count of samples used to calculate the average eye position for dedectiog looking at fixation cross on an instruction screen
-        self.instruction_sampling_window = 36
+        self.instruction_sampling_window = None
 
         # key for the first stimulus (e.g. 'z')
         self.key1 = None
@@ -164,6 +164,7 @@ class ExperimentSettings:
                 if self.experiment_type == 'eye-tracking':
                     self.AOI_size = settings_file['AOI_size']
                     self.stim_sampling_window = settings_file['stim_sampling_window']
+                    self.instruction_sampling_window = settings_file['instruction_sampling_window']
 
                 if self.experiment_type == 'reaction-time':
                     self.key1 = settings_file['key1']
@@ -208,6 +209,7 @@ class ExperimentSettings:
             if self.experiment_type == 'eye-tracking':
                 settings_file['AOI_size'] = self.AOI_size
                 settings_file['stim_sampling_window'] = self.stim_sampling_window
+                settings_file['instruction_sampling_window'] = self.instruction_sampling_window
 
             if self.experiment_type == 'reaction-time':
                 settings_file['key1'] = self.key1
@@ -250,7 +252,8 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n' +
-                                'Loot at sampling window size:' + '\t' + str(self.stim_sampling_window) + '\n')
+                                'Window size for stimulus:' + '\t' + str(self.stim_sampling_window) + '\n' +
+                                'Window size for instructions:' + '\t' + str(self.instruction_sampling_window) + '\n')
 
             reminder += str('\n' +
                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
@@ -426,7 +429,8 @@ class ExperimentSettings:
         if self.experiment_type == 'eye-tracking':
             settings_dialog.addText(u'Eye-tracking paraméterek...')
             settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3)
-            settings_dialog.addField(u'Fixációs átlagoló ablak mérete (mintavételek száma):', 8)
+            settings_dialog.addField(u'Stimulusnál használt ablak méret (mintavételek száma):', 8)
+            settings_dialog.addField(u'Instrukcióknál használt ablak méret (mintavételek száma):', 36)
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -442,6 +446,7 @@ class ExperimentSettings:
             if self.experiment_type == 'eye-tracking':
                 self.AOI_size = returned_data[8]
                 self.stim_sampling_window = returned_data[9]
+                self.instruction_sampling_window = returned_data[10]
 
         else:
             core.quit()
@@ -660,7 +665,7 @@ class InstructionHelper:
         if blocknumber < 1:
             blocknumber = 1
         for rt in experiment.last_block_RTs[-g_blocks_in_feedback:]:
-            feedback += str(blocknumber) + ". blokk: " + rt + "ms\n\n"
+            feedback += str(blocknumber) + ". blokk: " + rt + " ms\n\n"
             blocknumber += 1
 
         self.__print_to_screen(feedback, experiment.mywindow)
