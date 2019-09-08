@@ -37,6 +37,7 @@ except:
 
 g_blocks_in_feedback = 5
 
+
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
         os.makedirs(dirpath)
@@ -98,8 +99,10 @@ class ExperimentSettings:
 
         # AOI (area of interest) is a suqare with the same origin as the stimuli, this size means the size of this square's side
         self.AOI_size = None
-        # count of samples used to calculate the average eye position
-        self.look_at_sampling_window = None
+        # count of samples used to calculate the average eye position for dedecting looking at the stimulus
+        self.stim_sampling_window = None
+        # count of samples used to calculate the average eye position for dedectiog looking at fixation cross on an instruction screen
+        self.instruction_sampling_window = 36
 
         # key for the first stimulus (e.g. 'z')
         self.key1 = None
@@ -160,7 +163,7 @@ class ExperimentSettings:
 
                 if self.experiment_type == 'eye-tracking':
                     self.AOI_size = settings_file['AOI_size']
-                    self.look_at_sampling_window = settings_file['look_at_sampling_window']
+                    self.stim_sampling_window = settings_file['stim_sampling_window']
 
                 if self.experiment_type == 'reaction-time':
                     self.key1 = settings_file['key1']
@@ -204,7 +207,7 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 settings_file['AOI_size'] = self.AOI_size
-                settings_file['look_at_sampling_window'] = self.look_at_sampling_window
+                settings_file['stim_sampling_window'] = self.stim_sampling_window
 
             if self.experiment_type == 'reaction-time':
                 settings_file['key1'] = self.key1
@@ -247,7 +250,7 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n' +
-                                'Loot at sampling window size:' + '\t' + str(self.look_at_sampling_window) + '\n')
+                                'Loot at sampling window size:' + '\t' + str(self.stim_sampling_window) + '\n')
 
             reminder += str('\n' +
                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
@@ -438,7 +441,7 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 self.AOI_size = returned_data[8]
-                self.look_at_sampling_window = returned_data[9]
+                self.stim_sampling_window = returned_data[9]
 
         else:
             core.quit()
@@ -556,24 +559,37 @@ class InstructionHelper:
         text_stim.draw()
         mywindow.flip()
 
-    def __show_message(self, instruction_list, mywindow, expriment_settings):
+    def __show_message(self, instruction_list, experiment):
         """Display simple instructions on the screen."""
 
         # There can be more instructions to display successively
         for inst in instruction_list:
-            self.__print_to_screen(inst, mywindow)
-            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
-            if expriment_settings.key_quit in tempkey:
-                core.quit()
+            if experiment.settings.experiment_type == 'reaction-time':
+                self.__print_to_screen(inst, experiment.mywindow)
+                tempkey = event.waitKeys(keyList=experiment.settings.get_key_list())
+                if experiment.settings.key_quit in tempkey:
+                    core.quit()
+            else:  # 'eye-tracking'
+                experiment.fixation_cross.draw()
+                self.__print_to_screen(inst, experiment.mywindow)
+                if instruction_list[0] != inst:
+                    core.wait(3.0)
+                response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_sampling_window)
+                if response == -1:
+                    core.quit()
 
-    def show_instructions(self, mywindow, expriment_settings):
-        self.__show_message(self.insts, mywindow, expriment_settings)
+    def show_instructions(self, experiment):
+        self.__show_message(self.insts, experiment)
 
-    def show_unexp_quit(self, mywindow, expriment_settings):
-        self.__show_message(self.unexp_quit, mywindow, expriment_settings)
+    def show_unexp_quit(self, experiment):
+        self.__show_message(self.unexp_quit, experiment)
 
-    def show_ending(self, mywindow, expriment_settings):
-        self.__show_message(self.ending, mywindow, expriment_settings)
+    def show_ending(self, experiment):
+        if experiment.settings.experiment_type == 'reaction-time':
+            self.__show_message(self.ending, experiment)
+        else:
+            self.__print_to_screen(self.ending[0], experiment.mywindow)
+            core.wait(2.0)
 
     def feedback_explicit_RT(self, rt_mean, rt_mean_p, acc_for_pattern, acc_for_the_whole, acc_for_the_whole_str, mywindow, expriment_settings):
         """Display feedback screen in case of an explicit ASRT.
@@ -641,18 +657,13 @@ class InstructionHelper:
         """
         feedback = "Az előző blokkokban mért reakcióidők:\n\n"
         blocknumber = experiment.stimblock[experiment.last_N] - 4
-        if blocknumber < 0:
+        if blocknumber < 1:
             blocknumber = 1
         for rt in experiment.last_block_RTs[-g_blocks_in_feedback:]:
             feedback += str(blocknumber) + ". blokk: " + rt + "ms\n\n"
             blocknumber += 1
 
         self.__print_to_screen(feedback, experiment.mywindow)
-        tempkey = event.waitKeys(keyList=experiment.settings.get_key_list())
-        if experiment.settings.key_quit in tempkey:
-            return 'quit'
-        else:
-            return 'continue'
 
 
 class PersonDataHandler:
@@ -857,9 +868,12 @@ class PersonDataHandler:
         assert self.output_file_type == 'eye-tracking'
 
         output_buffer = StringIO()
+        max_trial = experiment.settings.get_maxtrial()
         for data in self.output_data_buffer:
 
             N = data[0] + 1
+            if N > max_trial:
+                break
             session = experiment.stim_sessionN[N]
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
@@ -992,6 +1006,8 @@ class Experiment:
         self.eye_tracker = None
         self.gaze_data_list = []
         self.last_block_RTs = []
+        self.fixation_cross_pos = None
+        self.fixation_cross = None
 
         # visual.Window object for displaying experiment
         self.mywindow = None
@@ -1315,11 +1331,10 @@ class Experiment:
 
         if x_coord != None and y_coord != None:
             self.gaze_data_list.append((x_coord, y_coord))
-            if len(self.gaze_data_list) > self.settings.look_at_sampling_window:
+            if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
                 self.gaze_data_list.pop(0)
 
-        self.person_data.output_data_buffer.append(
-            [self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
+        self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
@@ -1327,26 +1342,26 @@ class Experiment:
         else:
             return False
 
-    def wait_for_eye_response(self, expected_response):
+    def wait_for_eye_response(self, expected_eye_pos, sampling_window):
 
         while (True):
 
             if 'q' in event.getKeys():
                 return -1
 
-            if len(self.gaze_data_list) < self.settings.look_at_sampling_window:
+            if len(self.gaze_data_list) < sampling_window:
                 continue
 
             # calculate avarage gage position
             sum_x = 0
             sum_y = 0
-            for pos in self.gaze_data_list:
+            for pos in self.gaze_data_list[-sampling_window:]:
                 sum_x += pos[0]
                 sum_y += pos[1]
 
             # we have the pos in eye-tracker's display area normalized coordinates with the
             # origin at the upper left corner
-            avg_pos_norm = (sum_x / len(self.gaze_data_list), sum_y / len(self.gaze_data_list))
+            avg_pos_norm = (sum_x / sampling_window, sum_y / sampling_window)
 
             # we need to convert it to psychopy cm coordinates, where the origin is at the
             # center and y coordinates are mirrored.
@@ -1362,8 +1377,8 @@ class Experiment:
             avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
                           ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
 
-            if self.point_is_in_rectangle(avg_pos_cm, self.dict_pos[expected_response], self.settings.AOI_size):
-                return expected_response
+            if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
+                return 1
 
     def monitor_settings(self):
         """Specify monitor settings."""
@@ -1444,6 +1459,16 @@ class Experiment:
 
         whatnow = self.instructions.feedback_ET(self)
 
+        # wait some time
+        core.wait(10.0)
+
+        self.fixation_cross.draw()
+        self.print_to_screen("A következő blokkra lépéshez néz a keresztre.")
+        response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_sampling_window)
+        if response == -1:
+            return 'quit'
+        else:
+            return 'continue'
         return whatnow
 
     def wait_for_response(self, expected_response, response_clock):
@@ -1455,9 +1480,12 @@ class Experiment:
             return (self.pressed_dict[press[0][0]], press[0][1])
         # for ET version we wait for getting the right response (there is no wrong answer)
         else:
-            response = self.wait_for_eye_response(expected_response)
+            response = self.wait_for_eye_response(self.dict_pos[expected_response], self.settings.stim_sampling_window)
             # this RT is not precise, but good enough to give a feedback for the subject
-            return (response, response_clock.getTime())
+            if response == 1:
+                return (expected_response, response_clock.getTime())
+            else:
+                return (-1, response_clock.getTime())
 
     def quit_presentation(self):
         self.print_to_screen("Kilépés...\nAdatok mentése...")
@@ -1478,16 +1506,16 @@ class Experiment:
                               fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
         stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm",
                                fillColor=None, lineColor=self.colors['linecolor'])
+        if self.settings.experiment_type == 'eye-tracking':
+            # place the fixation cross to the bottom-right corner of the screen
+            aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+            monitor_width_cm = self.settings.monitor_width
+            monitor_height_cm = monitor_width_cm * aspect_ratio
+            self.fixation_cross_pos = (monitor_width_cm / 2 - 2, -(monitor_height_cm / 2 - 2))
+            self.fixation_cross = visual.TextStim(win=self.mywindow, text="+", height=2, units="cm", color='black', pos=self.fixation_cross_pos)
 
         stim_RSI = 0.0
         N = self.last_N + 1
-
-        # show instructions or continuation message
-        if N in self.settings.get_session_starts():
-            self.instructions.show_instructions(self.mywindow, self.settings)
-
-        else:
-            self.instructions.show_unexp_quit(self.mywindow, self.settings)
 
         responses_in_block = 0
         accs_in_block = []
@@ -1512,8 +1540,14 @@ class Experiment:
 
         # start recording gaze data
         if self.eye_tracker is not None:
-            self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA,
-                                          self.eye_data_callback, as_dictionary=True)
+            self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
+
+        # show instructions or continuation message
+        if N in self.settings.get_session_starts():
+            self.instructions.show_instructions(self)
+
+        else:
+            self.instructions.show_unexp_quit(self)
 
         while True:
             # four empty circles where the actual stimulus can be placed
@@ -1651,7 +1685,7 @@ class Experiment:
             if N == self.end_at[N - 1]:
                 break
 
-    def run(self):
+    def run(self, full_screen=True):
         ensure_dir(os.path.join(self.workdir_path, "logs"))
         ensure_dir(os.path.join(self.workdir_path, "settings"))
 
@@ -1700,7 +1734,7 @@ class Experiment:
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=True, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
+        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=full_screen, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
             # check frame rate
             self.frame_check()
 
@@ -1717,7 +1751,7 @@ class Experiment:
             self.person_data.append_to_output_file('sessionend_planned_quit')
 
             # show ending screen
-            self.instructions.show_ending(self.mywindow, self.settings)
+            self.instructions.show_ending(self)
 
 
 if __name__ == "__main__":
