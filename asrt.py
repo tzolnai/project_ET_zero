@@ -1700,7 +1700,7 @@ class Experiment:
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=False, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
+        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=True, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
             # check frame rate
             self.frame_check()
 
