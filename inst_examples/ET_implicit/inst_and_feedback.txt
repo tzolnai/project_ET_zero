@@ -33,14 +33,6 @@ A feladat indításához nyomd meg valamelyik válaszgombot!
 
 ***
 
-feedback implicit#
-
-Most pihenhetsz egy kicsit.
-
-Átlagos reakcióidőd: *MEANRT* másodperc
-
-***
-
 resume#
 
 A feladat indításához nyomd meg valamelyik válaszgombot!
