@@ -109,18 +109,19 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper._InstructionHelper__show_message(
-            instruction_helper.ending, self.mywindow, exp_settings)
+        experiment.mywindow = self.mywindow
+        instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
@@ -143,36 +144,38 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
         self.initWindow()
+        experiment.mywindow = self.mywindow
         with self.assertRaises(SystemExit):
-            instruction_helper._InstructionHelper__show_message(
-                instruction_helper.ending, self.mywindow, exp_settings)
+            instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
 
     def testDisplayEmptyInstructionList(self):
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
+        experiment.mywindow = self.mywindow
         instruction_helper = asrt.InstructionHelper("")
-        instruction_helper._InstructionHelper__show_message(
-            instruction_helper.ending, self.mywindow, exp_settings)
+        instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 0)
@@ -182,18 +185,19 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper._InstructionHelper__show_message(
-            instruction_helper.insts, self.mywindow, exp_settings)
+        experiment.mywindow = self.mywindow
+        instruction_helper._InstructionHelper__show_message(instruction_helper.insts, experiment)
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 3)
@@ -216,17 +220,19 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.show_instructions(self.mywindow, exp_settings)
+        experiment.mywindow = self.mywindow
+        instruction_helper.show_instructions(experiment)
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 3)
@@ -249,17 +255,19 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.show_unexp_quit(self.mywindow, exp_settings)
+        experiment.mywindow = self.mywindow
+        instruction_helper.show_unexp_quit(experiment)
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
@@ -272,17 +280,19 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
 
-        exp_settings = asrt.ExperimentSettings("", "")
-        exp_settings.experiment_type = 'reaction-time'
-        exp_settings.key1 = 'z'
-        exp_settings.key2 = 'c'
-        exp_settings.key3 = 'b'
-        exp_settings.key4 = 'm'
-        exp_settings.key_quit = 'q'
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'reaction-time'
+        experiment.settings.key1 = 'z'
+        experiment.settings.key2 = 'c'
+        experiment.settings.key3 = 'b'
+        experiment.settings.key4 = 'm'
+        experiment.settings.key_quit = 'q'
 
         visual_mock = pvm.PsychoPyVisualMock()
         self.initWindow()
-        instruction_helper.show_ending(self.mywindow, exp_settings)
+        experiment.mywindow = self.mywindow
+        instruction_helper.show_ending(experiment)
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
