@@ -35,6 +35,7 @@ try:
 except:
     g_tobii_available = False
 
+g_blocks_in_feedback = 5
 
 def ensure_dir(dirpath):
     if not os.path.exists(dirpath):
@@ -534,18 +535,19 @@ class InstructionHelper:
         if len(self.unexp_quit) == 0:
             print("Unexpected quit message was not specified!")
             core.quit()
-        if settings.whether_warning and len(self.feedback_speed) == 0:
-            print("Speed warning message was not specified, but warning is enabled in the settings!")
-            core.quit()
-        if settings.whether_warning and len(self.feedback_accuracy) == 0:
-            print("Accuracy warning message was not specified, but warning is enabled in the settings!")
-            core.quit()
-        if 'implicit' in settings.asrt_types.values() and len(self.feedback_imp) == 0:
-            print("Implicit feedback message was not specified, but there is an implicit session in the experiment!")
-            core.quit()
-        if 'explicit' in settings.asrt_types.values() and len(self.feedback_exp) == 0:
-            print("Explicit feedback message was not specified, but there is an explicit session in the experiment!")
-            core.quit()
+        if settings.experiment_type == 'reaction-time':
+            if settings.whether_warning and len(self.feedback_speed) == 0:
+                print("Speed warning message was not specified, but warning is enabled in the settings!")
+                core.quit()
+            if settings.whether_warning and len(self.feedback_accuracy) == 0:
+                print("Accuracy warning message was not specified, but warning is enabled in the settings!")
+                core.quit()
+            if 'implicit' in settings.asrt_types.values() and len(self.feedback_imp) == 0:
+                print("Implicit feedback message was not specified, but there is an implicit session in the experiment!")
+                core.quit()
+            if 'explicit' in settings.asrt_types.values() and len(self.feedback_exp) == 0:
+                print("Explicit feedback message was not specified, but there is an explicit session in the experiment!")
+                core.quit()
 
     def __print_to_screen(self, mytext, mywindow):
         """Display given string in the given window."""
@@ -632,32 +634,22 @@ class InstructionHelper:
         else:
             return 'continue'
 
-    def feedback_explicit_ET(self, rt_mean, rt_mean_p, mywindow, expriment_settings):
-        """Display feedback screen in case of an explicit ASRT.
+    def feedback_ET(self, experiment):
+        """Display feedback screen in the end of the block.
 
-           The feedback string contains placeholders for reaction times.
+           For eye tracking we display the last five blocks' avarage reaction times.
         """
+        feedback = "Az előző blokkokban mért reakcióidők:\n\n"
+        blocknumber = experiment.stimblock[experiment.last_N] - 4
+        if blocknumber < 0:
+            blocknumber = 1
+        for rt in experiment.last_block_RTs[-g_blocks_in_feedback:]:
+            feedback += str(blocknumber) + ". blokk: " + rt + "ms\n\n"
+            blocknumber += 1
 
-        for l in self.feedback_exp:
-            l = l.replace('*MEANRT*', rt_mean)
-            l = l.replace('*MEANRTP*', rt_mean_p)
-            self.__print_to_screen(l, mywindow)
-            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
-        if expriment_settings.key_quit in tempkey:
-            return 'quit'
-        else:
-            return 'continue'
-
-    def feedback_implicit_ET(self, rt_mean, mywindow, expriment_settings):
-        """Display feedback screen in case of an implicit ASRT.
-
-           The feedback string contains placeholders for reaction times.
-        """
-        for i in self.feedback_imp:
-            i = i.replace('*MEANRT*', rt_mean)
-            self.__print_to_screen(i, mywindow)
-            tempkey = event.waitKeys(keyList=expriment_settings.get_key_list())
-        if expriment_settings.key_quit in tempkey:
+        self.__print_to_screen(feedback, experiment.mywindow)
+        tempkey = event.waitKeys(keyList=experiment.settings.get_key_list())
+        if experiment.settings.key_quit in tempkey:
             return 'quit'
         else:
             return 'continue'
@@ -999,6 +991,7 @@ class Experiment:
         # tobii EyeTracker object for handling eye-tracker input
         self.eye_tracker = None
         self.gaze_data_list = []
+        self.last_block_RTs = []
 
         # visual.Window object for displaying experiment
         self.mywindow = None
@@ -1447,18 +1440,9 @@ class Experiment:
 
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
         rt_mean_str = str(rt_mean)[:5].replace('.', ',')
+        self.last_block_RTs.append(rt_mean_str)
 
-        if self.settings.asrt_types[self.stim_sessionN[N - 1]] == 'explicit':
-
-            try:
-                rt_mean_p = float(sum(RT_pattern_list)) / len(RT_pattern_list)
-                rt_mean_p_str = str(rt_mean_p)[:5].replace('.', ',')
-            except:
-                rt_mean_p_str = 'N/A'
-
-            whatnow = self.instructions.feedback_explicit_ET(rt_mean_str, rt_mean_p_str, self.mywindow, self.settings)
-        else:
-            whatnow = self.instructions.feedback_implicit_ET(rt_mean_str, self.mywindow, self.settings)
+        whatnow = self.instructions.feedback_ET(self)
 
         return whatnow
 
