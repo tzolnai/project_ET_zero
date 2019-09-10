@@ -697,6 +697,8 @@ class PersonDataHandler:
             with shelve.open(self.all_settings_file_path, 'r') as this_person_settings:
 
                 experiment.PCodes = this_person_settings['PCodes']
+                experiment.subject_age = this_person_settings['subject_age']
+                experiment.subject_sex = this_person_settings['subject_sex']
                 experiment.stim_output_line = this_person_settings['stim_output_line']
 
                 experiment.stim_sessionN = this_person_settings['stim_sessionN']
@@ -726,6 +728,8 @@ class PersonDataHandler:
 
         with shelve.open(self.all_settings_file_path, 'n') as this_person_settings:
             this_person_settings['PCodes'] = experiment.PCodes
+            this_person_settings['subject_sex'] = experiment.subject_sex
+            this_person_settings['subject_age'] = experiment.subject_age
             this_person_settings['stim_output_line'] = experiment.stim_output_line
 
             this_person_settings['stim_sessionN'] = experiment.stim_sessionN
@@ -738,27 +742,37 @@ class PersonDataHandler:
             this_person_settings['last_N'] = experiment.last_N
             this_person_settings['end_at'] = experiment.end_at
 
-    def update_subject_IDs_files(self):
-        """Add the new subject ID into the list of all IDs and save it to the IDs file.
-           Also generate a text file with the list of all subjects participating in the experiment
+    def update_all_subject_attributes_files(self, subject_sex, subject_age):
+        """Add the new subject's attributes into the list of all subject data and save it into file.
+           Also generate a text file with the list of all subjects participating in the experiment.
         """
 
         all_IDs = []
-        with shelve.open(self.all_IDs_file_path) as all_IDs_file:
+        with shelve.open(self.all_IDs_file_path) as all_subject_file:
             try:
-                all_IDs = all_IDs_file['ids']
+                all_IDs = all_subject_file['ids']
             except:
                 all_IDs = []
 
             if self.subject_id not in all_IDs:
                 all_IDs.append(self.subject_id)
-                all_IDs_file['ids'] = all_IDs
+                all_subject_file['ids'] = all_IDs
+                all_subject_file[self.subject_id] = [subject_sex, subject_age]
 
-        with codecs.open(self.subject_list_file_path, 'w', encoding='utf-8') as subject_list_file:
-            for id in all_IDs:
-                id_segmented = id.replace('_', '\t', 2)
-                subject_list_file.write(id_segmented)
-                subject_list_file.write('\n')
+        with shelve.open(self.all_IDs_file_path, 'r') as all_subject_file:
+            with codecs.open(self.subject_list_file_path, 'w', encoding='utf-8') as subject_list_file:
+                subject_list_IO = StringIO()
+                for id in all_IDs:
+                    id_segmented = id.replace('_', '\t', 2)
+                    subject_list_IO.write(id_segmented)
+                    subject_list_IO.write('\t')
+                    subject_list_IO.write(all_subject_file[id][0])
+                    subject_list_IO.write('\t')
+                    subject_list_IO.write(all_subject_file[id][1])
+                    subject_list_IO.write('\n')
+
+                subject_list_file.write(subject_list_IO.getvalue())
+                subject_list_IO.close()
 
     def append_to_output_file(self, string_to_append):
         """ Append a string to the end on the output text file."""
@@ -795,6 +809,8 @@ class PersonDataHandler:
                            experiment.subject_group,
                            experiment.subject_name,
                            experiment.subject_number,
+                           experiment.subject_sex,
+                           experiment.subject_age,
                            asrt_type,
                            PCode,
 
@@ -840,6 +856,8 @@ class PersonDataHandler:
                         'subject_group',
                         'subject_name',
                         'subject_number',
+                        'subject_sex',
+                        'subject_age',
                         'asrt_type',
                         'PCode',
 
@@ -904,6 +922,8 @@ class PersonDataHandler:
                            experiment.subject_group,
                            experiment.subject_name,
                            experiment.subject_number,
+                           experiment.subject_sex,
+                           experiment.subject_age,
                            asrt_type,
                            PCode,
 
@@ -953,6 +973,8 @@ class PersonDataHandler:
                         'subject_group',
                         'subject_name',
                         'subject_number',
+                        'subject_sex',
+                        'subject_age',
                         'asrt_type',
                         'PCode',
 
@@ -1030,6 +1052,10 @@ class Experiment:
         self.subject_number = None
         # name of the current subject
         self.subject_name = None
+        # sex of the subject (e.g. male, female, other)
+        self.subject_sex = None
+        # age of the subject (e.g. 23 (years))
+        self.subject_age = None
 
         # a dictionary of pcodes for the different sessions (e.g. {1 : '1st - 1234', 2 : '5th - 1423'})
         # pcode means pattern code, which defines the order of the pattern series, expected to be learnt by the subject
@@ -1087,7 +1113,7 @@ class Experiment:
             # write out a text file with the experiment settings data, so the user can check settings in a human readable form
             self.settings.write_out_reminder()
 
-    def show_subject_settings_dialog(self):
+    def show_subject_identification_dialog(self):
         """Ask the user to specify the subject's attributes (name, subject number, group)."""
 
         warningtext = ''
@@ -1109,22 +1135,23 @@ class Experiment:
                 self.subject_name = name
 
                 subject_number = returned_data[1]
+                try:
+                    subject_number = int(subject_number)
+                    if subject_number >= 0:
+                        itsOK = True
+                        self.subject_number = subject_number
+                    else:
+                        warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
+                        continue
+
+                except:
+                    warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
+                    continue
+
                 if len(self.settings.groups) > 1:
                     self.subject_group = returned_data[2]
                 else:
                     self.subject_group = ""
-
-                try:
-                    subject_number = int(subject_number)
-                    if subject_number >= 0:
-                        itsOK = 1
-                        self.subject_number = subject_number
-                    else:
-                        warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
-
-                except:
-                    warningtext = u'Pozitív egész számot adj meg a sorszámhoz!'
-
             else:
                 core.quit()
 
@@ -1150,7 +1177,7 @@ class Experiment:
             expstart11.show()
             core.quit()
 
-    def show_subject_PCodes_dialog(self):
+    def show_subject_attributes_dialog(self):
         """Select pattern sequences for the different sessions for the current subject."""
 
         settings_dialog = gui.Dlg(title=u'Beállítások')
@@ -1162,6 +1189,9 @@ class Experiment:
                 settings_dialog.addField(u'Session ' + str(z + 1) + ' PCode', choices=[
                                          '1st - 1234', '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
 
+        settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
+        settings_dialog.addField(u'Életkor', "25")
+
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.PCodes = {}
@@ -1169,6 +1199,22 @@ class Experiment:
             for zz in range(self.settings.numsessions):
                 self.PCodes[zz + 1] = returned_data[zz]
 
+            index = self.settings.numsessions
+            subject_sex = returned_data[index]
+            subject_age = returned_data[index + 1]
+
+            if subject_sex == "férfi":
+                self.subject_sex = "male"
+            elif subject_sex == "nő":
+                self.subject_sex = "female"
+            else:
+                self.subject_sex = "other"
+
+            try:
+                subject_age = int(subject_age)
+                self.subject_age = str(subject_age)
+            except:
+                core.quit()
             return self.PCodes
         else:
             core.quit()
@@ -1266,7 +1312,7 @@ class Experiment:
     def participant_id(self):
         """Find out the current subject and read subject settings / progress if he/she already has any data."""
 
-        self.show_subject_settings_dialog()
+        self.show_subject_identification_dialog()
 
         # unique subject ID
         subject_id = self.subject_name + '_' + str(self.subject_number) + '_' + self.subject_group
@@ -1281,9 +1327,6 @@ class Experiment:
                                              all_IDs_file_path, subject_list_file_path,
                                              output_file_path, self.settings.experiment_type)
 
-        # update ID file containing all participating subject's ID
-        self.person_data.update_subject_IDs_files()
-
         # try to load settings and progress for the given subject ID
         self.person_data.load_person_settings(self)
 
@@ -1293,7 +1336,9 @@ class Experiment:
         # we have a new subject
         else:
             # ask about the pattern codes used in the different sessions
-            self.show_subject_PCodes_dialog()
+            self.show_subject_attributes_dialog()
+            # update participant attribute files
+            self.person_data.update_all_subject_attributes_files(self.subject_sex, self.subject_age)
             # calculate stimulus properties for the experiment
             self.calculate_stim_properties()
             # save data of the new subject
