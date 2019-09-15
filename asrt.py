@@ -1630,7 +1630,6 @@ class Experiment:
                 else:
                     stimR.draw()
                 self.mywindow.flip()
-                self.stimulus_on_screen = True
 
                 # we measure the actual RSI
                 if cycle == 1:
@@ -1638,6 +1637,7 @@ class Experiment:
                         stim_RSI = 0.0
                     else:
                         stim_RSI = RSI_clock.getTime()
+                self.stimulus_on_screen = True
                 self.last_RSI = stim_RSI
 
                 if cycle == 1:
