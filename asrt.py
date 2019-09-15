@@ -1595,6 +1595,7 @@ class Experiment:
         else:
             self.instructions.show_unexp_quit(self)
 
+        RSI.start(self.settings.RSI_time)
         while True:
             # four empty circles where the actual stimulus can be placed
             self.stim_bg(stimbg)
@@ -1615,8 +1616,7 @@ class Experiment:
                 stimR.setPos(self.dict_pos[self.stimlist[N]])
 
             # wait before the next stimulus to have the set RSI
-            if not first_trial_in_block:
-                RSI.complete()
+            RSI.complete()
 
             cycle = 0
 
