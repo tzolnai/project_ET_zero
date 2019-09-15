@@ -48,8 +48,7 @@ class integrationTest(unittest.TestCase):
         filepath = os.path.abspath(__file__)
         (filepath, trail) = os.path.split(filepath)
         test_name = self.id().split(".")[2]
-        self.current_dir = os.path.join(
-            filepath, "data", "integration", test_name)
+        self.current_dir = os.path.join(filepath, "data", "integration", test_name)
         self.work_dir = os.path.join(self.current_dir, "workdir")
         asrt.ensure_dir(self.work_dir)
         self.clearDir(self.work_dir)
@@ -177,47 +176,42 @@ class integrationTest(unittest.TestCase):
                         self.assertEqual(ref_line, output_line)
                         continue
 
-                    # computer name
-                    self.assertEqual(ref_values[0], act_values[0])
-                    self.assertEqual(ref_values[1], act_values[1])  # group
-                    # subject name
-                    self.assertEqual(ref_values[2], act_values[2])
-                    # subject number
-                    self.assertEqual(ref_values[3], act_values[3])
-                    self.assertEqual(ref_values[4], act_values[4])  # asrt type
-                    self.assertEqual(ref_values[5], act_values[5])  # pcode
-                    self.assertEqual(
-                        ref_values[6], act_values[6])  # output_line
-                    self.assertEqual(ref_values[7], act_values[7])  # session
-                    self.assertEqual(ref_values[8], act_values[8])  # epoch
-                    self.assertEqual(ref_values[9], act_values[9])  # block
-                    self.assertEqual(ref_values[10], act_values[10])  # trial
+                    
+                    self.assertEqual(ref_values[0], act_values[0])  # computer name
+                    self.assertEqual(ref_values[1], act_values[1])  # group              
+                    self.assertEqual(ref_values[2], act_values[2])  # subject name       
+                    self.assertEqual(ref_values[3], act_values[3])  # subject number     
+                    self.assertEqual(ref_values[4], act_values[4])  # subject sex     
+                    self.assertEqual(ref_values[5], act_values[5])  # subject age
+                    self.assertEqual(ref_values[6], act_values[6])  # asrt type
+                    self.assertEqual(ref_values[7], act_values[7])  # pcode
+                    self.assertEqual(ref_values[8], act_values[8])  # output_line
+                    self.assertEqual(ref_values[9], act_values[9])  # session
+                    self.assertEqual(ref_values[10], act_values[10])  # epoch
+                    self.assertEqual(ref_values[11], act_values[11])  # block
+                    self.assertEqual(ref_values[12], act_values[12])  # trial
                     if check_timing:
                         # RSI time, keep this low so the program will be precise inside a trial
                         self.assertAlmostEqual(
-                            float(ref_values[11].replace(",", ".")),
-                            float(act_values[11].replace(",", ".")), delta=RSI_delta)
-                    self.assertEqual(
-                        ref_values[12], act_values[12])  # frame_rate
-                    self.assertEqual(
-                        ref_values[13], act_values[13])  # frame_time
-                    self.assertEqual(
-                        ref_values[14], act_values[14])  # frame_sd
+                            float(ref_values[13].replace(",", ".")),
+                            float(act_values[13].replace(",", ".")), delta=RSI_delta)
+                    self.assertEqual(ref_values[14], act_values[14])  # frame_rate
+                    self.assertEqual(ref_values[15], act_values[15])  # frame_time
+                    self.assertEqual(ref_values[16], act_values[16])  # frame_sd
                     # date
                     # time
-                    # stimulus color
-                    self.assertEqual(ref_values[17], act_values[17])
-                    self.assertEqual(ref_values[18], act_values[18])  # PR
-                    self.assertEqual(ref_values[19], act_values[19])  # RT
-                    self.assertEqual(ref_values[20], act_values[20])  # error
+                    self.assertEqual(ref_values[19], act_values[19])  # stimulus color
+                    self.assertEqual(ref_values[20], act_values[20])  # PR
+                    self.assertEqual(ref_values[21], act_values[21])  # RT
+                    self.assertEqual(ref_values[22], act_values[22])  # error
                     # stimulus
                     # response
-                    self.assertEqual(ref_values[23], act_values[23])  # quitlog
+                    self.assertEqual(ref_values[25], act_values[25])  # quitlog
 
     def testSimpleTestCase(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -235,7 +229,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -247,7 +241,7 @@ class integrationTest(unittest.TestCase):
     def testExplicitASRT(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -266,7 +260,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -277,19 +271,19 @@ class integrationTest(unittest.TestCase):
     def testMoreBlocks(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         self.experiment.run()
 
-        self.checkOutputFile(True)
+        self.checkOutputFile(True, 0.01)
 
     def testMoreSessions(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, '3rd - 1324', '3rd - 1324', '3rd - 1324'])
+            ['Tóth Béla', 10, '3rd - 1324', '3rd - 1324', '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -346,7 +340,6 @@ class integrationTest(unittest.TestCase):
         self.experiment.presentation = self.presentation
 
     def presentation_override_unexpected_quit(self):
-
         # There is one screen about the continuation
         self.key_list = [self.experiment.settings.key1]
 
@@ -397,7 +390,8 @@ class integrationTest(unittest.TestCase):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', '5th - 1423', 'noPattern',
-                                 '1st - 1234', 'Tóth Béla', 10, 'Tóth Béla', 10, 'Tóth Béla', 10])
+                                 '1st - 1234', 'férfi', 25, 'Tóth Béla', 10, 'Tóth Béla', 10,
+                                 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -410,7 +404,7 @@ class integrationTest(unittest.TestCase):
         # reset StaticPeriod
         core.StaticPeriod = self.StaticPeriod
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -434,7 +428,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, '3rd - 1324', 'férfi', 25])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 

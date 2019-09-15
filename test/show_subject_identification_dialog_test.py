@@ -27,7 +27,7 @@ import asrt
 import psychopy_gui_mock as pgm
 
 
-class showSubjectSettingsDialogTest(unittest.TestCase):
+class showSubjectIdentificationDialogTest(unittest.TestCase):
 
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -35,11 +35,11 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_settings_dialog()
+        experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "alattomos-aladar")
         self.assertEqual(experiment.subject_number, 0)
-        self.assertEqual(experiment.subject_group, '')
+        self.assertEqual(experiment.subject_group, 'kontrol')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -63,16 +63,16 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
         with self.assertRaises(SystemExit):
-            experiment.show_subject_settings_dialog()
+            experiment.show_subject_identification_dialog()
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'kontrol'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'kontrol', 'férfi', '25'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
-        subject_settings = experiment.show_subject_settings_dialog()
+        subject_settings = experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "toth-bela")
         self.assertEqual(experiment.subject_number, 10)
@@ -85,7 +85,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_settings_dialog()
+        experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "aaeeiioooouuuuaaeeiioooouuuu")
         self.assertEqual(experiment.subject_number, 10)
@@ -98,7 +98,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_settings_dialog()
+        experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
         self.assertEqual(experiment.subject_number, 10)
@@ -111,7 +111,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_settings_dialog()
+        experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "toth-csaba")
         self.assertEqual(experiment.subject_number, 10)
@@ -132,7 +132,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_settings_dialog()
+        experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "toth-csaba")
         self.assertEqual(experiment.subject_number, 10)
@@ -152,7 +152,7 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = []
-        experiment.show_subject_settings_dialog()
+        experiment.show_subject_identification_dialog()
 
         self.assertEqual(experiment.subject_name, "alattomos-aladar")
         self.assertEqual(experiment.subject_number, 0)
@@ -169,7 +169,6 @@ class showSubjectSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[0].initial, 'Alattomos Aladar')
         self.assertEqual(list_of_fields[1].label, "Sorszam")
         self.assertEqual(list_of_fields[1].initial, '0')
-
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

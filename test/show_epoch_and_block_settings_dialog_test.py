@@ -43,7 +43,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         self.assertEqual(len(exp_settings.epochs), 1)
         self.assertEqual(exp_settings.epochs[0], 5)
         self.assertEqual(len(exp_settings.asrt_types), 1)
-        self.assertEqual(exp_settings.asrt_types[1], '')
+        self.assertEqual(exp_settings.asrt_types[1], 'implicit')
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
@@ -56,8 +56,7 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[0].initial, 5)
         self.assertEqual(list_of_fields[1].label, "Eles probak a blokkban:")
         self.assertEqual(list_of_fields[1].initial, 80)
-        self.assertEqual(list_of_fields[2].label,
-                         "Blokkok szama egy epochban:")
+        self.assertEqual(list_of_fields[2].label, "Blokkok szama egy epochban:")
         self.assertEqual(list_of_fields[2].initial, 5)
         self.assertEqual(list_of_fields[3].label, "Session 1 epochok szama")
         self.assertEqual(list_of_fields[3].initial, 5)
@@ -94,13 +93,11 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 3)
-        self.assertEqual(
-            list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
+        self.assertEqual(list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
         self.assertEqual(list_of_fields[0].initial, 5)
         self.assertEqual(list_of_fields[1].label, "Eles probak a blokkban:")
         self.assertEqual(list_of_fields[1].initial, 80)
-        self.assertEqual(list_of_fields[2].label,
-                         "Blokkok szama egy epochban:")
+        self.assertEqual(list_of_fields[2].label, "Blokkok szama egy epochban:")
         self.assertEqual(list_of_fields[2].initial, 5)
 
     def testMoreSessions(self):
@@ -126,13 +123,11 @@ class showEpochAndBlockSettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 9)
-        self.assertEqual(
-            list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
+        self.assertEqual(list_of_fields[0].label, "Randomok gyakorlaskent a blokk elejen (ennyi db):")
         self.assertEqual(list_of_fields[0].initial, 5)
         self.assertEqual(list_of_fields[1].label, "Eles probak a blokkban:")
         self.assertEqual(list_of_fields[1].initial, 80)
-        self.assertEqual(list_of_fields[2].label,
-                         "Blokkok szama egy epochban:")
+        self.assertEqual(list_of_fields[2].label, "Blokkok szama egy epochban:")
         self.assertEqual(list_of_fields[2].initial, 5)
         self.assertEqual(list_of_fields[3].label, "Session 1 epochok szama")
         self.assertEqual(list_of_fields[3].initial, 5)

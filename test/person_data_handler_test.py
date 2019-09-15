@@ -205,7 +205,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -218,7 +218,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "alattomos-aladar\t333\tgroup1\n")
+                             "alattomos-aladar\t333\tgroup1\tmale\t25\n")
 
     def testAddSameIDToIDsFiles(self):
         all_IDs_file_path = self.constructFilePath("testAddSameIDToIDsFiles")
@@ -228,8 +228,8 @@ class personDataHandlerTest(unittest.TestCase):
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
         # call this twice simulating of running the experiment with the same subject more times
-        person_data_handler.update_subject_IDs_files()
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -242,7 +242,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "alattomos-aladar\t333\tgroup1\n")
+                             "alattomos-aladar\t333\tgroup1\tmale\t25\n")
 
     def testAddMoreIDsToIDsFiles(self):
         all_IDs_file_path = self.constructFilePath("testAddMoreIDsToIDsFiles")
@@ -250,19 +250,19 @@ class personDataHandlerTest(unittest.TestCase):
             "testAddMoreIDsToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         person_data_handler = asrt.PersonDataHandler(
             "toth-csaba_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         person_data_handler = asrt.PersonDataHandler(
             "kertesz-bela_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -275,9 +275,9 @@ class personDataHandlerTest(unittest.TestCase):
                              "alattomos-aladar_333_group1", 'toth-csaba_111_group2', 'kertesz-bela_222_group3'])
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
-            self.assertEqual(subject_list_txt.read(), "alattomos-aladar\t333\tgroup1\n"
-                                                      "toth-csaba\t111\tgroup2\n"
-                                                      "kertesz-bela\t222\tgroup3\n")
+            self.assertEqual(subject_list_txt.read(), "alattomos-aladar\t333\tgroup1\tmale\t25\n"
+                                                      "toth-csaba\t111\tgroup2\tmale\t25\n"
+                                                      "kertesz-bela\t222\tgroup3\tmale\t25\n")
 
     def testSaveSpecialGroupNameToIDsFiles(self):
         all_IDs_file_path = self.constructFilePath(
@@ -286,7 +286,7 @@ class personDataHandlerTest(unittest.TestCase):
             "testSaveSpecialGroupNameToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_subject_IDs_files()
+        person_data_handler.update_all_subject_attributes_files("male", "25")
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -299,7 +299,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "alattomos-aladar\t333\tgroup_1\n")
+                             "alattomos-aladar\t333\tgroup_1\tmale\t25\n")
 
     def testAppendToEmptyOutput(self):
         output_file_path = self.constructFilePath(
@@ -310,7 +310,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.append_to_output_file("something")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
 
@@ -325,7 +325,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.append_to_output_file("\nsomething3")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
@@ -342,6 +342,8 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_group = "group1"
         experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
+        experiment.subject_sex = "male"
+        experiment.subject_age = "25"
         experiment.settings.asrt_types = {1: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_output_line = 12
@@ -368,10 +370,10 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
-                                                 "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
+                                                 "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
-                                                 "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
+                                                 "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                              str(stim_RT_time) + "\t" +
                              str(stim_RT_date) + "\t"
@@ -390,6 +392,8 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_group = "group1"
         experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
+        experiment.subject_sex = "male"
+        experiment.subject_age = "25"
         experiment.settings.asrt_types = {1: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_output_line = 12
@@ -432,15 +436,15 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
-                                                 "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
+                                                 "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
-                                                 "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
+                                                 "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
                                                  "Orange\tP\t321,2345\t0\t1\tz\t\n"
-                                                 "Laposka\tgroup1\talattomos-aladar\t333\timplicit\t1234\t13\t1\t2\t"
+                                                 "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t13\t1\t2\t"
                                                  "12\t22\t0,111\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
@@ -459,6 +463,8 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_group = "group1"
         experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
+        experiment.subject_sex = "male"
+        experiment.subject_age = "25"
         experiment.settings.asrt_types = {1: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_output_line = 12
@@ -485,14 +491,14 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tasrt_type\tPCode\toutput_line\t"
-                                                 "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
+                                                 "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
-                                                 "I. Richárd\tgroup1\talattomos-aladar\t333\timplicit\t1234\t12\t1\t2\t"
+                                                 "I. Richárd\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
-                             str(stim_RT_time) + "\t" +
-                             str(stim_RT_date) + "\t"
-                             "Orange\tP\t321,2345\t0\t1\tz\t")
+                                                 str(stim_RT_time) + "\t" +
+                                                 str(stim_RT_date) + "\t"
+                                                 "Orange\tP\t321,2345\t0\t1\tz\t")
 
 
 if __name__ == "__main__":

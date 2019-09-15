@@ -27,7 +27,7 @@ import asrt
 import psychopy_gui_mock as pgm
 
 
-class showSubjectPCodesDialogTest(unittest.TestCase):
+class showSubjectAttributesDialogTest(unittest.TestCase):
 
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -39,19 +39,25 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         experiment.settings.asrt_types = {}
         experiment.settings.asrt_types[1] = "implicit"
 
-        experiment.show_subject_PCodes_dialog()
+        experiment.show_subject_attributes_dialog()
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
-        self.assertEqual(experiment.PCodes[1], "")
+        self.assertEqual(experiment.PCodes[1], "1st - 1234")
+        self.assertEqual(experiment.subject_sex, "male")
+        self.assertEqual(experiment.subject_age, "25")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
         self.assertEqual(list_of_texts[0], "")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 1)
+        self.assertEqual(len(list_of_fields), 3)
         self.assertEqual(list_of_fields[0].label, "Session 1 PCode")
+        self.assertEqual(list_of_fields[1].label, "Nem")
+        self.assertEqual(list_of_fields[1].initial, '')
+        self.assertEqual(list_of_fields[2].label, "Életkor")
+        self.assertEqual(list_of_fields[2].initial, '25')
 
     def testCustomValue(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -64,11 +70,13 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         experiment.settings.asrt_types = {}
         experiment.settings.asrt_types[1] = "implicit"
 
-        experiment.show_subject_PCodes_dialog()
+        experiment.show_subject_attributes_dialog()
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
         self.assertEqual(experiment.PCodes[1], "1st")
+        self.assertEqual(experiment.subject_sex, "male")
+        self.assertEqual(experiment.subject_age, "25")
 
     def testMoreSessionsCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -85,7 +93,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         experiment.settings.asrt_types[4] = "implicit"
         experiment.settings.asrt_types[5] = "implicit"
 
-        experiment.show_subject_PCodes_dialog()
+        experiment.show_subject_attributes_dialog()
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
@@ -94,18 +102,24 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         self.assertEqual(experiment.PCodes[3], "6th")
         self.assertEqual(experiment.PCodes[4], "3rd")
         self.assertEqual(experiment.PCodes[5], "1st")
+        self.assertEqual(experiment.subject_sex, "male")
+        self.assertEqual(experiment.subject_age, "25")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
         self.assertEqual(list_of_texts[0], "")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 5)
+        self.assertEqual(len(list_of_fields), 7)
         self.assertEqual(list_of_fields[0].label, "Session 1 PCode")
         self.assertEqual(list_of_fields[1].label, "Session 2 PCode")
         self.assertEqual(list_of_fields[2].label, "Session 3 PCode")
         self.assertEqual(list_of_fields[3].label, "Session 4 PCode")
         self.assertEqual(list_of_fields[4].label, "Session 5 PCode")
+        self.assertEqual(list_of_fields[5].label, "Nem")
+        self.assertEqual(list_of_fields[5].initial, '')
+        self.assertEqual(list_of_fields[6].label, "Életkor")
+        self.assertEqual(list_of_fields[6].initial, '25')
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -118,7 +132,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         experiment.settings.asrt_types[1] = "implicit"
 
         with self.assertRaises(SystemExit):
-            experiment.show_subject_PCodes_dialog()
+            experiment.show_subject_attributes_dialog()
 
     def testNoASRTSussions(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -135,7 +149,7 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         experiment.settings.asrt_types[4] = "implicit"
         experiment.settings.asrt_types[5] = "noASRT"
 
-        experiment.show_subject_PCodes_dialog()
+        experiment.show_subject_attributes_dialog()
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
@@ -144,18 +158,24 @@ class showSubjectPCodesDialogTest(unittest.TestCase):
         self.assertEqual(experiment.PCodes[3], "noPattern")
         self.assertEqual(experiment.PCodes[4], "3rd")
         self.assertEqual(experiment.PCodes[5], "noPattern")
+        self.assertEqual(experiment.subject_sex, "male")
+        self.assertEqual(experiment.subject_age, "25")
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 1)
         self.assertEqual(list_of_texts[0], "")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 5)
+        self.assertEqual(len(list_of_fields), 7)
         self.assertEqual(list_of_fields[0].label, "Session 1 PCode")
         self.assertEqual(list_of_fields[1].label, "Session 2 PCode")
         self.assertEqual(list_of_fields[2].label, "Session 3 PCode")
         self.assertEqual(list_of_fields[3].label, "Session 4 PCode")
         self.assertEqual(list_of_fields[4].label, "Session 5 PCode")
+        self.assertEqual(list_of_fields[5].label, "Nem")
+        self.assertEqual(list_of_fields[5].initial, '')
+        self.assertEqual(list_of_fields[6].label, "Életkor")
+        self.assertEqual(list_of_fields[6].initial, '25')
 
 
 if __name__ == "__main__":

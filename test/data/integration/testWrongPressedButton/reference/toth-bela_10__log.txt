@@ -1,13 +1,13 @@
-computer_name	subject_group	subject_name	subject_number	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	PR	RT	error	stimulus	response	quit_log	
-Laposka		toth-bela	10	implicit	1324	1	1	1	1	1	0,0	60,0	0,0	0,0	16:15:34.421637	31/08/2019	Orange	R	0,0	0	1	1	
-Laposka		toth-bela	10	implicit	1324	2	1	1	1	2	0,0006101999897509813	60,0	0,0	0,0	16:15:34.421637	31/08/2019	Orange	R	0,0	0	2	2	
-Laposka		toth-bela	10	implicit	1324	3	1	1	1	3	0,0005847999709658325	60,0	0,0	0,0	16:15:34.421637	31/08/2019	Orange	R	0,0	0	1	1	
-Laposka		toth-bela	10	implicit	1324	4	1	1	1	4	0,0005616999696940184	60,0	0,0	0,0	16:15:34.421637	31/08/2019	Orange	R	0,0	0	2	2	
-Laposka		toth-bela	10	implicit	1324	5	1	1	1	5	0,0005725999944843352	60,0	0,0	0,0	16:15:34.421637	31/08/2019	Orange	R	0,0	0	4	4	
-Laposka		toth-bela	10	implicit	1324	6	1	1	1	6	0,0005700999754481018	60,0	0,0	0,0	16:15:34.421637	31/08/2019	Orange	P	0,0	0	4	4	
-Laposka		toth-bela	10	implicit	1324	7	1	1	1	7	0,0007586000137962401	60,0	0,0	0,0	16:15:34.437261	31/08/2019	Orange	R	0,0	0	3	3	
-Laposka		toth-bela	10	implicit	1324	8	1	1	1	8	0,0006285999552346766	60,0	0,0	0,0	16:15:34.437261	31/08/2019	Orange	P	0,0	1	1	4	
-Laposka		toth-bela	10	implicit	1324	9	1	1	1	8	0,0006285999552346766	60,0	0,0	0,0	16:15:34.437261	31/08/2019	Orange	P	0,0	0	1	1	
-Laposka		toth-bela	10	implicit	1324	10	1	1	1	9	0,0005025000427849591	60,0	0,0	0,0	16:15:34.437261	31/08/2019	Orange	R	0,0	0	4	4	
-Laposka		toth-bela	10	implicit	1324	11	1	1	1	10	0,0007997999782674015	60,0	0,0	0,0	16:15:34.437261	31/08/2019	Orange	P	0,0	0	3	3	
-Laposka		toth-bela	10	implicit	1324	12	1	1	1	11	0,0005049000028520823	60,0	0,0	0,0	16:15:34.437261	31/08/2019	Orange	R	0,0	0	2	2	sessionend_planned_quit
+computer_name	subject_group	subject_name	subject_number	subject_sex	subject_age	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	PR	RT	error	stimulus	response	quit_log	
+Laposka		toth-bela	10	male	25	implicit	1324	1	1	1	1	1	0,0	60,0	0,0	0,0	14:58:51.722169	15/09/2019	Orange	R	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	2	1	1	1	2	0,0006673000170849264	60,0	0,0	0,0	14:58:51.722670	15/09/2019	Orange	R	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	3	1	1	1	3	0,0006263999966904521	60,0	0,0	0,0	14:58:51.723667	15/09/2019	Orange	R	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	4	1	1	1	4	0,0005957999965175986	60,0	0,0	0,0	14:58:51.724166	15/09/2019	Orange	R	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	5	1	1	1	5	0,0005910000181756914	60,0	0,0	0,0	14:58:51.724665	15/09/2019	Orange	R	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	6	1	1	1	6	0,000571100041270256	60,0	0,0	0,0	14:58:51.725662	15/09/2019	Orange	P	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	7	1	1	1	7	0,0005230000242590904	60,0	0,0	0,0	14:58:51.726161	15/09/2019	Orange	R	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	8	1	1	1	8	0,0005442000110633671	60,0	0,0	0,0	14:58:51.726661	15/09/2019	Orange	P	0,0	1	1	4	
+Laposka		toth-bela	10	male	25	implicit	1324	9	1	1	1	8	0,0005442000110633671	60,0	0,0	0,0	14:58:51.727160	15/09/2019	Orange	P	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	10	1	1	1	9	0,0005157000268809497	60,0	0,0	0,0	14:58:51.727659	15/09/2019	Orange	R	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	11	1	1	1	10	0,0009311999892815948	60,0	0,0	0,0	14:58:51.728657	15/09/2019	Orange	P	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	12	1	1	1	11	0,0005652999971061945	60,0	0,0	0,0	14:58:51.729156	15/09/2019	Orange	R	0,0	0	2	2	sessionend_planned_quit
