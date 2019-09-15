@@ -53,15 +53,15 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 3)
-        self.assertEqual(list_of_fields[0].label, "Session 1 PCode")
-        self.assertEqual(list_of_fields[1].label, "Nem")
-        self.assertEqual(list_of_fields[1].initial, '')
-        self.assertEqual(list_of_fields[2].label, "Életkor")
-        self.assertEqual(list_of_fields[2].initial, '25')
+        self.assertEqual(list_of_fields[0].label, "Nem")
+        self.assertEqual(list_of_fields[0].initial, '')
+        self.assertEqual(list_of_fields[1].label, "Életkor")
+        self.assertEqual(list_of_fields[1].initial, '25')
+        self.assertEqual(list_of_fields[2].label, "Session 1 PCode")
 
     def testCustomValue(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['1st'])
+        gui_mock.addFieldValues(['férfi', 25, '1st'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -80,7 +80,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
     def testMoreSessionsCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['2nd', '1st', '6th', '3rd', '1st'])
+        gui_mock.addFieldValues(['férfi', 25, '2nd', '1st', '6th', '3rd', '1st'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -111,15 +111,15 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 7)
-        self.assertEqual(list_of_fields[0].label, "Session 1 PCode")
-        self.assertEqual(list_of_fields[1].label, "Session 2 PCode")
-        self.assertEqual(list_of_fields[2].label, "Session 3 PCode")
-        self.assertEqual(list_of_fields[3].label, "Session 4 PCode")
-        self.assertEqual(list_of_fields[4].label, "Session 5 PCode")
-        self.assertEqual(list_of_fields[5].label, "Nem")
-        self.assertEqual(list_of_fields[5].initial, '')
-        self.assertEqual(list_of_fields[6].label, "Életkor")
-        self.assertEqual(list_of_fields[6].initial, '25')
+        self.assertEqual(list_of_fields[0].label, "Nem")
+        self.assertEqual(list_of_fields[0].initial, '')
+        self.assertEqual(list_of_fields[1].label, "Életkor")
+        self.assertEqual(list_of_fields[1].initial, '25')
+        self.assertEqual(list_of_fields[2].label, "Session 1 PCode")
+        self.assertEqual(list_of_fields[3].label, "Session 2 PCode")
+        self.assertEqual(list_of_fields[4].label, "Session 3 PCode")
+        self.assertEqual(list_of_fields[5].label, "Session 4 PCode")
+        self.assertEqual(list_of_fields[6].label, "Session 5 PCode")
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -136,8 +136,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
     def testNoASRTSussions(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(
-            ['2nd', '1st', 'noPattern', '3rd', 'noPattern'])
+        gui_mock.addFieldValues(['férfi', 25, '2nd', '1st', 'noPattern', '3rd', 'noPattern'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -167,15 +166,15 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 7)
-        self.assertEqual(list_of_fields[0].label, "Session 1 PCode")
-        self.assertEqual(list_of_fields[1].label, "Session 2 PCode")
-        self.assertEqual(list_of_fields[2].label, "Session 3 PCode")
-        self.assertEqual(list_of_fields[3].label, "Session 4 PCode")
-        self.assertEqual(list_of_fields[4].label, "Session 5 PCode")
-        self.assertEqual(list_of_fields[5].label, "Nem")
-        self.assertEqual(list_of_fields[5].initial, '')
-        self.assertEqual(list_of_fields[6].label, "Életkor")
-        self.assertEqual(list_of_fields[6].initial, '25')
+        self.assertEqual(list_of_fields[0].label, "Nem")
+        self.assertEqual(list_of_fields[0].initial, '')
+        self.assertEqual(list_of_fields[1].label, "Életkor")
+        self.assertEqual(list_of_fields[1].initial, '25')
+        self.assertEqual(list_of_fields[2].label, "Session 1 PCode")
+        self.assertEqual(list_of_fields[3].label, "Session 2 PCode")
+        self.assertEqual(list_of_fields[4].label, "Session 3 PCode")
+        self.assertEqual(list_of_fields[5].label, "Session 4 PCode")
+        self.assertEqual(list_of_fields[6].label, "Session 5 PCode")
 
 
 if __name__ == "__main__":

@@ -1182,6 +1182,8 @@ class Experiment:
 
         settings_dialog = gui.Dlg(title=u'Beállítások')
         settings_dialog.addText('')
+        settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
+        settings_dialog.addField(u'Életkor', "25")
         for z in range(self.settings.numsessions):
             if self.settings.asrt_types[z + 1] == "noASRT":
                 settings_dialog.addFixedField(u'Session ' + str(z + 1) + ' PCode', 'noPattern')
@@ -1189,19 +1191,16 @@ class Experiment:
                 settings_dialog.addField(u'Session ' + str(z + 1) + ' PCode', choices=[
                                          '1st - 1234', '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
 
-        settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
-        settings_dialog.addField(u'Életkor', "25")
-
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.PCodes = {}
 
+            subject_sex = returned_data[0]
+            subject_age = returned_data[1]
             for zz in range(self.settings.numsessions):
-                self.PCodes[zz + 1] = returned_data[zz]
+                self.PCodes[zz + 1] = returned_data[zz + 2]
 
             index = self.settings.numsessions
-            subject_sex = returned_data[index]
-            subject_age = returned_data[index + 1]
 
             if subject_sex == "férfi":
                 self.subject_sex = "male"
