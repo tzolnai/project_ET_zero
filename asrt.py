@@ -1513,7 +1513,7 @@ class Experiment:
         core.wait(10.0)
 
         self.fixation_cross.draw()
-        self.print_to_screen("A következő blokkra lépéshez néz a keresztre.")
+        self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
         response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_sampling_window)
         if response == -1:
             return 'quit'
