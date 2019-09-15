@@ -176,12 +176,11 @@ class integrationTest(unittest.TestCase):
                         self.assertEqual(ref_line, output_line)
                         continue
 
-                    
                     self.assertEqual(ref_values[0], act_values[0])  # computer name
-                    self.assertEqual(ref_values[1], act_values[1])  # group              
-                    self.assertEqual(ref_values[2], act_values[2])  # subject name       
-                    self.assertEqual(ref_values[3], act_values[3])  # subject number     
-                    self.assertEqual(ref_values[4], act_values[4])  # subject sex     
+                    self.assertEqual(ref_values[1], act_values[1])  # group
+                    self.assertEqual(ref_values[2], act_values[2])  # subject name
+                    self.assertEqual(ref_values[3], act_values[3])  # subject number
+                    self.assertEqual(ref_values[4], act_values[4])  # subject sex
                     self.assertEqual(ref_values[5], act_values[5])  # subject age
                     self.assertEqual(ref_values[6], act_values[6])  # asrt type
                     self.assertEqual(ref_values[7], act_values[7])  # pcode
