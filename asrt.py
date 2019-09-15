@@ -1739,7 +1739,7 @@ class Experiment:
             if N == self.end_at[N - 1]:
                 break
 
-    def run(self, full_screen=True):
+    def run(self, full_screen=True, mouse_visible=False):
         ensure_dir(os.path.join(self.workdir_path, "logs"))
         ensure_dir(os.path.join(self.workdir_path, "settings"))
 
@@ -1789,6 +1789,8 @@ class Experiment:
         else:
             win_type = 'pyglet'
         with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=full_screen, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
+            self.mywindow.mouseVisible = mouse_visible
+
             # check frame rate
             self.frame_check()
 
