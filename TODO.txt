@@ -7,5 +7,4 @@ use a bit more readable variable names (both in name and in output). e.g. bad na
 might be a good idea to make consitent the output variable: session, epoch, block, trial, how they are calculated, as global serial number or as inner serial number
 store both converted user id and the user name without changes
 cleanup instructions, accent characters, ':' etc
-ET: fixation point, stim_bg
-RT: ast block's feedback, RT test (use clock object)
+RT: last block's feedback, RT test (use clock object)
