@@ -23,7 +23,7 @@ A további instrukciók megtekintéséhez néz a keresztre!
 inst#
 
 Kb. percenként fogsz visszajelzést kapni arról,
-hogy mennyire voltál gyors az előző blokkokban ez alapján tudsz módosítani.
+hogy mennyire voltál gyors az előző blokkokban, ez alapján tudsz módosítani.
 
 A feladat indításához néz a keresztre!
 
