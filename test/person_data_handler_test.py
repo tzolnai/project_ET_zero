@@ -367,7 +367,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         person_data_handler.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date, stimRT,
                                                        stimACC, response, stimcolor, experiment.stim_output_line])
-        person_data_handler.flush_data_to_output(experiment)
+        person_data_handler.flush_RT_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
@@ -417,7 +417,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         person_data_handler.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date, stimRT,
                                                        stimACC, response, stimcolor, experiment.stim_output_line])
-        person_data_handler.flush_data_to_output(experiment)
+        person_data_handler.flush_RT_data_to_output(experiment)
 
         experiment.stim_output_line = 13
         experiment.stimtrial[0] = 22
@@ -433,7 +433,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         person_data_handler.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date, stimRT,
                                                        stimACC, response, stimcolor, experiment.stim_output_line])
-        person_data_handler.flush_data_to_output(experiment)
+        person_data_handler.flush_RT_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
@@ -488,7 +488,7 @@ class personDataHandlerTest(unittest.TestCase):
 
         person_data_handler.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date, stimRT,
                                                        stimACC, response, stimcolor, experiment.stim_output_line])
-        person_data_handler.flush_data_to_output(experiment)
+        person_data_handler.flush_RT_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"

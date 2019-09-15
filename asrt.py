@@ -335,8 +335,8 @@ class ExperimentSettings:
             else:
                 self.experiment_type = 'eye-tracking'
                 if not g_tobii_available:
-                    print(
-                        "For running the eye-tracking version of the experiment we need tobii_research module to be installed!")
+                    print("For running the eye-tracking version of the experiment,"
+                          " we need tobii_research module to be installed!")
                     core.quit()
             return returned_data[1]
         else:
@@ -788,12 +788,6 @@ class PersonDataHandler:
             with codecs.open(self.output_file_path, 'a+', encoding='utf-8') as output_file:
                 output_file.write(string_to_append)
 
-    def flush_data_to_output(self, experiment):
-        if self.output_file_type == 'reaction-time':
-            self.flush_RT_data_to_output(experiment)
-        else:
-            self.flush_ET_data_to_output(experiment)
-
     def flush_RT_data_to_output(self, experiment):
         """ Write out the ouptut date of the current trial into the output text file (reaction-time exp. type)."""
         assert self.output_file_type == 'reaction-time'
@@ -887,11 +881,12 @@ class PersonDataHandler:
             output_file.write(h + '\t')
 
     def flush_ET_data_to_output(self, experiment):
-        """ Write out the ouptut date of the current trial into the output text file (eye-tracking exp. type)."""
+        """ Write out the ouptut data of the current trial into the output text file (eye-tracking exp. type)."""
         assert self.output_file_type == 'eye-tracking'
 
         output_buffer = StringIO()
         max_trial = experiment.settings.get_maxtrial()
+        data_len = len(self.output_data_buffer)
         for data in self.output_data_buffer:
 
             N = data[0] + 1
@@ -963,6 +958,8 @@ class PersonDataHandler:
 
         self.append_to_output_file(output_buffer.getvalue())
         output_buffer.close()
+        # make sure we don't get more data here durig writing it out
+        assert data_len == len(self.output_data_buffer)
         self.output_data_buffer.clear()
 
     def add_ET_heading_to_output(self, output_file):
@@ -1705,7 +1702,15 @@ class Experiment:
 
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
 
-                self.person_data.flush_data_to_output(self)
+                if self.settings.experiment_type == 'reaction-time':
+                    self.person_data.flush_RT_data_to_output(self)
+                else:
+                    # stop registering more eye-tracking data
+                    self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
+                    self.person_data.flush_ET_data_to_output(self)
+                    # continue eye-tracking
+                    self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
+
                 self.person_data.save_person_settings(self)
 
                 if self.settings.experiment_type == 'reaction-time':
@@ -1792,8 +1797,7 @@ class Experiment:
 
             # stop recoring gaze data
             if self.eye_tracker is not None:
-                self.eye_tracker.unsubscribe_from(
-                    tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
+                self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
 
             # save user data
             self.person_data.save_person_settings(self)

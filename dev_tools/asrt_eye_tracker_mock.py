@@ -48,6 +48,7 @@ class EyeTrackerMock:
         gaze_data_callback = callback
 
     def unsubscribe_from(self, subscription_type, callback=None):
+        global gaze_data_callback
         gaze_data_callback = None
 
 
