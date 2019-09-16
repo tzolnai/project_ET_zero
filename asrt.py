@@ -1550,7 +1550,7 @@ class Experiment:
                               fillColor=self.colors['stimp'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
         stimR = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
                               fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
-        stimbg = visual.Circle(win=self.mywindow, radius=1, units="cm",
+        stimbg = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
                                fillColor=None, lineColor=self.colors['linecolor'])
         if self.settings.experiment_type == 'eye-tracking':
             # place the fixation cross to the bottom-right corner of the screen
