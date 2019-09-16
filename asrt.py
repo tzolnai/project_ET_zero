@@ -560,7 +560,7 @@ class InstructionHelper:
     def __print_to_screen(self, mytext, mywindow):
         """Display given string in the given window."""
 
-        text_stim = visual.TextStim(mywindow, text=mytext, units='cm', height=0.6, color='black')
+        text_stim = visual.TextStim(mywindow, text=mytext, units='cm', height=0.8, color='black')
         text_stim.draw()
         mywindow.flip()
 
@@ -1440,7 +1440,7 @@ class Experiment:
     def print_to_screen(self, mytext):
         """Display any string on the screen."""
 
-        xtext = visual.TextStim(self.mywindow, text=mytext, units="cm", height=0.6, color="black")
+        xtext = visual.TextStim(self.mywindow, text=mytext, units="cm", height=0.8, color="black")
         xtext.draw()
         self.mywindow.flip()
 
@@ -1557,8 +1557,8 @@ class Experiment:
             aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
             monitor_width_cm = self.settings.monitor_width
             monitor_height_cm = monitor_width_cm * aspect_ratio
-            self.fixation_cross_pos = (monitor_width_cm / 2 - 2, -(monitor_height_cm / 2 - 2))
-            self.fixation_cross = visual.TextStim(win=self.mywindow, text="+", height=2, units="cm", color='black', pos=self.fixation_cross_pos)
+            self.fixation_cross_pos = (monitor_width_cm / 2 - 3, -(monitor_height_cm / 2 - 3))
+            self.fixation_cross = visual.TextStim(win=self.mywindow, text="+", height=3, units="cm", color='black', pos=self.fixation_cross_pos)
 
         stim_RSI = 0.0
         N = self.last_N + 1
