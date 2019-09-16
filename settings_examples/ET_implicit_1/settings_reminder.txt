@@ -10,8 +10,8 @@ Blocks in epochs:	5
 Preparatory Trials\Block:	5
 Trials\Block:	80
 RSI:	0,5
-Asrt stim distance:	14
-Asrt stim size:	1
+Asrt stim distance:	15
+Asrt stim size:	1.5
 Asrt stim color (implicit):	DarkBlue
 Asrt stim color (explicit, cued):	Green
 Background color:	Ivory
