@@ -413,7 +413,7 @@ class ExperimentSettings:
         else:  # 'eye-tracking'
             settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 10)
 
-        settings_dialog.addField(u'Ingerek sugara (cm)', 1)
+        settings_dialog.addField(u'Ingerek sugara (cm)', 1.0)
 
         settings_dialog.addField(u'ASRT inger szine (elsodleges, R)',
                                  choices=possible_colors, initial="Orange")
