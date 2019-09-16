@@ -560,7 +560,7 @@ class InstructionHelper:
     def __print_to_screen(self, mytext, mywindow):
         """Display given string in the given window."""
 
-        text_stim = visual.TextStim(mywindow, text=mytext, units='cm', height=0.8, color='black')
+        text_stim = visual.TextStim(mywindow, text=mytext, units='cm', height=0.8, wrapWidth=20, color='black')
         text_stim.draw()
         mywindow.flip()
 
@@ -1440,7 +1440,7 @@ class Experiment:
     def print_to_screen(self, mytext):
         """Display any string on the screen."""
 
-        xtext = visual.TextStim(self.mywindow, text=mytext, units="cm", height=0.8, color="black")
+        xtext = visual.TextStim(self.mywindow, text=mytext, units="cm", height=0.8, wrapWidth=20, color="black")
         xtext.draw()
         self.mywindow.flip()
 
