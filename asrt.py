@@ -1383,7 +1383,7 @@ class Experiment:
         self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
-        if abs(point[0] - rect_center[0]) <= rect_size and abs(point[1] - rect_center[1]) <= rect_size:
+        if abs(point[0] - rect_center[0]) <= rect_size / 2.0 and abs(point[1] - rect_center[1]) <= rect_size / 2.0:
             return True
         else:
             return False
