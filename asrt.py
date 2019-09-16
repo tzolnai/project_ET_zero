@@ -1344,13 +1344,13 @@ class Experiment:
         # Sometimes the eyetracker is not identified for the first time. Try more times.
         loopCount = 1
         allTrackers = tobii.find_all_eyetrackers()
-        while not allTrackers and loopCount < 50:
+        while not allTrackers and loopCount < 200:
             allTrackers = tobii.find_all_eyetrackers()
             core.wait(0.02)
             loopCount += 1
 
         if len(allTrackers) < 1:
-            print("Cannot find any eyetrackers.")
+            print("Cannot find any eyetracker.")
             core.quit()
 
         self.eye_tracker = allTrackers[0]
