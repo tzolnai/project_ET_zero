@@ -409,9 +409,9 @@ class ExperimentSettings:
         settings_dialog.addText(u'Megjelenés..')
 
         if self.experiment_type == 'reaction-time':
-            settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3)
+            settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 3.0)
         else:  # 'eye-tracking'
-            settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 10)
+            settings_dialog.addField(u'Ingerek tavolsaga (kozeppontok kozott) (cm)', 10.0)
 
         settings_dialog.addField(u'Ingerek sugara (cm)', 1.0)
 
@@ -428,7 +428,7 @@ class ExperimentSettings:
 
         if self.experiment_type == 'eye-tracking':
             settings_dialog.addText(u'Eye-tracking paraméterek...')
-            settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3)
+            settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3.0)
             settings_dialog.addField(u'Stimulusnál használt ablak méret (mintavételek száma):', 8)
             settings_dialog.addField(u'Instrukcióknál használt ablak méret (mintavételek száma):', 36)
 
