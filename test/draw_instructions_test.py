@@ -94,7 +94,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_text = drawing_list[0]
         self.assertTrue(isinstance(instruction_text, pvm.TextStim))
         # size
-        self.assertAlmostEqual(instruction_text.height, 0.6, delta=0.001)
+        self.assertAlmostEqual(instruction_text.height, 0.8, delta=0.001)
         # pos
         self.assertAlmostEqual(instruction_text.pos[0], 0.0, delta=0.001)
         self.assertAlmostEqual(instruction_text.pos[1], 0.0, delta=0.001)
@@ -129,7 +129,7 @@ class drawInstructionsTest(unittest.TestCase):
         instruction_text = drawing_list[0]
         self.assertTrue(isinstance(instruction_text, pvm.TextStim))
         # size
-        self.assertAlmostEqual(instruction_text.height, 0.6, delta=0.001)
+        self.assertAlmostEqual(instruction_text.height, 0.8, delta=0.001)
         # pos
         self.assertAlmostEqual(instruction_text.pos[0], 0.0, delta=0.001)
         self.assertAlmostEqual(instruction_text.pos[1], 0.0, delta=0.001)
