@@ -1341,16 +1341,19 @@ class Experiment:
             self.person_data.save_person_settings(self)
 
     def init_eyetracker(self):
+        self.print_to_screen("Eye-tracker eszköz keresése...")
+
         # Sometimes the eyetracker is not identified for the first time. Try more times.
         loopCount = 1
         allTrackers = tobii.find_all_eyetrackers()
         while not allTrackers and loopCount < 200:
             allTrackers = tobii.find_all_eyetrackers()
-            core.wait(0.02)
+            core.wait(0.05)
             loopCount += 1
 
         if len(allTrackers) < 1:
-            print("Cannot find any eyetracker.")
+            self.print_to_screen("Nem találtam semmilyen eye-tracker eszközt!")
+            core.wait(3.0)
             core.quit()
 
         self.eye_tracker = allTrackers[0]
@@ -1775,10 +1778,6 @@ class Experiment:
         self.instructions.read_insts_from_file()
         self.instructions.validate_instructions(self.settings)
 
-        # init eye-tracker if needed
-        if self.settings.experiment_type == 'eye-tracking':
-            self.init_eyetracker()
-
         # find out the current subject
         self.participant_id()
 
@@ -1790,6 +1789,10 @@ class Experiment:
             win_type = 'pyglet'
         with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=full_screen, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
             self.mywindow.mouseVisible = mouse_visible
+
+            # init eye-tracker if needed
+            if self.settings.experiment_type == 'eye-tracking':
+                self.init_eyetracker()
 
             # check frame rate
             self.frame_check()
