@@ -660,7 +660,8 @@ class InstructionHelper:
 
            For eye tracking we display the last five blocks' avarage reaction times.
         """
-        feedback = "Az előző blokkokban mért reakcióidők:\n\n"
+        feedback = "Most pihenhetsz egy kicsit.\n\n"
+        feedback += "Az előző blokkokban mért reakcióidők:\n\n"
         blocknumber = experiment.stimblock[experiment.last_N] - min(4, len(experiment.last_block_RTs) - 1)
         if blocknumber < 1:
             blocknumber = 1
