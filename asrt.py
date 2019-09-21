@@ -915,6 +915,8 @@ class PersonDataHandler:
             right_pupil_validity = data[3]['right_pupil_validity']
 
             output_data = [experiment.settings.computer_name,
+                           experiment.mymonitor.getSizePix()[0],
+                           experiment.mymonitor.getSizePix()[1],
                            experiment.subject_group,
                            experiment.subject_name,
                            experiment.subject_number,
@@ -946,7 +948,15 @@ class PersonDataHandler:
                            left_pupil_diameter,
                            right_pupil_diameter,
                            left_pupil_validity,
-                           right_pupil_validity]
+                           right_pupil_validity,
+                           experiment.dict_pos[1][0],
+                           experiment.dict_pos[1][1],
+                           experiment.dict_pos[2][0],
+                           experiment.dict_pos[2][1],
+                           experiment.dict_pos[3][0],
+                           experiment.dict_pos[3][1],
+                           experiment.dict_pos[4][0],
+                           experiment.dict_pos[4][1]]
 
             output_buffer.write("\n")
             for data in output_data:
@@ -968,6 +978,8 @@ class PersonDataHandler:
         assert self.output_file_type == 'eye-tracking'
 
         heading_list = ['computer_name',
+                        'monitor_width_pixel',
+                        'monitor_height_pixel',
                         'subject_group',
                         'subject_name',
                         'subject_number',
@@ -1000,6 +1012,14 @@ class PersonDataHandler:
                         'right_pupil_diameter',
                         'left_pupil_validity',
                         'right_pupil_validity',
+                        'stimulus_1_position_x',
+                        'stimulus_1_position_y',
+                        'stimulus_2_position_x',
+                        'stimulus_2_position_y',
+                        'stimulus_3_position_x',
+                        'stimulus_3_position_y',
+                        'stimulus_4_position_x',
+                        'stimulus_4_position_y',
                         'quit_log']
 
         for h in heading_list:
