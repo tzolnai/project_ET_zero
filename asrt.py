@@ -904,10 +904,20 @@ class PersonDataHandler:
             else:
                 stimcolor = experiment.colors['stimr']
 
-            left_gaze_data = data[3]['left_gaze_point_on_display_area']
-            right_gaze_data = data[3]['right_gaze_point_on_display_area']
+            left_gaze_data_ADCS = data[3]['left_gaze_point_on_display_area']
+            right_gaze_data_ADCS = data[3]['right_gaze_point_on_display_area']
             left_gaze_validity = data[3]['left_gaze_point_validity']
             right_gaze_validity = data[3]['right_gaze_point_validity']
+
+            if left_gaze_validity:
+                left_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(left_gaze_data_ADCS)
+            else:
+                left_gaze_data_PCMCS = left_gaze_data_ADCS
+
+            if right_gaze_validity:
+                right_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(right_gaze_data_ADCS)
+            else:
+                right_gaze_data_PCMCS = right_gaze_data_ADCS
 
             left_pupil_diameter = data[3]['left_pupil_diameter']
             right_pupil_diameter = data[3]['right_pupil_diameter']
@@ -939,10 +949,14 @@ class PersonDataHandler:
                            experiment.stimpr[N],
                            experiment.stimlist[N],
                            data[2],
-                           left_gaze_data[0],
-                           left_gaze_data[1],
-                           right_gaze_data[0],
-                           right_gaze_data[1],
+                           left_gaze_data_ADCS[0],
+                           left_gaze_data_ADCS[1],
+                           right_gaze_data_ADCS[0],
+                           right_gaze_data_ADCS[1],
+                           left_gaze_data_PCMCS[0],
+                           left_gaze_data_PCMCS[1],
+                           right_gaze_data_PCMCS[0],
+                           right_gaze_data_PCMCS[1],
                            left_gaze_validity,
                            right_gaze_validity,
                            left_pupil_diameter,
@@ -1002,24 +1016,28 @@ class PersonDataHandler:
                         'PR',
                         'stimulus',
                         'stimulus_on_screen',
-                        'left_gaze_data_X',
-                        'left_gaze_data_Y',
-                        'right_gaze_data_X',
-                        'right_gaze_data_Y',
+                        'left_gaze_data_X_ADCS',
+                        'left_gaze_data_Y_ADCS',
+                        'right_gaze_data_X_ADCS',
+                        'right_gaze_data_Y_ADCS',
+                        'left_gaze_data_X_PCMCS',
+                        'left_gaze_data_Y_PCMCS',
+                        'right_gaze_data_X_PCMCS',
+                        'right_gaze_data_Y_PCMCS',
                         'left_gaze_validity',
                         'right_gaze_validity',
                         'left_pupil_diameter',
                         'right_pupil_diameter',
                         'left_pupil_validity',
                         'right_pupil_validity',
-                        'stimulus_1_position_x',
-                        'stimulus_1_position_y',
-                        'stimulus_2_position_x',
-                        'stimulus_2_position_y',
-                        'stimulus_3_position_x',
-                        'stimulus_3_position_y',
-                        'stimulus_4_position_x',
-                        'stimulus_4_position_y',
+                        'stimulus_1_position_X_PCMCS',
+                        'stimulus_1_position_Y_PCMCS',
+                        'stimulus_2_position_X_PCMCS',
+                        'stimulus_2_position_Y_PCMCS',
+                        'stimulus_3_position_X_PCMCS',
+                        'stimulus_3_position_Y_PCMCS',
+                        'stimulus_4_position_X_PCMCS',
+                        'stimulus_4_position_Y_PCMCS',
                         'quit_log']
 
         for h in heading_list:
@@ -1413,6 +1431,23 @@ class Experiment:
         else:
             return False
 
+    def ADCS_to_PCMCS(self, pos_ADCS):
+        # we have the pos in eye-tracker's display area normalized coordinates with the
+        # origin at the upper left corner and we to convert it to psychopy cm coordinates,
+        # where the origin is at the center and y coordinates are mirrored.
+        aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+        monitor_width_cm = self.settings.monitor_width
+        monitor_height_cm = monitor_width_cm * aspect_ratio
+
+        # shift origin
+        shift_x = monitor_width_cm / 2
+        shift_y = monitor_height_cm / 2
+
+        # need to mirror the y coordinates
+        pos_PCMCS = ((pos_ADCS[0] * monitor_width_cm) - shift_x,
+                    ((pos_ADCS[1] * monitor_height_cm) - shift_y) * - 1)
+        return pos_PCMCS
+
     def wait_for_eye_response(self, expected_eye_pos, sampling_window):
 
         while (True):
@@ -1430,23 +1465,10 @@ class Experiment:
                 sum_x += pos[0]
                 sum_y += pos[1]
 
-            # we have the pos in eye-tracker's display area normalized coordinates with the
-            # origin at the upper left corner
+            # we have the pos in eye-tracker's display area normalized coordinates
+            # and we need to convert it to psychopy cm coordinates
             avg_pos_norm = (sum_x / sampling_window, sum_y / sampling_window)
-
-            # we need to convert it to psychopy cm coordinates, where the origin is at the
-            # center and y coordinates are mirrored.
-            aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
-            monitor_width_cm = self.settings.monitor_width
-            monitor_height_cm = monitor_width_cm * aspect_ratio
-
-            # shift origin
-            shift_x = monitor_width_cm / 2
-            shift_y = monitor_height_cm / 2
-
-            # need to mirror the y coordinates
-            avg_pos_cm = ((avg_pos_norm[0] * monitor_width_cm) - shift_x,
-                          ((avg_pos_norm[1] * monitor_height_cm) - shift_y) * - 1)
+            avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
 
             if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
                 return 1
