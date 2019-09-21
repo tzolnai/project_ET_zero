@@ -581,7 +581,7 @@ class InstructionHelper:
                     core.wait(2.0)
                 response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_sampling_window)
                 if response == -1:
-                    core.quit()
+                    experiment.quit_presentation()
 
     def show_instructions(self, experiment):
         self.__show_message(self.insts, experiment, True)
@@ -1544,6 +1544,7 @@ class Experiment:
             self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
 
         self.person_data.append_to_output_file('userquit')
+        core.wait(3.0)
         core.quit()
 
     def presentation(self):
