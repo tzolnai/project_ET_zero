@@ -1432,18 +1432,21 @@ class Experiment:
             return False
 
     def ADCS_to_PCMCS(self, pos_ADCS):
-        # we have the pos in eye-tracker's display area normalized coordinates with the
-        # origin at the upper left corner and we to convert it to psychopy cm coordinates,
-        # where the origin is at the center and y coordinates are mirrored.
+        ''' Convert position from tobii active display coordinate system (ADCS) to PsychoPy coordinate system with cm unit (PCMCS).
+
+            Active display coordinate system: http://developer.tobiipro.com/commonconcepts/coordinatesystems.html
+            PsychoPy coordinate system with cm unit: https://www.psychopy.org/general/units.html        
+        '''
         aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
         monitor_width_cm = self.settings.monitor_width
         monitor_height_cm = monitor_width_cm * aspect_ratio
 
-        # shift origin
+        # shift origin from top-left to center
         shift_x = monitor_width_cm / 2
         shift_y = monitor_height_cm / 2
 
-        # need to mirror the y coordinates
+        # scale coordinates from normalized coordinates to cm unit coordinates
+        # we also mirror the y coordinates
         pos_PCMCS = ((pos_ADCS[0] * monitor_width_cm) - shift_x,
                     ((pos_ADCS[1] * monitor_height_cm) - shift_y) * - 1)
         return pos_PCMCS
