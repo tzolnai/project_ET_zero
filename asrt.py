@@ -1775,12 +1775,12 @@ class Experiment:
         self.instructions.read_insts_from_file()
         self.instructions.validate_instructions(self.settings)
 
-        # find out the current subject
-        self.participant_id()
-
         # init eye-tracker if needed
         if self.settings.experiment_type == 'eye-tracking':
             self.init_eyetracker()
+
+        # find out the current subject
+        self.participant_id()
 
         # init window
         self.monitor_settings()
