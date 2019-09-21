@@ -1362,11 +1362,12 @@ class Experiment:
             self.person_data.save_person_settings(self)
 
     def init_eyetracker(self):
-        self.print_to_screen("Eye-tracker eszköz keresése...")
+        allTrackers = tobii.find_all_eyetrackers()
+        if not allTrackers:
+            self.print_to_screen("Eye-tracker eszköz keresése...")
 
         # Sometimes the eyetracker is not identified for the first time. Try more times.
         loopCount = 1
-        allTrackers = tobii.find_all_eyetrackers()
         while not allTrackers and loopCount < 200:
             allTrackers = tobii.find_all_eyetrackers()
             core.wait(0.05)
