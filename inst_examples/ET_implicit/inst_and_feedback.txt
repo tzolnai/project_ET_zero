@@ -29,12 +29,6 @@ A feladat indításához néz a keresztre!
 
 ***
 
-resume#
-
-A feladat indításához néz a keresztre!
-
-***
-
 ending#
 
 Vége a kísérletnek!
