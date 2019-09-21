@@ -1741,6 +1741,9 @@ class Experiment:
 
             # end of the sessions (one run of the experiment script stops at the end of the current session)
             if N == self.end_at[N - 1]:
+                # stop recoring gaze data
+                if self.eye_tracker is not None:
+                    self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
                 break
 
     def run(self, full_screen=True, mouse_visible=False):
@@ -1800,10 +1803,6 @@ class Experiment:
 
             # show experiment screen
             self.presentation()
-
-            # stop recoring gaze data
-            if self.eye_tracker is not None:
-                self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
 
             # save user data
             self.person_data.save_person_settings(self)
