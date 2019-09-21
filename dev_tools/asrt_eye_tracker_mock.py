@@ -30,6 +30,7 @@ from pynput import mouse
 
 gaze_data_callback = None
 
+g_counter = 0
 
 class EyeTrackerMock:
     def subscribe_to(self, subscription_type, callback, as_dictionary=False):
@@ -59,20 +60,41 @@ tobii.find_all_eyetrackers = find_all_eyetrackers_mock
 
 
 def on_move(x, y):
-    if gaze_data_callback is not None:
-        for i in range(0, 4):
+    global g_counter
+    for i in range(0, 4):
+        if gaze_data_callback is not None:
+            g_counter += 1
             xCoord = (x / 1366)
             yCoord = (y / 768)
             gazeData = {}
-            gazeData['left_gaze_point_on_display_area'] = (xCoord + 0.1, yCoord)
-            gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.1, yCoord)
-            gazeData['left_gaze_point_validity'] = True
-            gazeData['right_gaze_point_validity'] = True
+            if g_counter % 10 != 0:
+                gazeData['left_gaze_point_on_display_area'] = (xCoord + 0.1, yCoord)
+                gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.1, yCoord)
+                gazeData['left_gaze_point_validity'] = True
+                gazeData['right_gaze_point_validity'] = True
+            elif g_counter / 10 == 1:                
+                gazeData['left_gaze_point_on_display_area'] = (xCoord + 0.1, yCoord)
+                gazeData['right_gaze_point_on_display_area'] = (float('nan'), float('nan'))
+                gazeData['left_gaze_point_validity'] = True
+                gazeData['right_gaze_point_validity'] = False
+            elif g_counter / 10 == 2:
+                gazeData['left_gaze_point_on_display_area'] = (float('nan'), float('nan'))
+                gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.1, yCoord)
+                gazeData['left_gaze_point_validity'] = False
+                gazeData['right_gaze_point_validity'] = True
+            elif g_counter / 10 == 3:
+                gazeData['left_gaze_point_on_display_area'] = (float('nan'), float('nan'))
+                gazeData['right_gaze_point_on_display_area'] = (float('nan'), float('nan'))
+                gazeData['left_gaze_point_validity'] = False
+                gazeData['right_gaze_point_validity'] = False
+                g_counter = 0
+                
             gazeData['left_pupil_diameter'] = 3
             gazeData['right_pupil_diameter'] = 3
             gazeData['left_pupil_validity'] = True
             gazeData['right_pupil_validity'] = True
             gaze_data_callback(gazeData)
+
 
 
 if __name__ == "__main__":
