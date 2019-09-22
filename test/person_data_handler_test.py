@@ -312,7 +312,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
+                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
 
     def testAppendMoreTimesToOutput(self):
         output_file_path = self.constructFilePath(
@@ -327,7 +327,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
 
     def testWriteEmptyOutput(self):
@@ -372,12 +372,12 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                              str(stim_RT_time) + "\t" +
                              str(stim_RT_date) + "\t"
-                             "Orange\tP\t321,2345\t0\t1\tz\t")
+                             "Orange\tP\thigh\t321,2345\t0\t1\tz\t")
 
     def testWriteExistingOutput(self):
         output_file_path = self.constructFilePath(
@@ -438,17 +438,17 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tP\t321,2345\t0\t1\tz\t\n"
+                                                 "Orange\tP\thigh\t321,2345\t0\t1\tz\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t13\t1\t2\t"
                                                  "12\t22\t0,111\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Green\tR\t523,2345\t1\t2\tb\t")
+                                                 "Green\tR\tlow\t523,2345\t1\t2\tb\t")
 
     def testPointInComputerNameOrDate(self):
         output_file_path = self.constructFilePath(
@@ -493,12 +493,12 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "I. Richárd\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tP\t321,2345\t0\t1\tz\t")
+                                                 "Orange\tP\thigh\t321,2345\t0\t1\tz\t")
 
 
 if __name__ == "__main__":

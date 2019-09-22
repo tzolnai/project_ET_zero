@@ -44,7 +44,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
         run_time = clock.getTime()
-        self.assertAlmostEqual(run_time, 0.0, delta=0.001)
+        self.assertAlmostEqual(run_time, 0.0, delta=0.002)
 
     def testWaitForEyeResponse(self):
         experiment = asrt.Experiment("")
@@ -65,7 +65,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
         for i in range(100):
             experiment.wait_for_eye_response([0.5, 0.5], sampling_window)
         run_time = clock.getTime()
-        self.assertAlmostEqual(run_time, 0.0, delta=0.006)
+        self.assertAlmostEqual(run_time, 0.0, delta=0.01)
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

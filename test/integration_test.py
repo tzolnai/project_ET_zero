@@ -201,11 +201,12 @@ class integrationTest(unittest.TestCase):
                     # time
                     self.assertEqual(ref_values[19], act_values[19])  # stimulus color
                     self.assertEqual(ref_values[20], act_values[20])  # PR
-                    self.assertEqual(ref_values[21], act_values[21])  # RT
-                    self.assertEqual(ref_values[22], act_values[22])  # error
+                    # triplet_frequency
+                    self.assertEqual(ref_values[22], act_values[22])  # RT
+                    self.assertEqual(ref_values[23], act_values[23])  # error
                     # stimulus
                     # response
-                    self.assertEqual(ref_values[25], act_values[25])  # quitlog
+                    self.assertEqual(ref_values[26], act_values[26])  # quitlog
 
     def testSimpleTestCase(self):
         # for setting participant data
@@ -320,23 +321,6 @@ class integrationTest(unittest.TestCase):
         self.key_list += [self.experiment.settings.key1]
         self.visual_mock.setReturnKeyList(self.key_list)
         return self.presentation()
-
-    def testContinueWithSecondSession(self):
-        # for setting participant data
-        gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10])
-
-        # override this method to get the stimlist to be able to generate the keylist
-        self.presentation = self.experiment.presentation
-        self.experiment.presentation = self.presentation_override
-
-        self.visual_mock = pvm.PsychoPyVisualMock()
-
-        self.experiment.run()
-
-        self.checkOutputFile(True)
-
-        self.experiment.presentation = self.presentation
 
     def presentation_override_unexpected_quit(self):
         # There is one screen about the continuation
