@@ -799,6 +799,21 @@ class PersonDataHandler:
             session = experiment.stim_sessionN[N]
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
+            freq_high_low = ""
+            if experiment.stimpr[N] == "P":
+                freq_high_low = "high"
+            elif PCode == "noPattern":
+                freq_high_low = "none"
+            else:
+                dict_HL = {}
+                dict_HL[PCode[0]] = PCode[1]
+                dict_HL[PCode[1]] = PCode[2]
+                dict_HL[PCode[2]] = PCode[3]
+                dict_HL[PCode[3]] = PCode[0]
+                if N > 3 and experiment.stimtrial[N] >= 3 and int(dict_HL[str(experiment.stimlist[N - 2])]) == experiment.stimlist[N]:
+                    freq_high_low = "high"
+                else:
+                    freq_high_low = "low"
 
             output_data = [experiment.settings.computer_name,
                            experiment.subject_group,
@@ -825,6 +840,7 @@ class PersonDataHandler:
 
                            data[7],
                            experiment.stimpr[N],
+                           freq_high_low,
                            data[4],
                            data[5],
 
@@ -872,6 +888,7 @@ class PersonDataHandler:
 
                         'stimulus_color',
                         'PR',
+                        'triplet_frequency',
                         'RT',
                         'error',
                         'stimulus',
@@ -903,6 +920,22 @@ class PersonDataHandler:
                     stimcolor = experiment.colors['stimr']
             else:
                 stimcolor = experiment.colors['stimr']
+
+            freq_high_low = ""
+            if experiment.stimpr[N] == "P":
+                freq_high_low = "high"
+            elif PCode == "noPattern":
+                freq_high_low = "none"
+            else:
+                dict_HL = {}
+                dict_HL[PCode[0]] = PCode[1]
+                dict_HL[PCode[1]] = PCode[2]
+                dict_HL[PCode[2]] = PCode[3]
+                dict_HL[PCode[3]] = PCode[0]
+                if N > 3 and experiment.stimtrial[N] >= 3 and int(dict_HL[str(experiment.stimlist[N - 2])]) == experiment.stimlist[N]:
+                    freq_high_low = "high"
+                else:
+                    freq_high_low = "low"
 
             left_gaze_data_ADCS = data[3]['left_gaze_point_on_display_area']
             right_gaze_data_ADCS = data[3]['right_gaze_point_on_display_area']
@@ -947,6 +980,7 @@ class PersonDataHandler:
 
                            stimcolor,
                            experiment.stimpr[N],
+                           freq_high_low,
                            experiment.stimlist[N],
                            data[2],
                            left_gaze_data_ADCS[0],
@@ -1014,6 +1048,7 @@ class PersonDataHandler:
 
                         'stimulus_color',
                         'PR',
+                        'triplet_frequency',
                         'stimulus',
                         'stimulus_on_screen',
                         'left_gaze_data_X_ADCS',
