@@ -805,12 +805,7 @@ class PersonDataHandler:
             elif PCode == "noPattern":
                 freq_high_low = "none"
             else:
-                dict_HL = {}
-                dict_HL[PCode[0]] = PCode[1]
-                dict_HL[PCode[1]] = PCode[2]
-                dict_HL[PCode[2]] = PCode[3]
-                dict_HL[PCode[3]] = PCode[0]
-                if N > 3 and experiment.stimtrial[N] >= 3 and int(dict_HL[str(experiment.stimlist[N - 2])]) == experiment.stimlist[N]:
+                if N > 3 and experiment.stimtrial[N] >= 3 and experiment.next_stim(session, experiment.stimlist[N - 2]) == experiment.stimlist[N]:
                     freq_high_low = "high"
                 else:
                     freq_high_low = "low"
@@ -927,12 +922,7 @@ class PersonDataHandler:
             elif PCode == "noPattern":
                 freq_high_low = "none"
             else:
-                dict_HL = {}
-                dict_HL[PCode[0]] = PCode[1]
-                dict_HL[PCode[1]] = PCode[2]
-                dict_HL[PCode[2]] = PCode[3]
-                dict_HL[PCode[3]] = PCode[0]
-                if N > 3 and experiment.stimtrial[N] >= 3 and int(dict_HL[str(experiment.stimlist[N - 2])]) == experiment.stimlist[N]:
+                if N > 3 and experiment.stimtrial[N] >= 3 and experiment.next_stim(session, experiment.stimlist[N - 2]) == experiment.stimlist[N]:
                     freq_high_low = "high"
                 else:
                     freq_high_low = "low"
@@ -1323,6 +1313,17 @@ class Experiment:
             PCode = '1432'
         return PCode
 
+    def next_stim(self, session_number, stimulus):
+        PCode = self.which_code(session_number)
+        assert PCode != "noPattern"
+
+        dict_next_stimulus = {}
+        dict_next_stimulus[PCode[0]] = PCode[1]
+        dict_next_stimulus[PCode[1]] = PCode[2]
+        dict_next_stimulus[PCode[2]] = PCode[3]
+        dict_next_stimulus[PCode[3]] = PCode[0]
+        return int(dict_next_stimulus[str(stimulus)])
+
     def calculate_stim_properties(self):
         """Calculate all variables used during the trials before the presentation starts."""
 
@@ -1363,14 +1364,6 @@ class Experiment:
                     all_trial_Nr += 1
 
                     asrt_type = self.settings.asrt_types[self.stim_sessionN[all_trial_Nr]]
-                    PCode = self.which_code(self.stim_sessionN[all_trial_Nr])
-
-                    dict_HL = {}
-                    if not PCode == "noPattern":
-                        dict_HL[PCode[0]] = PCode[1]
-                        dict_HL[PCode[1]] = PCode[2]
-                        dict_HL[PCode[2]] = PCode[3]
-                        dict_HL[PCode[3]] = PCode[0]
 
                     if self.settings.blockprepN % 2 == 1:
                         mod_pattern = 0
@@ -1379,7 +1372,7 @@ class Experiment:
 
                     if current_trial_num % 2 == mod_pattern and asrt_type != "noASRT":
                         if all_trial_Nr > 2:
-                            current_stim = int(dict_HL[str(self.stimlist[all_trial_Nr - 2])])
+                            current_stim = self.next_stim(self.stim_sessionN[all_trial_Nr], self.stimlist[all_trial_Nr - 2])
                         else:
                             # first pattern stim is random
                             current_stim = random.choice([1, 2, 3, 4])
@@ -1665,9 +1658,6 @@ class Experiment:
 
         responses_in_block = 0
         accs_in_block = []
-
-        asrt_type = self.settings.asrt_types[self.stim_sessionN[N]]
-        PCode = self.which_code(self.stim_sessionN[N])
 
         patternERR = 0
         number_of_patterns = 0
