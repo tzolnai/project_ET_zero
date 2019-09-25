@@ -120,9 +120,9 @@ class calculateStimpropertiesTest(unittest.TestCase):
             trial_num_in_block = i % (
                 experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i + 1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
-                self.assertEqual(experiment.stimpr[i + 1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testExplicitASRT(self):
         experiment = asrt.Experiment("")
@@ -217,9 +217,9 @@ class calculateStimpropertiesTest(unittest.TestCase):
             trial_num_in_block = i % (
                 experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i + 1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
-                self.assertEqual(experiment.stimpr[i + 1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testNoASRT(self):
         experiment = asrt.Experiment("")
@@ -307,7 +307,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         self.assertTrue(valid_random)
 
         for i in range(len(experiment.stimpr)):
-            self.assertEqual(experiment.stimpr[i + 1], "R")
+            self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testASRTWithoutPractice(self):
         experiment = asrt.Experiment("")
@@ -394,9 +394,9 @@ class calculateStimpropertiesTest(unittest.TestCase):
             trial_num_in_block = i % (
                 experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i + 1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
-                self.assertEqual(experiment.stimpr[i + 1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testASRTWithoutReal(self):
         experiment = asrt.Experiment("")
@@ -459,7 +459,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         # random only
         for i in range(len(experiment.stimpr)):
-            self.assertEqual(experiment.stimpr[i + 1], "R")
+            self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testWithEvenPracticeTrials(self):
         experiment = asrt.Experiment("")
@@ -546,9 +546,9 @@ class calculateStimpropertiesTest(unittest.TestCase):
             trial_num_in_block = i % (
                 experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i + 1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
-                self.assertEqual(experiment.stimpr[i + 1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testWithOddRealTrials(self):
         experiment = asrt.Experiment("")
@@ -636,9 +636,9 @@ class calculateStimpropertiesTest(unittest.TestCase):
             trial_num_in_block = i % (
                 experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
             if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                self.assertEqual(experiment.stimpr[i + 1], "P")
+                self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
-                self.assertEqual(experiment.stimpr[i + 1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "random")
 
     def testMoreSessionsWithDifferentProperties(self):
         experiment = asrt.Experiment("")
@@ -769,11 +769,11 @@ class calculateStimpropertiesTest(unittest.TestCase):
                 trial_num_in_block = i % (
                     experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
                 if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
-                    self.assertEqual(experiment.stimpr[i + 1], "P")
+                    self.assertEqual(experiment.stimpr[i + 1], "pattern")
                 else:
-                    self.assertEqual(experiment.stimpr[i + 1], "R")
+                    self.assertEqual(experiment.stimpr[i + 1], "random")
             else:  # noASRT
-                self.assertEqual(experiment.stimpr[i + 1], "R")
+                self.assertEqual(experiment.stimpr[i + 1], "random")
 
 
 if __name__ == "__main__":

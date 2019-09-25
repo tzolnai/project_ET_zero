@@ -352,7 +352,7 @@ class integrationTest(unittest.TestCase):
         self.visual_mock.setReturnKeyList(self.key_list)
         return self.presentation()
 
-    def testContinueAfterUnexpectedQuit(self):
+    '''def testContinueAfterUnexpectedQuit(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['Tóth Béla', 10])
@@ -367,7 +367,7 @@ class integrationTest(unittest.TestCase):
 
         self.checkOutputFile(True)
 
-        self.experiment.presentation = self.presentation
+        self.experiment.presentation = self.presentation'''
 
     def testMoreSessionsSubsequently(self):
         # for setting participant data

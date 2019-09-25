@@ -77,8 +77,8 @@ class personDataHandlerTest(unittest.TestCase):
                                 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15}
         experiment.stimlist = {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2,
                                7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2}
-        experiment.stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R',
-                             8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
+        experiment.stimpr = {1: 'random', 2: 'random', 3: 'random', 4: 'random', 5: 'random', 6: 'pattern', 7: 'random',
+                             8: 'pattern', 9: 'random', 10: 'pattern', 11: 'random', 12: 'pattern', 13: 'random', 14: 'pattern', 15: 'random'}
         experiment.last_N = 1
         experiment.end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16,
                              8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
@@ -102,8 +102,8 @@ class personDataHandlerTest(unittest.TestCase):
                          1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15})
         self.assertEqual(experiment.stimlist, {
                          1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2, 7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2})
-        self.assertEqual(experiment.stimpr, {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P',
-                                             7: 'R', 8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'})
+        self.assertEqual(experiment.stimpr, {1: 'random', 2: 'random', 3: 'random', 4: 'random', 5: 'random', 6: 'pattern',
+                                             7: 'random', 8: 'pattern', 9: 'random', 10: 'pattern', 11: 'random', 12: 'pattern', 13: 'random', 14: 'pattern', 15: 'random'})
         self.assertEqual(experiment.last_N, 1)
         self.assertEqual(experiment.end_at, {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16,
                                              7: 16, 8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16})
@@ -181,8 +181,8 @@ class personDataHandlerTest(unittest.TestCase):
                                 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15}
         experiment.stimlist = {1: 3, 2: 1, 3: 2, 4: 3, 5: 2, 6: 2,
                                7: 2, 8: 4, 9: 1, 10: 1, 11: 4, 12: 3, 13: 3, 14: 2, 15: 2}
-        experiment.stimpr = {1: 'R', 2: 'R', 3: 'R', 4: 'R', 5: 'R', 6: 'P', 7: 'R',
-                             8: 'P', 9: 'R', 10: 'P', 11: 'R', 12: 'P', 13: 'R', 14: 'P', 15: 'R'}
+        experiment.stimpr = {1: 'random', 2: 'random', 3: 'random', 4: 'random', 5: 'random', 6: 'pattern', 7: 'random',
+                             8: 'pattern', 9: 'random', 10: 'pattern', 11: 'random', 12: 'pattern', 13: 'random', 14: 'pattern', 15: 'random'}
         experiment.last_N = 1
         experiment.end_at = {1: 16, 2: 16, 3: 16, 4: 16, 5: 16, 6: 16, 7: 16,
                              8: 16, 9: 16, 10: 16, 11: 16, 12: 16, 13: 16, 14: 16, 15: 16}
@@ -312,7 +312,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
+                                                 "date\ttime\tstimulus_color\tpattern_or_random\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
 
     def testAppendMoreTimesToOutput(self):
         output_file_path = self.constructFilePath(
@@ -327,7 +327,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tpattern_or_random\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
 
     def testWriteEmptyOutput(self):
@@ -358,7 +358,7 @@ class personDataHandlerTest(unittest.TestCase):
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
         stimcolor = 'Orange'
-        experiment.stimpr = {0: 'P'}
+        experiment.stimpr = {0: 'pattern'}
         stimRT = 321.2345
         stimACC = 0
         experiment.stimlist = {0: 1}
@@ -372,12 +372,12 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tpattern_or_random\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                              str(stim_RT_time) + "\t" +
                              str(stim_RT_date) + "\t"
-                             "Orange\tP\thigh\t321,2345\t0\t1\tz\t")
+                             "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t")
 
     def testWriteExistingOutput(self):
         output_file_path = self.constructFilePath(
@@ -408,7 +408,7 @@ class personDataHandlerTest(unittest.TestCase):
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
         stimcolor = 'Orange'
-        experiment.stimpr = {0: 'P'}
+        experiment.stimpr = {0: 'pattern'}
         stimRT = 321.2345
         stimACC = 0
         experiment.stimlist = {0: 1}
@@ -425,7 +425,7 @@ class personDataHandlerTest(unittest.TestCase):
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
         stimcolor = 'Green'
-        experiment.stimpr[0] = "R"
+        experiment.stimpr[0] = 'random'
         stimRT = 523.2345
         stimACC = 1
         experiment.stimlist[0] = 2
@@ -438,17 +438,17 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tpattern_or_random\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tP\thigh\t321,2345\t0\t1\tz\t\n"
+                                                 "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t13\t1\t2\t"
                                                  "12\t22\t0,111\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Green\tR\tlow\t523,2345\t1\t2\tb\t")
+                                                 "Green\trandom\tlow\t523,2345\t1\t2\tb\t")
 
     def testPointInComputerNameOrDate(self):
         output_file_path = self.constructFilePath(
@@ -479,7 +479,7 @@ class personDataHandlerTest(unittest.TestCase):
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%Y.%m.%d')
         stimcolor = 'Orange'
-        experiment.stimpr = {0: 'P'}
+        experiment.stimpr = {0: 'pattern'}
         stimRT = 321.2345
         stimACC = 0
         experiment.stimlist = {0: 1}
@@ -493,12 +493,12 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\tPR\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\tpattern_or_random\ttriplet_frequency\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "I. Richárd\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tP\thigh\t321,2345\t0\t1\tz\t")
+                                                 "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t")
 
 
 if __name__ == "__main__":

@@ -341,7 +341,7 @@ class presentationTest(unittest.TestCase):
                 stim_circle = drawing_list[j + 8]
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
-                if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
+                if experiment.stimpr[((j - 3) / 9) + 1] == 'pattern':
                     self.assertEqual(stim_circle.fillColor,
                                      experiment.settings.asrt_pcolor)
                 else:
@@ -488,7 +488,7 @@ class presentationTest(unittest.TestCase):
                 stim_circle = drawing_list[j + 8]
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
-                if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
+                if experiment.stimpr[((j - 3) / 9) + 1] == 'pattern':
                     self.assertEqual(stim_circle.fillColor,
                                      experiment.settings.asrt_pcolor)
                 else:
@@ -624,7 +624,7 @@ class presentationTest(unittest.TestCase):
                 stim_circle = drawing_list[j + 8]
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
-                if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
+                if experiment.stimpr[((j - 3) / 9) + 1] == 'pattern':
                     self.assertEqual(stim_circle.fillColor,
                                      experiment.settings.asrt_pcolor)
                 else:
@@ -786,7 +786,7 @@ class presentationTest(unittest.TestCase):
                 stim_circle = drawing_list[j + 8]
                 self.assertTrue(isinstance(stim_circle, pvm.Circle))
                 self.assertEqual(stim_circle.lineColor, 'black')
-                if experiment.stimpr[((j - 3) / 9) + 1] == 'P':
+                if experiment.stimpr[((j - 3) / 9) + 1] == 'pattern':
                     self.assertEqual(stim_circle.fillColor,
                                      experiment.settings.asrt_pcolor)
                 else:

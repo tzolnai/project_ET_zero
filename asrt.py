@@ -800,7 +800,7 @@ class PersonDataHandler:
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
             freq_high_low = ""
-            if experiment.stimpr[N] == "P":
+            if experiment.stimpr[N] == "pattern":
                 freq_high_low = "high"
             elif PCode == "noPattern":
                 freq_high_low = "none"
@@ -887,7 +887,7 @@ class PersonDataHandler:
                         'time',
 
                         'stimulus_color',
-                        'PR',
+                        'pattern_or_random',
                         'triplet_frequency',
                         'RT',
                         'error',
@@ -913,7 +913,7 @@ class PersonDataHandler:
             session = experiment.stim_sessionN[N]
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
-            if experiment.stimpr[N] == 'P':
+            if experiment.stimpr[N] == 'pattern':
                 if experiment.settings.asrt_types[session] == 'explicit':
                     stimcolor = experiment.colors['stimp']
                 else:
@@ -922,7 +922,7 @@ class PersonDataHandler:
                 stimcolor = experiment.colors['stimr']
 
             freq_high_low = ""
-            if experiment.stimpr[N] == "P":
+            if experiment.stimpr[N] == "pattern":
                 freq_high_low = "high"
             elif PCode == "noPattern":
                 freq_high_low = "none"
@@ -1047,7 +1047,7 @@ class PersonDataHandler:
                         'frame_sd',
 
                         'stimulus_color',
-                        'PR',
+                        'pattern_or_random',
                         'triplet_frequency',
                         'stimulus',
                         'stimulus_on_screen',
@@ -1145,7 +1145,7 @@ class Experiment:
         self.stimlist = None
         # global trial number -> first trial of the next session mapping (e. g.{1 : 3, 2 : 3, 3 : 5, 4 : 5} - two sessions with two trials in each)
         self.end_at = None
-        # global trial number -> pattern or random stimulus mapping (e. g.{1 : 'P', 2 : 'R', 3 : 'P', 4 : 'R'} - two sessions with two trials in each)
+        # global trial number -> pattern or random stimulus mapping (e. g.{1 : 'pattern', 2 : 'random', 3 : 'pattern', 4 : 'random'} - two sessions with two trials in each)
         self.stimpr = None
         # number of the last trial (it is 0 in the beggining and it is always equal with the last displayed stimulus's serial number
         self.last_N = None
@@ -1351,7 +1351,7 @@ class Experiment:
 
                     current_stim = random.choice([1, 2, 3, 4])
                     self.stimlist[all_trial_Nr] = current_stim
-                    self.stimpr[all_trial_Nr] = "R"
+                    self.stimpr[all_trial_Nr] = "random"
                     self.stimtrial[all_trial_Nr] = current_trial_num
                     self.stimblock[all_trial_Nr] = block_num
                     self.stimepoch[all_trial_Nr] = epoch
@@ -1383,10 +1383,10 @@ class Experiment:
                         else:
                             # first pattern stim is random
                             current_stim = random.choice([1, 2, 3, 4])
-                        self.stimpr[all_trial_Nr] = "P"
+                        self.stimpr[all_trial_Nr] = "pattern"
                     else:
                         current_stim = random.choice([1, 2, 3, 4])
-                        self.stimpr[all_trial_Nr] = "R"
+                        self.stimpr[all_trial_Nr] = "random"
 
                     self.stimlist[all_trial_Nr] = current_stim
                     self.stimtrial[all_trial_Nr] = current_trial_num
@@ -1704,7 +1704,7 @@ class Experiment:
             self.last_RSI = -1
 
             # set the actual stimulus' position and fill color
-            if self.stimpr[N] == 'P':
+            if self.stimpr[N] == 'pattern':
                 if self.settings.asrt_types[self.stim_sessionN[N]] == 'explicit':
                     stimP.fillColor = self.colors['stimp']
                 else:
@@ -1725,7 +1725,7 @@ class Experiment:
                 self.stim_bg(stimbg)
 
                 # display the actual stimulus
-                if self.stimpr[N] == 'P':
+                if self.stimpr[N] == 'pattern':
                     stimP.draw()
                 else:
                     stimR.draw()
@@ -1770,7 +1770,7 @@ class Experiment:
                     stimACC = 0
                     accs_in_block.append(0)
 
-                    if self.stimpr[N] == 'P':
+                    if self.stimpr[N] == 'pattern':
                         number_of_patterns += 1
                         RT_pattern_list.append(stimRT)
                     RT_all_list.append(stimRT)
@@ -1780,7 +1780,7 @@ class Experiment:
                     stimACC = 1
                     accs_in_block.append(1)
 
-                    if self.stimpr[N] == 'P':
+                    if self.stimpr[N] == 'pattern':
                         patternERR += 1
                         number_of_patterns += 1
                         RT_pattern_list.append(stimRT)
