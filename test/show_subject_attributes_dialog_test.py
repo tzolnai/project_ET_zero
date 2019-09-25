@@ -74,7 +74,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
-        self.assertEqual(experiment.PCodes[1], "1st")
+        self.assertEqual(experiment.PCodes[1], "1st - 1234")
         self.assertEqual(experiment.subject_sex, "male")
         self.assertEqual(experiment.subject_age, "25")
 
@@ -97,11 +97,11 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
-        self.assertEqual(experiment.PCodes[1], "2nd")
-        self.assertEqual(experiment.PCodes[2], "1st")
-        self.assertEqual(experiment.PCodes[3], "6th")
-        self.assertEqual(experiment.PCodes[4], "3rd")
-        self.assertEqual(experiment.PCodes[5], "1st")
+        self.assertEqual(experiment.PCodes[1], "2nd - 1243")
+        self.assertEqual(experiment.PCodes[2], "1st - 1234")
+        self.assertEqual(experiment.PCodes[3], "6th - 1432")
+        self.assertEqual(experiment.PCodes[4], "3rd - 1324")
+        self.assertEqual(experiment.PCodes[5], "1st - 1234")
         self.assertEqual(experiment.subject_sex, "male")
         self.assertEqual(experiment.subject_age, "25")
 
@@ -152,10 +152,10 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
-        self.assertEqual(experiment.PCodes[1], "2nd")
-        self.assertEqual(experiment.PCodes[2], "1st")
+        self.assertEqual(experiment.PCodes[1], "2nd - 1243")
+        self.assertEqual(experiment.PCodes[2], "1st - 1234")
         self.assertEqual(experiment.PCodes[3], "noPattern")
-        self.assertEqual(experiment.PCodes[4], "3rd")
+        self.assertEqual(experiment.PCodes[4], "3rd - 1324")
         self.assertEqual(experiment.PCodes[5], "noPattern")
         self.assertEqual(experiment.subject_sex, "male")
         self.assertEqual(experiment.subject_age, "25")

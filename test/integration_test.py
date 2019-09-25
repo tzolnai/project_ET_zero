@@ -211,7 +211,7 @@ class integrationTest(unittest.TestCase):
     def testSimpleTestCase(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -229,7 +229,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -241,7 +241,7 @@ class integrationTest(unittest.TestCase):
     def testExplicitASRT(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -260,7 +260,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -271,7 +271,7 @@ class integrationTest(unittest.TestCase):
     def testMoreBlocks(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -283,7 +283,7 @@ class integrationTest(unittest.TestCase):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'férfi', 25, '3rd - 1324', '3rd - 1324', '3rd - 1324'])
+            ['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -372,8 +372,8 @@ class integrationTest(unittest.TestCase):
     def testMoreSessionsSubsequently(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324', '5th - 1423', 'noPattern',
-                                 '1st - 1234', 'Tóth Béla', 10, 'Tóth Béla', 10,
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '5th', 'noPattern',
+                                 '1st', 'Tóth Béla', 10, 'Tóth Béla', 10,
                                  'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
@@ -387,7 +387,7 @@ class integrationTest(unittest.TestCase):
         # reset StaticPeriod
         core.StaticPeriod = self.StaticPeriod
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -411,7 +411,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd - 1324'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 

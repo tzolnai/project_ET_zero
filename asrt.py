@@ -1260,7 +1260,7 @@ class Experiment:
                 settings_dialog.addFixedField(u'Session ' + str(z + 1) + ' PCode', 'noPattern')
             else:
                 settings_dialog.addField(u'Session ' + str(z + 1) + ' PCode', choices=[
-                                         '1st - 1234', '2nd - 1243', '3rd - 1324', '4th - 1342', '5th - 1423', '6th - 1432'])
+                                         '1st', '2nd', '3rd', '4th', '5th', '6th'])
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -1269,7 +1269,21 @@ class Experiment:
             subject_sex = returned_data[0]
             subject_age = returned_data[1]
             for zz in range(self.settings.numsessions):
-                self.PCodes[zz + 1] = returned_data[zz + 2]
+                PCode = returned_data[zz + 2]
+                if PCode == '1st':
+                    self.PCodes[zz + 1] = '1st - 1234'
+                elif PCode == '2nd':
+                    self.PCodes[zz + 1] = '2nd - 1243'
+                elif PCode == '3rd':
+                    self.PCodes[zz + 1] = '3rd - 1324'
+                elif PCode == '4th':
+                    self.PCodes[zz + 1] = '4th - 1342'
+                elif PCode == '5th':
+                    self.PCodes[zz + 1] = '5th - 1423'
+                elif PCode == '6th':
+                    self.PCodes[zz + 1] = '6th - 1432'
+                else:
+                    self.PCodes[zz + 1] = 'noPattern'
 
             index = self.settings.numsessions
 

@@ -52,7 +52,7 @@ class participantIDTest(unittest.TestCase):
     def testNoSettingsFile(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'kontrol', 'férfi', 25, '3rd - 1324', '2nd - 1243'])
+            ['Tóth Béla', 10, 'kontrol', 'férfi', 25, '3rd', '2nd'])
 
         thispath = self.constructFilePath("NoSettingsFile")
         experiment = asrt.Experiment(thispath)
@@ -117,7 +117,7 @@ class participantIDTest(unittest.TestCase):
     def testExistingSettingsFile(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'kontrol', 'nő', 30, '3rd - 1324', '2nd - 1243', 'Tóth Béla', 10, 'kontrol'])
+            ['Tóth Béla', 10, 'kontrol', 'nő', 30, '3rd', '2nd', 'Tóth Béla', 10, 'kontrol'])
 
         thispath = self.constructFilePath("NoSettingsFile")
         experiment = asrt.Experiment(thispath)
