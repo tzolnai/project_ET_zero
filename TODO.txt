@@ -10,3 +10,4 @@ cleanup instructions, accent characters, ':' etc
 RT: last block's feedback, RT test (use clock object)
 output: screen size in pixel, hl, triplet, eye position in cm, stimulus locations in cm
 participants in experiment, asrt_types, headings
+optimize critical parts (getkeys, newdata), at least one sample for all trials
