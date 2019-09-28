@@ -44,6 +44,9 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_pcolor, "Green")
         self.assertEqual(exp_settings.asrt_background, "Ivory")
         self.assertEqual(exp_settings.RSI_time, 0.12)
+        self.assertEqual(exp_settings.AOI_size, None)
+        self.assertEqual(exp_settings.stim_sampling_window, None)
+        self.assertEqual(exp_settings.instruction_sampling_window, None)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -52,27 +55,72 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
 
         list_of_fields = gui_mock.getListOfFields()
         self.assertEqual(len(list_of_fields), 8)
-        self.assertEqual(list_of_fields[0].label,
-                         "Hasznos kepernyo szelessege (cm)")
+        self.assertEqual(list_of_fields[0].label, "Hasznos kepernyo szelessege (cm)")
         self.assertEqual(list_of_fields[0].initial, 34.2)
-        self.assertEqual(list_of_fields[1].label,
-                         "Szamitogep fantazianeve (ekezet nelkul)")
+        self.assertEqual(list_of_fields[1].label, "Szamitogep fantazianeve (ekezet nelkul)")
         self.assertEqual(list_of_fields[1].initial, "Laposka")
-        self.assertEqual(
-            list_of_fields[2].label, "Ingerek tavolsaga (kozeppontok kozott) (cm)")
-        self.assertEqual(list_of_fields[2].initial, 3)
+        self.assertEqual(list_of_fields[2].label, "Ingerek tavolsaga (kozeppontok kozott) (cm)")
+        self.assertEqual(list_of_fields[2].initial, 3.0)
         self.assertEqual(list_of_fields[3].label, "Ingerek sugara (cm)")
         self.assertEqual(list_of_fields[3].initial, 1)
-        self.assertEqual(list_of_fields[4].label,
-                         "ASRT inger szine (elsodleges, R)")
+        self.assertEqual(list_of_fields[4].label, "ASRT inger szine (elsodleges, R)")
         self.assertEqual(list_of_fields[4].initial, "Orange")
-        self.assertEqual(
-            list_of_fields[5].label, "ASRT inger szine (masodlagos, P, explicit asrtnel)")
+        self.assertEqual(list_of_fields[5].label, "ASRT inger szine (masodlagos, P, explicit asrtnel)")
         self.assertEqual(list_of_fields[5].initial, "Green")
         self.assertEqual(list_of_fields[6].label, "Hatter szine")
         self.assertEqual(list_of_fields[6].initial, "Ivory")
         self.assertEqual(list_of_fields[7].label, "RSI (ms)")
         self.assertEqual(list_of_fields[7].initial, 120)
+
+    def testDefaultsET(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.show_computer_and_display_settings_dialog()
+
+        self.assertEqual(exp_settings.monitor_width, 34.2)
+        self.assertEqual(exp_settings.computer_name, "Laposka")
+        self.assertEqual(exp_settings.asrt_distance, 10)
+        self.assertEqual(exp_settings.asrt_size, 1)
+        self.assertEqual(exp_settings.asrt_rcolor, "Orange")
+        self.assertEqual(exp_settings.asrt_pcolor, "Green")
+        self.assertEqual(exp_settings.asrt_background, "Ivory")
+        self.assertEqual(exp_settings.RSI_time, 0.5)
+        self.assertEqual(exp_settings.AOI_size, 3.0)
+        self.assertEqual(exp_settings.stim_sampling_window, 8)
+        self.assertEqual(exp_settings.instruction_sampling_window, 36)
+
+        list_of_texts = gui_mock.getListOfTexts()
+        self.assertEqual(len(list_of_texts), 3)
+        self.assertEqual(list_of_texts[0], "A számítógépről...")
+        self.assertEqual(list_of_texts[1], "Megjelenés..")
+        self.assertEqual(list_of_texts[2], "Eye-tracking paraméterek...")
+
+        list_of_fields = gui_mock.getListOfFields()
+        self.assertEqual(len(list_of_fields), 11)
+        self.assertEqual(list_of_fields[0].label, "Hasznos kepernyo szelessege (cm)")
+        self.assertEqual(list_of_fields[0].initial, 34.2)
+        self.assertEqual(list_of_fields[1].label, "Szamitogep fantazianeve (ekezet nelkul)")
+        self.assertEqual(list_of_fields[1].initial, "Laposka")
+        self.assertEqual(list_of_fields[2].label, "Ingerek tavolsaga (kozeppontok kozott) (cm)")
+        self.assertEqual(list_of_fields[2].initial, 10.0)
+        self.assertEqual(list_of_fields[3].label, "Ingerek sugara (cm)")
+        self.assertEqual(list_of_fields[3].initial, 1)
+        self.assertEqual(list_of_fields[4].label, "ASRT inger szine (elsodleges, R)")
+        self.assertEqual(list_of_fields[4].initial, "Orange")
+        self.assertEqual(list_of_fields[5].label, "ASRT inger szine (masodlagos, P, explicit asrtnel)")
+        self.assertEqual(list_of_fields[5].initial, "Green")
+        self.assertEqual(list_of_fields[6].label, "Hatter szine")
+        self.assertEqual(list_of_fields[6].initial, "Ivory")
+        self.assertEqual(list_of_fields[7].label, "RSI (ms)")
+        self.assertEqual(list_of_fields[7].initial, 500)
+        self.assertEqual(list_of_fields[8].label, "AOI négyzetek oldahossza (cm):")
+        self.assertEqual(list_of_fields[8].initial, 3.0)
+        self.assertEqual(list_of_fields[9].label, "Stimulusnál használt ablak méret (mintavételek száma):")
+        self.assertEqual(list_of_fields[9].initial, 8)
+        self.assertEqual(list_of_fields[10].label, "Instrukcióknál használt ablak méret (mintavételek száma):")
+        self.assertEqual(list_of_fields[10].initial, 36)
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -98,6 +146,27 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_pcolor, "White")
         self.assertEqual(exp_settings.asrt_background, "Green")
         self.assertEqual(exp_settings.RSI_time, 0.205)
+
+    def testCustomValuesET(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(
+            [47.6, "Alma", 15.3, 1.5, "DarkBlue", "White", "Green", 500, 4.0, 8, 36])
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.show_computer_and_display_settings_dialog()
+
+        self.assertEqual(exp_settings.monitor_width, 47.6)
+        self.assertEqual(exp_settings.computer_name, "Alma")
+        self.assertEqual(exp_settings.asrt_distance, 15.3)
+        self.assertEqual(exp_settings.asrt_size, 1.5)
+        self.assertEqual(exp_settings.asrt_rcolor, "DarkBlue")
+        self.assertEqual(exp_settings.asrt_pcolor, "White")
+        self.assertEqual(exp_settings.asrt_background, "Green")
+        self.assertEqual(exp_settings.RSI_time, 0.500)
+        self.assertEqual(exp_settings.AOI_size, 4.0)
+        self.assertEqual(exp_settings.stim_sampling_window, 8)
+        self.assertEqual(exp_settings.instruction_sampling_window, 36)
 
 
 if __name__ == "__main__":
