@@ -30,6 +30,7 @@ import psychopy_gui_mock as pgm
 class showBasicSettingsDialogTest(unittest.TestCase):
 
     def testDefault(self):
+        asrt.g_tobii_available = False
         gui_mock = pgm.PsychoPyGuiMock()
         exp_settings = asrt.ExperimentSettings("", "")
         numgroups = exp_settings.show_basic_settings_dialog()
@@ -55,6 +56,7 @@ class showBasicSettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[2].initial, 2)
 
     def testCustomValues(self):
+        asrt.g_tobii_available = False
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['reakció idő', 3, 3])
 
@@ -63,6 +65,26 @@ class showBasicSettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.experiment_type, 'reaction-time')
         self.assertEqual(numgroups, 3)
         self.assertEqual(exp_settings.numsessions, 3)
+
+    def testCustomValuesET(self):
+        asrt.g_tobii_available = True
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['eye-tracking', 4, 5])
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        numgroups = exp_settings.show_basic_settings_dialog()
+        self.assertEqual(exp_settings.experiment_type, 'eye-tracking')
+        self.assertEqual(numgroups, 4)
+        self.assertEqual(exp_settings.numsessions, 5)
+
+    def testETMissingDependency(self):
+        asrt.g_tobii_available = False
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['eye-tracking', 4, 5])
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        with self.assertRaises(SystemExit):
+            exp_settings.show_basic_settings_dialog()
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
