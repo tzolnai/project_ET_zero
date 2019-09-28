@@ -205,7 +205,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -218,7 +218,8 @@ class personDataHandlerTest(unittest.TestCase):
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "alattomos-aladar\t333\tgroup1\tmale\t25\n")
+                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "alattomos-aladar\t333\tgroup1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
 
     def testAddSameIDToIDsFiles(self):
         all_IDs_file_path = self.constructFilePath("testAddSameIDToIDsFiles")
@@ -228,8 +229,8 @@ class personDataHandlerTest(unittest.TestCase):
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
         # call this twice simulating of running the experiment with the same subject more times
-        person_data_handler.update_all_subject_attributes_files("male", "25")
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -242,7 +243,8 @@ class personDataHandlerTest(unittest.TestCase):
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "alattomos-aladar\t333\tgroup1\tmale\t25\n")
+                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "alattomos-aladar\t333\tgroup1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
 
     def testAddMoreIDsToIDsFiles(self):
         all_IDs_file_path = self.constructFilePath("testAddMoreIDsToIDsFiles")
@@ -250,19 +252,19 @@ class personDataHandlerTest(unittest.TestCase):
             "testAddMoreIDsToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['3rd - 1324', '2nd - 1243'])
 
         person_data_handler = asrt.PersonDataHandler(
             "toth-csaba_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
         person_data_handler = asrt.PersonDataHandler(
             "kertesz-bela_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '3rd - 1324'])
 
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['3rd - 1324', '2nd - 1243'])
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -275,9 +277,11 @@ class personDataHandlerTest(unittest.TestCase):
                              "alattomos-aladar_333_group1", 'toth-csaba_111_group2', 'kertesz-bela_222_group3'])
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
-            self.assertEqual(subject_list_txt.read(), "alattomos-aladar\t333\tgroup1\tmale\t25\n"
-                                                      "toth-csaba\t111\tgroup2\tmale\t25\n"
-                                                      "kertesz-bela\t222\tgroup3\tmale\t25\n")
+            self.assertEqual(subject_list_txt.read(),
+                                                      "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                                                      "alattomos-aladar\t333\tgroup1\tmale\t25\t['3rd - 1324', '2nd - 1243']\n"
+                                                      "toth-csaba\t111\tgroup2\tmale\t25\t['1th - 1234', '2nd - 1243']\n"
+                                                      "kertesz-bela\t222\tgroup3\tmale\t25\t['1th - 1234', '3rd - 1324']\n")
 
     def testSaveSpecialGroupNameToIDsFiles(self):
         all_IDs_file_path = self.constructFilePath(
@@ -286,7 +290,7 @@ class personDataHandlerTest(unittest.TestCase):
             "testSaveSpecialGroupNameToIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
             "alattomos-aladar_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "")
-        person_data_handler.update_all_subject_attributes_files("male", "25")
+        person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
         # output files exist
         self.assertTrue(os.path.exists(all_IDs_file_path + ".dat")
@@ -299,7 +303,8 @@ class personDataHandlerTest(unittest.TestCase):
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "alattomos-aladar\t333\tgroup_1\tmale\t25\n")
+                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "alattomos-aladar\t333\tgroup_1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
 
     def testAppendToEmptyOutput(self):
         output_file_path = self.constructFilePath(

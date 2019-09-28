@@ -743,7 +743,7 @@ class PersonDataHandler:
             this_person_settings['last_N'] = experiment.last_N
             this_person_settings['end_at'] = experiment.end_at
 
-    def update_all_subject_attributes_files(self, subject_sex, subject_age):
+    def update_all_subject_attributes_files(self, subject_sex, subject_age, subject_PCodes):
         """Add the new subject's attributes into the list of all subject data and save it into file.
            Also generate a text file with the list of all subjects participating in the experiment.
         """
@@ -758,11 +758,15 @@ class PersonDataHandler:
             if self.subject_id not in all_IDs:
                 all_IDs.append(self.subject_id)
                 all_subject_file['ids'] = all_IDs
-                all_subject_file[self.subject_id] = [subject_sex, subject_age]
+                all_subject_file[self.subject_id] = [subject_sex, subject_age, subject_PCodes]
 
         with shelve.open(self.all_IDs_file_path, 'r') as all_subject_file:
             with codecs.open(self.subject_list_file_path, 'w', encoding='utf-8') as subject_list_file:
                 subject_list_IO = StringIO()
+                # write header
+                subject_list_IO.write('subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n')
+
+                # write subject data
                 for id in all_IDs:
                     id_segmented = id.replace('_', '\t', 2)
                     subject_list_IO.write(id_segmented)
@@ -770,6 +774,8 @@ class PersonDataHandler:
                     subject_list_IO.write(all_subject_file[id][0])
                     subject_list_IO.write('\t')
                     subject_list_IO.write(all_subject_file[id][1])
+                    subject_list_IO.write('\t')
+                    subject_list_IO.write(str(all_subject_file[id][2]))
                     subject_list_IO.write('\n')
 
                 subject_list_file.write(subject_list_IO.getvalue())
@@ -1415,7 +1421,7 @@ class Experiment:
             # ask about the pattern codes used in the different sessions
             self.show_subject_attributes_dialog()
             # update participant attribute files
-            self.person_data.update_all_subject_attributes_files(self.subject_sex, self.subject_age)
+            self.person_data.update_all_subject_attributes_files(self.subject_sex, self.subject_age, self.PCodes)
             # calculate stimulus properties for the experiment
             self.calculate_stim_properties()
             # save data of the new subject
