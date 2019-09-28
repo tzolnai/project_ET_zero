@@ -82,6 +82,9 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_pcolor, None)
         self.assertEqual(exp_settings.asrt_background, None)
         self.assertEqual(exp_settings.RSI_time, None)
+        self.assertEqual(exp_settings.AOI_size, None)
+        self.assertEqual(exp_settings.stim_sampling_window, None)
+        self.assertEqual(exp_settings.instruction_sampling_window, None)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
         self.assertEqual(exp_settings.key3, None)
@@ -151,6 +154,9 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_pcolor, "Green")
         self.assertEqual(exp_settings.asrt_background, "Ivory")
         self.assertEqual(exp_settings.RSI_time, 0.12)
+        self.assertEqual(exp_settings.AOI_size, None)
+        self.assertEqual(exp_settings.stim_sampling_window, None)
+        self.assertEqual(exp_settings.instruction_sampling_window, None)
         self.assertEqual(exp_settings.key1, 'z')
         self.assertEqual(exp_settings.key2, 'c')
         self.assertEqual(exp_settings.key3, 'b')
@@ -159,6 +165,76 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.whether_warning, True)
         self.assertEqual(exp_settings.speed_warning, 93)
         self.assertEqual(exp_settings.acc_warning, 91)
+        self.assertEqual(exp_settings.get_maxtrial(), 2125)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 2126])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851,
+                                                           936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
+
+    def testRoundTripCustomValuesET(self):
+        output_file = self.constructFilePath("testRoundTripCustomValuesET")
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.numsessions = 1
+        exp_settings.groups = ["kontrol"]
+        exp_settings.blockprepN = 5
+        exp_settings.blocklengthN = 80
+        exp_settings.block_in_epochN = 5
+        exp_settings.epochN = 5
+        exp_settings.epochs = [5]
+        exp_settings.asrt_types = ["implicit"]
+        exp_settings.monitor_width = 29
+        exp_settings.computer_name = "Laposka"
+        exp_settings.asrt_distance = 4.5
+        exp_settings.asrt_size = 1.8
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_background = "Ivory"
+        exp_settings.RSI_time = 0.12
+        exp_settings.AOI_size = 1.5
+        exp_settings.stim_sampling_window = 8
+        exp_settings.instruction_sampling_window = 36
+        exp_settings.key1 = 'z'
+        exp_settings.key2 = 'c'
+        exp_settings.key3 = 'b'
+        exp_settings.key4 = 'm'
+        exp_settings.key_quit = 'q'
+        exp_settings.whether_warning = True
+        exp_settings.speed_warning = 93
+        exp_settings.acc_warning = 91
+
+        exp_settings.write_to_file()
+
+        exp_settings = asrt.ExperimentSettings(output_file, "")
+        exp_settings.read_from_file()
+
+        self.assertEqual(exp_settings.experiment_type, "eye-tracking")
+        self.assertEqual(exp_settings.groups, ["kontrol"])
+        self.assertEqual(exp_settings.blockprepN, 5)
+        self.assertEqual(exp_settings.blocklengthN, 80)
+        self.assertEqual(exp_settings.block_in_epochN, 5)
+        self.assertEqual(exp_settings.epochN, 5)
+        self.assertEqual(exp_settings.epochs, [5])
+        self.assertEqual(exp_settings.asrt_types, ["implicit"])
+        self.assertEqual(exp_settings.monitor_width, 29)
+        self.assertEqual(exp_settings.computer_name, "Laposka")
+        self.assertEqual(exp_settings.asrt_distance, 4.5)
+        self.assertEqual(exp_settings.asrt_size, 1.8)
+        self.assertEqual(exp_settings.asrt_rcolor, "Orange")
+        self.assertEqual(exp_settings.asrt_pcolor, "Green")
+        self.assertEqual(exp_settings.asrt_background, "Ivory")
+        self.assertEqual(exp_settings.RSI_time, 0.12)
+        self.assertEqual(exp_settings.AOI_size, 1.5)
+        self.assertEqual(exp_settings.stim_sampling_window, 8)
+        self.assertEqual(exp_settings.instruction_sampling_window, 36)
+        self.assertEqual(exp_settings.key1, None)
+        self.assertEqual(exp_settings.key2, None)
+        self.assertEqual(exp_settings.key3, None)
+        self.assertEqual(exp_settings.key4, None)
+        self.assertEqual(exp_settings.key_quit, 'q')
+        self.assertEqual(exp_settings.whether_warning, None)
+        self.assertEqual(exp_settings.speed_warning, None)
+        self.assertEqual(exp_settings.acc_warning, None)
         self.assertEqual(exp_settings.get_maxtrial(), 2125)
         self.assertEqual(exp_settings.get_session_starts(), [1, 2126])
         self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851,
@@ -200,6 +276,9 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_pcolor, None)
         self.assertEqual(exp_settings.asrt_background, None)
         self.assertEqual(exp_settings.RSI_time, None)
+        self.assertEqual(exp_settings.AOI_size, None)
+        self.assertEqual(exp_settings.stim_sampling_window, None)
+        self.assertEqual(exp_settings.instruction_sampling_window, None)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
         self.assertEqual(exp_settings.key3, None)
@@ -260,8 +339,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                              'Preparatory Trials\\Block:' + '\t' + str(exp_settings.blockprepN) + '\n' +
                              'Trials\\Block:' + '\t' + str(exp_settings.blocklengthN) + '\n' +
                              'RSI:' + '\t' + str(exp_settings.RSI_time).replace('.', ',') + '\n' +
-                             'Asrt stim distance:' + '\t' + str(exp_settings.asrt_distance) + '\n' +
-                             'Asrt stim size:' + '\t' + str(exp_settings.asrt_size) + '\n' +
+                             'Asrt stim distance:' + '\t' + str(exp_settings.asrt_distance).replace('.', ',') + '\n' +
+                             'Asrt stim size:' + '\t' + str(exp_settings.asrt_size).replace('.', ',') + '\n' +
                              'Asrt stim color (implicit):' + '\t' + exp_settings.asrt_rcolor + '\n' +
                              'Asrt stim color (explicit, cued):' + '\t' + exp_settings.asrt_pcolor + '\n' +
                              'Background color:' + '\t' + exp_settings.asrt_background + '\n' +
@@ -280,6 +359,70 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                              'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
                              'jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
+    def testReminderTxtCustomValuesET(self):
+        output_file = self.constructFilePath("testReminderTxtCustomValuesET")
+        exp_settings = asrt.ExperimentSettings("", output_file)
+
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.numsessions = 1
+        exp_settings.groups = ["kontrol"]
+        exp_settings.blockprepN = 5
+        exp_settings.blocklengthN = 80
+        exp_settings.block_in_epochN = 5
+        exp_settings.epochN = 5
+        exp_settings.epochs = [5]
+        exp_settings.monitor_width = 29
+        exp_settings.computer_name = "Laposka"
+        exp_settings.asrt_distance = 4.5
+        exp_settings.asrt_size = 1.8
+        exp_settings.asrt_rcolor = "Orange"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_background = "Ivory"
+        exp_settings.RSI_time = 0.12
+        exp_settings.AOI_size = 1.5
+        exp_settings.stim_sampling_window = 8
+        exp_settings.instruction_sampling_window = 36
+        exp_settings.key_quit = 'q'
+        exp_settings.sessionstarts = [1, 2, 3]
+
+        exp_settings.write_out_reminder()
+
+        with codecs.open(output_file, 'r', encoding='utf-8') as reminder_file:
+            self.assertEqual(reminder_file.read(),
+                             u'Beállítások\n' +
+                             '\n' +
+                             'Monitor Width: ' + '\t' + str(exp_settings.monitor_width).replace('.', ',') + '\n' +
+                             'Computer Name: ' + '\t' + exp_settings.computer_name + '\n' +
+                             'Experiment type:' + '\t' + exp_settings.experiment_type + '\n' +
+                             'Groups:' + '\t' + str(exp_settings.groups)[1:-1].replace("u'", '').replace("'", '') + '\n' +
+                             'Sessions:' + '\t' + str(exp_settings.numsessions) + '\n' +
+                             'Epochs in sessions:' + '\t' + str(exp_settings.epochs)[1:-1].replace("u'", '').replace("'", '') + '\n' +
+                             'Blocks in epochs:' + '\t' + str(exp_settings.block_in_epochN) + '\n' +
+                             'Preparatory Trials\\Block:' + '\t' + str(exp_settings.blockprepN) + '\n' +
+                             'Trials\\Block:' + '\t' + str(exp_settings.blocklengthN) + '\n' +
+                             'RSI:' + '\t' + str(exp_settings.RSI_time).replace('.', ',') + '\n' +
+                             'Asrt stim distance:' + '\t' + str(exp_settings.asrt_distance).replace('.', ',') + '\n' +
+                             'Asrt stim size:' + '\t' + str(exp_settings.asrt_size).replace('.', ',') + '\n' +
+                             'Asrt stim color (implicit):' + '\t' + exp_settings.asrt_rcolor + '\n' +
+                             'Asrt stim color (explicit, cued):' + '\t' + exp_settings.asrt_pcolor + '\n' +
+                             'Background color:' + '\t' + exp_settings.asrt_background + '\n' +
+                             'AOI size:' + '\t' + str(exp_settings.AOI_size).replace('.', ',') + '\n' +
+                             'Window size for stimulus:' + '\t' + str(exp_settings.stim_sampling_window) + '\n' +
+                             'Window size for instructions:' + '\t' + str(exp_settings.instruction_sampling_window) + '\n'
+                             '\n' +
+                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
+
+                             'A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,\n' +
+                             'az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,\n' +
+                             'úgy az asrt.py és az instrukciókat tartalmazó inst_and_feedback.txt fájlt másold át egy,\n' +
+                             'másik könyvtárba is, és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.\n\n' +
+
+                             'Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő\n' +
+                             'beállítások vannak elmentve.\n\n' +
+
+                             'A settings/settings fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl\n' +
+                             'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
+                             'jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

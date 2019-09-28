@@ -244,14 +244,14 @@ class ExperimentSettings:
                             'Preparatory Trials\\Block:' + '\t' + str(self.blockprepN) + '\n' +
                             'Trials\\Block:' + '\t' + str(self.blocklengthN) + '\n' +
                             'RSI:' + '\t' + str(self.RSI_time).replace('.', ',') + '\n' +
-                            'Asrt stim distance:' + '\t' + str(self.asrt_distance) + '\n' +
-                            'Asrt stim size:' + '\t' + str(self.asrt_size) + '\n' +
+                            'Asrt stim distance:' + '\t' + str(self.asrt_distance).replace('.', ',') + '\n' +
+                            'Asrt stim size:' + '\t' + str(self.asrt_size).replace('.', ',') + '\n' +
                             'Asrt stim color (implicit):' + '\t' + self.asrt_rcolor + '\n' +
                             'Asrt stim color (explicit, cued):' + '\t' + self.asrt_pcolor + '\n' +
                             'Background color:' + '\t' + self.asrt_background + '\n')
 
             if self.experiment_type == 'eye-tracking':
-                reminder += str('AOI size:' + '\t' + str(self.AOI_size) + '\n' +
+                reminder += str('AOI size:' + '\t' + str(self.AOI_size).replace('.', ',') + '\n' +
                                 'Window size for stimulus:' + '\t' + str(self.stim_sampling_window) + '\n' +
                                 'Window size for instructions:' + '\t' + str(self.instruction_sampling_window) + '\n')
 
