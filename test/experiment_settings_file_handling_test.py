@@ -103,6 +103,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             exp_settings.get_block_starts()
 
+        self.assertEqual(exp_settings.get_key_list(), None)
+
     def testRoundTripCustomValues(self):
         output_file = self.constructFilePath("testRoundTripCustomValues")
         exp_settings = asrt.ExperimentSettings(output_file, "")
@@ -169,6 +171,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.get_session_starts(), [1, 2126])
         self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851,
                                                            936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
+        self.assertEqual(exp_settings.get_key_list(), ['z', 'c', 'b', 'm', 'q'])
 
     def testRoundTripCustomValuesET(self):
         output_file = self.constructFilePath("testRoundTripCustomValuesET")
@@ -239,6 +242,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.get_session_starts(), [1, 2126])
         self.assertEqual(exp_settings.get_block_starts(), [1, 86, 171, 256, 341, 426, 511, 596, 681, 766, 851,
                                                            936, 1021, 1106, 1191, 1276, 1361, 1446, 1531, 1616, 1701, 1786, 1871, 1956, 2041, 2126, 2211])
+        self.assertEqual(exp_settings.get_key_list(), ['q'])
 
     def testReadEmptyFile(self):
         output_file = self.constructFilePath("testReadEmptyFile")

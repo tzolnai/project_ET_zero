@@ -309,7 +309,7 @@ class ExperimentSettings:
         if self.experiment_type == 'reaction-time':
             return [self.key1, self.key2, self.key3, self.key4, self.key_quit]
         elif self.experiment_type == 'eye-tracking':
-            return ['return', self.key_quit]
+            return [self.key_quit]
         else:
             return None
 
