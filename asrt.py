@@ -1696,6 +1696,7 @@ class Experiment:
             # four empty circles where the actual stimulus can be placed
             self.stim_bg(stimbg)
             self.mywindow.flip()
+            self.last_N = N - 1
             self.stimulus_on_screen = False
             self.last_RSI = -1
 
@@ -1788,7 +1789,6 @@ class Experiment:
                                                                 stimRT, stimACC, response, stimcolor, self.stim_output_line])
 
                 if stimACC == 0:
-                    self.last_N = N
                     N += 1
                     first_trial_in_block = False
                     break
@@ -1797,6 +1797,9 @@ class Experiment:
             if N in self.settings.get_block_starts():
 
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
+                self.last_N = N - 1
+                self.stimulus_on_screen = False
+                self.last_RSI = -1
 
                 if self.settings.experiment_type == 'reaction-time':
                     self.person_data.flush_RT_data_to_output(self)
