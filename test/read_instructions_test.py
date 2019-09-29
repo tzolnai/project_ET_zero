@@ -207,8 +207,7 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.ending), 0)
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
-        self.assertEqual(
-            instruction_helper.insts[0], "Üdvözlünk a feladatban!")
+        self.assertEqual(instruction_helper.insts[0], "Üdvözlünk a feladatban!")
 
     def testKeywordWithoutContent(self):
         inst_feedback_path = self.constructFilePath(
@@ -225,6 +224,186 @@ class readInstructionsTest(unittest.TestCase):
         self.assertEqual(len(instruction_helper.ending), 0)
         self.assertEqual(len(instruction_helper.unexp_quit), 0)
 
+    def testDefaultRTInstructionSetValidation(self):
+        inst_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        instruction_helper.validate_instructions(exp_settings)
+
+    def testDefaultERInstructionSetValidation(self):
+        inst_feedback_path = self.constructFilePath("ET_default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingStartingInstruction(self):
+        inst_feedback_path = self.constructFilePath("missing_starting_instruction.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingEnding(self):
+        inst_feedback_path = self.constructFilePath("missing_ending.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingUnexpectedQuit(self):
+        inst_feedback_path = self.constructFilePath("missing_unexpected_quit.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingFeedbackSpeed(self):
+        inst_feedback_path = self.constructFilePath("missing_feedback_speed.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.whether_warning = True
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when there is no warning set
+        exp_settings.whether_warning = False
+        instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when we have eye-tracking version
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.whether_warning = True
+        instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingFeedbackAccuracy(self):
+        inst_feedback_path = self.constructFilePath("missing_feedback_accuracy.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.whether_warning = True
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when there is no warning set
+        exp_settings.whether_warning = False
+        instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when we have eye-tracking version
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.whether_warning = True
+        instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingImplicitFeedback(self):
+        inst_feedback_path = self.constructFilePath("missing_implicit_feedback.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when there is no implicit asrt type
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "noASRT"
+        instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when we have eye-tracking version
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+        instruction_helper.validate_instructions(exp_settings)
+
+    def testValidationMissingExplicitFeedback(self):
+        inst_feedback_path = self.constructFilePath("missing_explicit_feedback.txt")
+        instruction_helper = asrt.InstructionHelper(inst_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        exp_settings = asrt.ExperimentSettings("", "")
+        exp_settings.experiment_type = 'reaction-time'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+
+        with self.assertRaises(SystemExit):
+            instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when there is no implicit asrt type
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "implicit"
+        exp_settings.asrt_types[2] = "noASRT"
+        instruction_helper.validate_instructions(exp_settings)
+
+        # no problem when we have eye-tracking version
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.asrt_types = {}
+        exp_settings.asrt_types[1] = "explicit"
+        exp_settings.asrt_types[2] = "implicit"
+        exp_settings.asrt_types[3] = "noASRT"
+        instruction_helper.validate_instructions(exp_settings)
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

@@ -1,0 +1,42 @@
+﻿feedback implicit#
+
+Most pihenhetsz egy kicsit.
+
+Pontosságod: *PERCACC* %
+Átlagos reakcióidőd: *MEANRT* másodperc
+*SPEEDACC*
+
+***
+
+feedback explicit#
+
+Most pihenhetsz egy kicsit.
+
+Pontosságod általában: *PERCACC* %
+Átlagos reakcióidőd: *MEANRT* másodperc
+Pontosságod a bejósolható elemeknél: *PERCACCP* %
+Átlagos reakcióidőd a bejósolható elemeknél: *MEANRTP* másodperc
+*SPEEDACC*
+
+***
+***
+
+feedback speed#
+Legyél gyorsabb!
+
+***
+
+feedback accuracy#
+Legyél pontosabb!
+
+***
+
+ending#
+
+A feladat végetért. Köszönjük a részvételt!
+
+***
+
+unexpected quit#
+
+Váratlan kilépés történt a feladatból. Folytatás. A feladat indításához nyomd meg valamelyik válaszbillentyűt.
