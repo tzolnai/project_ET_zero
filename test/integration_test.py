@@ -408,6 +408,63 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.presentation = self.presentation
 
+    def presentation_override_unexpected_quit_at_blockend(self):
+        # There are some instructions first
+        self.key_list = [self.experiment.settings.key1,
+                         self.experiment.settings.key1,
+                         self.experiment.settings.key1]
+
+        # Then we have the stimuli
+        trial = 1
+        for stim in self.experiment.stimlist.values():
+            # ignore first sessions' trials
+            if trial > self.experiment.last_N:
+                if stim == 1:
+                    self.key_list.append(self.experiment.settings.key1)
+                elif stim == 2:
+                    self.key_list.append(self.experiment.settings.key2)
+                elif stim == 3:
+                    self.key_list.append(self.experiment.settings.key3)
+                elif stim == 4:
+                    self.key_list.append(self.experiment.settings.key4)
+
+            trial += 1
+
+            if trial - 1 > self.experiment.last_N:
+                # feedback at the end of the block
+                if trial in self.experiment.settings.get_block_starts():
+                    if trial > self.experiment.settings.get_maxtrial() / 2:
+                        self.key_list.append(self.experiment.settings.key_quit)
+                    else:
+                        self.key_list.append(self.experiment.settings.key1)
+
+        # ending screen
+        self.key_list += [self.experiment.settings.key1]
+        self.visual_mock.setReturnKeyList(self.key_list)
+        return self.presentation()
+
+    def testContinueAfterQuitAtBlockEnd(self):
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '3rd', 'Tóth Béla', 10])
+
+        # override this method to get the stimlist to be able to generate the keylist
+        self.presentation = self.experiment.presentation
+        self.experiment.presentation = self.presentation_override_unexpected_quit_at_blockend
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        with self.assertRaises(SystemExit):
+            self.experiment.run()
+
+        self.experiment.presentation = self.presentation_override_unexpected_quit_continue
+
+        self.experiment.run()
+
+        self.checkOutputFile(True, 0.03)
+
+        self.experiment.presentation = self.presentation
+
     def testMoreSessionsSubsequently(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
