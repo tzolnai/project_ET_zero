@@ -564,7 +564,7 @@ class InstructionHelper:
         text_stim.draw()
         mywindow.flip()
 
-    def __show_message(self, instruction_list, experiment, wait = False):
+    def __show_message(self, instruction_list, experiment):
         """Display simple instructions on the screen."""
 
         # There can be more instructions to display successively
@@ -577,14 +577,13 @@ class InstructionHelper:
             else:  # 'eye-tracking'
                 experiment.fixation_cross.draw()
                 self.__print_to_screen(inst, experiment.mywindow)
-                if wait:
-                    core.wait(2.0)
+                core.wait(2.0)
                 response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_sampling_window)
                 if response == -1:
                     core.quit()
 
     def show_instructions(self, experiment):
-        self.__show_message(self.insts, experiment, True)
+        self.__show_message(self.insts, experiment)
 
     def show_unexp_quit(self, experiment):
         self.__show_message(self.unexp_quit, experiment)
