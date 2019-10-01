@@ -581,7 +581,7 @@ class InstructionHelper:
                     core.wait(2.0)
                 response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_sampling_window)
                 if response == -1:
-                    experiment.quit_presentation()
+                    core.quit()
 
     def show_instructions(self, experiment):
         self.__show_message(self.insts, experiment, True)
@@ -663,10 +663,8 @@ class InstructionHelper:
         feedback = "Most pihenhetsz egy kicsit.\n\n"
         feedback += "Az előző blokkokban mért reakcióidők:\n\n"
         blocknumber = experiment.stimblock[experiment.last_N] - min(4, len(experiment.last_block_RTs) - 1)
-        if blocknumber < 1:
-            blocknumber = 1
         for rt in experiment.last_block_RTs[-g_blocks_in_feedback:]:
-            feedback += str(blocknumber) + ". blokk: " + rt + " ms\n\n"
+            feedback += str(blocknumber) + ". blokk: " + rt + " másodperc.\n\n"
             blocknumber += 1
 
         self.__print_to_screen(feedback, experiment.mywindow)

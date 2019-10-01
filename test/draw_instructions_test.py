@@ -29,6 +29,12 @@ import psychopy_visual_mock as pvm
 import platform
 
 
+def DummyFunction(*argv):
+    pass
+
+
+core.wait = DummyFunction
+
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
@@ -139,6 +145,69 @@ class drawInstructionsTest(unittest.TestCase):
         self.assertEqualWithEOL(instruction_text.text, str(
             "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n"))
 
+    def testDisplaySingleInstructionET(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+        experiment.fixation_cross_pos = (0.0, 0.0)
+        experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
+                                                    color='black', pos=experiment.fixation_cross_pos)
+        experiment.settings.instruction_sampling_window = 36
+        experiment.settings.stim_sampling_window = 8
+        experiment.settings.AOI_size = 1.0
+        experiment.settings.monitor_width = 47.6
+        experiment.monitor_settings()
+        for i in range(0, experiment.settings.instruction_sampling_window):
+            gazeData = {}
+            gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+            gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+            gazeData['left_gaze_point_validity'] = True
+            gazeData['right_gaze_point_validity'] = True
+            gazeData['left_pupil_diameter'] = 3
+            gazeData['right_pupil_diameter'] = 3
+            gazeData['left_pupil_validity'] = True
+            gazeData['right_pupil_validity'] = True
+            experiment.eye_data_callback(gazeData)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 2)
+
+        # fixation cross
+        fixation_cross = drawing_list[0]
+        self.assertTrue(isinstance(fixation_cross, pvm.TextStim))
+        # size
+        self.assertAlmostEqual(fixation_cross.height, 3, delta=0.001)
+        # pos
+        self.assertAlmostEqual(fixation_cross.pos[0], 0.0, delta=0.001)
+        self.assertAlmostEqual(fixation_cross.pos[1], 0.0, delta=0.001)
+        # color
+        self.assertEqual(fixation_cross.color, "black")
+        # text
+        self.assertEqualWithEOL(fixation_cross.text, str("+"))
+
+        instruction_text = drawing_list[1]
+        self.assertTrue(isinstance(instruction_text, pvm.TextStim))
+        # size
+        self.assertAlmostEqual(instruction_text.height, 0.8, delta=0.001)
+        # pos
+        self.assertAlmostEqual(instruction_text.pos[0], 0.0, delta=0.001)
+        self.assertAlmostEqual(instruction_text.pos[1], 0.0, delta=0.001)
+        # color
+        self.assertEqual(instruction_text.color, "black")
+        # text
+        self.assertEqualWithEOL(instruction_text.text, str("\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n"))
+
     def testQuitDisplay(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
@@ -157,6 +226,26 @@ class drawInstructionsTest(unittest.TestCase):
         visual_mock.setReturnKeyList(['q'])
         self.initWindow()
         experiment.mywindow = self.mywindow
+        with self.assertRaises(SystemExit):
+            instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
+
+    def testQuitDisplayET(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+        experiment.fixation_cross_pos = (0.0, 0.0)
+        experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
+                                                    color='black', pos=experiment.fixation_cross_pos)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['q'])
         with self.assertRaises(SystemExit):
             instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
 
@@ -212,6 +301,60 @@ class drawInstructionsTest(unittest.TestCase):
                                 "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
                                 "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
         self.assertEqualWithEOL(drawing_list[2].text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
+                                "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
+                                "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
+
+    def testDisplayMoreInstructionsET(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+        experiment.fixation_cross_pos = (0.0, 0.0)
+        experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
+                                                    color='black', pos=experiment.fixation_cross_pos)
+        experiment.settings.instruction_sampling_window = 36
+        experiment.settings.stim_sampling_window = 8
+        experiment.settings.AOI_size = 1.0
+        experiment.settings.monitor_width = 47.6
+        experiment.monitor_settings()
+        for i in range(0, experiment.settings.instruction_sampling_window):
+            gazeData = {}
+            gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+            gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+            gazeData['left_gaze_point_validity'] = True
+            gazeData['right_gaze_point_validity'] = True
+            gazeData['left_pupil_diameter'] = 3
+            gazeData['right_pupil_diameter'] = 3
+            gazeData['left_pupil_validity'] = True
+            gazeData['right_pupil_validity'] = True
+            experiment.eye_data_callback(gazeData)
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        instruction_helper._InstructionHelper__show_message(instruction_helper.insts, experiment)
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 6)
+
+        self.assertEqualWithEOL(drawing_list[0].text, "+")
+        self.assertEqualWithEOL(drawing_list[1].text, "\r\n\r\nÜdvözlünk a feladatban!\r\n\r\n"
+                                "A képernyőn négy kör lesz, a kör egyikén megjelenik egy kutya.\r\n\r\n"
+                                "Az a feladatod, hogy a kutya megjelenési helyének megfelelő gombot nyomd meg.\r\n\r\n"
+                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[2].text, "+")
+        self.assertEqualWithEOL(drawing_list[3].text, "\r\n\r\nA következő billenytűket kell használni: z, c, b, m\r\n\r\n"
+                                "Minél pontosabban és gyorsabban kövesd le a megjelenő ingereket!\r\n\r\n"
+                                "Ehhez mindkét kezedet használd, a középső és mutatóujjaidat.\r\n\r\n"
+                                "A kutya egymás után többször ugyanazon a helyen is megjelenhet.\r\n\r\n"
+                                "A további instrukciók megtekintéséhez nyomd meg valamelyik válaszgombot!\r\n\r\n")
+        self.assertEqualWithEOL(drawing_list[4].text, "+")
+        self.assertEqualWithEOL(drawing_list[5].text, "\r\n\r\nKb. percenként fogsz visszajelzést kapni arról,\r\n"
                                 "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
                                 "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
@@ -299,6 +442,27 @@ class drawInstructionsTest(unittest.TestCase):
 
         self.assertEqualWithEOL(
             drawing_list[0].text, "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n")
+
+    def testShowEndingET(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        instruction_helper.show_ending(experiment)
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 1)
+
+        self.assertEqualWithEOL(drawing_list[0].text, "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n")
 
     def testShowImplicitFeedbackNoWarning(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
@@ -615,6 +779,87 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "Pontosságod: 96.123 %\r\n"
                                                       "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
                                                       "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
+
+    def testShowFeedbackETSimple(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+        experiment.stimblock = {4: 2}
+        experiment.last_N = 4
+        experiment.last_block_RTs = ["0.423", "0.543"]
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        instruction_helper.feedback_ET(experiment)
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 1)
+        self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
+                                                      "Az előző blokkokban mért reakcióidők:\n\n"
+                                                      "1. blokk: 0.423 másodperc.\n\n"
+                                                      "2. blokk: 0.543 másodperc.\n\n")
+
+    def testShowFeedbackETAfterContinueScript(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+        experiment.stimblock = {4: 10}
+        experiment.last_N = 4
+        experiment.last_block_RTs = ["0.423", "0.543"]
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        instruction_helper.feedback_ET(experiment)
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 1)
+        self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
+                                                      "Az előző blokkokban mért reakcióidők:\n\n"
+                                                      "9. blokk: 0.423 másodperc.\n\n"
+                                                      "10. blokk: 0.543 másodperc.\n\n")
+
+    def testShowFeedbackETMoreRTData(self):
+        inst_and_feedback_path = self.constructFilePath("default.txt")
+        instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
+        instruction_helper.read_insts_from_file()
+
+        experiment = asrt.Experiment("")
+        self.initWindow()
+        experiment.mywindow = self.mywindow
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.settings.experiment_type = 'eye-tracking'
+        experiment.settings.key_quit = 'q'
+        experiment.stimblock = {4: 10}
+        experiment.last_N = 4
+        experiment.last_block_RTs = ["0.512", "0.443", "0.335", "0.601", "0.213", "0.934", "0.912", "0.120"]
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        instruction_helper.feedback_ET(experiment)
+
+        drawing_list = visual_mock.getListOfDrawings()
+        self.assertEqual(len(drawing_list), 1)
+        self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
+                                                      "Az előző blokkokban mért reakcióidők:\n\n"
+                                                      "6. blokk: 0.601 másodperc.\n\n"
+                                                      "7. blokk: 0.213 másodperc.\n\n"
+                                                      "8. blokk: 0.934 másodperc.\n\n"
+                                                      "9. blokk: 0.912 másodperc.\n\n"
+                                                      "10. blokk: 0.120 másodperc.\n\n")
 
 
 if __name__ == "__main__":
