@@ -710,6 +710,8 @@ class PersonDataHandler:
                 experiment.end_at = this_person_settings['end_at']
         except:
             experiment.PCodes = {}
+            experiment.subject_age = None
+            experiment.subject_sex = None
             experiment.stim_output_line = 0
             experiment.stim_sessionN = {}
             experiment.stimepoch = {}
@@ -803,10 +805,10 @@ class PersonDataHandler:
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
             freq_high_low = ""
-            if experiment.stimpr[N] == "pattern":
-                freq_high_low = "high"
-            elif PCode == "noPattern":
+            if PCode == "noPattern":
                 freq_high_low = "none"
+            elif experiment.stimpr[N] == "pattern":
+                freq_high_low = "high"
             else:
                 if N > 3 and experiment.stimtrial[N] >= 3 and experiment.next_stim(session, experiment.stimlist[N - 2]) == experiment.stimlist[N]:
                     freq_high_low = "high"
@@ -920,10 +922,10 @@ class PersonDataHandler:
                 stimcolor = experiment.colors['stimr']
 
             freq_high_low = ""
-            if experiment.stimpr[N] == "pattern":
-                freq_high_low = "high"
-            elif PCode == "noPattern":
+            if PCode == "noPattern":
                 freq_high_low = "none"
+            elif experiment.stimpr[N] == "pattern":
+                freq_high_low = "high"
             else:
                 if N > 3 and experiment.stimtrial[N] >= 3 and experiment.next_stim(session, experiment.stimlist[N - 2]) == experiment.stimlist[N]:
                     freq_high_low = "high"
@@ -1493,7 +1495,7 @@ class Experiment:
         # scale coordinates from normalized coordinates to cm unit coordinates
         # we also mirror the y coordinates
         pos_PCMCS = ((pos_ADCS[0] * monitor_width_cm) - shift_x,
-                    ((pos_ADCS[1] * monitor_height_cm) - shift_y) * - 1)
+                     ((pos_ADCS[1] * monitor_height_cm) - shift_y) * - 1)
         return pos_PCMCS
 
     def wait_for_eye_response(self, expected_eye_pos, sampling_window):
