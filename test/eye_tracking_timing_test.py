@@ -25,6 +25,7 @@ import unittest
 import asrt
 from psychopy import core, monitors
 
+
 class eyeTrackingTimingTest(unittest.TestCase):
 
     def testGazeDataCallback(self):
@@ -66,6 +67,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
             experiment.wait_for_eye_response([0.5, 0.5], sampling_window)
         run_time = clock.getTime()
         self.assertAlmostEqual(run_time, 0.0, delta=0.01)
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

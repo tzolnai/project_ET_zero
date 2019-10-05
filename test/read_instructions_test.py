@@ -405,5 +405,6 @@ class readInstructionsTest(unittest.TestCase):
         exp_settings.asrt_types[3] = "noASRT"
         instruction_helper.validate_instructions(exp_settings)
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests

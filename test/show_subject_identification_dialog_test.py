@@ -170,5 +170,6 @@ class showSubjectIdentificationDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[1].label, "Sorszam")
         self.assertEqual(list_of_fields[1].initial, '0')
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests

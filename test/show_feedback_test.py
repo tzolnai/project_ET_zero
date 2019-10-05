@@ -32,6 +32,7 @@ import platform
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
+
 def DummyFunction(*argv):
     pass
 
@@ -388,6 +389,7 @@ class showFeedbackTest(unittest.TestCase):
                                                           "10. blokk: 0,432 másodperc.\n\n")
             self.assertEqualWithEOL(drawing_list[1].text, "+")
             self.assertEqualWithEOL(drawing_list[2].text, "A következő blokkra lépéshez néz a keresztre!")
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

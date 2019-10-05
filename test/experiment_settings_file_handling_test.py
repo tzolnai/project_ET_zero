@@ -428,5 +428,6 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                              'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
                              'jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests

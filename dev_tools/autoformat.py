@@ -25,16 +25,20 @@ def format_files_in_directory(dir_path):
         if os.path.isfile(file_path) and file_path.endswith(".py"):
             print("Formating file: " + file_path)
 
+            with open(file_path, 'rb') as open_file:
+                old_content = open_file.read()
+
             # Run autopep8
             os.system("autopep8 -i --ignore E402 --max-line-length 150 " + file_path)
 
             # Replace line endings (use Linux line endings consitently)
             with open(file_path, 'rb') as open_file:
                 content = open_file.read()
-            if b'\r\n' in content:
-                content = content.replace(b'\r\n', b'\n')
-                with open(file_path, 'wb') as open_file:
-                    open_file.write(content)
+            if old_content != content:
+                if b'\r\n' in content:
+                    content = content.replace(b'\r\n', b'\n')
+                    with open(file_path, 'wb') as open_file:
+                        open_file.write(content)
 
         elif os.path.isdir(file_path) and not file_path.endswith("externals"):
             print("Stepping into directory: " + file_path)
