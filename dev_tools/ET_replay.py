@@ -16,6 +16,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# asrt.py version: 0.0.0
+
 import sys
 import os
 # Add the local path to the main script and external scripts so we can import them.
@@ -66,6 +68,7 @@ class EyeTrackingReplay():
             last_stimulus_on_screen = 'False'
             sampling_counter = 0
             block_displayed = False
+            trial_starting_samples = True # remove this one later
             for line in output_lines[1:]:
 
                 current_trial = line.split('\t')[11]
@@ -74,6 +77,12 @@ class EyeTrackingReplay():
                 current_stimulus = int(line.split('\t')[18])
                 stimulus_on_screen = line.split('\t')[19]
                 block_number = line.split('\t')[10]
+                RSI_time = line.split('\t')[12]
+
+                if current_trial != last_trial:
+                    trial_starting_samples = True
+                if RSI_time == '-1':
+                    trial_starting_samples = False
 
                 if current_trial == '1':
                     if not block_displayed:
@@ -113,7 +122,7 @@ class EyeTrackingReplay():
                     experiment.stim_bg(stimbg)
                     experiment.stim_bg(AOI_rect)
 
-                    if stimulus_on_screen == 'True':
+                    if stimulus_on_screen == 'True' and not trial_starting_samples:
                         if current_pattern_random == 'pattern':
                             if asrt_type == 'explicit':
                                 stimP.fillColor = experiment.colors['stimp']
@@ -127,7 +136,7 @@ class EyeTrackingReplay():
                         else:
                             stimR.draw()
                     text_stim = visual.TextStim(experiment.mywindow, text=current_trial + ". trial",
-                                                    units='cm', height=0.8, wrapWidth=20, color='black', pos = (0.0, 12.0))
+                                                units='cm', height=0.8, wrapWidth=20, color='black', pos = (0.0, 12.0))
                     text_stim.draw()
                     experiment.mywindow.flip()
 
