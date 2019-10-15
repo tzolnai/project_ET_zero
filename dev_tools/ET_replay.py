@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# asrt.py version: 0.0.0
+# asrt.py version: 0.0.1
 
 import sys
 import os
@@ -68,23 +68,17 @@ class EyeTrackingReplay():
             last_stimulus_on_screen = 'False'
             sampling_counter = 0
             block_displayed = False
-            trial_starting_samples = True # remove this one later
             for line in output_lines[1:]:
 
-                current_trial = line.split('\t')[11]
-                current_pattern_random = line.split('\t')[17]
-                asrt_type = line.split('\t')[6]
-                current_stimulus = int(line.split('\t')[18])
-                stimulus_on_screen = line.split('\t')[19]
-                block_number = line.split('\t')[10]
-                RSI_time = line.split('\t')[12]
+                current_trial = line.split('\t')[13]
+                current_pattern_random = line.split('\t')[18]
+                asrt_type = line.split('\t')[8]
+                current_stimulus = int(line.split('\t')[21])
+                stimulus_on_screen = line.split('\t')[22]
+                block_number = line.split('\t')[12]
+                RSI_time = line.split('\t')[14]
 
-                if current_trial != last_trial:
-                    trial_starting_samples = True
-                if RSI_time == '-1':
-                    trial_starting_samples = False
-
-                if current_trial == '1':
+                if current_trial == '1' and stimulus_on_screen == 'False':
                     if not block_displayed:
                         text_stim = visual.TextStim(experiment.mywindow, text=block_number + ". blokk kezdete...",
                                                     units='cm', height=1.0, wrapWidth=20, color='black')
@@ -98,10 +92,10 @@ class EyeTrackingReplay():
                 block_displayed = False
                 if sampling_counter > 4:
                     sampling_counter = 0
-                    left_gaze_XY = (float(line.split('\t')[20].replace(',', '.')), float(line.split('\t')[21].replace(',', '.')))
-                    left_gaze_valid = bool(line.split('\t')[24])
-                    right_gaze_XY = (float(line.split('\t')[22].replace(',', '.')), float(line.split('\t')[23].replace(',', '.')))
-                    right_gaze_valid = bool(line.split('\t')[25])
+                    left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
+                    left_gaze_valid = bool(line.split('\t')[27])
+                    right_gaze_XY = (float(line.split('\t')[25].replace(',', '.')), float(line.split('\t')[26].replace(',', '.')))
+                    right_gaze_valid = bool(line.split('\t')[28])
                     x_coord = None
                     y_coord = None
                     if left_gaze_valid and right_gaze_valid:
@@ -122,7 +116,7 @@ class EyeTrackingReplay():
                     experiment.stim_bg(stimbg)
                     experiment.stim_bg(AOI_rect)
 
-                    if stimulus_on_screen == 'True' and not trial_starting_samples:
+                    if stimulus_on_screen == 'True':
                         if current_pattern_random == 'pattern':
                             if asrt_type == 'explicit':
                                 stimP.fillColor = experiment.colors['stimp']
