@@ -30,20 +30,23 @@ def convert(raw_file_name, new_file_name):
 
     new_file_data = StringIO()
     new_file_data.write(raw_lines[0][:len(raw_lines[0]) - 1])
-    new_file_data.write('counter')
+    new_file_data.write('RT (samples)')
     new_file_data.write('\n')
 
     last_trial = "1"
-    counter = 1
+    counter = 0
     current_line = 1
     for line in raw_lines[1:]:
         if last_trial != line.split('\t')[13] or line == raw_lines[len(raw_lines) - 1]:
             new_file_data.write((raw_lines[current_line - 1])[:len(raw_lines[current_line - 1]) - 1])
             new_file_data.write('\t')
-            new_file_data.write(str(counter))
+            if line == raw_lines[len(raw_lines) - 1]:
+                new_file_data.write(str(counter + 1))
+            else:
+                new_file_data.write(str(counter))
             new_file_data.write('\n')
             last_trial = line.split('\t')[13]
-            counter = 1
+            counter = 0
         current_line += 1
         if line.split('\t')[14] != "-1":
             counter += 1
