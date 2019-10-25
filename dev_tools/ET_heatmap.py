@@ -57,9 +57,11 @@ def convert(raw_file_name):
         if x_coord is not None and y_coord is not None and x_coord < 1.0 and y_coord < 1.0:
             heatmap[int(x_coord * 100)][int(y_coord * 100)] -= 1
 
+    data_count = abs(heatmap.sum(axis=0).sum())
+    print(data_count)
     pyplot.imshow(heatmap, cmap='hot')
     pyplot.show()
-    pyplot.imshow(heatmap, cmap='hot', vmin=-1000)
+    pyplot.imshow(heatmap, cmap='hot', vmin=-(data_count / 200.0))
     pyplot.show()
 
 if __name__ == "__main__":
