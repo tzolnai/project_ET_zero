@@ -59,6 +59,8 @@ def convert(raw_file_name):
 
     pyplot.imshow(heatmap, cmap='hot')
     pyplot.show()
+    pyplot.imshow(heatmap, cmap='hot', vmin=-1000)
+    pyplot.show()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
