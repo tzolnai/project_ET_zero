@@ -29,7 +29,7 @@ def convert(raw_file_name):
     with codecs.open(raw_file_name, 'r', encoding='utf-8') as raw_output_file:
         raw_lines = raw_output_file.readlines()
         
-    heatmap = numpy.ones((100, 100))
+    heatmap = numpy.zeros((100, 100))
 
     for line in raw_lines[1:]:
     
