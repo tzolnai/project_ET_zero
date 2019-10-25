@@ -1465,10 +1465,9 @@ class Experiment:
             x_coord = right_gaze_XY[0]
             y_coord = right_gaze_XY[1]
 
-        if x_coord != None and y_coord != None:
-            self.gaze_data_list.append((x_coord, y_coord))
-            if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
-                self.gaze_data_list.pop(0)
+        self.gaze_data_list.append((x_coord, y_coord))
+        if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
+            self.gaze_data_list.pop(0)
 
         self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
@@ -1508,16 +1507,25 @@ class Experiment:
             if len(self.gaze_data_list) < sampling_window:
                 continue
 
-            # calculate avarage gage position
+            # calculate avarage gaze position
             sum_x = 0
             sum_y = 0
+            count_x = 0
+            count_y = 0
             for pos in self.gaze_data_list[-sampling_window:]:
-                sum_x += pos[0]
-                sum_y += pos[1]
+                if pos[0] is not None:
+                    count_x += 1
+                    sum_x += pos[0]
+                if pos[1] is not None:
+                    count_y += 1
+                    sum_y += pos[1]
+
+            if count_x == 0 or count_y == 0:
+                continue
 
             # we have the pos in eye-tracker's display area normalized coordinates
             # and we need to convert it to psychopy cm coordinates
-            avg_pos_norm = (sum_x / sampling_window, sum_y / sampling_window)
+            avg_pos_norm = (sum_x / count_x, sum_y / count_y)
             avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
 
             if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
