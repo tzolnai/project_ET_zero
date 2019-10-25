@@ -93,9 +93,9 @@ class EyeTrackingReplay():
                 if sampling_counter > 4:
                     sampling_counter = 0
                     left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
-                    left_gaze_valid = bool(line.split('\t')[27])
+                    left_gaze_valid = bool(line.split('\t')[32])
                     right_gaze_XY = (float(line.split('\t')[25].replace(',', '.')), float(line.split('\t')[26].replace(',', '.')))
-                    right_gaze_valid = bool(line.split('\t')[28])
+                    right_gaze_valid = bool(line.split('\t')[33])
                     x_coord = None
                     y_coord = None
                     if left_gaze_valid and right_gaze_valid:
