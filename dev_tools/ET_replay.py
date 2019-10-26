@@ -130,7 +130,7 @@ class EyeTrackingReplay():
                         else:
                             stimR.draw()
                     text_stim = visual.TextStim(experiment.mywindow, text=current_trial + ". trial",
-                                                units='cm', height=0.8, wrapWidth=20, color='black', pos = (0.0, 12.0))
+                                                units='cm', height=0.8, wrapWidth=20, color='black', pos=(0.0, 12.0))
                     text_stim.draw()
                     experiment.mywindow.flip()
 

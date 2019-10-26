@@ -28,16 +28,16 @@ def convert(raw_file_name):
 
     with codecs.open(raw_file_name, 'r', encoding='utf-8') as raw_output_file:
         raw_lines = raw_output_file.readlines()
-        
+
     heatmap = numpy.zeros((100, 100))
 
     for line in raw_lines[1:]:
-    
+
         current_trial = line.split('\t')[13]
         stimulus_on_screen = line.split('\t')[22]
         if current_trial == '1' and stimulus_on_screen == 'False':
             continue
-    
+
         left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
         left_gaze_valid = line.split('\t')[31]
         right_gaze_XY = (float(line.split('\t')[25].replace(',', '.')), float(line.split('\t')[26].replace(',', '.')))
@@ -50,10 +50,10 @@ def convert(raw_file_name):
         elif left_gaze_valid == "1":
             x_coord = left_gaze_XY[0]
             y_coord = left_gaze_XY[1]
-        elif right_gaze_valid ==  "1":
+        elif right_gaze_valid == "1":
             x_coord = right_gaze_XY[0]
             y_coord = right_gaze_XY[1]
-        
+
         if x_coord is not None and y_coord is not None and x_coord < 1.0 and y_coord < 1.0:
             heatmap[int(x_coord * 100)][int(y_coord * 100)] -= 1
 
@@ -63,6 +63,7 @@ def convert(raw_file_name):
     pyplot.show()
     pyplot.imshow(heatmap, cmap='hot', vmin=-(data_count / 200.0))
     pyplot.show()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

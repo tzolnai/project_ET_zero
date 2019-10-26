@@ -36,21 +36,21 @@ def convert(raw_file_name, new_file_name):
     counter = 0
     current_line = 0
     eye_in_AOI = False
-    
-    for line in raw_lines[1:]:    
+
+    for line in raw_lines[1:]:
         current_line += 1
         if last_trial != line.split('\t')[13]:
-            eye_in_AOI = False  
+            eye_in_AOI = False
             last_trial = line.split('\t')[13]
             continue
-        if eye_in_AOI:        
+        if eye_in_AOI:
             last_trial = line.split('\t')[13]
             continue
-        
-        # stimulus    
+
+        # stimulus
         current_stimulus = int(line.split('\t')[21])
         stimulus_on_screen = line.split('\t')[22]
-        
+
         # calculate eye_pos
         left_gaze_XY = (float(line.split('\t')[27].replace(',', '.')), float(line.split('\t')[28].replace(',', '.')))
         left_gaze_valid = int(line.split('\t')[31])
@@ -67,16 +67,16 @@ def convert(raw_file_name, new_file_name):
         elif right_gaze_valid:
             x_coord = right_gaze_XY[0]
             y_coord = right_gaze_XY[1]
-        
+
         # eye inside AOI
         dict_pos = {1: (float(-7.5), float(-7.5)),
                     2: (float(7.5), float(-7.5)),
                     3: (float(-7.5), float(7.5)),
                     4: (float(7.5), float(7.5))}
-        
+
         if stimulus_on_screen == 'True' and abs(x_coord - dict_pos[current_stimulus][0]) <= 2.0 and abs(y_coord - dict_pos[current_stimulus][1]) <= 2.0:
             eye_in_AOI = True
-    
+
         if last_trial != line.split('\t')[13] or line == raw_lines[len(raw_lines) - 1] or eye_in_AOI:
             new_file_data.write((raw_lines[current_line - 1])[:len(raw_lines[current_line - 1]) - 1])
             new_file_data.write('\t')
