@@ -78,17 +78,11 @@ def on_move(x, y):
                 gazeData['right_gaze_point_on_display_area'] = (float('nan'), float('nan'))
                 gazeData['left_gaze_point_validity'] = 1
                 gazeData['right_gaze_point_validity'] = 0
-            elif g_counter / 10 == 2:
+            else:
                 gazeData['left_gaze_point_on_display_area'] = (float('nan'), float('nan'))
                 gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.1, yCoord)
                 gazeData['left_gaze_point_validity'] = 0
                 gazeData['right_gaze_point_validity'] = 1
-            elif g_counter / 10 == 3:
-                gazeData['left_gaze_point_on_display_area'] = (float('nan'), float('nan'))
-                gazeData['right_gaze_point_on_display_area'] = (float('nan'), float('nan'))
-                gazeData['left_gaze_point_validity'] = 0
-                gazeData['right_gaze_point_validity'] = 0
-                g_counter = 0
 
             gazeData['left_pupil_diameter'] = 3
             gazeData['right_pupil_diameter'] = 3
