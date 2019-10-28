@@ -29,14 +29,27 @@ def convert(raw_file_name):
     with codecs.open(raw_file_name, 'r', encoding='utf-8') as raw_output_file:
         raw_lines = raw_output_file.readlines()
 
+    if len(raw_lines) == 0:
+        print("There is no data in the given output txt file.")
+
     heatmap_global = numpy.zeros((100, 100))
     heatmap_epoch = numpy.zeros((100, 100))
 
+    trial_pos = raw_lines[0].split('\t').index("trial")
+    stim_on_screen_pos = raw_lines[0].split('\t').index("stimulus_on_screen")
+    epoch_pos = raw_lines[0].split('\t').index("epoch")
+    left_gazeX_pos = raw_lines[0].split('\t').index("left_gaze_data_X_ADCS")
+    left_gazeY_pos = raw_lines[0].split('\t').index("left_gaze_data_Y_ADCS")
+    right_gazeX_pos = raw_lines[0].split('\t').index("right_gaze_data_X_ADCS")
+    right_gazeY_pos = raw_lines[0].split('\t').index("right_gaze_data_Y_ADCS")
+    left_gaze_valid_pos = raw_lines[0].split('\t').index("left_gaze_validity")
+    right_gaze_valid_pos = raw_lines[0].split('\t').index("right_gaze_validity")
+
     last_epoch = "1"
     for line in raw_lines[1:]:
-        current_trial = line.split('\t')[13]
-        stimulus_on_screen = line.split('\t')[22]
-        epoch_number = line.split('\t')[11]
+        current_trial = line.split('\t')[trial_pos]
+        stimulus_on_screen = line.split('\t')[stim_on_screen_pos]
+        epoch_number = line.split('\t')[epoch_pos]
 
         if current_trial == '1':
             continue
@@ -47,10 +60,10 @@ def convert(raw_file_name):
             heatmap_epoch = numpy.zeros((100, 100))
             last_epoch = epoch_number
 
-        left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
-        left_gaze_valid = line.split('\t')[31]
-        right_gaze_XY = (float(line.split('\t')[25].replace(',', '.')), float(line.split('\t')[26].replace(',', '.')))
-        right_gaze_valid = line.split('\t')[32]
+        left_gaze_XY = (float(line.split('\t')[left_gazeX_pos].replace(',', '.')), float(line.split('\t')[left_gazeY_pos].replace(',', '.')))
+        left_gaze_valid = line.split('\t')[left_gaze_valid_pos]
+        right_gaze_XY = (float(line.split('\t')[right_gazeX_pos].replace(',', '.')), float(line.split('\t')[right_gazeY_pos].replace(',', '.')))
+        right_gaze_valid = line.split('\t')[right_gaze_valid_pos]
         x_coord = None
         y_coord = None
         if left_gaze_valid == "1" and right_gaze_valid == "1":
