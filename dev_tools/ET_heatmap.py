@@ -29,14 +29,23 @@ def convert(raw_file_name):
     with codecs.open(raw_file_name, 'r', encoding='utf-8') as raw_output_file:
         raw_lines = raw_output_file.readlines()
 
-    heatmap = numpy.zeros((100, 100))
+    heatmap_global = numpy.zeros((100, 100))
+    heatmap_epoch = numpy.zeros((100, 100))
 
+    last_epoch = "1"
     for line in raw_lines[1:]:
-
         current_trial = line.split('\t')[13]
         stimulus_on_screen = line.split('\t')[22]
+        epoch_number = line.split('\t')[11]
+
         if current_trial == '1':
             continue
+
+        if epoch_number != last_epoch:
+            pyplot.figure("epoch " + last_epoch)
+            pyplot.imshow(heatmap_epoch, cmap='hot')
+            heatmap_epoch = numpy.zeros((100, 100))
+            last_epoch = epoch_number
 
         left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
         left_gaze_valid = line.split('\t')[31]
@@ -55,13 +64,17 @@ def convert(raw_file_name):
             y_coord = right_gaze_XY[1]
 
         if x_coord is not None and y_coord is not None and x_coord < 1.0 and y_coord < 1.0:
-            heatmap[int(x_coord * 100)][int(y_coord * 100)] -= 1
+            heatmap_global[int(x_coord * 100)][int(y_coord * 100)] -= 1
+            heatmap_epoch[int(x_coord * 100)][int(y_coord * 100)] -= 1
 
-    data_count = abs(heatmap.sum(axis=0).sum())
-    pyplot.figure()
-    pyplot.imshow(heatmap, cmap='hot')
-    pyplot.figure()
-    pyplot.imshow(heatmap, cmap='hot', vmin=-(data_count / 200.0))
+    pyplot.figure("epoch " + last_epoch)
+    pyplot.imshow(heatmap_epoch, cmap='hot')
+
+    data_count = abs(heatmap_global.sum(axis=0).sum())
+    pyplot.figure("global")
+    pyplot.imshow(heatmap_global, cmap='hot')
+    pyplot.figure("global_limited")
+    pyplot.imshow(heatmap_global, cmap='hot', vmin=-(data_count / 200.0))
     pyplot.show()
 
 
