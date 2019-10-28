@@ -35,7 +35,7 @@ def convert(raw_file_name):
 
         current_trial = line.split('\t')[13]
         stimulus_on_screen = line.split('\t')[22]
-        if current_trial == '1' and stimulus_on_screen == 'False':
+        if current_trial == '1':
             continue
 
         left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
