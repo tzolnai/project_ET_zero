@@ -58,8 +58,9 @@ def convert(raw_file_name):
             heatmap[int(x_coord * 100)][int(y_coord * 100)] -= 1
 
     data_count = abs(heatmap.sum(axis=0).sum())
+    pyplot.figure()
     pyplot.imshow(heatmap, cmap='hot')
-    pyplot.show()
+    pyplot.figure()
     pyplot.imshow(heatmap, cmap='hot', vmin=-(data_count / 200.0))
     pyplot.show()
 
