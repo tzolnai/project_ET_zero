@@ -28,6 +28,7 @@ import platform
 import numbers
 from datetime import datetime
 from io import StringIO
+import threading
 
 try:
     import tobii_research as tobii
@@ -1101,6 +1102,7 @@ class Experiment:
         self.last_block_RTs = []
         self.fixation_cross_pos = None
         self.fixation_cross = None
+        self.shared_data_lock = threading.Lock()
 
         # visual.Window object for displaying experiment
         self.mywindow = None
@@ -1465,14 +1467,15 @@ class Experiment:
             x_coord = right_gaze_XY[0]
             y_coord = right_gaze_XY[1]
 
-        if x_coord != None and y_coord != None:
-            self.gaze_data_list.append((x_coord, y_coord))
-            if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
+        with self.shared_data_lock:
+            if x_coord != None and y_coord != None:
+                self.gaze_data_list.append((x_coord, y_coord))
+                if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
+                    self.gaze_data_list.pop(0)
+            else:
                 self.gaze_data_list.pop(0)
-        else:
-            self.gaze_data_list.pop(0)
 
-        self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
+            self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size / 2.0 and abs(point[1] - rect_center[1]) <= rect_size / 2.0:
@@ -1507,23 +1510,27 @@ class Experiment:
             if 'q' in event.getKeys():
                 return -1
 
-            if len(self.gaze_data_list) < sampling_window:
-                continue
+            with self.shared_data_lock:
+                if len(self.gaze_data_list) < sampling_window:
+                    continue
 
-            # calculate avarage gage position
-            sum_x = 0
-            sum_y = 0
-            for pos in self.gaze_data_list[-sampling_window:]:
-                sum_x += pos[0]
-                sum_y += pos[1]
+                last_item = self.gaze_data_list[-1]
 
-            # we have the pos in eye-tracker's display area normalized coordinates
-            # and we need to convert it to psychopy cm coordinates
-            avg_pos_norm = (sum_x / sampling_window, sum_y / sampling_window)
-            avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
+                # calculate avarage gage position
+                sum_x = 0
+                sum_y = 0
+                for pos in self.gaze_data_list[-sampling_window:]:
+                    sum_x += pos[0]
+                    sum_y += pos[1]
 
-            if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
-                return 1
+                # we have the pos in eye-tracker's display area normalized coordinates
+                # and we need to convert it to psychopy cm coordinates
+                avg_pos_norm = (sum_x / sampling_window, sum_y / sampling_window)
+                avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
+
+                assert last_item == self.gaze_data_list[-1]
+                if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
+                    return 1
 
     def monitor_settings(self):
         """Specify monitor settings."""
@@ -1697,9 +1704,10 @@ class Experiment:
             # four empty circles where the actual stimulus can be placed
             self.stim_bg(stimbg)
             self.mywindow.flip()
-            self.last_N = N - 1
-            self.stimulus_on_screen = False
-            self.last_RSI = -1
+            with self.shared_data_lock:
+                self.last_N = N - 1
+                self.stimulus_on_screen = False
+                self.last_RSI = -1
 
             # set the actual stimulus' position and fill color
             if self.stimpr[N] == 'pattern':
@@ -1735,8 +1743,10 @@ class Experiment:
                         stim_RSI = 0.0
                     else:
                         stim_RSI = RSI_clock.getTime()
-                self.stimulus_on_screen = True
-                self.last_RSI = stim_RSI
+
+                with self.shared_data_lock:
+                    self.stimulus_on_screen = True
+                    self.last_RSI = stim_RSI
 
                 if cycle == 1:
                     trial_clock.reset()
@@ -1759,7 +1769,8 @@ class Experiment:
                     self.stim_output_line -= 1
 
                     if N >= 1:
-                        self.last_N = N - 1
+                        with self.shared_data_lock:
+                            self.last_N = N - 1
 
                     self.quit_presentation()
 
@@ -1798,9 +1809,10 @@ class Experiment:
             if N in self.settings.get_block_starts():
 
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
-                self.last_N = N - 1
-                self.stimulus_on_screen = False
-                self.last_RSI = -1
+                with self.shared_data_lock:
+                    self.last_N = N - 1
+                    self.stimulus_on_screen = False
+                    self.last_RSI = -1
 
                 if self.settings.experiment_type == 'reaction-time':
                     self.person_data.flush_RT_data_to_output(self)
@@ -1821,7 +1833,8 @@ class Experiment:
 
                 if whatnow == 'quit':
                     if N >= 1:
-                        self.last_N = N - 1
+                        with self.shared_data_lock:
+                            self.last_N = N - 1
 
                     self.quit_presentation()
 
