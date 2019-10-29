@@ -1103,6 +1103,7 @@ class Experiment:
         self.fixation_cross_pos = None
         self.fixation_cross = None
         self.shared_data_lock = threading.Lock()
+        self.main_loop_lock = threading.Lock()
 
         # visual.Window object for displaying experiment
         self.mywindow = None
@@ -1477,6 +1478,9 @@ class Experiment:
 
             self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
 
+        if self.main_loop_lock.locked():
+            self.main_loop_lock.release()
+
     def point_is_in_rectangle(self, point, rect_center, rect_size):
         if abs(point[0] - rect_center[0]) <= rect_size / 2.0 and abs(point[1] - rect_center[1]) <= rect_size / 2.0:
             return True
@@ -1506,9 +1510,12 @@ class Experiment:
     def wait_for_eye_response(self, expected_eye_pos, sampling_window):
 
         while (True):
-
             if 'q' in event.getKeys():
+                if self.main_loop_lock.locked():
+                    self.main_loop_lock.release()
                 return -1
+
+            self.main_loop_lock.acquire()
 
             with self.shared_data_lock:
                 if len(self.gaze_data_list) < sampling_window:
@@ -1530,6 +1537,8 @@ class Experiment:
 
                 assert last_item == self.gaze_data_list[-1]
                 if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
+                    if self.main_loop_lock.locked():
+                        self.main_loop_lock.release()
                     return 1
 
     def monitor_settings(self):
