@@ -993,6 +993,7 @@ class PersonDataHandler:
                            right_pupil_diameter,
                            left_pupil_validity,
                            right_pupil_validity,
+                           data[4],
                            experiment.dict_pos[1][0],
                            experiment.dict_pos[1][1],
                            experiment.dict_pos[2][0],
@@ -1061,6 +1062,7 @@ class PersonDataHandler:
                         'right_pupil_diameter',
                         'left_pupil_validity',
                         'right_pupil_validity',
+                        'gaze_data_time_stamp',
                         'stimulus_1_position_X_PCMCS',
                         'stimulus_1_position_Y_PCMCS',
                         'stimulus_2_position_X_PCMCS',
@@ -1449,8 +1451,7 @@ class Experiment:
         self.eye_tracker = allTrackers[0]
 
     def eye_data_callback(self, gazeData):
-        max_length = 8
-
+        time_stamp = tobii.get_system_time_stamp()
         left_gaze_XY = gazeData['left_gaze_point_on_display_area']
         right_gaze_XY = gazeData['right_gaze_point_on_display_area']
         left_gaze_valid = gazeData['left_gaze_point_validity']
@@ -1476,7 +1477,7 @@ class Experiment:
             else:
                 self.gaze_data_list.pop(0)
 
-            self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData])
+            self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData, time_stamp])
 
         if self.main_loop_lock.locked():
             self.main_loop_lock.release()

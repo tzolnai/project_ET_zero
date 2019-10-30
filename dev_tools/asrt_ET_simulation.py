@@ -56,8 +56,11 @@ class EyeTrackerMock:
 def find_all_eyetrackers_mock():
     return [EyeTrackerMock()]
 
+def get_system_time_stamp_mock():
+    return 1000000
 
 tobii.find_all_eyetrackers = find_all_eyetrackers_mock
+tobii.get_system_time_stamp = get_system_time_stamp_mock
 
 
 def on_move(x, y):
