@@ -19,6 +19,7 @@ pip install pyglet==1.3.2
 Additional dependencies:
 * [pytest](https://docs.pytest.org/en/latest/): For running tests under test folder
 * [pynput](https://pypi.org/project/pynput/): For running ET_simulation script (dev_tools folder)
+* [autopep8](https://pypi.org/project/autopep8/): For running autoformat script (dev_tools folder)
 
 ### Setup
 
