@@ -44,7 +44,7 @@ def convert(raw_file_name):
         left_gazeY_pos = raw_lines[0].split('\t').index("left_gaze_data_Y_ADCS")
         right_gazeX_pos = raw_lines[0].split('\t').index("right_gaze_data_X_ADCS")
         right_gazeY_pos = raw_lines[0].split('\t').index("right_gaze_data_Y_ADCS")
-    except ValueError: # backward compatibility
+    except ValueError:  # backward compatibility
         left_gazeX_pos = raw_lines[0].split('\t').index("left_gaze_data_X")
         left_gazeY_pos = raw_lines[0].split('\t').index("left_gaze_data_Y")
         right_gazeX_pos = raw_lines[0].split('\t').index("right_gaze_data_X")
