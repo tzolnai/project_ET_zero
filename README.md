@@ -7,7 +7,7 @@ Running ASRT script requires all of the following and their dependencies.
 
 * [Python 3.6](https://www.python.org/downloads/)
 * [Tobii Pro SDK](https://pypi.org/project/tobii-research/) (only for eye-tracking)
-* [Psychopy](https://www.psychopy.org/download.html)
+* [PsychoPy](https://www.psychopy.org/download.html)
 * [pyglet](https://pyglet.readthedocs.io/en/stable/)
 
 After Python 3.6 and pip is intalled, you can install psychopy, tobii_research and pyglet packages using `pip install`.
@@ -22,7 +22,7 @@ Additional dependencies:
 
 ### Setup
 
-After all prerequisites are installed you can download the content of this repository.
+After all prerequisites are installed you need to download the content of this repository.
 
 Before running the ASRT script you need to place an instruction file in the same folder where the `asrt.py` is.
 The instruction file should have the name `inst_and_feedback.txt`. You can find example instruction files under `inst_examples` folder.
