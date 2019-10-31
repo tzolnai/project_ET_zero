@@ -29,25 +29,31 @@ def convert(raw_file_name, new_file_name):
         raw_lines = raw_output_file.readlines()
 
     new_file_data = StringIO()
-    new_file_data.write(raw_lines[0][:len(raw_lines[0]) - 1])
+    end_pos = raw_lines[0].find("stimulus_on_screen")
+    new_file_data.write(raw_lines[0][:end_pos])
     new_file_data.write('RT (samples)')
     new_file_data.write('\n')
 
     trial_pos = raw_lines[0].split('\t').index("trial")
     RSI_pos = raw_lines[0].split('\t').index("RSI_time")
+    stimulus_on_screen_pos = raw_lines[0].split('\t').index("stimulus_on_screen")
 
     last_trial = "1"
     RT_counter = 0
     current_line = 1
     for line in raw_lines[1:]:
         if last_trial != line.split('\t')[trial_pos] or line == raw_lines[len(raw_lines) - 1]:
-            new_file_data.write((raw_lines[current_line - 1])[:len(raw_lines[current_line - 1]) - 1])
+            line_to_write = raw_lines[current_line - 1]
+            end_pos = find_variable_str_index(line_to_write, stimulus_on_screen_pos)
+            new_file_data.write(line_to_write[:end_pos])
             new_file_data.write('\t')
+
             if line == raw_lines[len(raw_lines) - 1]:
                 new_file_data.write(str(RT_counter + 1))
             else:
                 new_file_data.write(str(RT_counter))
             new_file_data.write('\n')
+
             last_trial = line.split('\t')[trial_pos]
             RT_counter = 0
         current_line += 1
@@ -57,6 +63,13 @@ def convert(raw_file_name, new_file_name):
     with codecs.open(new_file_name, 'w', encoding='utf-8') as new_output_file:
         new_output_file.write(new_file_data.getvalue())
     new_file_data.close()
+
+
+def find_variable_str_index(string, variable_pos):
+    begin_index = 0
+    for i in range(variable_pos - 1):
+        begin_index = string.find("\t", begin_index) + 1
+    return string.find("\t", begin_index)
 
 
 if __name__ == "__main__":
