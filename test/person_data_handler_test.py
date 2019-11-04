@@ -334,10 +334,10 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\tsomething")
 
@@ -369,10 +369,10 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\nsomething\nsomething2\nsomething3")
 
@@ -443,7 +443,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
-        experiment.stimulus_on_screen = True
+        experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'implicit'}
@@ -471,20 +471,22 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData['left_pupil_validity'] = True
         gazeData['right_pupil_validity'] = True
 
-        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.stimulus_on_screen, gazeData])
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\thigh\t1\tTrue\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t"
+                                                 "1,3\tblack\tpattern\thigh\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataWithBigLastN(self):
@@ -505,7 +507,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
-        experiment.stimulus_on_screen = True
+        experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = experiment.settings.get_maxtrial()
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'implicit'}
@@ -533,16 +535,18 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData['left_pupil_validity'] = True
         gazeData['right_pupil_validity'] = True
 
-        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.stimulus_on_screen, gazeData])
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t")
 
@@ -564,7 +568,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
-        experiment.stimulus_on_screen = True
+        experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'explicit'}
@@ -592,20 +596,22 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData['left_pupil_validity'] = True
         gazeData['right_pupil_validity'] = True
 
-        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.stimulus_on_screen, gazeData])
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\texplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\thigh\t1\tTrue\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t"
+                                                 "1,3\tblack\tpattern\thigh\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataNoPatternASRT(self):
@@ -626,7 +632,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
-        experiment.stimulus_on_screen = True
+        experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'noASRT'}
@@ -654,20 +660,22 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData['left_pupil_validity'] = True
         gazeData['right_pupil_validity'] = True
 
-        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.stimulus_on_screen, gazeData])
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\tnoASRT\tnoPattern\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\tnone\t1\tTrue\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteExistingOutput(self):
@@ -758,7 +766,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
-        experiment.stimulus_on_screen = True
+        experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'implicit'}
@@ -786,7 +794,9 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData['left_pupil_validity'] = True
         gazeData['right_pupil_validity'] = True
 
-        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.stimulus_on_screen, gazeData])
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
         experiment.stimtrial[0] = 22
@@ -805,24 +815,26 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData['left_pupil_validity'] = False
         gazeData['right_pupil_validity'] = False
 
-        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.stimulus_on_screen, gazeData])
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\tstimulus_on_screen\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
-                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tstimulus_1_position_X_PCMCS\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\thigh\t1\tTrue\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t"
+                                                 "1,3\tblack\tpattern\thigh\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t123.4\t59,1\t16,56\t"
-                                                 "1,3\tGreen\tpattern\thigh\t1\tTrue\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t"
-                                                 "True\tTrue\tnan\tnan\tFalse\tFalse\t-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
+                                                 "1,3\tGreen\tpattern\thigh\t1\tstimulus_on_screen\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t"
+                                                 "True\tTrue\tnan\tnan\tFalse\tFalse\t10000\t-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testPointInComputerNameOrDate(self):
         output_file_path = self.constructFilePath(
