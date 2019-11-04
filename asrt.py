@@ -466,7 +466,7 @@ class ExperimentSettings:
         settings_dialog.addField(u'Figyelmeztetes pontossagra/sebessegre:', True)
         settings_dialog.addText(u'Ha be van kapcsolva a figyelmeztetés, akkor...:')
         settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 93)
-        settings_dialog.addField(u'Figyelmeztetes sebessegre ezen pontossag felett (%):', 91)
+        settings_dialog.addField(u'Figyelmeztetes pontosságra ezen pontossag alatt (%):', 91)
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
             self.key1 = returned_data[0]
