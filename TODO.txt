@@ -10,3 +10,6 @@ cleanup instructions, accent characters, ':' etc
 RT: last block's feedback, RT test (use clock object)
 optimize critical parts (getkeys, newdata), at least one sample for all trials
 output_line?
+move classes to separate lines
+add integration tests also for ET experiments
+create a separate presentation method for RT and ET version
