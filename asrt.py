@@ -1047,7 +1047,7 @@ class PersonDataHandler:
                         'pattern_or_random',
                         'triplet_frequency',
                         'stimulus',
-                        'stimulus_on_screen',
+                        'trial_phase',
                         'left_gaze_data_X_ADCS',
                         'left_gaze_data_Y_ADCS',
                         'right_gaze_data_X_ADCS',
@@ -1149,8 +1149,9 @@ class Experiment:
         self.stimpr = None
         # number of the last trial (it is 0 in the beggining and it is always equal with the last displayed stimulus's serial number
         self.last_N = None
-        # this variable has a meaning during presentation, current stimulus is on the screen or we are in the RSI interval
-        self.stimulus_on_screen = None
+        # this variable has a meaning during presentation, showing the phase of displaying the current stimulus
+        # possible values: "before_stimulus", "stimulus_on_screen", "after_reaction"
+        self.trial_phase = None
         # this variable has a meaning during presentation, last measured RSI
         self.last_RSI = None
 
@@ -1477,7 +1478,7 @@ class Experiment:
             else:
                 self.gaze_data_list.pop(0)
 
-            self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.stimulus_on_screen, gazeData, time_stamp])
+            self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
 
         if self.main_loop_lock.locked():
             self.main_loop_lock.release()
@@ -1695,7 +1696,7 @@ class Experiment:
 
         first_trial_in_block = True
 
-        self.stimulus_on_screen = False
+        self.trial_phase = "before_stimulus"
         self.last_RSI = -1
 
         # start recording gaze data
@@ -1716,7 +1717,7 @@ class Experiment:
             self.mywindow.flip()
             with self.shared_data_lock:
                 self.last_N = N - 1
-                self.stimulus_on_screen = False
+                self.trial_phase = "before_stimulus"
                 self.last_RSI = -1
 
             # set the actual stimulus' position and fill color
@@ -1755,12 +1756,15 @@ class Experiment:
                         stim_RSI = RSI_clock.getTime()
 
                 with self.shared_data_lock:
-                    self.stimulus_on_screen = True
+                    self.trial_phase = "stimulus_on_screen"
                     self.last_RSI = stim_RSI
 
                 if cycle == 1:
                     trial_clock.reset()
                 (response, time_stamp) = self.wait_for_response(self.stimlist[N], trial_clock)
+
+                with self.shared_data_lock:
+                    self.trial_phase = "after_reaction"
 
                 # start of the RSI timer
                 RSI_clock.reset()
@@ -1821,7 +1825,7 @@ class Experiment:
                 self.print_to_screen(u"Adatok mentése és visszajelzés előkészítése...")
                 with self.shared_data_lock:
                     self.last_N = N - 1
-                    self.stimulus_on_screen = False
+                    self.trial_phase = "before_stimulus"
                     self.last_RSI = -1
 
                 if self.settings.experiment_type == 'reaction-time':
