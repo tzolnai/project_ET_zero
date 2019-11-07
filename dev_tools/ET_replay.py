@@ -16,8 +16,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# asrt.py version: 0.0.1
-
 import sys
 import os
 # Add the local path to the main script and external scripts so we can import them.
