@@ -35,7 +35,6 @@ def convert(raw_file_name, new_file_name):
     new_file_data.write('\n')
 
     trial_pos = raw_lines[0].split('\t').index("trial")
-    RSI_pos = raw_lines[0].split('\t').index("RSI_time")
     trial_phase_pos = raw_lines[0].split('\t').index("trial_phase")
 
     last_trial = "1"
