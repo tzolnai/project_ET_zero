@@ -70,7 +70,7 @@ class showKeyAndFeedbackSettingsDialogTest(unittest.TestCase):
             list_of_fields[6].label, "Figyelmeztetes sebessegre ezen pontossag felett (%):")
         self.assertEqual(list_of_fields[6].initial, 93)
         self.assertEqual(
-            list_of_fields[7].label, "Figyelmeztetes sebessegre ezen pontossag felett (%):")
+            list_of_fields[7].label, "Figyelmeztetes pontosságra ezen pontossag alatt (%):")
         self.assertEqual(list_of_fields[7].initial, 91)
 
     def testCancel(self):

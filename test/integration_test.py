@@ -461,7 +461,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run()
 
-        self.checkOutputFile(True, 0.03)
+        self.checkOutputFile()
 
         self.experiment.presentation = self.presentation
 
