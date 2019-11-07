@@ -65,20 +65,28 @@ class EyeTrackingReplay():
                                    fillColor=None, lineColor='Red', lineWidth=2.0)
 
             last_trial = -1
-            last_stimulus_on_screen = 'False'
+            last_trial_phase = 'before_stimulus'
             sampling_counter = 0
             block_displayed = False
             for line in output_lines[1:]:
 
-                current_trial = line.split('\t')[13]
-                current_pattern_random = line.split('\t')[18]
-                asrt_type = line.split('\t')[8]
-                current_stimulus = int(line.split('\t')[21])
-                stimulus_on_screen = line.split('\t')[22]
-                block_number = line.split('\t')[12]
-                RSI_time = line.split('\t')[14]
+                trial_pos = output_lines[0].split('\t').index("trial")
+                pattern_random_pos = output_lines[0].split('\t').index("pattern_or_random")
+                asrt_type_pos = output_lines[0].split('\t').index("asrt_type")
+                stimulus_pos = output_lines[0].split('\t').index("stimulus")
+                block_pos = output_lines[0].split('\t').index("block")
+                RSI_pos = output_lines[0].split('\t').index("RSI_time")
+                trial_phase_pos = output_lines[0].split('\t').index("trial_phase")
 
-                if current_trial == '1' and stimulus_on_screen == 'False':
+                current_trial = line.split('\t')[trial_pos]
+                current_pattern_random = line.split('\t')[pattern_random_pos]
+                asrt_type = line.split('\t')[asrt_type_pos]
+                current_stimulus = int(line.split('\t')[stimulus_pos])
+                trial_phase = line.split('\t')[trial_phase_pos]
+                block_number = line.split('\t')[block_pos]
+                RSI_time = line.split('\t')[RSI_pos]
+
+                if current_trial == '1' and trial_phase == 'before_stimulus':
                     if not block_displayed:
                         text_stim = visual.TextStim(experiment.mywindow, text=block_number + ". blokk kezdete...",
                                                     units='cm', height=1.0, wrapWidth=20, color='black')
@@ -112,11 +120,11 @@ class EyeTrackingReplay():
                     eye_pos.draw()
                     eye_pos_drawn = True
 
-                if current_trial != last_trial or last_stimulus_on_screen != stimulus_on_screen or eye_pos_drawn:
+                if current_trial != last_trial or last_trial_phase != trial_phase or eye_pos_drawn:
                     experiment.stim_bg(stimbg)
                     experiment.stim_bg(AOI_rect)
 
-                    if stimulus_on_screen == 'True':
+                    if trial_phase != 'before_stimulus':
                         if current_pattern_random == 'pattern':
                             if asrt_type == 'explicit':
                                 stimP.fillColor = experiment.colors['stimp']
@@ -136,7 +144,7 @@ class EyeTrackingReplay():
 
                 core.wait(0.008)
                 last_trial = current_trial
-                last_stimulus_on_screen = stimulus_on_screen
+                last_trial_phase = trial_phase
                 sampling_counter += 1
                 eye_pos_drawn = False
 
