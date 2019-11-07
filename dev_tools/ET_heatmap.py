@@ -36,7 +36,6 @@ def convert(raw_file_name):
     heatmap_epoch = numpy.zeros((100, 100))
 
     trial_pos = raw_lines[0].split('\t').index("trial")
-    stim_on_screen_pos = raw_lines[0].split('\t').index("stimulus_on_screen")
     epoch_pos = raw_lines[0].split('\t').index("epoch")
 
     try:
@@ -56,7 +55,6 @@ def convert(raw_file_name):
     last_epoch = "1"
     for line in raw_lines[1:]:
         current_trial = line.split('\t')[trial_pos]
-        stimulus_on_screen = line.split('\t')[stim_on_screen_pos]
         epoch_number = line.split('\t')[epoch_pos]
 
         if current_trial == '1':
