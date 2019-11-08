@@ -806,7 +806,7 @@ class PersonDataHandler:
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
             freq_high_low = ""
-            if PCode == "noPattern":
+            if PCode == "noPattern" or experiment.stimtrial[N] < 3:
                 freq_high_low = "none"
             elif experiment.stimpr[N] == "pattern":
                 freq_high_low = "high"
@@ -923,7 +923,7 @@ class PersonDataHandler:
                 stimcolor = experiment.colors['stimr']
 
             freq_high_low = ""
-            if PCode == "noPattern":
+            if PCode == "noPattern" or experiment.stimtrial[N] < 3:
                 freq_high_low = "none"
             elif experiment.stimpr[N] == "pattern":
                 freq_high_low = "high"
