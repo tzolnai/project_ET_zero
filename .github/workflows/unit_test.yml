@@ -28,6 +28,6 @@ jobs:
       - name: Run tests
         run: |
           cd test
-          python all_settings_def_test.py
-          python calculate_stim_properties_test.py
+          python all_settings_def_test.py          
           python coordinate_test.py
+          python calculate_stim_properties_test.py
