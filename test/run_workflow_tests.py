@@ -30,3 +30,4 @@ if __name__ == "__main__":
     os.system('pytest person_data_handler_test.py')
     os.system('pytest presentation_test.py')
     os.system('pytest read_instructions_test.py')
+    os.system('pytest show_basic_settings_dialog_test.py')
