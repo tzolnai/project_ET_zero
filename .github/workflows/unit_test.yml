@@ -10,7 +10,5 @@ jobs:
     steps:
     - name: Run tests
       run: |
-        dir
         pip install pytest
-        cd test
         pytest
