@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - name: Run tests
-      working-directory: test
+      path: test
       run: |
         pip install pytest
         pytest
