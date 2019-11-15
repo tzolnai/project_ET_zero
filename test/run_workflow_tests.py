@@ -17,15 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
+import os
 
 if __name__ == "__main__":
-    all_tests = unittest.TestLoader().discover('.', pattern='all_settings_def_test.py')
-    unittest.TextTestRunner().run(all_tests)
-    all_tests = unittest.TestLoader().discover('.', pattern='calculate_stim_properties_test.py')
-    unittest.TextTestRunner().run(all_tests)
-    all_tests = unittest.TestLoader().discover('.', pattern='coordinate_test.py')
-    unittest.TextTestRunner().run(all_tests)
-    all_tests = unittest.TestLoader().discover('.', pattern='draw_instructions_test.py')
-    unittest.TextTestRunner().run(all_tests)
-    all_tests = unittest.TestLoader().discover('.', pattern='experiment_settings_file_handling_test.py')
-    unittest.TextTestRunner().run(all_tests)
+    os.system('pytest all_settings_def_test.py')
+    os.system('pytest calculate_stim_properties_test.py')
+    os.system('pytest coordinate_test.py')
+    os.system('pytest draw_instructions_test.py')
+    os.system('pytest experiment_settings_file_handling_test.py')

@@ -27,6 +27,7 @@ from psychopy import monitors, visual, core, logging
 import asrt
 import psychopy_visual_mock as pvm
 import platform
+import pytest
 
 
 def DummyFunction(*argv):
@@ -146,10 +147,8 @@ class drawInstructionsTest(unittest.TestCase):
         self.assertEqualWithEOL(instruction_text.text, str(
             "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n"))
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testDisplaySingleInstructionET(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -233,10 +232,8 @@ class drawInstructionsTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testQuitDisplayET(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -311,10 +308,8 @@ class drawInstructionsTest(unittest.TestCase):
                                 "hogy mennyire voltál gyors és pontos - ez alapján tudsz módosítani.\r\n\r\n"
                                 "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testDisplayMoreInstructionsET(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -453,10 +448,8 @@ class drawInstructionsTest(unittest.TestCase):
         self.assertEqualWithEOL(
             drawing_list[0].text, "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testShowEndingET(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -793,10 +786,8 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "Átlagos reakcióidőd: 450.2 másodperc\r\n\r\n"
                                                       "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testShowFeedbackETSimple(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -822,10 +813,8 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "1. blokk: 0.423 másodperc.\n\n"
                                                       "2. blokk: 0.543 másodperc.\n\n")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testShowFeedbackETAfterContinueScript(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -851,10 +840,8 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "9. blokk: 0.423 másodperc.\n\n"
                                                       "10. blokk: 0.543 másodperc.\n\n")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testShowFeedbackETMoreRTData(self):
-        if not asrt.g_tobii_available:
-            return
-
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
