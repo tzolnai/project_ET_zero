@@ -8,8 +8,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code        
+      - name: Checkout source code        
         uses: actions/checkout@v1
+        
+      - name: Checkout externals
+        run: |
+          git submodule init
+          git submodule update
         
       - name: Install PsychoPy
         run: pip install psychopy        
