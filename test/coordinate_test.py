@@ -48,7 +48,8 @@ class coordinateTest(unittest.TestCase):
                              monitor=self.my_monitor,
                              winType=win_type,
                              color='White',
-                             gammaRamp=256)
+                             gammaRamp=256,
+                             gammaErrorPolicy='ignore')
 
     def testTopRightPos(self):
         experiment = asrt.Experiment("")
