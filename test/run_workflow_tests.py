@@ -23,3 +23,5 @@ if __name__ == "__main__":
     unittest.TextTestRunner().run(all_tests)
     all_tests = unittest.TestLoader().discover('.', pattern='calculate_stim_properties_test.py')
     unittest.TextTestRunner().run(all_tests)
+    all_tests = unittest.TestLoader().discover('.', pattern='coordinate_test.py')
+    unittest.TextTestRunner().run(all_tests)
