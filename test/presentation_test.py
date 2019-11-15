@@ -120,7 +120,8 @@ class presentationTest(unittest.TestCase):
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False,
+                           monitor=experiment.mymonitor, units="cm", winType=win_type, gammaErrorPolicy='ignore') as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -259,7 +260,8 @@ class presentationTest(unittest.TestCase):
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False,
+                           monitor=experiment.mymonitor, units="cm", winType=win_type, gammaErrorPolicy='ignore') as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -404,7 +406,8 @@ class presentationTest(unittest.TestCase):
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False,
+                           monitor=experiment.mymonitor, units="cm", winType=win_type, gammaErrorPolicy='ignore') as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -541,7 +544,8 @@ class presentationTest(unittest.TestCase):
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False,
+                           monitor=experiment.mymonitor, units="cm", winType=win_type, gammaErrorPolicy='ignore') as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
@@ -702,7 +706,8 @@ class presentationTest(unittest.TestCase):
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False,
+                           monitor=experiment.mymonitor, units="cm", winType=win_type, gammaErrorPolicy='ignore') as experiment.mywindow:
 
             experiment.pressed_dict = {experiment.settings.key1: 1, experiment.settings.key2: 2,
                                        experiment.settings.key3: 3, experiment.settings.key4: 4}
