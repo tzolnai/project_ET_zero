@@ -147,6 +147,9 @@ class drawInstructionsTest(unittest.TestCase):
             "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n"))
 
     def testDisplaySingleInstructionET(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -231,6 +234,9 @@ class drawInstructionsTest(unittest.TestCase):
             instruction_helper._InstructionHelper__show_message(instruction_helper.ending, experiment)
 
     def testQuitDisplayET(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -306,6 +312,9 @@ class drawInstructionsTest(unittest.TestCase):
                                 "A feladat indításához nyomd meg valamelyik válaszgombot!\r\n\r\n")
 
     def testDisplayMoreInstructionsET(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -445,6 +454,9 @@ class drawInstructionsTest(unittest.TestCase):
             drawing_list[0].text, "\r\n\r\nA feladat végetért. Köszönjük a részvételt!\r\n\r\n")
 
     def testShowEndingET(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -782,6 +794,9 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
     def testShowFeedbackETSimple(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -808,6 +823,9 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "2. blokk: 0.543 másodperc.\n\n")
 
     def testShowFeedbackETAfterContinueScript(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
@@ -834,6 +852,9 @@ class drawInstructionsTest(unittest.TestCase):
                                                       "10. blokk: 0.543 másodperc.\n\n")
 
     def testShowFeedbackETMoreRTData(self):
+        if not asrt.g_tobii_available:
+            return
+
         inst_and_feedback_path = self.constructFilePath("default.txt")
         instruction_helper = asrt.InstructionHelper(inst_and_feedback_path)
         instruction_helper.read_insts_from_file()
