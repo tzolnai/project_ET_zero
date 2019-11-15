@@ -25,3 +25,4 @@ if __name__ == "__main__":
     os.system('pytest coordinate_test.py')
     os.system('pytest draw_instructions_test.py')
     os.system('pytest experiment_settings_file_handling_test.py')
+    os.system('pytest eye_tracking_timing_test.py')

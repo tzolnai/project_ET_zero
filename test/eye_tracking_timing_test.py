@@ -24,10 +24,12 @@ sys.path = [".."] + sys.path
 import unittest
 import asrt
 from psychopy import core, monitors
+import pytest
 
 
 class eyeTrackingTimingTest(unittest.TestCase):
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testGazeDataCallback(self):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
