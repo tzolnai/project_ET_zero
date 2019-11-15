@@ -27,6 +27,7 @@ import time
 import shelve
 import dbm
 import codecs
+from psychopy import monitors
 
 
 class personDataHandlerTest(unittest.TestCase):
@@ -43,6 +44,11 @@ class personDataHandlerTest(unittest.TestCase):
                 os.unlink(file_path)
 
     def setUp(self):
+        self.my_monitor = monitors.Monitor('myMon')
+        self.my_monitor.setSizePix([1366, 768])
+        self.my_monitor.setWidth(29)
+        self.my_monitor.saveMon()
+
         tempdir = os.path.abspath(__file__)
         (tempdir, trail) = os.path.split(tempdir)
         tempdir = os.path.join(tempdir, "data", "person_data_handler")
@@ -458,7 +464,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'pattern'}
         experiment.stimlist = {1: 1}
         experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
-        experiment.monitor_settings()
+        experiment.mymonitor = self.my_monitor
         experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
 
         gazeData = {}
@@ -522,7 +528,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'pattern'}
         experiment.stimlist = {1: 1}
         experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
-        experiment.monitor_settings()
+        experiment.mymonitor = self.my_monitor
         experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
 
         gazeData = {}
@@ -583,7 +589,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'pattern'}
         experiment.stimlist = {1: 1}
         experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
-        experiment.monitor_settings()
+        experiment.mymonitor = self.my_monitor
         experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
 
         gazeData = {}
@@ -647,7 +653,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'pattern'}
         experiment.stimlist = {1: 1}
         experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
-        experiment.monitor_settings()
+        experiment.mymonitor = self.my_monitor
         experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
 
         gazeData = {}
@@ -781,7 +787,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimpr = {1: 'pattern'}
         experiment.stimlist = {1: 1}
         experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
-        experiment.monitor_settings()
+        experiment.mymonitor = self.my_monitor
         experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
 
         gazeData = {}
