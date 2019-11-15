@@ -9,6 +9,6 @@ jobs:
 
     steps:
     - name: Run tests
+      working-directory: ./test
       run: |
-        cd test
         pytest
