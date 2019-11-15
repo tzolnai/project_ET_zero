@@ -8,7 +8,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Run tests
-      run: |
-        pip install pytest
-        pytest
+      - name: checkout        
+        uses: actions/checkout@v1
+      - name: Run tests
+        run: |
+          pip install pytest
+          cd test
+          pytest
