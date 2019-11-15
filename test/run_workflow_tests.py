@@ -27,3 +27,4 @@ if __name__ == "__main__":
     os.system('pytest experiment_settings_file_handling_test.py')
     os.system('pytest eye_tracking_timing_test.py')
     os.system('pytest participant_id_test.py')
+    os.system('pytest person_data_handler_test.py')
