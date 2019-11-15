@@ -11,4 +11,5 @@ jobs:
     - name: Run tests
       working-directory: ./test
       run: |
+        pip install pytest
         pytest
