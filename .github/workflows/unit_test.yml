@@ -8,10 +8,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: checkout        
+      - name: Checkout code        
         uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          pip install psychopy
+          pip install pyglet==1.3.2
+          pip install pytest
+          
       - name: Run tests
         run: |
-          pip install pytest
           cd test
           pytest
