@@ -27,3 +27,5 @@ if __name__ == "__main__":
     unittest.TextTestRunner().run(all_tests)
     all_tests = unittest.TestLoader().discover('.', pattern='draw_instructions_test.py')
     unittest.TextTestRunner().run(all_tests)
+    all_tests = unittest.TestLoader().discover('.', pattern='experiment_settings_file_handling_test.py')
+    unittest.TextTestRunner().run(all_tests)
