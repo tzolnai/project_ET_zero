@@ -13,3 +13,4 @@ output_line?
 move classes to separate lines
 add integration tests also for ET experiments
 create a separate presentation method for RT and ET version
+trial_frequency -> trial type
