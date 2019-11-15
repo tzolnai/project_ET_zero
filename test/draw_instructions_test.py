@@ -75,7 +75,8 @@ class drawInstructionsTest(unittest.TestCase):
                                       monitor=my_monitor,
                                       winType=win_type,
                                       color='White',
-                                      gammaRamp=256)
+                                      gammaRamp=256,
+                                      gammaErrorPolicy='ignore')
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
