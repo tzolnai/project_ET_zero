@@ -1,0 +1,14 @@
+name: Python application
+
+on: [push]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run tests
+      run: |
+        cd test
+        pytest
