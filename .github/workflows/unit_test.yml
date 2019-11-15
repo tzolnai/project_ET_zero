@@ -12,4 +12,5 @@ jobs:
       run: |
         dir
         pip install pytest
+        cd test
         pytest
