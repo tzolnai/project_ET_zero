@@ -9,7 +9,6 @@ jobs:
 
     steps:
     - name: Run tests
-      path: test
       run: |
         pip install pytest
         pytest
