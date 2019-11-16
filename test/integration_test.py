@@ -74,7 +74,17 @@ class integrationTest(unittest.TestCase):
         self.StaticPeriod = core.StaticPeriod
         core.StaticPeriod = DummyStaticPeriod
 
+        # Change this variable to update all reference file
+        self.update_references = False
+
     def tearDown(self):
+        if self.update_references:
+            reference_file_path = os.path.join(
+                self.current_dir, "reference", "toth-bela_10__log.txt")
+            workdir_output = os.path.join(
+                self.work_dir, "logs", "toth-bela_10__log.txt")
+            shutil.copyfile(workdir_output, reference_file_path)
+
         self.clearDir(self.work_dir)
 
         self.experiment.calculate_stim_properties = self.calculate_stim_properties
