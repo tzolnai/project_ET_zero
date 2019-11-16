@@ -247,7 +247,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
-        self.checkOutputFile(True)
+        self.checkOutputFile()
 
     def calculate_stim_properties_override_wrong_button(self):
         self.calculate_stim_properties_override()
