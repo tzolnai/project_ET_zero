@@ -27,6 +27,7 @@ from psychopy import monitors, visual, core, logging
 import asrt
 import psychopy_visual_mock as pvm
 import platform
+import pytest
 
 
 # ignore warnings comming from psychopy
