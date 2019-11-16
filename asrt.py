@@ -1869,7 +1869,7 @@ class Experiment:
                     self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
                 break
 
-    def run(self, full_screen=True, mouse_visible=False):
+    def run(self, full_screen=True, mouse_visible=False, window_gammaErrorPolicy='raise'):
         ensure_dir(os.path.join(self.workdir_path, "logs"))
         ensure_dir(os.path.join(self.workdir_path, "settings"))
 
@@ -1914,7 +1914,8 @@ class Experiment:
             win_type = 'pygame'
         else:
             win_type = 'pyglet'
-        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=full_screen, monitor=self.mymonitor, units="cm", winType=win_type) as self.mywindow:
+        with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=full_screen,
+                           monitor=self.mymonitor, units="cm", winType=win_type, gammaErrorPolicy=window_gammaErrorPolicy) as self.mywindow:
             self.mywindow.mouseVisible = mouse_visible
 
             # init eye-tracker if needed

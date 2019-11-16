@@ -215,7 +215,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
@@ -234,7 +234,7 @@ class integrationTest(unittest.TestCase):
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         with self.assertRaises(SystemExit):
-            self.experiment.run()
+            self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
@@ -245,7 +245,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
@@ -264,7 +264,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
@@ -275,7 +275,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True, 0.01)
 
@@ -287,7 +287,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
@@ -398,11 +398,11 @@ class integrationTest(unittest.TestCase):
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         with self.assertRaises(SystemExit):
-            self.experiment.run()
+            self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.experiment.presentation = self.presentation_override_unexpected_quit_continue
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
@@ -455,11 +455,11 @@ class integrationTest(unittest.TestCase):
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         with self.assertRaises(SystemExit):
-            self.experiment.run()
+            self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.experiment.presentation = self.presentation_override_unexpected_quit_continue
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile()
 
@@ -475,7 +475,7 @@ class integrationTest(unittest.TestCase):
         self.visual_mock = pvm.PsychoPyVisualMock()
 
         for i in range(1, 5):
-            self.experiment.run()
+            self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile()
 
@@ -487,7 +487,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True, 0.03)
 
@@ -511,7 +511,7 @@ class integrationTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.run()
+        self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
 
