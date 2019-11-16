@@ -40,7 +40,9 @@ def convert(raw_file_name, new_file_name):
 
     last_trial = "1"
     start_time = 0
+    end_time = 0
     start_time_found = False
+    end_time_found = False
     current_line = 1
     for line in raw_lines[1:]:
         if last_trial != line.split('\t')[trial_pos] or line == raw_lines[len(raw_lines) - 1]:
@@ -49,7 +51,9 @@ def convert(raw_file_name, new_file_name):
             new_file_data.write(line_to_write[:end_pos])
             new_file_data.write('\t')
 
-            if start_time_found:
+            if start_time_found and end_time_found:
+                new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
+            elif start_time_found:
                 end_time = int(line.split('\t')[time_stamp_pos])
                 new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
             else:
@@ -58,11 +62,16 @@ def convert(raw_file_name, new_file_name):
 
             last_trial = line.split('\t')[trial_pos]
             start_time_found = False
-        current_line += 1
+            end_time_found = False
 
         if line.split('\t')[trial_phase_pos] == "stimulus_on_screen" and not start_time_found:
             start_time = int(line.split('\t')[time_stamp_pos])
             start_time_found = True
+
+        if line.split('\t')[trial_phase_pos] == "after_reaction" and not end_time_found:
+            end_time = int(line.split('\t')[time_stamp_pos])
+            end_time_found = True
+        current_line += 1
 
     with codecs.open(new_file_name, 'w', encoding='utf-8') as new_output_file:
         new_output_file.write(new_file_data.getvalue())
