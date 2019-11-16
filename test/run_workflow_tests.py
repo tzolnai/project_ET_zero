@@ -34,7 +34,7 @@ if __name__ == "__main__":
     os.system('pytest show_basic_settings_dialog_test.py')
     os.system('pytest show_computer_and_display_settings_dialog_test.py')
     os.system('pytest show_epoch_and_block_settings_dialog_test.py')
-    #os.system('pytest show_feedback_test.py')
+    os.system('pytest show_feedback_test.py')
     os.system('pytest show_key_and_feedback_settings_dialog_test.py')
     os.system('pytest show_subject_attributes_dialog_test.py')
     os.system('pytest show_subject_continuation_dialog_test.py')

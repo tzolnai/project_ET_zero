@@ -68,7 +68,8 @@ class showFeedbackTest(unittest.TestCase):
                              allowGUI=True,
                              monitor=my_monitor,
                              winType=win_type,
-                             color='White')
+                             color='White',
+                             gammaErrorPolicy='ignore')
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
@@ -297,6 +298,7 @@ class showFeedbackTest(unittest.TestCase):
                                                           "Pontosságod a bejósolható elemeknél: N/A %\r\n"
                                                           "Átlagos reakcióidőd a bejósolható elemeknél: N/A másodperc\r\n\r\n\r\n")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testShowETFeedback(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
         experiment = asrt.Experiment("")
@@ -349,6 +351,7 @@ class showFeedbackTest(unittest.TestCase):
             self.assertEqualWithEOL(drawing_list[1].text, "+")
             self.assertEqualWithEOL(drawing_list[2].text, "A következő blokkra lépéshez néz a keresztre!")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testShowETFeedbackQuit(self):
         inst_and_feedback_path = self.constructFilePath("default.txt")
         experiment = asrt.Experiment("")
