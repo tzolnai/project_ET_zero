@@ -2,7 +2,7 @@
 
 To run all tests:
 - Install pytest: pip install pytest
-Run this command from \test folder: `pytest`
+- Run this command from \test folder: `pytest`
 
 To check test coverage:
 - Download pytest-cov: https://pypi.org/project/pytest-cov/
