@@ -941,12 +941,12 @@ class PersonDataHandler:
             if left_gaze_validity:
                 left_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(left_gaze_data_ADCS)
             else:
-                left_gaze_data_PCMCS = left_gaze_data_ADCS
+                left_gaze_data_PCMCS = (float('nan'), float('nan'))
 
             if right_gaze_validity:
                 right_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(right_gaze_data_ADCS)
             else:
-                right_gaze_data_PCMCS = right_gaze_data_ADCS
+                right_gaze_data_PCMCS = (float('nan'), float('nan'))
 
             left_pupil_diameter = data[3]['left_pupil_diameter']
             right_pupil_diameter = data[3]['right_pupil_diameter']

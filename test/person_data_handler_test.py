@@ -892,6 +892,133 @@ class personDataHandlerTest(unittest.TestCase):
                                                  str(stim_RT_date) + "\t"
                                                  "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t")
 
+    def testWriteRandomTrialOutputET(self):
+        output_file_path = self.constructFilePath("testWriteOutputET.txt")
+        person_data_handler = asrt.PersonDataHandler(
+            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.computer_name = "Laposka"
+        experiment.settings.monitor_width = 47.6
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.epochN = 5
+        experiment.settings.block_in_epochN = 5
+        experiment.subject_group = "group1"
+        experiment.subject_name = "alattomos-aladar"
+        experiment.subject_number = 333
+        experiment.subject_sex = "male"
+        experiment.subject_age = "25"
+        experiment.trial_phase = "stimulus_on_screen"
+        experiment.last_N = 0
+        experiment.last_RSI = "500.0"
+        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.PCodes = {1: '1st - 1234'}
+        experiment.stim_sessionN = {1: 1}
+        experiment.stimepoch = {1: 2}
+        experiment.stimblock = {1: 12}
+        experiment.stimtrial = {1: 21}
+        experiment.frame_rate = 59.1
+        experiment.frame_time = 16.56
+        experiment.frame_sd = 1.3
+        experiment.stimpr = {1: 'random'}
+        experiment.stimlist = {1: 1}
+        experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
+        experiment.mymonitor = self.my_monitor
+        experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
+
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_point_validity'] = 0
+        gazeData['right_gaze_point_validity'] = 0
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 0
+        gazeData['right_pupil_validity'] = 0
+
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
+        person_data_handler.flush_ET_data_to_output(experiment)
+
+        with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+                                                 "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
+                                                 "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
+                                                 "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
+                                                 "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
+                                                 "1,3\tblack\trandom\tlow\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\t0\t0\t3\t3\t0\t0\t10000\t"
+                                                 "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
+
+    def testWriteHighRandomTrialOutputET(self):
+        output_file_path = self.constructFilePath("testWriteOutputET.txt")
+        person_data_handler = asrt.PersonDataHandler(
+            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.computer_name = "Laposka"
+        experiment.settings.monitor_width = 47.6
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.epochN = 5
+        experiment.settings.block_in_epochN = 5
+        experiment.subject_group = "group1"
+        experiment.subject_name = "alattomos-aladar"
+        experiment.subject_number = 333
+        experiment.subject_sex = "male"
+        experiment.subject_age = "25"
+        experiment.trial_phase = "stimulus_on_screen"
+        experiment.last_N = 4
+        experiment.last_RSI = "500.0"
+        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.PCodes = {1: '1st - 1234'}
+        experiment.stim_sessionN = {3: 1, 4: 1, 5: 1}
+        experiment.stimepoch = {3: 1, 4: 1, 5: 1}
+        experiment.stimblock = {3: 1, 4: 1, 5: 1}
+        experiment.stimtrial = {3: 3, 4: 4, 5: 5}
+        experiment.stimlist = {3: 1, 4: 1, 5: 2}
+        experiment.stimpr = {3: "random", 4: "pattern", 5: "random"}
+        experiment.frame_rate = 59.1
+        experiment.frame_time = 16.56
+        experiment.frame_sd = 1.3
+        experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
+        experiment.mymonitor = self.my_monitor
+        experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
+
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 0
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
+
+        time_stamp = 10000
+
+        person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
+        person_data_handler.flush_ET_data_to_output(experiment)
+
+        with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+                                                 "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\tpattern_or_random\ttriplet_frequency\tstimulus\ttrial_phase\t"
+                                                 "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
+                                                 "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
+                                                 "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t1\t5\t500.0\t59,1\t16,56\t"
+                                                 "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\t1\t0\t3\t3\t1\t1\t10000\t"
+                                                 "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
