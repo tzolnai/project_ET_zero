@@ -56,19 +56,12 @@ class showFeedbackTest(unittest.TestCase):
         my_monitor.setSizePix([1366, 768])
         my_monitor.setWidth(29)
         my_monitor.saveMon()
-
-        if platform.system() == "Linux":
-            win_type = 'pygame'
-        else:
-            win_type = 'pyglet'
-
         return visual.Window(size=[1366, 768],
                              pos=[0, 0],
                              units='cm',
                              fullscr=False,
                              allowGUI=True,
                              monitor=my_monitor,
-                             winType=win_type,
                              color='White',
                              gammaErrorPolicy='ignore')
 

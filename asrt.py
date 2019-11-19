@@ -1910,12 +1910,8 @@ class Experiment:
 
         # init window
         self.monitor_settings()
-        if platform.system() == "Linux":
-            win_type = 'pygame'
-        else:
-            win_type = 'pyglet'
         with visual.Window(size=self.mymonitor.getSizePix(), color=self.colors['wincolor'], fullscr=full_screen,
-                           monitor=self.mymonitor, units="cm", winType=win_type, gammaErrorPolicy=window_gammaErrorPolicy) as self.mywindow:
+                           monitor=self.mymonitor, units="cm", gammaErrorPolicy=window_gammaErrorPolicy) as self.mywindow:
             self.mywindow.mouseVisible = mouse_visible
 
             # init eye-tracker if needed

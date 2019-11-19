@@ -63,18 +63,12 @@ class drawInstructionsTest(unittest.TestCase):
         my_monitor.setWidth(29)
         my_monitor.saveMon()
 
-        if platform.system() == "Linux":
-            win_type = 'pygame'
-        else:
-            win_type = 'pyglet'
-
         self.mywindow = visual.Window(size=[1366, 768],
                                       pos=[0, 0],
                                       units='cm',
                                       fullscr=False,
                                       allowGUI=True,
                                       monitor=my_monitor,
-                                      winType=win_type,
                                       color='White',
                                       gammaRamp=256,
                                       gammaErrorPolicy='ignore')

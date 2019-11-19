@@ -45,11 +45,8 @@ class EyeTrackingReplay():
                                4: (float(experiment.settings.asrt_distance) * 0.5, float(experiment.settings.asrt_distance) * 0.5)}
         experiment.colors = {'wincolor': 'White', 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
-        if platform.system() == "Linux":
-            win_type = 'pygame'
-        else:
-            win_type = 'pyglet'
-        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm", winType=win_type) as experiment.mywindow:
+
+        with visual.Window(size=experiment.mymonitor.getSizePix(), color=experiment.colors['wincolor'], fullscr=False, monitor=experiment.mymonitor, units="cm") as experiment.mywindow:
 
             stimP = visual.Circle(win=experiment.mywindow, radius=experiment.settings.asrt_size, units="cm",
                                   fillColor=experiment.colors['stimp'], lineColor=experiment.colors['linecolor'], pos=experiment.dict_pos[1])

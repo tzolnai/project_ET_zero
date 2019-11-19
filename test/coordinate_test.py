@@ -35,18 +35,12 @@ class coordinateTest(unittest.TestCase):
         self.my_monitor.setWidth(29)
         self.my_monitor.saveMon()
 
-        if platform.system() == "Linux":
-            win_type = 'pygame'
-        else:
-            win_type = 'pyglet'
-
         return visual.Window(size=[1366, 768],
                              pos=[0, 0],
                              units='cm',
                              fullscr=False,
                              allowGUI=True,
                              monitor=self.my_monitor,
-                             winType=win_type,
                              color='White',
                              gammaRamp=256,
                              gammaErrorPolicy='ignore')
