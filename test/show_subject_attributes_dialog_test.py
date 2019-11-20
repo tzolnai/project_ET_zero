@@ -134,9 +134,9 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             experiment.show_subject_attributes_dialog()
 
-    def testNoASRTSussions(self):
+    def testNoASRTSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['férfi', 25, '2nd', '1st', 'noPattern', '3rd', 'noPattern'])
+        gui_mock.addFieldValues(['férfi', 25, '5th', '6th', 'noPattern', '4th', 'noPattern'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -152,10 +152,10 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.PCodes),
                          experiment.settings.numsessions)
-        self.assertEqual(experiment.PCodes[1], "2nd - 1243")
-        self.assertEqual(experiment.PCodes[2], "1st - 1234")
+        self.assertEqual(experiment.PCodes[1], "5th - 1423")
+        self.assertEqual(experiment.PCodes[2], "6th - 1432")
         self.assertEqual(experiment.PCodes[3], "noPattern")
-        self.assertEqual(experiment.PCodes[4], "3rd - 1324")
+        self.assertEqual(experiment.PCodes[4], "4th - 1342")
         self.assertEqual(experiment.PCodes[5], "noPattern")
         self.assertEqual(experiment.subject_sex, "male")
         self.assertEqual(experiment.subject_age, "25")
@@ -176,6 +176,19 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[5].label, "Session 4 PCode")
         self.assertEqual(list_of_fields[6].label, "Session 5 PCode")
 
+    def testWrongSubjectNumber(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['férfi', "alma", '1st'])
+
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+
+        experiment.settings.numsessions = 1
+        experiment.settings.asrt_types = {}
+        experiment.settings.asrt_types[1] = "implicit"
+
+        with self.assertRaises(SystemExit):
+            experiment.show_subject_attributes_dialog()
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
