@@ -650,7 +650,7 @@ class presentationTest(unittest.TestCase):
             self.assertEqualWithEOL(feedback.text, "\r\n\r\nMost pihenhetsz egy kicsit.\r\n\r\n"
                                                    "Pontosságod általában: 91,66 %\r\n"
                                                    "Átlagos reakcióidőd: 0,0 másodperc\r\n"
-                                                   "Pontosságod a bejósolható elemeknél: 75,0 %\r\n"
+                                                   "Pontosságod a bejósolható elemeknél: 80,0 %\r\n"
                                                    "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
