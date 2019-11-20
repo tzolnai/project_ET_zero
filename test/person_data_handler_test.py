@@ -402,7 +402,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stim_sessionN = {0: 1}
         experiment.stimepoch = {0: 2}
         experiment.stimblock = {0: 12}
-        experiment.stimtrial = {0: 21}
+        experiment.stimtrial = {0: 2}
         stim_RSI = 0.123
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
@@ -426,10 +426,10 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
-                                                 "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
+                                                 "12\t2\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t")
+                                                 "Orange\tpattern\tnone\t321,2345\t0\t1\tz\t")
 
     def testWriteEmptyOutputET(self):
         output_file_path = self.constructFilePath("testWriteEmptyOutputET.txt")
@@ -457,7 +457,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
-        experiment.stimtrial = {1: 21}
+        experiment.stimtrial = {1: 1}
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
         experiment.frame_sd = 1.3
@@ -491,8 +491,8 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\thigh\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataWithBigLastN(self):
@@ -582,7 +582,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
-        experiment.stimtrial = {1: 21}
+        experiment.stimtrial = {1: 1}
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
         experiment.frame_sd = 1.3
@@ -616,8 +616,8 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\texplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\thigh\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\texplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataNoPatternASRT(self):
@@ -701,10 +701,10 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.asrt_types = {1: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_output_line = 12
-        experiment.stim_sessionN = {0: 1}
-        experiment.stimepoch = {0: 2}
-        experiment.stimblock = {0: 12}
-        experiment.stimtrial = {0: 21}
+        experiment.stim_sessionN = {1: 1}
+        experiment.stimepoch = {1: 2}
+        experiment.stimblock = {1: 1}
+        experiment.stimtrial = {1: 1}
         stim_RSI = 0.123
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
@@ -712,27 +712,27 @@ class personDataHandlerTest(unittest.TestCase):
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
         stimcolor = 'Orange'
-        experiment.stimpr = {0: 'pattern'}
+        experiment.stimpr = {1: 'pattern'}
         stimRT = 321.2345
         stimACC = 0
-        experiment.stimlist = {0: 1}
+        experiment.stimlist = {1: 1}
         response = 'z'
-        N = 0
+        N = 1
 
         person_data_handler.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date, stimRT,
                                                        stimACC, response, stimcolor, experiment.stim_output_line])
         person_data_handler.flush_RT_data_to_output(experiment)
 
         experiment.stim_output_line = 13
-        experiment.stimtrial[0] = 22
+        experiment.stimtrial[1] = 2
         stim_RSI = 0.111
         stim_RT_time = time.strftime('%H:%M:%S')
         stim_RT_date = time.strftime('%d/%m/%Y')
         stimcolor = 'Green'
-        experiment.stimpr[0] = 'random'
+        experiment.stimpr[1] = 'random'
         stimRT = 523.2345
         stimACC = 1
-        experiment.stimlist[0] = 2
+        experiment.stimlist[1] = 2
         response = 'b'
 
         person_data_handler.output_data_buffer.append([N, stim_RSI, stim_RT_time, stim_RT_date, stimRT,
@@ -744,15 +744,15 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
-                                                 "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
+                                                 "1\t1\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t\n"
+                                                 "Orange\tpattern\tnone\t321,2345\t0\t1\tz\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t13\t1\t2\t"
-                                                 "12\t22\t0,111\t59,1\t16,56\t1,3\t" +
+                                                 "1\t2\t0,111\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Green\trandom\tlow\t523,2345\t1\t2\tb\t")
+                                                 "Green\trandom\tnone\t523,2345\t1\t2\tb\t")
 
     def testWriteExistingOutputET(self):
         output_file_path = self.constructFilePath("testWriteExistingOutputET.txt")
@@ -778,9 +778,9 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.asrt_types = {1: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_sessionN = {1: 1}
-        experiment.stimepoch = {1: 2}
+        experiment.stimepoch = {1: 1}
         experiment.stimblock = {1: 12}
-        experiment.stimtrial = {1: 21}
+        experiment.stimtrial = {1: 2}
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
         experiment.frame_sd = 1.3
@@ -805,10 +805,10 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.output_data_buffer.append([experiment.last_N, experiment.last_RSI, experiment.trial_phase, gazeData, time_stamp])
         person_data_handler.flush_ET_data_to_output(experiment)
 
-        experiment.stimtrial[0] = 22
+        experiment.stimtrial = {1: 2}
         experiment.colors = {'wincolor': 'Green', 'linecolor': 'Green', 'stimp': 'Green', 'stimr': 'Green'}
-        experiment.stimpr[0] = 'random'
-        experiment.stimlist[0] = 2
+        experiment.stimpr[1] = 'random'
+        experiment.stimlist[1] = 2
         experiment.last_RSI = "123.4"
 
         gazeData = {}
@@ -835,11 +835,11 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\thigh\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t500.0\t59,1\t16,56\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t123.4\t59,1\t16,56\t"
-                                                 "1,3\tGreen\tpattern\thigh\t1\tstimulus_on_screen\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t123.4\t59,1\t16,56\t"
+                                                 "1,3\tGreen\trandom\tnone\t2\tstimulus_on_screen\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t"
                                                  "True\tTrue\tnan\tnan\tFalse\tFalse\t10000\t-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testPointInComputerNameOrDate(self):
@@ -863,7 +863,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stim_sessionN = {0: 1}
         experiment.stimepoch = {0: 2}
         experiment.stimblock = {0: 12}
-        experiment.stimtrial = {0: 21}
+        experiment.stimtrial = {0: 1}
         stim_RSI = 0.123
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
@@ -887,10 +887,10 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "I. Richárd\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
-                                                 "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
+                                                 "12\t1\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
-                                                 "Orange\tpattern\thigh\t321,2345\t0\t1\tz\t")
+                                                 "Orange\tpattern\tnone\t321,2345\t0\t1\tz\t")
 
     def testWriteRandomTrialOutputET(self):
         output_file_path = self.constructFilePath("testWriteOutputET.txt")
@@ -918,7 +918,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
-        experiment.stimtrial = {1: 21}
+        experiment.stimtrial = {1: 1}
         experiment.frame_rate = 59.1
         experiment.frame_time = 16.56
         experiment.frame_sd = 1.3
@@ -952,8 +952,8 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\trandom\tlow\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\t0\t0\t3\t3\t0\t0\t10000\t"
+                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
+                                                 "1,3\tblack\trandom\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\t0\t0\t3\t3\t0\t0\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteHighRandomTrialOutputET(self):

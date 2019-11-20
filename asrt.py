@@ -1321,13 +1321,10 @@ class Experiment:
         PCode = self.which_code(session)
         if PCode == "noPattern" or self.stimtrial[N] < 3:
             return "none"
-        elif self.stimpr[N] == "pattern":
+        elif self.next_stim(session, self.stimlist[N - 2]) == self.stimlist[N]:
             return "high"
         else:
-            if N > 3 and self.stimtrial[N] >= 3 and self.next_stim(session, self.stimlist[N - 2]) == self.stimlist[N]:
-                return "high"
-            else:
-                return "low"
+            return "low"
 
     def calculate_stim_properties(self):
         """Calculate all variables used during the trials before the presentation starts."""
