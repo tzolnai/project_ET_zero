@@ -879,7 +879,7 @@ class PersonDataHandler:
                         'time',
 
                         'stimulus_color',
-                        'triplet_type_pr',
+                        'trial_type_pr',
                         'triplet_type_hl',
                         'RT',
                         'error',
@@ -1025,7 +1025,7 @@ class PersonDataHandler:
                         'frame_sd',
 
                         'stimulus_color',
-                        'triplet_type_pr',
+                        'trial_type_pr',
                         'triplet_type_hl',
                         'stimulus',
                         'trial_phase',

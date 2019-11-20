@@ -289,7 +289,7 @@ class OutputValidation(unittest.TestCase):
     def validate_pattern_random_and_trial_relation(self, data_table):
         print("Validate pattern/random...")
 
-        pr_column = data_table["triplet_type_pr"]
+        pr_column = data_table["trial_type_pr"]
         trial_column = data_table["trial"]
         self.assertTrue(len(pr_column) > 0)
         self.assertEqual(len(pr_column), len(trial_column))
@@ -307,7 +307,7 @@ class OutputValidation(unittest.TestCase):
 
         high_low_column = data_table["triplet_type_hl"]
         trial_column = data_table["trial"]
-        pr_column = data_table["triplet_type_pr"]
+        pr_column = data_table["trial_type_pr"]
         stimulus_column = data_table["stimulus"]
         self.assertTrue(len(high_low_column) > 0)
         self.assertEqual(len(high_low_column), len(trial_column))
@@ -343,7 +343,7 @@ class OutputValidation(unittest.TestCase):
     def validate_stimulus(self, data_table):
         print("Validate stimulus...")
 
-        pr_column = data_table["triplet_type_pr"]
+        pr_column = data_table["trial_type_pr"]
         stimulus_column = data_table["stimulus"]
         self.assertTrue(len(stimulus_column) > 0)
         self.assertEqual(len(stimulus_column), len(pr_column))

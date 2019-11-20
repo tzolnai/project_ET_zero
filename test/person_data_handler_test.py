@@ -328,7 +328,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
+                                                 "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
 
     def testAppendToEmptyOutputET(self):
         output_file_path = self.constructFilePath("testAppendToEmptyOutputET.txt")
@@ -340,7 +340,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -360,7 +360,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
 
     def testAppendMoreTimesToOutputET(self):
@@ -375,7 +375,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -424,7 +424,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
@@ -485,7 +485,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -549,7 +549,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -610,7 +610,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -674,7 +674,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -742,7 +742,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
@@ -829,7 +829,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -885,7 +885,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
-                                                 "date\ttime\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
+                                                 "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "I. Richárd\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t21\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
@@ -946,7 +946,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
@@ -1010,7 +1010,7 @@ class personDataHandlerTest(unittest.TestCase):
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
             self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
-                                                 "frame_time\tframe_sd\tstimulus_color\ttriplet_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
+                                                 "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
                                                  "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
