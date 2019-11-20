@@ -1,1 +1,1 @@
-computer_name	subject_group	subject_name	subject_number	subject_sex	subject_age	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	pattern_or_random	triplet_frequency	RT	error	stimulus	response	quit_log	userquit
+computer_name	subject_group	subject_name	subject_number	subject_sex	subject_age	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	triplet_type_pr	triplet_frequency	RT	error	stimulus	response	quit_log	userquit

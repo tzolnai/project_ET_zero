@@ -66,7 +66,7 @@ class EyeTrackingReplay():
             for line in output_lines[1:]:
 
                 trial_pos = output_lines[0].split('\t').index("trial")
-                pattern_random_pos = output_lines[0].split('\t').index("pattern_or_random")
+                pattern_random_pos = output_lines[0].split('\t').index("triplet_type_pr")
                 asrt_type_pos = output_lines[0].split('\t').index("asrt_type")
                 stimulus_pos = output_lines[0].split('\t').index("stimulus")
                 block_pos = output_lines[0].split('\t').index("block")
