@@ -805,16 +805,7 @@ class PersonDataHandler:
             session = experiment.stim_sessionN[N]
             PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
-            freq_high_low = ""
-            if PCode == "noPattern" or experiment.stimtrial[N] < 3:
-                freq_high_low = "none"
-            elif experiment.stimpr[N] == "pattern":
-                freq_high_low = "high"
-            else:
-                if N > 3 and experiment.stimtrial[N] >= 3 and experiment.next_stim(session, experiment.stimlist[N - 2]) == experiment.stimlist[N]:
-                    freq_high_low = "high"
-                else:
-                    freq_high_low = "low"
+            trial_type_high_low = experiment.calulate_trial_type_high_low(N)
 
             output_data = [experiment.settings.computer_name,
                            experiment.subject_group,
@@ -841,7 +832,7 @@ class PersonDataHandler:
 
                            data[7],
                            experiment.stimpr[N],
-                           freq_high_low,
+                           trial_type_high_low,
                            data[4],
                            data[5],
 
@@ -922,17 +913,7 @@ class PersonDataHandler:
             else:
                 stimcolor = experiment.colors['stimr']
 
-            freq_high_low = ""
-            if PCode == "noPattern" or experiment.stimtrial[N] < 3:
-                freq_high_low = "none"
-            elif experiment.stimpr[N] == "pattern":
-                freq_high_low = "high"
-            else:
-                if N > 3 and experiment.stimtrial[N] >= 3 and experiment.next_stim(session, experiment.stimlist[N - 2]) == experiment.stimlist[N]:
-                    freq_high_low = "high"
-                else:
-                    freq_high_low = "low"
-
+            trial_type_high_low = experiment.calulate_trial_type_high_low(N)
             left_gaze_data_ADCS = data[3]['left_gaze_point_on_display_area']
             right_gaze_data_ADCS = data[3]['right_gaze_point_on_display_area']
             left_gaze_validity = data[3]['left_gaze_point_validity']
@@ -976,7 +957,7 @@ class PersonDataHandler:
 
                            stimcolor,
                            experiment.stimpr[N],
-                           freq_high_low,
+                           trial_type_high_low,
                            experiment.stimlist[N],
                            data[2],
                            left_gaze_data_ADCS[0],
@@ -1334,6 +1315,19 @@ class Experiment:
         dict_next_stimulus[PCode[2]] = PCode[3]
         dict_next_stimulus[PCode[3]] = PCode[0]
         return int(dict_next_stimulus[str(stimulus)])
+
+    def calulate_trial_type_high_low(self, N):
+        session = self.stim_sessionN[N]
+        PCode = self.which_code(session)
+        if PCode == "noPattern" or self.stimtrial[N] < 3:
+            return "none"
+        elif self.stimpr[N] == "pattern":
+            return "high"
+        else:
+            if N > 3 and self.stimtrial[N] >= 3 and self.next_stim(session, self.stimlist[N - 2]) == self.stimlist[N]:
+                return "high"
+            else:
+                return "low"
 
     def calculate_stim_properties(self):
         """Calculate all variables used during the trials before the presentation starts."""
