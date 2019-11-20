@@ -1,12 +1,12 @@
 ### Testing
 
 To run all tests:
-- Install pytest: pip install pytest
-- Run this command from \test folder: `pytest`
+- Install pytest: `pip install pytest`
+- Run this command `pytest`
 
 To check test coverage:
-- Download pytest-cov: https://pypi.org/project/pytest-cov/
-- Run this command from \test folder: `pytest --cov=asrt`
+- Install pytest-cov: `pip install pytest-cov`
+- Run this command: `pytest --cov=asrt`
 
 To check uncovered lines:
 - Run this command: `pytest --cov-report term-missing --cov=asrt`
