@@ -28,10 +28,26 @@ import shutil
 import psychopy_visual_mock as pvm
 import psychopy_gui_mock as pgm
 from psychopy import visual, logging, core
+import random
 
 
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
+
+
+random_generator_g = 1
+
+def choice_mock(list):
+    global random_generator_g
+    if random_generator_g == 1:
+        random_generator_g = 2
+    elif random_generator_g == 2:
+        random_generator_g = 3
+    elif random_generator_g == 3:
+        random_generator_g = 4
+    else:
+        random_generator_g = 1
+    return random_generator_g
 
 
 def DummyFunction(*argv):
@@ -60,6 +76,10 @@ class integrationTest(unittest.TestCase):
         self.experiment.calculate_stim_properties = self.calculate_stim_properties_override
         self.frame_check = self.experiment.frame_check
         self.experiment.frame_check = self.frame_check_override
+
+        global random_generator_g
+        random_generator_g = 1
+        random.choice = choice_mock
 
         # override static period to avoid waiting time
         class DummyStaticPeriod:
@@ -160,7 +180,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
 
-    def checkOutputFile(self, check_timing=False, RSI_delta=0.002):
+    def checkOutputFile(self, check_timing=False):
         reference_file_path = os.path.join(
             self.current_dir, "reference", "toth-bela_10__log.txt")
         workdir_output = os.path.join(
@@ -203,21 +223,19 @@ class integrationTest(unittest.TestCase):
                         # RSI time, keep this low so the program will be precise inside a trial
                         self.assertAlmostEqual(
                             float(ref_values[13].replace(",", ".")),
-                            float(act_values[13].replace(",", ".")), delta=RSI_delta)
+                            float(act_values[13].replace(",", ".")), delta=0.002)
                     self.assertEqual(ref_values[14], act_values[14])  # frame_rate
                     self.assertEqual(ref_values[15], act_values[15])  # frame_time
                     self.assertEqual(ref_values[16], act_values[16])  # frame_sd
                     # date
                     # time
                     self.assertEqual(ref_values[19], act_values[19])  # stimulus color
-                    self.assertEqual(ref_values[20], act_values[20])  # PR
-                    # triplet_type_hl
-                    if ref_values[21] == "none" or ref_values[20] == "pattern":
-                        self.assertEqual(ref_values[21], act_values[21])
+                    self.assertEqual(ref_values[20], act_values[20])  # trial_type_pr
+                    self.assertEqual(ref_values[21], act_values[21])  # triplet_type_hl
                     self.assertEqual(ref_values[22], act_values[22])  # RT
                     self.assertEqual(ref_values[23], act_values[23])  # error
-                    # stimulus
-                    # response
+                    self.assertEqual(ref_values[24], act_values[24])  # stimulus
+                    self.assertEqual(ref_values[25], act_values[25])  # response
                     self.assertEqual(ref_values[26], act_values[26])  # quitlog
 
     def testSimpleTestCase(self):
@@ -289,7 +307,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
-        self.checkOutputFile(True, 0.01)
+        self.checkOutputFile()
 
     def testMoreSessions(self):
         # for setting participant data
@@ -501,7 +519,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
-        self.checkOutputFile(True, 0.03)
+        self.checkOutputFile()
 
     def calculate_stim_properties_override_RT(self):
         self.calculate_stim_properties_override()
@@ -526,6 +544,17 @@ class integrationTest(unittest.TestCase):
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
+
+    def testWithoutPrepTrials(self):
+        # for setting participant data
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile()
 
 
 if __name__ == "__main__":
