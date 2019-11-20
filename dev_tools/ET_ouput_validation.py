@@ -302,10 +302,10 @@ class OutputValidation(unittest.TestCase):
 
         print("OK")
 
-    def validate_triplet_frequency(self, data_table):
+    def validate_triplet_type_hl(self, data_table):
         print("Validate triplet frequency...")
 
-        high_low_column = data_table["triplet_frequency"]
+        high_low_column = data_table["triplet_type_hl"]
         trial_column = data_table["trial"]
         pr_column = data_table["triplet_type_pr"]
         stimulus_column = data_table["stimulus"]
@@ -406,7 +406,7 @@ class OutputValidation(unittest.TestCase):
         self.validate_frame_time(data_table)
         self.validate_frame_sd(data_table)
         self.validate_pattern_random_and_trial_relation(data_table)
-        self.validate_triplet_frequency(data_table)
+        self.validate_triplet_type_hl(data_table)
         self.validate_stimulus(data_table)
         # self.validate_RSI_interval_sampling(data_table)
 

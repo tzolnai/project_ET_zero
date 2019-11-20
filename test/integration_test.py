@@ -211,7 +211,7 @@ class integrationTest(unittest.TestCase):
                     # time
                     self.assertEqual(ref_values[19], act_values[19])  # stimulus color
                     self.assertEqual(ref_values[20], act_values[20])  # PR
-                    # triplet_frequency
+                    # triplet_type_hl
                     if ref_values[21] == "none" or ref_values[20] == "pattern":
                         self.assertEqual(ref_values[21], act_values[21])
                     self.assertEqual(ref_values[22], act_values[22])  # RT

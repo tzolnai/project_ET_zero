@@ -889,7 +889,7 @@ class PersonDataHandler:
 
                         'stimulus_color',
                         'triplet_type_pr',
-                        'triplet_frequency',
+                        'triplet_type_hl',
                         'RT',
                         'error',
                         'stimulus',
@@ -1045,7 +1045,7 @@ class PersonDataHandler:
 
                         'stimulus_color',
                         'triplet_type_pr',
-                        'triplet_frequency',
+                        'triplet_type_hl',
                         'stimulus',
                         'trial_phase',
                         'left_gaze_data_X_ADCS',

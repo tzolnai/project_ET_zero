@@ -1,4 +1,4 @@
-computer_name	subject_group	subject_name	subject_number	subject_sex	subject_age	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	triplet_type_pr	triplet_frequency	RT	error	stimulus	response	quit_log	
+computer_name	subject_group	subject_name	subject_number	subject_sex	subject_age	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	triplet_type_pr	triplet_type_hl	RT	error	stimulus	response	quit_log	
 Laposka		toth-bela	10	male	25	implicit	1324	1	1	1	1	1	0,0	60,0	0,0	0,0	19:10:41.517411	22/09/2019	Orange	random	low	500	0	2	2	
 Laposka		toth-bela	10	male	25	implicit	1324	2	1	1	1	2	0,0005615999980363995	60,0	0,0	0,0	19:10:41.517411	22/09/2019	Orange	random	low	600	0	3	3	
 Laposka		toth-bela	10	male	25	implicit	1324	3	1	1	1	3	0,0005868999869562685	60,0	0,0	0,0	19:10:41.517411	22/09/2019	Orange	random	low	200	0	1	1	
