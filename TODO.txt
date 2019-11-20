@@ -2,15 +2,10 @@ Ideas for improvements:
 use more input check and warning in settings dialog
 make that somehow clear that the set RSI won't be accurate (depends on refresh rate)
 make decimal point configurable (see replace(".", ",") lines)
-implement some basic output variable calculation in a post-process script (stimhl)
-use a bit more readable variable names (both in name and in output). e.g. bad naming example: stimpr and "PR" in output (can pattern_or_random or someting like that)
-might be a good idea to make consitent the output variable: session, epoch, block, trial, how they are calculated, as global serial number or as inner serial number
 store both converted user id and the user name without changes
 cleanup instructions, accent characters, ':' etc
 RT: last block's feedback, RT test (use clock object)
-optimize critical parts (getkeys, newdata), at least one sample for all trials
 output_line?
-move classes to separate lines
+move classes to separate files
 add integration tests also for ET experiments
 create a separate presentation method for RT and ET version
-trial_frequency -> trial type
