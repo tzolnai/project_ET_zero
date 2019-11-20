@@ -84,5 +84,6 @@ class calculateTripletTypeHighLowTest(unittest.TestCase):
         triplet_type = experiment.calulate_trial_type_high_low(4)
         self.assertEqual(triplet_type, "high")
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests

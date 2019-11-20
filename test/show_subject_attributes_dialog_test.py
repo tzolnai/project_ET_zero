@@ -190,5 +190,6 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             experiment.show_subject_attributes_dialog()
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests

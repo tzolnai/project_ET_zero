@@ -1020,5 +1020,6 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\t1\t0\t3\t3\t1\t1\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
