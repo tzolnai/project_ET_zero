@@ -97,7 +97,8 @@ class integrationTest(unittest.TestCase):
         core.StaticPeriod = DummyStaticPeriod
 
         # Change this variable to update all reference file
-        self.update_references = True
+        self.update_references = False
+        self.update_RSI_reference = False
 
     def tearDown(self):
         if self.update_references:
@@ -109,9 +110,16 @@ class integrationTest(unittest.TestCase):
             with codecs.open(workdir_output, 'r', encoding='utf-8') as workdir_output_file:
                 output_lines = workdir_output_file.readlines()
 
-            for i in range(len(output_lines)):
+            for i in range(1, len(output_lines)):
                 output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[17], "_")
                 output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[18], "_")
+
+            if not self.update_RSI_reference:
+                with codecs.open(reference_file_path, 'r', encoding='utf-8') as reference_file:
+                    ref_lines = reference_file.readlines()
+
+                for i in range(1, len(output_lines)):
+                    output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[13], ref_lines[i].split('\t')[13])
 
             with codecs.open(reference_file_path, 'w', encoding='utf-8') as reference_file:
                 for line in output_lines:
