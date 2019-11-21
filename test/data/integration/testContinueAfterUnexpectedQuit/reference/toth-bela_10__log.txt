@@ -1,31 +1,31 @@
 computer_name	subject_group	subject_name	subject_number	subject_sex	subject_age	asrt_type	PCode	output_line	session	epoch	block	trial	RSI_time	frame_rate	frame_time	frame_sd	date	time	stimulus_color	trial_type_pr	triplet_type_hl	RT	error	stimulus	response	quit_log	
-Laposka		toth-bela	10	male	25	implicit	1324	1	1	1	1	1	0,0	60,0	0,0	0,0	19:48:06.503810	20/11/2019	Orange	random	none	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	2	1	1	1	2	0,0005556000396609306	60,0	0,0	0,0	19:48:06.503810	20/11/2019	Orange	random	none	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	3	1	1	1	3	0,0005632000975310802	60,0	0,0	0,0	19:48:06.504809	20/11/2019	Orange	random	high	0,0	0	4	4	
-Laposka		toth-bela	10	male	25	implicit	1324	4	1	1	1	4	0,0008505999576300383	60,0	0,0	0,0	19:48:06.505811	20/11/2019	Orange	pattern	low	0,0	0	1	1	
-Laposka		toth-bela	10	male	25	implicit	1324	5	1	1	1	5	0,0005151999648660421	60,0	0,0	0,0	19:48:06.506809	20/11/2019	Orange	random	low	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	6	1	1	1	6	0,00047209998592734337	60,0	0,0	0,0	19:48:06.506809	20/11/2019	Orange	pattern	high	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	7	1	1	1	7	0,0004542999668046832	60,0	0,0	0,0	19:48:06.507807	20/11/2019	Orange	random	low	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	8	1	1	1	8	0,0004632000345736742	60,0	0,0	0,0	19:48:06.507807	20/11/2019	Orange	pattern	high	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	9	1	1	1	9	0,0004529000725597143	60,0	0,0	0,0	19:48:06.508806	20/11/2019	Orange	random	low	0,0	0	4	4	
-Laposka		toth-bela	10	male	25	implicit	1324	10	1	1	1	10	0,0004618000239133835	60,0	0,0	0,0	19:48:06.508806	20/11/2019	Orange	pattern	high	0,0	0	4	4	userquit
-Laposka		toth-bela	10	male	25	implicit	1324	11	1	1	2	1	0,0	60,0	0,0	0,0	19:48:07.021920	20/11/2019	Orange	random	none	0,0	0	1	1	
-Laposka		toth-bela	10	male	25	implicit	1324	12	1	1	2	2	0,0008563000010326505	60,0	0,0	0,0	19:48:07.022916	20/11/2019	Orange	random	none	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	13	1	1	2	3	0,0010081999935209751	60,0	0,0	0,0	19:48:07.023921	20/11/2019	Orange	random	high	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	14	1	1	2	4	0,000927999964915216	60,0	0,0	0,0	19:48:07.024918	20/11/2019	Orange	pattern	high	0,0	0	4	4	
-Laposka		toth-bela	10	male	25	implicit	1324	15	1	1	2	5	0,0006656999466940761	60,0	0,0	0,0	19:48:07.025917	20/11/2019	Orange	random	low	0,0	0	1	1	
-Laposka		toth-bela	10	male	25	implicit	1324	16	1	1	2	6	0,0005734000587835908	60,0	0,0	0,0	19:48:07.026917	20/11/2019	Orange	pattern	high	0,0	0	1	1	
-Laposka		toth-bela	10	male	25	implicit	1324	17	1	1	2	7	0,0004966000560671091	60,0	0,0	0,0	19:48:07.026917	20/11/2019	Orange	random	low	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	18	1	1	2	8	0,0005910000763833523	60,0	0,0	0,0	19:48:07.027913	20/11/2019	Orange	pattern	high	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	19	1	1	2	9	0,0007422000635415316	60,0	0,0	0,0	19:48:07.028918	20/11/2019	Orange	random	low	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	20	1	1	2	10	0,0005384000251069665	60,0	0,0	0,0	19:48:07.028918	20/11/2019	Orange	pattern	high	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	21	1	1	3	1	0,0	60,0	0,0	0,0	19:48:07.105346	20/11/2019	Orange	random	none	0,0	0	4	4	
-Laposka		toth-bela	10	male	25	implicit	1324	22	1	1	3	2	0,0004947999259456992	60,0	0,0	0,0	19:48:07.106345	20/11/2019	Orange	random	none	0,0	0	1	1	
-Laposka		toth-bela	10	male	25	implicit	1324	23	1	1	3	3	0,0004608000162988901	60,0	0,0	0,0	19:48:07.106345	20/11/2019	Orange	random	low	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	24	1	1	3	4	0,00048459996469318867	60,0	0,0	0,0	19:48:07.107344	20/11/2019	Orange	pattern	high	0,0	0	3	3	
-Laposka		toth-bela	10	male	25	implicit	1324	25	1	1	3	5	0,0004521000664681196	60,0	0,0	0,0	19:48:07.108343	20/11/2019	Orange	random	high	0,0	0	4	4	
-Laposka		toth-bela	10	male	25	implicit	1324	26	1	1	3	6	0,0005455000791698694	60,0	0,0	0,0	19:48:07.108343	20/11/2019	Orange	pattern	high	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	27	1	1	3	7	0,0004525999538600445	60,0	0,0	0,0	19:48:07.109343	20/11/2019	Orange	random	high	0,0	0	1	1	
-Laposka		toth-bela	10	male	25	implicit	1324	28	1	1	3	8	0,0004715999821200967	60,0	0,0	0,0	19:48:07.109343	20/11/2019	Orange	pattern	high	0,0	0	4	4	
-Laposka		toth-bela	10	male	25	implicit	1324	29	1	1	3	9	0,00045489997137337923	60,0	0,0	0,0	19:48:07.110342	20/11/2019	Orange	random	low	0,0	0	2	2	
-Laposka		toth-bela	10	male	25	implicit	1324	30	1	1	3	10	0,0004640999250113964	60,0	0,0	0,0	19:48:07.110342	20/11/2019	Orange	pattern	high	0,0	0	1	1	sessionend_planned_quit
+Laposka		toth-bela	10	male	25	implicit	1324	1	1	1	1	1	0,0	60,0	0,0	0,0	19:12:10.420115	20/11/2019	Orange	random	none	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	2	1	1	1	2	0,0005250000394880772	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	random	none	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	3	1	1	1	3	0,0005432000616565347	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	random	high	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	4	1	1	1	4	0,00082949991337955	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	random	low	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	5	1	1	1	5	0,0005330999847501516	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	random	low	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	6	1	1	1	6	0,0005321999778971076	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	pattern	high	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	7	1	1	1	7	0,00045489997137337923	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	random	low	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	8	1	1	1	8	0,00046989996917545795	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	pattern	high	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	9	1	1	1	9	0,00044680002611130476	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	random	low	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	10	1	1	1	10	0,00046739995013922453	60,0	0,0	0,0	19:12:10.435741	20/11/2019	Orange	pattern	high	0,0	0	4	4	userquit
+Laposka		toth-bela	10	male	25	implicit	1324	11	1	1	2	1	0,0	60,0	0,0	0,0	19:12:10.898546	20/11/2019	Orange	random	none	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	12	1	1	2	2	0,0010868000099435449	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	random	none	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	13	1	1	2	3	0,0009221000364050269	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	random	high	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	14	1	1	2	4	0,0009360000258311629	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	random	high	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	15	1	1	2	5	0,0009637000039219856	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	random	low	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	16	1	1	2	6	0,000992499990388751	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	pattern	high	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	17	1	1	2	7	0,0005291999550536275	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	random	low	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	18	1	1	2	8	0,0005149999633431435	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	pattern	high	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	19	1	1	2	9	0,0006746000144630671	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	random	low	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	20	1	1	2	10	0,0005054000066593289	60,0	0,0	0,0	19:12:10.914169	20/11/2019	Orange	pattern	high	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	21	1	1	3	1	0,0	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	none	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	22	1	1	3	2	0,0004795000422745943	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	none	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	23	1	1	3	3	0,0004558999789878726	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	low	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	24	1	1	3	4	0,00045389996375888586	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	high	0,0	0	3	3	
+Laposka		toth-bela	10	male	25	implicit	1324	25	1	1	3	5	0,0004520999500527978	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	high	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	26	1	1	3	6	0,0004762999014928937	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	pattern	high	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	27	1	1	3	7	0,00045279995538294315	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	high	0,0	0	1	1	
+Laposka		toth-bela	10	male	25	implicit	1324	28	1	1	3	8	0,0004681999562308192	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	pattern	high	0,0	0	4	4	
+Laposka		toth-bela	10	male	25	implicit	1324	29	1	1	3	9	0,00044730002991855145	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	random	low	0,0	0	2	2	
+Laposka		toth-bela	10	male	25	implicit	1324	30	1	1	3	10	0,0004651999333873391	60,0	0,0	0,0	19:12:11.007917	20/11/2019	Orange	pattern	high	0,0	0	1	1	sessionend_planned_quit

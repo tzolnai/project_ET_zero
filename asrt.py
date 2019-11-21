@@ -1375,8 +1375,6 @@ class Experiment:
                     if current_trial_num % 2 == mod_pattern and asrt_type != "noASRT":
                         if current_trial_num > 2:
                             current_stim = self.next_stim(self.stim_sessionN[all_trial_Nr], self.stimlist[all_trial_Nr - 2])
-                            if self.stimpr[all_trial_Nr - 2] == "random":
-                                self.stimpr[all_trial_Nr - 2] = "pattern"
                         else:
                             # first pattern stim is random
                             current_stim = random.choice([1, 2, 3, 4])
