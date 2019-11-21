@@ -29,6 +29,7 @@ import psychopy_visual_mock as pvm
 import psychopy_gui_mock as pgm
 from psychopy import visual, logging, core
 import random
+from datetime import datetime
 
 
 # ignore warnings comming from psychopy
@@ -227,8 +228,8 @@ class integrationTest(unittest.TestCase):
                     self.assertEqual(ref_values[14], act_values[14])  # frame_rate
                     self.assertEqual(ref_values[15], act_values[15])  # frame_time
                     self.assertEqual(ref_values[16], act_values[16])  # frame_sd
-                    # date
-                    # time
+                    datetime.strptime(act_values[17], '%H:%M:%S.%f')  # date
+                    datetime.strptime(act_values[18], '%d/%m/%Y')  # time
                     self.assertEqual(ref_values[19], act_values[19])  # stimulus color
                     self.assertEqual(ref_values[20], act_values[20])  # trial_type_pr
                     self.assertEqual(ref_values[21], act_values[21])  # triplet_type_hl
