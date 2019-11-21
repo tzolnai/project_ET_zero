@@ -393,7 +393,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         for i in range(len(experiment.stimpr)):
             trial_num_in_block = i % (
                 experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
-            if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
+            if trial_num_in_block > experiment.settings.blockprepN and trial_num_in_block > 1 and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
                 self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
                 self.assertEqual(experiment.stimpr[i + 1], "random")
