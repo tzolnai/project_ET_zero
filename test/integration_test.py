@@ -30,6 +30,7 @@ import psychopy_gui_mock as pgm
 from psychopy import visual, logging, core
 import random
 from datetime import datetime
+import codecs
 
 
 # ignore warnings comming from psychopy
@@ -96,7 +97,7 @@ class integrationTest(unittest.TestCase):
         core.StaticPeriod = DummyStaticPeriod
 
         # Change this variable to update all reference file
-        self.update_references = False
+        self.update_references = True
 
     def tearDown(self):
         if self.update_references:
@@ -104,7 +105,17 @@ class integrationTest(unittest.TestCase):
                 self.current_dir, "reference", "toth-bela_10__log.txt")
             workdir_output = os.path.join(
                 self.work_dir, "logs", "toth-bela_10__log.txt")
-            shutil.copyfile(workdir_output, reference_file_path)
+
+            with codecs.open(workdir_output, 'r', encoding='utf-8') as workdir_output_file:
+                output_lines = workdir_output_file.readlines()
+
+            for i in range(len(output_lines)):
+                output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[17], "_")
+                output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[18], "_")
+
+            with codecs.open(reference_file_path, 'w', encoding='utf-8') as reference_file:
+                for line in output_lines:
+                    reference_file.write(line)
 
         self.clearDir(self.work_dir)
 
@@ -182,6 +193,9 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_rate = 60.0
 
     def checkOutputFile(self, check_timing=False):
+        if self.update_references:
+            return
+
         reference_file_path = os.path.join(
             self.current_dir, "reference", "toth-bela_10__log.txt")
         workdir_output = os.path.join(
