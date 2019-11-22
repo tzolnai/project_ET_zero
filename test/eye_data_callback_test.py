@@ -206,6 +206,37 @@ class eyeDataCallBackTest(unittest.TestCase):
         thread.join()
         self.assertTrue(not thread.is_alive())
 
+    def testLotsOfInvalidData(self):
+        experiment = asrt.Experiment("")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.stim_sampling_window = 8
+        experiment.settings.instruction_sampling_window = 36
+        experiment.last_N = 10
+        experiment.last_RSI = 400.0
+        experiment.trial_phase = "before_stimulus"
+
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+
+        clock = core.Clock()
+        for i in range(100):
+            experiment.eye_data_callback(gazeData)
+
+        self.assertEqual(len(experiment.gaze_data_list), experiment.settings.instruction_sampling_window)
+
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_point_validity'] = 0
+        gazeData['right_gaze_point_validity'] = 0
+        for i in range(100):
+            experiment.eye_data_callback(gazeData)
+        self.assertEqual(len(experiment.gaze_data_list), 0)
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
