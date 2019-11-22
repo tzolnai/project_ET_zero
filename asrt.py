@@ -1605,7 +1605,7 @@ class Experiment:
 
         return whatnow
 
-    def show_feedback_ET(self, RT_all_list):
+    def show_feedback_ET(self, RT_all_list, end_of_session):
         """ Display feedback in the end of the blocks, showing some data about reaction time."""
 
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
@@ -1617,13 +1617,17 @@ class Experiment:
         # wait some time
         core.wait(10.0)
 
-        self.fixation_cross.draw()
-        self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
-        response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_sampling_window)
-        if response == -1:
-            return 'quit'
+        if not end_of_session:
+            self.fixation_cross.draw()
+            self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
+            response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_sampling_window)
+            if response == -1:
+                return 'quit'
+            else:
+                return 'continue'
         else:
             return 'continue'
+
         return whatnow
 
     def wait_for_response(self, expected_response, response_clock):
@@ -1835,7 +1839,7 @@ class Experiment:
                     whatnow = self.show_feedback_RT(N, number_of_patterns, patternERR, responses_in_block,
                                                     accs_in_block, RT_all_list, RT_pattern_list)
                 else:
-                    whatnow = self.show_feedback_ET(RT_all_list)
+                    whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
 
                 if whatnow == 'quit':
                     if N >= 1:
