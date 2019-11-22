@@ -916,8 +916,8 @@ class PersonDataHandler:
             trial_type_high_low = experiment.calulate_trial_type_high_low(N)
             left_gaze_data_ADCS = data[3]['left_gaze_point_on_display_area']
             right_gaze_data_ADCS = data[3]['right_gaze_point_on_display_area']
-            left_gaze_validity = data[3]['left_gaze_point_validity']
-            right_gaze_validity = data[3]['right_gaze_point_validity']
+            left_gaze_validity = bool(data[3]['left_gaze_point_validity'])
+            right_gaze_validity = bool(data[3]['right_gaze_point_validity'])
 
             if left_gaze_validity:
                 left_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(left_gaze_data_ADCS)
@@ -931,8 +931,8 @@ class PersonDataHandler:
 
             left_pupil_diameter = data[3]['left_pupil_diameter']
             right_pupil_diameter = data[3]['right_pupil_diameter']
-            left_pupil_validity = data[3]['left_pupil_validity']
-            right_pupil_validity = data[3]['right_pupil_validity']
+            left_pupil_validity = bool(data[3]['left_pupil_validity'])
+            right_pupil_validity = bool(data[3]['right_pupil_validity'])
 
             output_data = [experiment.settings.computer_name,
                            experiment.mymonitor.getSizePix()[0],

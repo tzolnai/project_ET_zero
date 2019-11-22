@@ -470,12 +470,12 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['left_gaze_point_validity'] = True
-        gazeData['right_gaze_point_validity'] = True
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
         gazeData['right_pupil_diameter'] = 3
-        gazeData['left_pupil_validity'] = True
-        gazeData['right_pupil_validity'] = True
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
 
         time_stamp = 10000
 
@@ -534,12 +534,12 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['left_gaze_point_validity'] = True
-        gazeData['right_gaze_point_validity'] = True
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
         gazeData['right_pupil_diameter'] = 3
-        gazeData['left_pupil_validity'] = True
-        gazeData['right_pupil_validity'] = True
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
 
         time_stamp = 10000
 
@@ -595,12 +595,12 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['left_gaze_point_validity'] = True
-        gazeData['right_gaze_point_validity'] = True
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
         gazeData['right_pupil_diameter'] = 3
-        gazeData['left_pupil_validity'] = True
-        gazeData['right_pupil_validity'] = True
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
 
         time_stamp = 10000
 
@@ -659,12 +659,12 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['left_gaze_point_validity'] = True
-        gazeData['right_gaze_point_validity'] = True
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
         gazeData['right_pupil_diameter'] = 3
-        gazeData['left_pupil_validity'] = True
-        gazeData['right_pupil_validity'] = True
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
 
         time_stamp = 10000
 
@@ -793,12 +793,12 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['left_gaze_point_validity'] = True
-        gazeData['right_gaze_point_validity'] = True
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
         gazeData['right_pupil_diameter'] = 3
-        gazeData['left_pupil_validity'] = True
-        gazeData['right_pupil_validity'] = True
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
 
         time_stamp = 10000
 
@@ -814,12 +814,12 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.75, 0.75)
         gazeData['right_gaze_point_on_display_area'] = (0.25, 0.25)
-        gazeData['left_gaze_point_validity'] = True
-        gazeData['right_gaze_point_validity'] = True
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = float('nan')
         gazeData['right_pupil_diameter'] = float('nan')
-        gazeData['left_pupil_validity'] = False
-        gazeData['right_pupil_validity'] = False
+        gazeData['left_pupil_validity'] = 0
+        gazeData['right_pupil_validity'] = 0
 
         time_stamp = 10000
 
@@ -953,7 +953,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\trandom\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\t0\t0\t3\t3\t0\t0\t10000\t"
+                                                 "1,3\tblack\trandom\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\tFalse\tFalse\t3\t3\tFalse\tFalse\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteHighRandomTrialOutputET(self):
@@ -1017,7 +1017,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t1\t5\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\t1\t0\t3\t3\t1\t1\t10000\t"
+                                                 "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\tTrue\tFalse\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
 
