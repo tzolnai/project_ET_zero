@@ -39,6 +39,7 @@ logging.console.setLevel(logging.ERROR)
 
 random_generator_g = 1
 
+
 def choice_mock(list):
     global random_generator_g
     if random_generator_g == 1:
@@ -200,7 +201,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
 
-    def checkOutputFile(self, check_timing=False):
+    def checkOutputFile(self, timing_small_delta=False):
         if self.update_references:
             return
 
@@ -242,11 +243,9 @@ class integrationTest(unittest.TestCase):
                     self.assertEqual(ref_values[10], act_values[10])  # epoch
                     self.assertEqual(ref_values[11], act_values[11])  # block
                     self.assertEqual(ref_values[12], act_values[12])  # trial
-                    if check_timing:
-                        # RSI time, keep this low so the program will be precise inside a trial
-                        self.assertAlmostEqual(
-                            float(ref_values[13].replace(",", ".")),
-                            float(act_values[13].replace(",", ".")), delta=0.002)
+                    self.assertAlmostEqual(
+                        float(ref_values[13].replace(",", ".")),
+                        float(act_values[13].replace(",", ".")), delta=(0.002 if timing_small_delta else 0.1))
                     self.assertEqual(ref_values[14], act_values[14])  # frame_rate
                     self.assertEqual(ref_values[15], act_values[15])  # frame_time
                     self.assertEqual(ref_values[16], act_values[16])  # frame_sd
