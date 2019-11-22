@@ -1468,7 +1468,8 @@ class Experiment:
                 if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
                     self.gaze_data_list.pop(0)
             else:
-                self.gaze_data_list.pop(0)
+                if len(self.gaze_data_list) > 0:
+                    self.gaze_data_list.pop(0)
 
             self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
 
