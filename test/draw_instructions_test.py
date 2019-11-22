@@ -803,7 +803,7 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
         self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
-                                                      "Az előző blokkokban mért reakcióidők:\n\n"
+                                                      "Az előző blokkokban mért átlagos reakcióidők:\n\n"
                                                       "1. blokk: 0.423 másodperc.\n\n"
                                                       "2. blokk: 0.543 másodperc.\n\n")
 
@@ -830,7 +830,7 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
         self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
-                                                      "Az előző blokkokban mért reakcióidők:\n\n"
+                                                      "Az előző blokkokban mért átlagos reakcióidők:\n\n"
                                                       "9. blokk: 0.423 másodperc.\n\n"
                                                       "10. blokk: 0.543 másodperc.\n\n")
 
@@ -857,7 +857,7 @@ class drawInstructionsTest(unittest.TestCase):
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
         self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
-                                                      "Az előző blokkokban mért reakcióidők:\n\n"
+                                                      "Az előző blokkokban mért átlagos reakcióidők:\n\n"
                                                       "6. blokk: 0.601 másodperc.\n\n"
                                                       "7. blokk: 0.213 másodperc.\n\n"
                                                       "8. blokk: 0.934 másodperc.\n\n"

@@ -32,6 +32,7 @@ A feladat indításához néz a keresztre!
 ending#
 
 Vége a kísérletnek!
+Köszönjük a részvételt!
 
 ***
 

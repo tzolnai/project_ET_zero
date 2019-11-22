@@ -336,7 +336,7 @@ class showFeedbackTest(unittest.TestCase):
             self.assertEqual(len(drawing_list), 3)
 
             self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
-                                                          "Az előző blokkokban mért reakcióidők:\n\n"
+                                                          "Az előző blokkokban mért átlagos reakcióidők:\n\n"
                                                           "6. blokk: 0,213 másodperc.\n\n"
                                                           "7. blokk: 0,934 másodperc.\n\n"
                                                           "8. blokk: 0,912 másodperc.\n\n"
@@ -378,7 +378,7 @@ class showFeedbackTest(unittest.TestCase):
             self.assertEqual(len(drawing_list), 3)
 
             self.assertEqualWithEOL(drawing_list[0].text, "Most pihenhetsz egy kicsit.\n\n"
-                                                          "Az előző blokkokban mért reakcióidők:\n\n"
+                                                          "Az előző blokkokban mért átlagos reakcióidők:\n\n"
                                                           "6. blokk: 0,213 másodperc.\n\n"
                                                           "7. blokk: 0,934 másodperc.\n\n"
                                                           "8. blokk: 0,912 másodperc.\n\n"
