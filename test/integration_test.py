@@ -342,7 +342,7 @@ class integrationTest(unittest.TestCase):
 
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
-        self.checkOutputFile(True)
+        self.checkOutputFile()
 
     def presentation_override(self):
         # There are some instructions first
