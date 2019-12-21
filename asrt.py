@@ -1468,12 +1468,12 @@ class Experiment:
         with self.shared_data_lock:
             if x_coord != None and y_coord != None:
                 self.gaze_data_list.append((x_coord, y_coord))
-                if len(self.gaze_data_list) > self.current_sampling_window:
-                    self.gaze_data_list.pop(0)
             else:
-                if len(self.gaze_data_list) > 0:
-                    self.gaze_data_list.pop(0)
+                self.gaze_data_list.append((None, None))
 
+            if len(self.gaze_data_list) > self.current_sampling_window * 2:
+                self.gaze_data_list.pop(0)
+                assert len(self.gaze_data_list) == self.current_sampling_window * 2
             self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
 
         if self.main_loop_lock.locked():
@@ -1521,12 +1521,22 @@ class Experiment:
 
                 last_item = self.gaze_data_list[-1]
 
-                # calculate avarage gage position
+                # calculate avarage gaze position
                 sum_x = 0
                 sum_y = 0
-                for pos in self.gaze_data_list[-sampling_window:]:
-                    sum_x += pos[0]
-                    sum_y += pos[1]
+                count = 0
+                for pos in reversed(self.gaze_data_list):
+                    if pos[0] != None and pos[1] != None:
+                        count += 1
+                        sum_x += pos[0]
+                        sum_y += pos[1]
+                    if count >= sampling_window:
+                        break
+
+                if count < sampling_window:
+                    continue
+
+                assert count == sampling_window
 
                 # we have the pos in eye-tracker's display area normalized coordinates
                 # and we need to convert it to psychopy cm coordinates

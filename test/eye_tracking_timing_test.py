@@ -34,8 +34,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 8
-        experiment.settings.instruction_sampling_window = 36
+        experiment.current_sampling_window = 8
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)

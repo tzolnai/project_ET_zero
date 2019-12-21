@@ -50,7 +50,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window * 2)
 
     def testWindowSize2(self):
         experiment = asrt.Experiment("")
@@ -71,7 +71,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window * 2)
         for gaze_data in experiment.gaze_data_list:
             self.assertEqual(gaze_data[0], 0.375)
             self.assertEqual(gaze_data[1], 0.45)
@@ -92,7 +92,9 @@ class eyeDataCallBackTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 0
 
         experiment.eye_data_callback(gazeData)
-        self.assertEqual(len(experiment.gaze_data_list), 0)
+        self.assertEqual(len(experiment.gaze_data_list), 1)
+        self.assertEqual(experiment.gaze_data_list[0][0], None)
+        self.assertEqual(experiment.gaze_data_list[0][1], None)
 
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (1.0, 1.0)
@@ -100,29 +102,29 @@ class eyeDataCallBackTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 1
 
         experiment.eye_data_callback(gazeData)
-        self.assertEqual(len(experiment.gaze_data_list), 1)
-        self.assertEqual(experiment.gaze_data_list[0][0], 0.75)
-        self.assertEqual(experiment.gaze_data_list[0][1], 0.75)
+        self.assertEqual(len(experiment.gaze_data_list), 2)
+        self.assertEqual(experiment.gaze_data_list[1][0], 0.75)
+        self.assertEqual(experiment.gaze_data_list[1][1], 0.75)
 
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (1.0, 1.0)
         gazeData['left_gaze_point_validity'] = 0
         gazeData['right_gaze_point_validity'] = 1
-
-        experiment.eye_data_callback(gazeData)
-        self.assertEqual(len(experiment.gaze_data_list), 2)
-        self.assertEqual(experiment.gaze_data_list[1][0], 1.0)
-        self.assertEqual(experiment.gaze_data_list[1][1], 1.0)
-
-        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['right_gaze_point_on_display_area'] = (1.0, 1.0)
-        gazeData['left_gaze_point_validity'] = 1
-        gazeData['right_gaze_point_validity'] = 0
 
         experiment.eye_data_callback(gazeData)
         self.assertEqual(len(experiment.gaze_data_list), 3)
-        self.assertEqual(experiment.gaze_data_list[2][0], 0.5)
-        self.assertEqual(experiment.gaze_data_list[2][1], 0.5)
+        self.assertEqual(experiment.gaze_data_list[2][0], 1.0)
+        self.assertEqual(experiment.gaze_data_list[2][1], 1.0)
+
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (1.0, 1.0)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 0
+
+        experiment.eye_data_callback(gazeData)
+        self.assertEqual(len(experiment.gaze_data_list), 4)
+        self.assertEqual(experiment.gaze_data_list[3][0], 0.5)
+        self.assertEqual(experiment.gaze_data_list[3][1], 0.5)
 
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (1.0, 1.0)
@@ -130,7 +132,9 @@ class eyeDataCallBackTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 0
 
         experiment.eye_data_callback(gazeData)
-        self.assertEqual(len(experiment.gaze_data_list), 2)
+        self.assertEqual(len(experiment.gaze_data_list), 5)
+        self.assertEqual(experiment.gaze_data_list[4][0], None)
+        self.assertEqual(experiment.gaze_data_list[4][1], None)
 
     def testDataListAppend(self):
         experiment = asrt.Experiment("")
@@ -219,7 +223,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window * 2)
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -228,7 +232,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 0
         for i in range(100):
             experiment.eye_data_callback(gazeData)
-        self.assertEqual(len(experiment.gaze_data_list), 0)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window * 2)
 
 
 if __name__ == "__main__":
