@@ -19,13 +19,15 @@
 import sys
 import os
 # Add the local path to the main script and external scripts so we can import them.
-sys.path = [".."] + sys.path
+sys.path = [".."] + \
+    [os.path.join("..", "externals", "psychopy_mock")] + sys.path
 
 import unittest
 import asrt
 import pytest
 from psychopy import core
 import threading
+import psychopy_visual_mock as pvm
 
 
 def DummyConvert(pos):
@@ -424,6 +426,41 @@ class waitForEyeResponseTest(unittest.TestCase):
 
         experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window)
 
+    def testMainLoopLockIsReleasedByQuit(self):
+        experiment = asrt.Experiment("")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.current_sampling_window = 8
+        experiment.last_N = 10
+        experiment.last_RSI = 400.0
+        experiment.trial_phase = "before_stimulus"
+        experiment.settings.AOI_size = 0.2
+        experiment.ADCS_to_PCMCS = DummyConvert
+
+        experiment.main_loop_lock.acquire()
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['q'])
+        experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window)
+
+        self.assertTrue(not experiment.main_loop_lock.locked())
+
+    def testMainLoopLockIsReleasedByQuit2(self):
+        experiment = asrt.Experiment("")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.current_sampling_window = 8
+        experiment.last_N = 10
+        experiment.last_RSI = 400.0
+        experiment.trial_phase = "before_stimulus"
+        experiment.settings.AOI_size = 0.2
+        experiment.ADCS_to_PCMCS = DummyConvert
+
+        visual_mock = pvm.PsychoPyVisualMock()
+        visual_mock.setReturnKeyList(['q'])
+        experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window)
+
+        self.assertTrue(not experiment.main_loop_lock.locked())
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
