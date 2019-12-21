@@ -33,7 +33,7 @@ import psychopy_visual_mock as pvm
 def DummyConvert(pos):
     return pos
 
-
+@pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
 class waitForEyeResponseTest(unittest.TestCase):
 
     def testWindowSize(self):
