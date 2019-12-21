@@ -39,7 +39,8 @@ class frameCheckTest(unittest.TestCase):
         my_monitor.saveMon()
         experiment = asrt.Experiment("")
 
-        with visual.Window(size=(screen.width, screen.height), color='white', monitor=my_monitor, fullscr=False, units="cm") as experiment.mywindow:
+        with visual.Window(size=(screen.width, screen.height), color='white', monitor=my_monitor, fullscr=False,
+                                 units="cm", gammaRamp=256, gammaErrorPolicy='ignore') as experiment.mywindow:
             experiment.mywindow.getMsPerFrame = lambda nFrames: (16.67, 1.0)
             experiment.mywindow.getActualFrameRate = lambda : 60.0
 
