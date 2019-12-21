@@ -1639,10 +1639,8 @@ class Experiment:
                 return 'quit'
             else:
                 return 'continue'
-        else:
-            return 'continue'
 
-        return whatnow
+        return 'continue'
 
     def wait_for_response(self, expected_response, response_clock):
         if self.settings.experiment_type == 'reaction-time':
