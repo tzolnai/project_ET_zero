@@ -310,7 +310,7 @@ class showFeedbackTest(unittest.TestCase):
             experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
                                                         color='black', pos=experiment.fixation_cross_pos)
             experiment.settings.instruction_sampling_window = 36
-            experiment.settings.stim_sampling_window = 8
+            experiment.current_sampling_window = 36
             experiment.settings.AOI_size = 1.0
             experiment.settings.monitor_width = 47.6
             experiment.monitor_settings()
@@ -363,7 +363,7 @@ class showFeedbackTest(unittest.TestCase):
             experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
                                                         color='black', pos=experiment.fixation_cross_pos)
             experiment.settings.instruction_sampling_window = 36
-            experiment.settings.stim_sampling_window = 8
+            experiment.current_sampling_window = 36
             experiment.settings.AOI_size = 1.0
             experiment.settings.monitor_width = 47.6
 
@@ -405,7 +405,7 @@ class showFeedbackTest(unittest.TestCase):
             experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
                                                         color='black', pos=experiment.fixation_cross_pos)
             experiment.settings.instruction_sampling_window = 36
-            experiment.settings.stim_sampling_window = 8
+            experiment.current_sampling_window = 36
             experiment.settings.AOI_size = 1.0
             experiment.settings.monitor_width = 47.6
             experiment.monitor_settings()

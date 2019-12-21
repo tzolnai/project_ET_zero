@@ -1082,9 +1082,12 @@ class Experiment:
         # tobii EyeTracker object for handling eye-tracker input
         self.eye_tracker = None
         self.gaze_data_list = []
+        self.current_sampling_window = None
         self.last_block_RTs = []
+
         self.fixation_cross_pos = None
         self.fixation_cross = None
+
         self.shared_data_lock = threading.Lock()
         self.main_loop_lock = threading.Lock()
 
@@ -1465,7 +1468,7 @@ class Experiment:
         with self.shared_data_lock:
             if x_coord != None and y_coord != None:
                 self.gaze_data_list.append((x_coord, y_coord))
-                if len(self.gaze_data_list) > max(self.settings.stim_sampling_window, self.settings.instruction_sampling_window):
+                if len(self.gaze_data_list) > self.current_sampling_window:
                     self.gaze_data_list.pop(0)
             else:
                 if len(self.gaze_data_list) > 0:
@@ -1695,6 +1698,8 @@ class Experiment:
 
         self.trial_phase = "before_stimulus"
         self.last_RSI = -1
+        
+        self.current_sampling_window = self.settings.instruction_sampling_window
 
         # start recording gaze data
         if self.eye_tracker is not None:
@@ -1713,6 +1718,8 @@ class Experiment:
             self.stim_bg(stimbg)
             self.mywindow.flip()
             with self.shared_data_lock:
+                self.current_sampling_window = self.settings.stim_sampling_window
+                self.gaze_data_list.clear()
                 self.last_N = N - 1
                 self.trial_phase = "before_stimulus"
                 self.last_RSI = -1
@@ -1824,6 +1831,8 @@ class Experiment:
                     self.last_N = N - 1
                     self.trial_phase = "before_stimulus"
                     self.last_RSI = -1
+                    self.current_sampling_window = self.settings.instruction_sampling_window
+                    self.gaze_data_list.clear()
 
                 if self.settings.experiment_type == 'reaction-time':
                     self.person_data.flush_RT_data_to_output(self)

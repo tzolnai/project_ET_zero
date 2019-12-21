@@ -35,8 +35,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 8
-        experiment.settings.instruction_sampling_window = 36
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -51,14 +50,13 @@ class eyeDataCallBackTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), experiment.settings.instruction_sampling_window)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
 
     def testWindowSize2(self):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 30
-        experiment.settings.instruction_sampling_window = 10
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -73,7 +71,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), experiment.settings.stim_sampling_window)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
         for gaze_data in experiment.gaze_data_list:
             self.assertEqual(gaze_data[0], 0.375)
             self.assertEqual(gaze_data[1], 0.45)
@@ -82,8 +80,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 30
-        experiment.settings.instruction_sampling_window = 10
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -139,8 +136,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 6
-        experiment.settings.instruction_sampling_window = 36
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -149,13 +145,13 @@ class eyeDataCallBackTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(0, 36):
+        for i in range(0, experiment.current_sampling_window):
             gazeData['right_gaze_point_on_display_area'] = (0.02 * i, 0.02 * i)
             gazeData['left_gaze_point_on_display_area'] = (0.03 * i, 0.03 * i)
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), 36)
-        for i in range(0, 36):
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
+        for i in range(0, experiment.current_sampling_window):
             self.assertAlmostEqual(experiment.gaze_data_list[i][0], 0.05 * i / 2.0, delta=0.0001)
             self.assertAlmostEqual(experiment.gaze_data_list[i][1], 0.05 * i / 2.0, delta=0.0001)
 
@@ -163,8 +159,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 6
-        experiment.settings.instruction_sampling_window = 36
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -184,8 +179,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 6
-        experiment.settings.instruction_sampling_window = 36
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -210,8 +204,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.stim_sampling_window = 8
-        experiment.settings.instruction_sampling_window = 36
+        experiment.current_sampling_window = 8
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -226,7 +219,7 @@ class eyeDataCallBackTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        self.assertEqual(len(experiment.gaze_data_list), experiment.settings.instruction_sampling_window)
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
