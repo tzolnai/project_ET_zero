@@ -18,10 +18,14 @@
 
 import os
 import shelve
+import sys
 
 
 def do_changes(settings_file):
-    settings_file['experiment_type'] = 'reaction-time'
+    settings_file['experiment_type'] = 'eye-tracking'
+    settings_file['AOI_size'] = 4.0
+    settings_file['stim_sampling_window'] = 8
+    settings_file['instruction_sampling_window'] = 36
 
 
 def migrate_setting_file(settings_path):
@@ -48,6 +52,7 @@ def migrate_recursively(root_dir):
 
 
 if __name__ == "__main__":
-    root_dir = os.path.split(os.path.abspath(__file__))[0]
-    (root_dir, trail) = os.path.split(root_dir)
-    migrate_recursively(root_dir)
+    if len(sys.argv) != 2:
+        print ("Error: You need to pass a absolute path as a command line parameter.")
+    else:
+        migrate_recursively(sys.argv[1])
