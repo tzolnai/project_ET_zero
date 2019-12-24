@@ -33,6 +33,7 @@ import psychopy_visual_mock as pvm
 def DummyConvert(pos):
     return pos
 
+
 @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
 class waitForEyeResponseTest(unittest.TestCase):
 
@@ -461,6 +462,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window)
 
         self.assertTrue(not experiment.main_loop_lock.locked())
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

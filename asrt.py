@@ -1706,7 +1706,7 @@ class Experiment:
 
         self.trial_phase = "before_stimulus"
         self.last_RSI = -1
-        
+
         self.current_sampling_window = self.settings.instruction_sampling_window
 
         # start recording gaze data

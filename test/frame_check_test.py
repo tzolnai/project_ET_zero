@@ -40,9 +40,9 @@ class frameCheckTest(unittest.TestCase):
         experiment = asrt.Experiment("")
 
         with visual.Window(size=(screen.width, screen.height), color='white', monitor=my_monitor, fullscr=False,
-                                 units="cm", gammaRamp=256, gammaErrorPolicy='ignore') as experiment.mywindow:
+                           units="cm", gammaRamp=256, gammaErrorPolicy='ignore') as experiment.mywindow:
             experiment.mywindow.getMsPerFrame = lambda nFrames: (16.67, 1.0)
-            experiment.mywindow.getActualFrameRate = lambda : 60.0
+            experiment.mywindow.getActualFrameRate = lambda: 60.0
 
             visual_mock = pvm.PsychoPyVisualMock()
             experiment.frame_check()
@@ -56,6 +56,7 @@ class frameCheckTest(unittest.TestCase):
 
             self.assertEqual(
                 drawing_list[0].text, "Adatok előkészítése folyamatban.\n\nEz eltarthat pár másodpercig.\n\nAddig semmit sem fogsz látni a képernyőn...")
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

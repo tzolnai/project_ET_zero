@@ -53,6 +53,6 @@ def migrate_recursively(root_dir):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print ("Error: You need to pass a absolute path as a command line parameter.")
+        print("Error: You need to pass a absolute path as a command line parameter.")
     else:
         migrate_recursively(sys.argv[1])
