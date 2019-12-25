@@ -422,5 +422,24 @@ class integrationETTest(unittest.TestCase):
 
         self.checkOutputFile(True)
 
+    def testContinueAfterQuitAtBlockEnd(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '3rd', 'Tóth Béla', 10])
+
+        keylist = []
+        for i in range(3 + 127):
+            keylist.append('c')
+        keylist.append('q')
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+        self.visual_mock.setReturnKeyList(keylist)
+
+        with self.assertRaises(SystemExit):
+            self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile()
+
 if __name__ == "__main__":
     unittest.main()  # run all tests

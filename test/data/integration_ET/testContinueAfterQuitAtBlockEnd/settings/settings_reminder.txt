@@ -1,0 +1,36 @@
+Beállítások
+
+Monitor Width: 	34,7
+Computer Name: 	Laposka
+Experiment type:	reaction-time
+Response keys: 	i, a, s, d.
+Quit key: 	l
+Warning (speed, accuracy): 	True
+Speed warning at:	67
+Acc warning at:	40
+Groups:	nincsenek csoportok
+Sessions:	2
+Epochs in sessions:	3, 2
+Blocks in epochs:	7
+Preparatory Trials\Block:	7
+Trials\Block:	120
+RSI:	0,4
+Asrt stim distance:	4,0
+Asrt stim size:	1,5
+Asrt stim color (implicit):	DarkBlue
+Asrt stim color (explicit, cued):	Fuchsia
+Background color:	Grey
+
+Az alábbi beállítások minden személyre érvényesek és irányadóak
+
+A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,
+az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,
+úgy az asrt.py és az instrukciókat tartalmazó inst_and_feedback.txt fájlt másold át egy,
+másik könyvtárba is, és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.
+
+Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő
+beállítások vannak elmentve.
+
+A settings/settings fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl
+törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,
+jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.
