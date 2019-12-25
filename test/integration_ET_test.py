@@ -360,5 +360,18 @@ class integrationTest(unittest.TestCase):
 
         self.checkOutputFile()
 
+    def testMoreSessionsSubsequently(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '5th', 'noPattern',
+                                 '1st', 'Tóth Béla', 10, 'Tóth Béla', 10,
+                                 'Tóth Béla', 10])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        for i in range(1, 5):
+            self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile()
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
