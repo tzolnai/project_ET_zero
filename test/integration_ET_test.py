@@ -28,7 +28,7 @@ import shutil
 import pytest
 import psychopy_visual_mock as pvm
 import psychopy_gui_mock as pgm
-from psychopy import visual, logging, core
+from psychopy import visual, logging, core, monitors
 import random
 from datetime import datetime
 import codecs
@@ -114,6 +114,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_check = self.frame_check_override
         self.experiment.wait_for_eye_response_original = self.experiment.wait_for_eye_response
         self.experiment.wait_for_eye_response = self.wait_for_eye_response_override
+        self.experiment.monitor_settings = self.monitor_settings_override
 
         global random_generator_g
         random_generator_g = 1
@@ -200,6 +201,11 @@ class integrationTest(unittest.TestCase):
         self.experiment.frame_time = 0.0
         self.experiment.frame_sd = 0.0
         self.experiment.frame_rate = 60.0
+
+    def monitor_settings_override(self):
+        self.experiment.mymonitor = monitors.Monitor('myMon')
+        self.experiment.mymonitor.setSizePix([1366, 768])
+        self.experiment.mymonitor.setWidth(29)
 
     def PCMCS_to_ADCS(self, pos_PCMCS):
         aspect_ratio = self.experiment.mymonitor.getSizePix()[1] / self.experiment.mymonitor.getSizePix()[0]
