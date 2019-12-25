@@ -95,7 +95,7 @@ def get_system_time_stamp_mock():
 
 
 @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
-class integrationTest(unittest.TestCase):
+class integrationETTest(unittest.TestCase):
 
     def setUp(self):
         # Init work directories
@@ -394,6 +394,18 @@ class integrationTest(unittest.TestCase):
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile()
+
+    def testQuitInsideABlock(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+        self.visual_mock.setReturnKeyList(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'q'])
+
+        with self.assertRaises(SystemExit):
+            self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile(True)
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
