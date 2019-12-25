@@ -407,5 +407,20 @@ class integrationETTest(unittest.TestCase):
 
         self.checkOutputFile(True)
 
+    def testContinueAfterUnexpectedQuit(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'Tóth Béla', 10])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+        self.visual_mock.setReturnKeyList(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c','c', 'c', 'c',
+                                           'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'q'])
+
+        with self.assertRaises(SystemExit):
+            self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile(True)
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
