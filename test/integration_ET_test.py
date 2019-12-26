@@ -452,5 +452,44 @@ class integrationETTest(unittest.TestCase):
 
         self.checkOutputFile()
 
+    def wait_for_eye_response_override_invalid_data(self, expected_eye_pos, sampling_window):
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+        gazeData['right_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
+
+        invalidGazeData = {}
+        invalidGazeData['left_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+        invalidGazeData['right_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+        invalidGazeData['left_gaze_point_validity'] = 0
+        invalidGazeData['right_gaze_point_validity'] = 0
+        invalidGazeData['left_pupil_diameter'] = 3
+        invalidGazeData['right_pupil_diameter'] = 3
+        invalidGazeData['left_pupil_validity'] = 0
+        invalidGazeData['right_pupil_validity'] = 0
+
+        for i in range(sampling_window):
+            self.experiment.eye_data_callback(gazeData)
+            self.experiment.eye_data_callback(invalidGazeData)
+
+        return self.experiment.wait_for_eye_response_original(expected_eye_pos, sampling_window)
+
+    def testInvalidGazeData(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+
+        self.experiment.wait_for_eye_response = self.wait_for_eye_response_override_invalid_data
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile(True)
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
