@@ -491,5 +491,41 @@ class integrationETTest(unittest.TestCase):
 
         self.checkOutputFile(True)
 
+    def wait_for_eye_response_override_averaging_data(self, expected_eye_pos, sampling_window):
+        gazeData = {}
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
+
+        for i in range(sampling_window):
+            eye_pos = self.PCMCS_to_ADCS(expected_eye_pos)
+            if i % 2 == 0:
+                eye_pos = (eye_pos[0] + 0.2, eye_pos[1] - 0.2)
+                gazeData['left_gaze_point_on_display_area'] = eye_pos
+                gazeData['right_gaze_point_on_display_area'] = eye_pos
+            else:
+                eye_pos = (eye_pos[0] - 0.2, eye_pos[1] + 0.2)
+                gazeData['left_gaze_point_on_display_area'] = eye_pos
+                gazeData['right_gaze_point_on_display_area'] = eye_pos
+
+            self.experiment.eye_data_callback(gazeData)
+
+        return self.experiment.wait_for_eye_response_original(expected_eye_pos, sampling_window)
+
+    def testGazeDataAveraging(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+
+        self.experiment.wait_for_eye_response = self.wait_for_eye_response_override_averaging_data
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile(True)
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
