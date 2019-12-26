@@ -29,6 +29,7 @@ import numbers
 from datetime import datetime
 from io import StringIO
 import threading
+import copy
 
 try:
     import tobii_research as tobii
@@ -1446,7 +1447,8 @@ class Experiment:
 
         self.eye_tracker = allTrackers[0]
 
-    def eye_data_callback(self, gazeData):
+    def eye_data_callback(self, origGazeData):
+        gazeData = copy.deepcopy(origGazeData)
         time_stamp = tobii.get_system_time_stamp()
         left_gaze_XY = gazeData['left_gaze_point_on_display_area']
         right_gaze_XY = gazeData['right_gaze_point_on_display_area']
@@ -1474,6 +1476,7 @@ class Experiment:
             if len(self.gaze_data_list) > self.current_sampling_window * 2:
                 self.gaze_data_list.pop(0)
                 assert len(self.gaze_data_list) == self.current_sampling_window * 2
+
             self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
 
         if self.main_loop_lock.locked():
