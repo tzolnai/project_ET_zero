@@ -289,7 +289,7 @@ class OutputValidation(unittest.TestCase):
     def validate_pattern_random_and_trial_relation(self, data_table):
         print("Validate pattern/random...")
 
-        pr_column = data_table["trial_type_pr"]
+        pr_column = data_table["pattern_or_random"]
         trial_column = data_table["trial"]
         self.assertTrue(len(pr_column) > 0)
         self.assertEqual(len(pr_column), len(trial_column))
@@ -345,8 +345,10 @@ class OutputValidation(unittest.TestCase):
 
         pr_column = data_table["pattern_or_random"]
         stimulus_column = data_table["stimulus"]
+        trial_column = data_table["trial"]
         self.assertTrue(len(stimulus_column) > 0)
         self.assertEqual(len(stimulus_column), len(pr_column))
+        self.assertEqual(len(stimulus_column), len(trial_column))
 
         PCode = str(data_table["PCode"][0])
         dict_next_stimulus = {}
@@ -359,7 +361,7 @@ class OutputValidation(unittest.TestCase):
         for i in range(len(stimulus_column)):
             self.assertTrue(stimulus_column[i] in [1, 2, 3, 4])
             if pr_column[i] == "pattern":
-                if i > 0 and stimulus_column[i] != last_pattern_stimulus:
+                if trial_column[i] > 1 and stimulus_column[i] != last_pattern_stimulus:
                     self.assertEqual(str(stimulus_column[i]), dict_next_stimulus[str(last_pattern_stimulus)])
                 last_pattern_stimulus = stimulus_column[i]
 
@@ -386,6 +388,150 @@ class OutputValidation(unittest.TestCase):
 
         print("OK")
 
+    def validate_trial_phase_local(self, data_table):
+        print("Validate trial phase local...")
+
+        trial_phase_column = data_table["trial_phase"]
+        self.assertTrue(len(trial_phase_column) > 0)
+
+        for i in range(len(trial_phase_column)):
+            self.assertTrue(trial_phase_column[i] in ["before_stimulus", "stimulus_on_screen", "after_reaction"])
+            if i > 0 and trial_phase_column[i] != trial_phase_column[i - 1]:
+                if trial_phase_column[i] == "before_stimulus":
+                    self.assertTrue(trial_phase_column[i - 1] == "after_reaction" or trial_phase_column[i - 1] == "stimulus_on_screen")
+                elif trial_phase_column[i] == "stimulus_on_screen":
+                    self.assertEqual(trial_phase_column[i - 1], "before_stimulus")
+                elif trial_phase_column[i] == "after_reaction":
+                    self.assertTrue(trial_phase_column[i - 1] == "before_stimulus" or trial_phase_column[i - 1] == "stimulus_on_screen")
+
+        print("OK")
+
+    def validate_trial_phase_global(self, data_table):
+        print("Validate trial phase global...")
+
+        trial_phase_column = data_table["trial_phase"]
+        RSI_column = data_table["RSI_time"]
+        self.assertTrue(len(trial_phase_column) > 0)
+        self.assertEqual(len(trial_phase_column), len(RSI_column))
+
+        for i in range(len(trial_phase_column)):
+            self.assertTrue(trial_phase_column[i] in ["before_stimulus", "stimulus_on_screen", "after_reaction"])
+            # in the begining of the trial we have before stimulus state
+            if RSI_column[i] == "-1":
+                self.assertEqual(trial_phase_column[i], "before_stimulus")
+            else:
+                self.assertTrue(trial_phase_column[i] in ["stimulus_on_screen", "after_reaction"])
+
+        print("OK")
+
+    def validate_gaze_data_ADCS_local(self, data_table):
+        print("Validate gaze data in ADCS (local)...")
+
+        for gaze_data_string in ["left_gaze_data_X_ADCS", "left_gaze_data_Y_ADCS", "right_gaze_data_X_ADCS", "right_gaze_data_Y_ADCS"]:
+            gaze_data_column = data_table[gaze_data_string]
+            self.assertEqual(len(data_table["left_gaze_data_X_ADCS"]), len(gaze_data_column))
+
+            for i in range(len(gaze_data_column)):
+                gaze_data = gaze_data_column[i]
+                if isinstance(gaze_data, str):
+                    self.assertTrue(float(gaze_data.replace(",", ".")) > -0.2)
+                    self.assertTrue(float(gaze_data.replace(",", ".")) < 2.2)
+                elif isinstance(gaze_data, float):
+                    self.assertTrue(math.isnan(gaze_data))
+
+        print("OK")
+
+    def validate_gaze_data_ADCS_global(self, data_table):
+        print("Validate gaze data in ADCS (global)...")
+
+        left_gaze_X_column = data_table["left_gaze_data_X_ADCS"]
+        left_gaze_Y_column = data_table["left_gaze_data_Y_ADCS"]
+        right_gaze_X_column = data_table["right_gaze_data_X_ADCS"]
+        right_gaze_Y_column = data_table["right_gaze_data_Y_ADCS"]
+
+        for i in range(len(left_gaze_X_column)):
+            left_gaze_X = left_gaze_X_column[i]
+            left_gaze_Y = left_gaze_Y_column[i]
+            right_gaze_X = right_gaze_X_column[i]
+            right_gaze_Y = right_gaze_Y_column[i]
+
+            self.assertEqual(isinstance(left_gaze_X, str), isinstance(left_gaze_Y, str))
+            self.assertEqual(isinstance(left_gaze_X, float), isinstance(left_gaze_Y, float))
+
+            self.assertEqual(isinstance(right_gaze_X, str), isinstance(right_gaze_Y, str))
+            self.assertEqual(isinstance(right_gaze_X, float), isinstance(right_gaze_Y, float))
+
+            if data_table["left_gaze_validity"][i]:
+                self.assertTrue(isinstance(left_gaze_X, str))
+                self.assertTrue(isinstance(left_gaze_Y, str))
+            else:
+                self.assertTrue(isinstance(left_gaze_X, float))
+                self.assertTrue(isinstance(left_gaze_Y, float))
+
+            if data_table["right_gaze_validity"][i]:
+                self.assertTrue(isinstance(right_gaze_X, str))
+                self.assertTrue(isinstance(right_gaze_Y, str))
+            else:
+                self.assertTrue(isinstance(right_gaze_X, float))
+                self.assertTrue(isinstance(right_gaze_Y, float))
+
+        print("OK")
+
+    def validate_gaze_data_PCMCS_local(self, data_table):
+        print("Validate gaze data in PCMCS (local)...")
+
+        monitor_width = 53.7
+
+        for gaze_data_string in ["left_gaze_data_X_PCMCS", "left_gaze_data_Y_PCMCS", "right_gaze_data_X_PCMCS", "right_gaze_data_Y_PCMCS"]:
+            gaze_data_column = data_table[gaze_data_string]
+            self.assertEqual(len(data_table["left_gaze_data_X_PCMCS"]), len(gaze_data_column))
+
+            for i in range(len(gaze_data_column)):
+                gaze_data = gaze_data_column[i]
+                if isinstance(gaze_data, str):
+                    self.assertTrue(float(gaze_data.replace(",", ".")) > -monitor_width)
+                    self.assertTrue(float(gaze_data.replace(",", ".")) < monitor_width)
+                elif isinstance(gaze_data, float):
+                    self.assertTrue(math.isnan(gaze_data))
+
+        print("OK")
+
+    def validate_gaze_data_PCMCS_global(self, data_table):
+        print("Validate gaze data in PCMCS (global)...")
+
+        left_gaze_X_column = data_table["left_gaze_data_X_PCMCS"]
+        left_gaze_Y_column = data_table["left_gaze_data_Y_PCMCS"]
+        right_gaze_X_column = data_table["right_gaze_data_X_PCMCS"]
+        right_gaze_Y_column = data_table["right_gaze_data_Y_PCMCS"]
+
+        for i in range(len(left_gaze_X_column)):
+            left_gaze_X = left_gaze_X_column[i]
+            left_gaze_Y = left_gaze_Y_column[i]
+            right_gaze_X = right_gaze_X_column[i]
+            right_gaze_Y = right_gaze_Y_column[i]
+
+            self.assertEqual(isinstance(left_gaze_X, str), isinstance(left_gaze_Y, str))
+            self.assertEqual(isinstance(left_gaze_X, float), isinstance(left_gaze_Y, float))
+
+            self.assertEqual(isinstance(right_gaze_X, str), isinstance(right_gaze_Y, str))
+            self.assertEqual(isinstance(right_gaze_X, float), isinstance(right_gaze_Y, float))
+
+            if data_table["left_gaze_validity"][i]:
+                self.assertTrue(isinstance(left_gaze_X, str))
+                self.assertTrue(isinstance(left_gaze_Y, str))
+            else:
+                self.assertTrue(isinstance(left_gaze_X, float))
+                self.assertTrue(isinstance(left_gaze_Y, float))
+
+            if data_table["right_gaze_validity"][i]:
+                self.assertTrue(isinstance(right_gaze_X, str))
+                self.assertTrue(isinstance(right_gaze_Y, str))
+            else:
+                self.assertTrue(isinstance(right_gaze_X, float))
+                self.assertTrue(isinstance(right_gaze_Y, float))
+
+        print("OK")
+
     def validate(self, file_name):
         data_table = pandas.read_csv(file_name, sep='\t')
 
@@ -409,6 +555,12 @@ class OutputValidation(unittest.TestCase):
         self.validate_triplet_type_hl(data_table)
         self.validate_stimulus(data_table)
         # self.validate_RSI_interval_sampling(data_table)
+        self.validate_trial_phase_local(data_table)
+        self.validate_trial_phase_global(data_table)
+        self.validate_gaze_data_ADCS_local(data_table)
+        self.validate_gaze_data_ADCS_global(data_table)
+        self.validate_gaze_data_PCMCS_local(data_table)
+        self.validate_gaze_data_PCMCS_global(data_table)
 
 
 if __name__ == "__main__":
