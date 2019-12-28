@@ -532,6 +532,127 @@ class OutputValidation(unittest.TestCase):
 
         print("OK")
 
+    def validate_pupil_data_local(self, data_table):
+        print("Validate pupil data (local)...")
+
+        for pupil_data_string in ["left_pupil_diameter", "right_pupil_diameter"]:
+            pupil_data_column = data_table[pupil_data_string]
+            self.assertEqual(len(data_table["left_pupil_diameter"]), len(data_table["right_pupil_diameter"]))
+
+            minus_pupil_counter = 0
+            for i in range(len(pupil_data_column)):
+                if i > 0 and data_table["trial"][i - 1] != data_table["trial"][i]:
+                    minus_pupil_counter = 0
+
+                pupil_data = pupil_data_column[i]
+                if isinstance(pupil_data, str):
+                    if pupil_data == "-1,0":
+                        minus_pupil_counter += 1
+                        self.assertTrue(minus_pupil_counter <= 2)
+                    else:
+                        self.assertTrue(float(pupil_data.replace(",", ".")) > 0.0)
+                        self.assertTrue(float(pupil_data.replace(",", ".")) < 5.0)
+                        minus_pupil_counter = 0
+                elif isinstance(pupil_data, float):
+                    self.assertTrue(math.isnan(pupil_data))
+                    minus_pupil_counter = 0
+
+        print("OK")
+
+    def validate_pupil_data_global(self, data_table):
+        print("Validate pupil data (global)...")
+
+        left_pupil_column = data_table["left_pupil_diameter"]
+        right_pupil_column = data_table["right_pupil_diameter"]
+
+        for i in range(len(left_pupil_column)):
+
+            if data_table["left_pupil_validity"][i]:
+                self.assertTrue(isinstance(left_pupil_column[i], str))
+            else:
+                self.assertTrue(isinstance(left_pupil_column[i], float))
+
+            if data_table["right_pupil_validity"][i]:
+                self.assertTrue(isinstance(right_pupil_column[i], str))
+            else:
+                self.assertTrue(isinstance(right_pupil_column[i], float))
+
+        print("OK")
+
+    def validate_validity_flag(self, data_table):
+        print("Validate validity flag...")
+
+        left_gaze_validity = data_table["left_gaze_validity"]
+        right_gaze_validity = data_table["right_gaze_validity"]
+        left_pupil_validity = data_table["left_pupil_validity"]
+        right_pupil_validity = data_table["right_pupil_validity"]
+
+        for i in range(len(left_gaze_validity)):
+            self.assertTrue(left_gaze_validity[i] in [0, 1])
+            self.assertTrue(right_gaze_validity[i] in [0, 1])
+            self.assertTrue(left_pupil_validity[i] in [0, 1])
+            self.assertTrue(right_pupil_validity[i] in [0, 1])
+
+            self.assertEqual(left_gaze_validity[i], left_pupil_validity[i])
+            self.assertEqual(right_gaze_validity[i], right_pupil_validity[i])
+
+        print("OK")
+
+    def validate_gaze_timestamp(self, data_table):
+        print("Validate gaze timesstamp...")
+
+        for timestamp in data_table["gaze_data_time_stamp"]:
+            self.assertTrue(timestamp > 0)
+            self.assertTrue(timestamp < 10000000000)
+
+        for i in range(1, len(data_table["gaze_data_time_stamp"])):
+            self.assertTrue(data_table["gaze_data_time_stamp"][i] > data_table["gaze_data_time_stamp"][i - 1])
+            if data_table["trial"][i] == data_table["trial"][i - 1]:
+                self.assertTrue(data_table["gaze_data_time_stamp"][i] - data_table["gaze_data_time_stamp"][i - 1] < 50000)
+
+        print("OK")
+
+    def validate_stim_pos_PCMCS(self, data_table):
+        print("Validate stim pos in PCMCS...")
+
+        stim_distance = 15
+        for data in data_table["stimulus_1_position_X_PCMCS"]:
+            self.assertEqual(data, str(-stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_1_position_Y_PCMCS"]:
+            self.assertEqual(data, str(-stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_2_position_X_PCMCS"]:
+            self.assertEqual(data, str(stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_2_position_Y_PCMCS"]:
+            self.assertEqual(data, str(-stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_3_position_X_PCMCS"]:
+            self.assertEqual(data, str(-stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_3_position_Y_PCMCS"]:
+            self.assertEqual(data, str(stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_4_position_X_PCMCS"]:
+            self.assertEqual(data, str(stim_distance / 2).replace(".", ","))
+
+        for data in data_table["stimulus_4_position_Y_PCMCS"]:
+            self.assertEqual(data, str(stim_distance / 2).replace(".", ","))
+
+        print("OK")
+
+    def validate_quit_log(self, data_table):
+        print("Validate quit log...")
+
+        for data in data_table["quit_log"]:
+            if isinstance(data, float):
+                self.assertTrue(math.isnan(data))
+            else:
+                self.assertTrue(data in ["sessionend_planned_quit", "user_quit"])
+
+        print("OK")
+
     def validate(self, file_name):
         data_table = pandas.read_csv(file_name, sep='\t')
 
@@ -561,6 +682,12 @@ class OutputValidation(unittest.TestCase):
         self.validate_gaze_data_ADCS_global(data_table)
         self.validate_gaze_data_PCMCS_local(data_table)
         self.validate_gaze_data_PCMCS_global(data_table)
+        self.validate_pupil_data_local(data_table)
+        self.validate_pupil_data_global(data_table)
+        self.validate_validity_flag(data_table)
+        # self.validate_gaze_timestamp(data_table)
+        self.validate_stim_pos_PCMCS(data_table)
+        self.validate_quit_log(data_table)
 
 
 if __name__ == "__main__":
