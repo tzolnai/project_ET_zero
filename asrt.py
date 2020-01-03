@@ -101,10 +101,10 @@ class ExperimentSettings:
 
         # AOI (area of interest) is a suqare with the same origin as the stimuli, this size means the size of this square's side
         self.AOI_size = None
-        # count of samples used to calculate the average eye position for dedecting looking at the stimulus
-        self.stim_sampling_window = None
-        # count of samples used to calculate the average eye position for dedectiog looking at fixation cross on an instruction screen
-        self.instruction_sampling_window = None
+        # count of samples used to identify fixation on the stimulus
+        self.stim_fixation_threshold = None
+        # count of samples used to identify fixation on fixation cross on an instruction screen
+        self.instruction_fixation_threshold = None
 
         # key for the first stimulus (e.g. 'z')
         self.key1 = None
@@ -165,8 +165,8 @@ class ExperimentSettings:
 
                 if self.experiment_type == 'eye-tracking':
                     self.AOI_size = settings_file['AOI_size']
-                    self.stim_sampling_window = settings_file['stim_sampling_window']
-                    self.instruction_sampling_window = settings_file['instruction_sampling_window']
+                    self.stim_fixation_threshold = settings_file['stim_fixation_threshold']
+                    self.instruction_fixation_threshold = settings_file['instruction_fixation_threshold']
 
                 if self.experiment_type == 'reaction-time':
                     self.key1 = settings_file['key1']
@@ -210,8 +210,8 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 settings_file['AOI_size'] = self.AOI_size
-                settings_file['stim_sampling_window'] = self.stim_sampling_window
-                settings_file['instruction_sampling_window'] = self.instruction_sampling_window
+                settings_file['stim_fixation_threshold'] = self.stim_fixation_threshold
+                settings_file['instruction_fixation_threshold'] = self.instruction_fixation_threshold
 
             if self.experiment_type == 'reaction-time':
                 settings_file['key1'] = self.key1
@@ -254,8 +254,8 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 reminder += str('AOI size:' + '\t' + str(self.AOI_size).replace('.', ',') + '\n' +
-                                'Window size for stimulus:' + '\t' + str(self.stim_sampling_window) + '\n' +
-                                'Window size for instructions:' + '\t' + str(self.instruction_sampling_window) + '\n')
+                                'Fixation threshold for stimulus:' + '\t' + str(self.stim_fixation_threshold) + '\n' +
+                                'Fixation threshold for instructions:' + '\t' + str(self.instruction_fixation_threshold) + '\n')
 
             reminder += str('\n' +
                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
@@ -431,8 +431,8 @@ class ExperimentSettings:
         if self.experiment_type == 'eye-tracking':
             settings_dialog.addText(u'Eye-tracking paraméterek...')
             settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3.0)
-            settings_dialog.addField(u'Stimulusnál használt ablak méret (mintavételek száma):', 8)
-            settings_dialog.addField(u'Instrukcióknál használt ablak méret (mintavételek száma):', 36)
+            settings_dialog.addField(u'Stimulusnál használt fixációs küszöbérték (mintavételek száma):', 12)
+            settings_dialog.addField(u'Instrukcióknál használt fixációs küszöbérték (mintavételek száma):', 36)
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -447,8 +447,8 @@ class ExperimentSettings:
 
             if self.experiment_type == 'eye-tracking':
                 self.AOI_size = returned_data[8]
-                self.stim_sampling_window = returned_data[9]
-                self.instruction_sampling_window = returned_data[10]
+                self.stim_fixation_threshold = returned_data[9]
+                self.instruction_fixation_threshold = returned_data[10]
 
         else:
             core.quit()
@@ -580,7 +580,7 @@ class InstructionHelper:
                 experiment.fixation_cross.draw()
                 self.__print_to_screen(inst, experiment.mywindow)
                 core.wait(2.0)
-                response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_sampling_window)
+                response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_fixation_threshold)
                 if response == -1:
                     core.quit()
 
@@ -1473,9 +1473,9 @@ class Experiment:
             else:
                 self.gaze_data_list.append((None, None))
 
-            if len(self.gaze_data_list) > self.current_sampling_window * 2:
+            if len(self.gaze_data_list) > self.current_sampling_window:
                 self.gaze_data_list.pop(0)
-                assert len(self.gaze_data_list) == self.current_sampling_window * 2
+                assert len(self.gaze_data_list) == self.current_sampling_window
 
             self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
 
@@ -1508,7 +1508,7 @@ class Experiment:
                      ((pos_ADCS[1] * monitor_height_cm) - shift_y) * - 1)
         return pos_PCMCS
 
-    def wait_for_eye_response(self, expected_eye_pos, sampling_window):
+    def wait_for_eye_response(self, expected_eye_pos, fixation_threshold):
 
         while (True):
             if 'q' in event.getKeys():
@@ -1519,35 +1519,26 @@ class Experiment:
             self.main_loop_lock.acquire()
 
             with self.shared_data_lock:
-                if len(self.gaze_data_list) < sampling_window:
+                if len(self.gaze_data_list) < fixation_threshold:
                     continue
 
                 last_item = self.gaze_data_list[-1]
 
-                # calculate avarage gaze position
-                sum_x = 0
-                sum_y = 0
+                # check that gaze positions are in the speicific AOI
                 count = 0
                 for pos in reversed(self.gaze_data_list):
-                    if pos[0] != None and pos[1] != None:
+                    if pos[0] == None or pos[1] == None:
+                        continue
+
+                    if self.point_is_in_rectangle(self.ADCS_to_PCMCS(pos), expected_eye_pos, self.settings.AOI_size):
                         count += 1
-                        sum_x += pos[0]
-                        sum_y += pos[1]
-                    if count >= sampling_window:
+                    else:
                         break
 
-                if count < sampling_window:
-                    continue
+                    if count >= fixation_threshold:
+                        break
 
-                assert count == sampling_window
-
-                # we have the pos in eye-tracker's display area normalized coordinates
-                # and we need to convert it to psychopy cm coordinates
-                avg_pos_norm = (sum_x / sampling_window, sum_y / sampling_window)
-                avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
-
-                assert last_item == self.gaze_data_list[-1]
-                if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
+                if count >= fixation_threshold:
                     if self.main_loop_lock.locked():
                         self.main_loop_lock.release()
                     return 1
@@ -1637,7 +1628,7 @@ class Experiment:
         if not end_of_session:
             self.fixation_cross.draw()
             self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
-            response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_sampling_window)
+            response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_fixation_threshold)
             if response == -1:
                 return 'quit'
             else:
@@ -1654,7 +1645,7 @@ class Experiment:
             return (self.pressed_dict[press[0][0]], press[0][1])
         # for ET version we wait for getting the right response (there is no wrong answer)
         else:
-            response = self.wait_for_eye_response(self.dict_pos[expected_response], self.settings.stim_sampling_window)
+            response = self.wait_for_eye_response(self.dict_pos[expected_response], self.settings.stim_fixation_threshold)
             # this RT is not precise, but good enough to give a feedback for the subject
             if response == 1:
                 return (expected_response, response_clock.getTime())
@@ -1710,10 +1701,9 @@ class Experiment:
         self.trial_phase = "before_stimulus"
         self.last_RSI = -1
 
-        self.current_sampling_window = self.settings.instruction_sampling_window
-
         # start recording gaze data
         if self.eye_tracker is not None:
+            self.current_sampling_window = self.settings.instruction_fixation_threshold * 2
             self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
 
         # show instructions or continuation message
@@ -1729,8 +1719,9 @@ class Experiment:
             self.stim_bg(stimbg)
             self.mywindow.flip()
             with self.shared_data_lock:
-                self.current_sampling_window = self.settings.stim_sampling_window
-                self.gaze_data_list.clear()
+                if self.eye_tracker is not None:
+                    self.current_sampling_window = self.settings.stim_fixation_threshold * 2
+                    self.gaze_data_list.clear()
                 self.last_N = N - 1
                 self.trial_phase = "before_stimulus"
                 self.last_RSI = -1
@@ -1842,8 +1833,9 @@ class Experiment:
                     self.last_N = N - 1
                     self.trial_phase = "before_stimulus"
                     self.last_RSI = -1
-                    self.current_sampling_window = self.settings.instruction_sampling_window
-                    self.gaze_data_list.clear()
+                    if self.eye_tracker is not None:
+                        self.current_sampling_window = self.settings.instruction_fixation_threshold * 2
+                        self.gaze_data_list.clear()
 
                 if self.settings.experiment_type == 'reaction-time':
                     self.person_data.flush_RT_data_to_output(self)
