@@ -16,5 +16,5 @@
 'asrt_background', (7680, 15)
 'RSI_time', (8192, 12)
 'AOI_size', (8704, 12)
-'stim_sampling_window', (9216, 5)
-'instruction_sampling_window', (9728, 5)
+'stim_fixation_threshold', (10240, 5)
+'instruction_fixation_threshold', (10752, 5)
