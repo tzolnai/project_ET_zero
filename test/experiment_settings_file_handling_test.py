@@ -83,8 +83,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, None)
         self.assertEqual(exp_settings.RSI_time, None)
         self.assertEqual(exp_settings.AOI_size, None)
-        self.assertEqual(exp_settings.stim_sampling_window, None)
-        self.assertEqual(exp_settings.instruction_sampling_window, None)
+        self.assertEqual(exp_settings.stim_fixation_threshold, None)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, None)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
         self.assertEqual(exp_settings.key3, None)
@@ -157,8 +157,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, "Ivory")
         self.assertEqual(exp_settings.RSI_time, 0.12)
         self.assertEqual(exp_settings.AOI_size, None)
-        self.assertEqual(exp_settings.stim_sampling_window, None)
-        self.assertEqual(exp_settings.instruction_sampling_window, None)
+        self.assertEqual(exp_settings.stim_fixation_threshold, None)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, None)
         self.assertEqual(exp_settings.key1, 'z')
         self.assertEqual(exp_settings.key2, 'c')
         self.assertEqual(exp_settings.key3, 'b')
@@ -195,8 +195,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.asrt_background = "Ivory"
         exp_settings.RSI_time = 0.12
         exp_settings.AOI_size = 1.5
-        exp_settings.stim_sampling_window = 8
-        exp_settings.instruction_sampling_window = 36
+        exp_settings.stim_fixation_threshold = 12
+        exp_settings.instruction_fixation_threshold = 36
         exp_settings.key1 = 'z'
         exp_settings.key2 = 'c'
         exp_settings.key3 = 'b'
@@ -228,8 +228,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, "Ivory")
         self.assertEqual(exp_settings.RSI_time, 0.12)
         self.assertEqual(exp_settings.AOI_size, 1.5)
-        self.assertEqual(exp_settings.stim_sampling_window, 8)
-        self.assertEqual(exp_settings.instruction_sampling_window, 36)
+        self.assertEqual(exp_settings.stim_fixation_threshold, 12)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
         self.assertEqual(exp_settings.key3, None)
@@ -281,8 +281,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, None)
         self.assertEqual(exp_settings.RSI_time, None)
         self.assertEqual(exp_settings.AOI_size, None)
-        self.assertEqual(exp_settings.stim_sampling_window, None)
-        self.assertEqual(exp_settings.instruction_sampling_window, None)
+        self.assertEqual(exp_settings.stim_fixation_threshold, None)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, None)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)
         self.assertEqual(exp_settings.key3, None)
@@ -384,8 +384,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         exp_settings.asrt_background = "Ivory"
         exp_settings.RSI_time = 0.12
         exp_settings.AOI_size = 1.5
-        exp_settings.stim_sampling_window = 8
-        exp_settings.instruction_sampling_window = 36
+        exp_settings.stim_fixation_threshold = 12
+        exp_settings.instruction_fixation_threshold = 36
         exp_settings.key_quit = 'q'
         exp_settings.sessionstarts = [1, 2, 3]
 
@@ -411,8 +411,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                              'Asrt stim color (explicit, cued):' + '\t' + exp_settings.asrt_pcolor + '\n' +
                              'Background color:' + '\t' + exp_settings.asrt_background + '\n' +
                              'AOI size:' + '\t' + str(exp_settings.AOI_size).replace('.', ',') + '\n' +
-                             'Window size for stimulus:' + '\t' + str(exp_settings.stim_sampling_window) + '\n' +
-                             'Window size for instructions:' + '\t' + str(exp_settings.instruction_sampling_window) + '\n'
+                             'Fixation threshold for stimulus:' + '\t' + str(exp_settings.stim_fixation_threshold) + '\n' +
+                             'Fixation threshold for instructions:' + '\t' + str(exp_settings.instruction_fixation_threshold) + '\n'
                              '\n' +
                              'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
 

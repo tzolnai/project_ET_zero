@@ -34,7 +34,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 8
+        experiment.current_sampling_window = 36
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -46,7 +46,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
         run_time = clock.getTime()
-        self.assertAlmostEqual(run_time, 0.0, delta=0.01)
+        self.assertAlmostEqual(run_time, 0.0, delta=0.1)
 
     def testWaitForEyeResponse(self):
         experiment = asrt.Experiment("")
@@ -65,9 +65,9 @@ class eyeTrackingTimingTest(unittest.TestCase):
 
         clock = core.Clock()
         for i in range(100):
-            experiment.wait_for_eye_response([0.5, 0.5], sampling_window)
+            experiment.wait_for_eye_response([0.5, 0.5], sampling_window // 2)
         run_time = clock.getTime()
-        self.assertAlmostEqual(run_time, 0.0, delta=0.01)
+        self.assertAlmostEqual(run_time, 0.0, delta=0.1)
 
 
 if __name__ == "__main__":

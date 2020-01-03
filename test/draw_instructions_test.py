@@ -157,12 +157,12 @@ class drawInstructionsTest(unittest.TestCase):
         experiment.fixation_cross_pos = (0.0, 0.0)
         experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
                                                     color='black', pos=experiment.fixation_cross_pos)
-        experiment.settings.instruction_sampling_window = 36
+        experiment.settings.instruction_fixation_threshold = 36
         experiment.current_sampling_window = 36
         experiment.settings.AOI_size = 1.0
         experiment.settings.monitor_width = 47.6
         experiment.monitor_settings()
-        for i in range(0, experiment.settings.instruction_sampling_window):
+        for i in range(0, experiment.settings.instruction_fixation_threshold):
             gazeData = {}
             gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
             gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -318,12 +318,12 @@ class drawInstructionsTest(unittest.TestCase):
         experiment.fixation_cross_pos = (0.0, 0.0)
         experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
                                                     color='black', pos=experiment.fixation_cross_pos)
-        experiment.settings.instruction_sampling_window = 36
+        experiment.settings.instruction_fixation_threshold = 36
         experiment.current_sampling_window = 36
         experiment.settings.AOI_size = 1.0
         experiment.settings.monitor_width = 47.6
         experiment.monitor_settings()
-        for i in range(0, experiment.settings.instruction_sampling_window):
+        for i in range(0, experiment.settings.instruction_fixation_threshold):
             gazeData = {}
             gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
             gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)

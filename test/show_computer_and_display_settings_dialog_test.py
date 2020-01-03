@@ -45,8 +45,8 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, "Ivory")
         self.assertEqual(exp_settings.RSI_time, 0.12)
         self.assertEqual(exp_settings.AOI_size, None)
-        self.assertEqual(exp_settings.stim_sampling_window, None)
-        self.assertEqual(exp_settings.instruction_sampling_window, None)
+        self.assertEqual(exp_settings.stim_fixation_threshold, None)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, None)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -88,8 +88,8 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, "Ivory")
         self.assertEqual(exp_settings.RSI_time, 0.5)
         self.assertEqual(exp_settings.AOI_size, 3.0)
-        self.assertEqual(exp_settings.stim_sampling_window, 8)
-        self.assertEqual(exp_settings.instruction_sampling_window, 36)
+        self.assertEqual(exp_settings.stim_fixation_threshold, 12)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 3)
@@ -117,9 +117,9 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[7].initial, 500)
         self.assertEqual(list_of_fields[8].label, "AOI négyzetek oldahossza (cm):")
         self.assertEqual(list_of_fields[8].initial, 3.0)
-        self.assertEqual(list_of_fields[9].label, "Stimulusnál használt ablak méret (mintavételek száma):")
-        self.assertEqual(list_of_fields[9].initial, 8)
-        self.assertEqual(list_of_fields[10].label, "Instrukcióknál használt ablak méret (mintavételek száma):")
+        self.assertEqual(list_of_fields[9].label, "Stimulusnál használt fixációs küszöbérték (mintavételek száma):")
+        self.assertEqual(list_of_fields[9].initial, 12)
+        self.assertEqual(list_of_fields[10].label, "Instrukcióknál használt fixációs küszöbérték (mintavételek száma):")
         self.assertEqual(list_of_fields[10].initial, 36)
 
     def testCancel(self):
@@ -150,7 +150,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
     def testCustomValuesET(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            [47.6, "Alma", 15.3, 1.5, "DarkBlue", "White", "Green", 500, 4.0, 8, 36])
+            [47.6, "Alma", 15.3, 1.5, "DarkBlue", "White", "Green", 500, 4.0, 12, 36])
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.experiment_type = 'eye-tracking'
@@ -165,8 +165,8 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.asrt_background, "Green")
         self.assertEqual(exp_settings.RSI_time, 0.500)
         self.assertEqual(exp_settings.AOI_size, 4.0)
-        self.assertEqual(exp_settings.stim_sampling_window, 8)
-        self.assertEqual(exp_settings.instruction_sampling_window, 36)
+        self.assertEqual(exp_settings.stim_fixation_threshold, 12)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
 
 
 if __name__ == "__main__":

@@ -580,7 +580,7 @@ class integrationTest(unittest.TestCase):
 
     def testRandomBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'noPattern','Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'noPattern', 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -588,6 +588,7 @@ class integrationTest(unittest.TestCase):
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile()
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

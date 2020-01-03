@@ -412,7 +412,7 @@ class integrationETTest(unittest.TestCase):
         gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
-        self.visual_mock.setReturnKeyList(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c','c', 'c', 'c',
+        self.visual_mock.setReturnKeyList(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c',
                                            'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'q'])
 
         with self.assertRaises(SystemExit):
@@ -443,7 +443,7 @@ class integrationETTest(unittest.TestCase):
 
     def testRandomBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'noPattern','Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'noPattern', 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -503,11 +503,11 @@ class integrationETTest(unittest.TestCase):
         for i in range(sampling_window):
             eye_pos = self.PCMCS_to_ADCS(expected_eye_pos)
             if i % 2 == 0:
-                eye_pos = (eye_pos[0] + 0.2, eye_pos[1] - 0.2)
+                eye_pos = (eye_pos[0] + 0.01, eye_pos[1] - 0.01)
                 gazeData['left_gaze_point_on_display_area'] = eye_pos
                 gazeData['right_gaze_point_on_display_area'] = eye_pos
             else:
-                eye_pos = (eye_pos[0] - 0.2, eye_pos[1] + 0.2)
+                eye_pos = (eye_pos[0] - 0.01, eye_pos[1] + 0.01)
                 gazeData['left_gaze_point_on_display_area'] = eye_pos
                 gazeData['right_gaze_point_on_display_area'] = eye_pos
 
@@ -526,6 +526,7 @@ class integrationETTest(unittest.TestCase):
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile(True)
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
