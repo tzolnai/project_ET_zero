@@ -1,6 +1,10 @@
-# ASRT
+# ASRT core
 
-A work-in progress ASRT script for Python 3.
+The core code of ASRT script written in Python 3. This code includes all the
+basic functionality useful for an ASRT experiment, but it does probably not
+include everything which is needed for a specific experiment. Specific needs
+can be implemented in separate repositories \ forks.
+This script supports both keyboard and eye-tracking controlled design.
 
 ### Prerequisites
 Running ASRT script requires all of the following and their dependencies.
