@@ -1,11 +1,9 @@
-# ASRT core
+# Project ET zero
 
-The core code of ASRT script written in Python 3. This code includes all the
-basic functionality useful for an ASRT experiment, but it does probably not
-include everything which is needed for a specific experiment. Specific needs
-can be implemented in separate repositories \ forks.
+ASRT script used in projet ET zero.
 
-This script supports both keyboard and eye-tracking controlled design.
+The core ASRT scirpt is implemented here:
+https://github.com/tzolnai/asrt_core
 
 ### Prerequisites
 Running ASRT script requires all of the following and their dependencies.
