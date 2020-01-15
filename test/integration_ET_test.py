@@ -387,7 +387,7 @@ class integrationETTest(unittest.TestCase):
 
     def testWithoutPrepTrials(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -424,7 +424,7 @@ class integrationETTest(unittest.TestCase):
 
     def testContinueAfterQuitAtBlockEnd(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '3rd', 'Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '5th', '5th', '3rd', '3rd', 'Tóth Béla', 10])
 
         keylist = []
         for i in range(3 + 127):
@@ -443,7 +443,7 @@ class integrationETTest(unittest.TestCase):
 
     def testRandomBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'noPattern', 'Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', 'noPattern', 'noPattern', 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 

@@ -49,8 +49,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "1st - 1234"
-        experiment.PCodes[2] = "1st - 1234"
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -146,8 +146,10 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "2nd - 1243"
-        experiment.PCodes[2] = "3rd - 1324"
+        for i in range(experiment.settings.epochs[0]):
+            experiment.PCodes[i + 1] = "2nd - 1243"
+        for i in range(experiment.settings.epochs[1]):
+            experiment.PCodes[5 + i + 1] = "3rd - 1324"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -242,7 +244,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "noPattern"
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "noPattern"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -330,7 +333,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "1st - 1234"
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -419,7 +423,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "1st - 1234"
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -482,7 +487,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "1st - 1234"
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -571,7 +577,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "1st - 1234"
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),
@@ -663,9 +670,12 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.stimlist = {}
         experiment.stimpr = {}
         experiment.PCodes = {}
-        experiment.PCodes[1] = "2nd - 1243"
-        experiment.PCodes[2] = "3rd - 1324"
-        experiment.PCodes[3] = "noPattern"
+        for i in range(experiment.settings.epochs[0]):
+            experiment.PCodes[i + 1] = "2nd - 1243"
+        for i in range(experiment.settings.epochs[1]):
+            experiment.PCodes[2 + i + 1] = "3rd - 1324"
+        for i in range(experiment.settings.epochs[2]):
+            experiment.PCodes[7 + i + 1] = "noPattern"
         experiment.calculate_stim_properties()
 
         self.assertEqual(len(experiment.stim_sessionN),

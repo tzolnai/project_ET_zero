@@ -498,7 +498,7 @@ class integrationTest(unittest.TestCase):
     def testContinueAfterQuitAtBlockEnd(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '3rd', 'Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '5th', '5th', '3rd', '3rd', 'Tóth Béla', 10])
 
         # override this method to get the stimlist to be able to generate the keylist
         self.presentation = self.experiment.presentation
@@ -570,7 +570,7 @@ class integrationTest(unittest.TestCase):
     def testWithoutPrepTrials(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -580,7 +580,7 @@ class integrationTest(unittest.TestCase):
 
     def testRandomBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'noPattern', 'Tóth Béla', 10])
+        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', 'noPattern', 'noPattern', 'Tóth Béla', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 

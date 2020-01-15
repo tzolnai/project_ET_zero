@@ -396,8 +396,12 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
+        experiment.settings.epochN = 5
+        experiment.settings.epochs = [5]
         experiment.settings.asrt_types = {1: 'implicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_output_line = 12
         experiment.stim_sessionN = {0: 1}
         experiment.stimepoch = {0: 2}
@@ -453,7 +457,9 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'implicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
@@ -578,7 +584,9 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'explicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
@@ -642,7 +650,9 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'noASRT'}
-        experiment.PCodes = {1: 'noPattern'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "noPattern"
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
@@ -699,7 +709,11 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
         experiment.settings.asrt_types = {1: 'implicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.settings.epochN = 5
+        experiment.settings.epochs = [5]
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_output_line = 12
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
@@ -857,8 +871,12 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
+        experiment.settings.epochN = 5
+        experiment.settings.epochs = [5]
         experiment.settings.asrt_types = {1: 'implicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_output_line = 12
         experiment.stim_sessionN = {0: 1}
         experiment.stimepoch = {0: 2}
@@ -914,7 +932,9 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'implicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
         experiment.stimblock = {1: 12}
@@ -978,7 +998,9 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.last_N = 4
         experiment.last_RSI = "500.0"
         experiment.settings.asrt_types = {1: 'implicit'}
-        experiment.PCodes = {1: '1st - 1234'}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
         experiment.stim_sessionN = {3: 1, 4: 1, 5: 1}
         experiment.stimepoch = {3: 1, 4: 1, 5: 1}
         experiment.stimblock = {3: 1, 4: 1, 5: 1}
