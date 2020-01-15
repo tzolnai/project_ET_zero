@@ -29,12 +29,9 @@ import platform
 class readInstructionsTest(unittest.TestCase):
 
     def assertEqualWithEOL(self, string1, string2):
-        if platform.system() == "Windows":
-            self.assertEqual(string1, string2)
-        else:
-            string1 = string1.replace("\r", "")
-            string2 = string2.replace("\r", "")
-            self.assertEqual(string1, string2)
+        string1 = string1.replace("\r", "")
+        string2 = string2.replace("\r", "")
+        self.assertEqual(string1, string2)
 
     def constructFilePath(self, file_name):
         filepath = os.path.abspath(__file__)
