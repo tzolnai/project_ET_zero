@@ -803,8 +803,9 @@ class PersonDataHandler:
         output_buffer = StringIO()
         for data in self.output_data_buffer:
             N = data[0]
+            epoch = experiment.stimepoch[N]
+            PCode = experiment.which_code(epoch)
             session = experiment.stim_sessionN[N]
-            PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
             trial_type_high_low = experiment.calulate_trial_type_high_low(N)
 
@@ -903,8 +904,9 @@ class PersonDataHandler:
             N = data[0] + 1
             if N > max_trial:
                 break
+            epoch = experiment.stimepoch[N]
+            PCode = experiment.which_code(epoch)
             session = experiment.stim_sessionN[N]
-            PCode = experiment.which_code(session)
             asrt_type = experiment.settings.asrt_types[session]
             if experiment.stimpr[N] == 'pattern':
                 if experiment.settings.asrt_types[session] == 'explicit':
@@ -1113,7 +1115,7 @@ class Experiment:
         # age of the subject (e.g. 23 (years))
         self.subject_age = None
 
-        # a dictionary of pcodes for the different sessions (e.g. {1 : '1st - 1234', 2 : '5th - 1423'})
+        # a dictionary of pcodes for the different epochs (e.g. {1 : '1st - 1234', 2 : '5th - 1423'})
         # pcode means pattern code, which defines the order of the pattern series, expected to be learnt by the subject
         self.PCodes = None
         # serial number of the next line in the output file (e.g. 10)
@@ -1241,12 +1243,16 @@ class Experiment:
         settings_dialog.addText('')
         settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
         settings_dialog.addField(u'Életkor', "25")
-        for z in range(self.settings.numsessions):
-            if self.settings.asrt_types[z + 1] == "noASRT":
-                settings_dialog.addFixedField(u'Session ' + str(z + 1) + ' PCode', 'noPattern')
-            else:
-                settings_dialog.addField(u'Session ' + str(z + 1) + ' PCode', choices=[
-                                         '1st', '2nd', '3rd', '4th', '5th', '6th'])
+
+        epoch_number = 0
+        for i in range(self.settings.numsessions):
+            for j in range(self.settings.epochs[i]):
+                epoch_number += 1
+                if self.settings.asrt_types[i + 1] == "noASRT":
+                    settings_dialog.addFixedField(u'Epoch ' + str(epoch_number) + ' PCode', 'noPattern')
+                else:
+                    settings_dialog.addField(u'Epoch ' + str(epoch_number) + ' PCode', choices=[
+                                            '1st', '2nd', '3rd', '4th', '5th', '6th'])
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -1254,22 +1260,22 @@ class Experiment:
 
             subject_sex = returned_data[0]
             subject_age = returned_data[1]
-            for zz in range(self.settings.numsessions):
-                PCode = returned_data[zz + 2]
+            for i in range(epoch_number):
+                PCode = returned_data[i + 2]
                 if PCode == '1st':
-                    self.PCodes[zz + 1] = '1st - 1234'
+                    self.PCodes[i + 1] = '1st - 1234'
                 elif PCode == '2nd':
-                    self.PCodes[zz + 1] = '2nd - 1243'
+                    self.PCodes[i + 1] = '2nd - 1243'
                 elif PCode == '3rd':
-                    self.PCodes[zz + 1] = '3rd - 1324'
+                    self.PCodes[i + 1] = '3rd - 1324'
                 elif PCode == '4th':
-                    self.PCodes[zz + 1] = '4th - 1342'
+                    self.PCodes[i + 1] = '4th - 1342'
                 elif PCode == '5th':
-                    self.PCodes[zz + 1] = '5th - 1423'
+                    self.PCodes[i + 1] = '5th - 1423'
                 elif PCode == '6th':
-                    self.PCodes[zz + 1] = '6th - 1432'
+                    self.PCodes[i + 1] = '6th - 1432'
                 else:
-                    self.PCodes[zz + 1] = 'noPattern'
+                    self.PCodes[i + 1] = 'noPattern'
 
             index = self.settings.numsessions
 
@@ -1289,10 +1295,10 @@ class Experiment:
         else:
             core.quit()
 
-    def which_code(self, session_number):
+    def which_code(self, epoch_number):
         """Convert sessions pattern code to a raw code containing only the series of stimulus numbers."""
 
-        pcode_raw = self.PCodes[session_number]
+        pcode_raw = self.PCodes[epoch_number]
         PCode = 'noPattern'
 
         if pcode_raw == '1st - 1234':
@@ -1309,8 +1315,8 @@ class Experiment:
             PCode = '1432'
         return PCode
 
-    def next_stim(self, session_number, stimulus):
-        PCode = self.which_code(session_number)
+    def next_stim(self, epoch_number, stimulus):
+        PCode = self.which_code(epoch_number)
         assert PCode != "noPattern"
 
         dict_next_stimulus = {}
@@ -1321,11 +1327,11 @@ class Experiment:
         return int(dict_next_stimulus[str(stimulus)])
 
     def calulate_trial_type_high_low(self, N):
-        session = self.stim_sessionN[N]
-        PCode = self.which_code(session)
-        if PCode == "noPattern" or self.stimtrial[N] < 3:
+        epoch = self.stimepoch[N]
+        PCode = self.which_code(epoch)
+        if PCode == "noPattern" or self.stimtrial[N] < 3 or N < 3:
             return "none"
-        elif self.next_stim(session, self.stimlist[N - 2]) == self.stimlist[N]:
+        elif self.next_stim(epoch, self.stimlist[N - 2]) == self.stimlist[N]:
             return "high"
         else:
             return "low"
@@ -1378,7 +1384,7 @@ class Experiment:
 
                     if current_trial_num % 2 == mod_pattern and asrt_type != "noASRT":
                         if current_trial_num > 2:
-                            current_stim = self.next_stim(self.stim_sessionN[all_trial_Nr], self.stimlist[all_trial_Nr - 2])
+                            current_stim = self.next_stim(epoch, self.stimlist[all_trial_Nr - 2])
                             self.stimpr[all_trial_Nr] = "pattern"
                         else:
                             # first pattern stim is random
