@@ -6,7 +6,7 @@
 'block_in_epochN', (2560, 5)
 'epochN', (3072, 5)
 'epochs', (3584, 12)
-'asrt_types', (4096, 40)
+'asrt_types', (4096, 48)
 'monitor_width', (4608, 12)
 'computer_name', (5120, 17)
 'asrt_distance', (5632, 12)

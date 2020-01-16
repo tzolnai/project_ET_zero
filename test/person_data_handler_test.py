@@ -398,7 +398,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_age = "25"
         experiment.settings.epochN = 5
         experiment.settings.epochs = [5]
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "1st - 1234"
@@ -456,7 +456,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "1st - 1234"
@@ -522,7 +522,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = experiment.settings.get_maxtrial()
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 2}
@@ -583,7 +583,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'explicit'}
+        experiment.settings.asrt_types = {1: 'explicit', 2: 'explicit', 3: 'explicit', 4: 'explicit', 5: 'explicit'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "1st - 1234"
@@ -649,7 +649,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'noASRT'}
+        experiment.settings.asrt_types = {1: 'noASRT', 2: 'noASRT', 3: 'noASRT', 4: 'noASRT', 5: 'noASRT'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "noPattern"
@@ -708,7 +708,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.settings.epochN = 5
         experiment.settings.epochs = [5]
         experiment.PCodes = {}
@@ -789,7 +789,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {1: '1st - 1234'}
         experiment.stim_sessionN = {1: 1}
         experiment.stimepoch = {1: 1}
@@ -873,7 +873,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.subject_age = "25"
         experiment.settings.epochN = 5
         experiment.settings.epochs = [5]
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "1st - 1234"
@@ -931,7 +931,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 0
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "1st - 1234"
@@ -997,7 +997,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.trial_phase = "stimulus_on_screen"
         experiment.last_N = 4
         experiment.last_RSI = "500.0"
-        experiment.settings.asrt_types = {1: 'implicit'}
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.PCodes = {}
         for i in range(experiment.settings.epochN):
             experiment.PCodes[i + 1] = "1st - 1234"

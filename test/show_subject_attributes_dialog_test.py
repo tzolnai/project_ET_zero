@@ -37,8 +37,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         experiment.settings.numsessions = 1
         experiment.settings.epochs = [2]
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit'}
 
         experiment.show_subject_attributes_dialog()
 
@@ -209,12 +208,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         experiment.settings.numsessions = 5
         experiment.settings.epochs = [1, 2, 1, 1, 2]
         experiment.settings.epochN = 7
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
-        experiment.settings.asrt_types[2] = "implicit"
-        experiment.settings.asrt_types[3] = "implicit"
-        experiment.settings.asrt_types[4] = "implicit"
-        experiment.settings.asrt_types[5] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit', 6: 'implicit', 7: 'implicit'}
 
         experiment.show_subject_attributes_dialog()
 
@@ -247,6 +241,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[6].label, "Epoch 5 PCode")
         self.assertEqual(list_of_fields[7].label, "Epoch 6 PCode")
         self.assertEqual(list_of_fields[8].label, "Epoch 7 PCode")
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

@@ -37,9 +37,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 80
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
-        experiment.settings.asrt_types[2] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit', 6: 'implicit', 7: 'implicit',
+                                          8: 'implicit', 9: 'implicit', 10: 'implicit', 11: 'implicit', 12: 'implicit'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -134,9 +133,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 80
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "explicit"
-        experiment.settings.asrt_types[2] = "explicit"
+        experiment.settings.asrt_types = {1: 'explicit', 2: 'explicit', 3: 'explicit', 4: 'explicit', 5: 'explicit', 6: 'explicit', 7: 'explicit',
+                                          8: 'explicit', 9: 'explicit', 10: 'explicit', 11: 'explicit', 12: 'explicit'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -233,8 +231,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 80
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "noASRT"
+        experiment.settings.asrt_types = {1: 'noASRT', 2: 'noASRT', 3: 'noASRT', 4: 'noASRT', 5: 'noASRT'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -322,8 +319,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 80
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -412,8 +408,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 0
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -476,8 +471,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 80
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -566,8 +560,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 75
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "implicit"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -657,10 +650,8 @@ class calculateStimpropertiesTest(unittest.TestCase):
         experiment.settings.blocklengthN = 80
         experiment.settings.asrt_rcolor = "Orange"
         experiment.settings.asrt_pcolor = "Green"
-        experiment.settings.asrt_types = {}
-        experiment.settings.asrt_types[1] = "explicit"
-        experiment.settings.asrt_types[2] = "implicit"
-        experiment.settings.asrt_types[3] = "noASRT"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit', 3: 'explicit', 4: 'explicit', 5: 'explicit',
+                                          6: 'explicit', 7: 'explicit', 8: 'noASRT', 9: 'noASRT', 10: 'noASRT', 11: 'noASRT'}
 
         experiment.stim_sessionN = {}
         experiment.end_at = {}
@@ -784,6 +775,92 @@ class calculateStimpropertiesTest(unittest.TestCase):
                     self.assertEqual(experiment.stimpr[i + 1], "random")
             else:  # noASRT
                 self.assertEqual(experiment.stimpr[i + 1], "random")
+
+    def testNoASRTAtTheBeginningOfSession(self):
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.settings.epochN = 5
+        experiment.settings.epochs = [5]
+        experiment.settings.block_in_epochN = 5
+        experiment.settings.blockprepN = 5
+        experiment.settings.blocklengthN = 80
+        experiment.settings.asrt_rcolor = "Orange"
+        experiment.settings.asrt_pcolor = "Green"
+        experiment.settings.asrt_types = {1: 'noASRT', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
+
+        experiment.stim_sessionN = {}
+        experiment.end_at = {}
+        experiment.stimepoch = {}
+        experiment.stimblock = {}
+        experiment.stimtrial = {}
+        experiment.stimlist = {}
+        experiment.stimpr = {}
+        experiment.PCodes = {}
+        experiment.PCodes[1] = "noPattern"
+        for i in range(1, experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
+        experiment.calculate_stim_properties()
+
+        self.assertEqual(len(experiment.stim_sessionN),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.end_at),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimepoch),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimblock),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimtrial),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimlist),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimpr),
+                         experiment.settings.get_maxtrial())
+
+        # all trials are in the same session
+        for i in range(len(experiment.stim_sessionN)):
+            self.assertEqual(experiment.stim_sessionN[i + 1], 1)
+
+        for i in range(len(experiment.end_at)):
+            self.assertEqual(
+                experiment.end_at[i + 1], experiment.settings.get_maxtrial() + 1)
+
+        for i in range(len(experiment.stimepoch)):
+            self.assertEqual(experiment.stimepoch[i + 1], i // ((experiment.settings.blockprepN +
+                                                                 experiment.settings.blocklengthN) * experiment.settings.block_in_epochN) + 1)
+
+        for i in range(len(experiment.stimblock)):
+            self.assertEqual(experiment.stimblock[i + 1], i // (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
+
+        for i in range(len(experiment.stimtrial)):
+            self.assertEqual(experiment.stimtrial[i + 1], i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1)
+
+        count_1 = 0
+        count_2 = 0
+        count_3 = 0
+        oount_4 = 0
+        for i in range(len(experiment.stimlist)):
+            trial_num_in_block = i % (
+                experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+            if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
+                if experiment.stimlist[i + 1] == 1:
+                    count_1 += 1
+                elif experiment.stimlist[i + 1] == 2:
+                    count_2 += 1
+                elif experiment.stimlist[i + 1] == 3:
+                    count_3 += 1
+                elif experiment.stimlist[i + 1] == 4:
+                    oount_4 += 1
+
+        for i in range(len(experiment.stimpr)):
+            if experiment.stim_sessionN[i + 1] > 1:
+                trial_num_in_block = i % (
+                    experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1
+                if trial_num_in_block > experiment.settings.blockprepN and (trial_num_in_block - experiment.settings.blockprepN) % 2 == 1:
+                    self.assertEqual(experiment.stimpr[i + 1], "pattern")
+                else:
+                    self.assertEqual(experiment.stimpr[i + 1], "random")
 
 
 if __name__ == "__main__":

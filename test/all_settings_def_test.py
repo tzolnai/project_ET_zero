@@ -70,7 +70,7 @@ class allSettingsDefTest(unittest.TestCase):
         experiment.settings.block_in_epochN = 5
         experiment.settings.epochN = 5
         experiment.settings.epochs = [5]
-        experiment.settings.asrt_types = ["implicit"]
+        experiment.settings.asrt_types = {1: 'noASRT', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'}
         experiment.settings.monitor_width = 29
         experiment.settings.computer_name = "Laposka"
         experiment.settings.asrt_distance = 4.5
@@ -100,7 +100,7 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.block_in_epochN, 5)
         self.assertEqual(experiment.settings.epochN, 5)
         self.assertEqual(experiment.settings.epochs, [5])
-        self.assertEqual(experiment.settings.asrt_types, ["implicit"])
+        self.assertEqual(experiment.settings.asrt_types, {1: 'noASRT', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit'})
         self.assertEqual(experiment.settings.monitor_width, 29)
         self.assertEqual(experiment.settings.computer_name, "Laposka")
         self.assertEqual(experiment.settings.asrt_distance, 4.5)
@@ -139,7 +139,8 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.block_in_epochN, 5)
         self.assertEqual(experiment.settings.epochN, 10)
         self.assertEqual(experiment.settings.epochs, [5, 5])
-        self.assertEqual(experiment.settings.asrt_types, {1: 'implicit', 2: 'implicit'})
+        self.assertEqual(experiment.settings.asrt_types, {1: 'noASRT', 2: 'implicit', 3: 'implicit', 4: 'implicit',
+                                                          5: 'implicit', 6: 'noASRT', 7: 'implicit', 8: 'implicit', 9: 'implicit', 10: 'implicit'})
         self.assertEqual(experiment.settings.monitor_width, 34.2)
         self.assertEqual(experiment.settings.computer_name, "Laposka")
         self.assertEqual(experiment.settings.asrt_distance, 3)
@@ -178,7 +179,8 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.block_in_epochN, 5)
         self.assertEqual(experiment.settings.epochN, 10)
         self.assertEqual(experiment.settings.epochs, [5, 5])
-        self.assertEqual(experiment.settings.asrt_types, {1: 'implicit', 2: 'implicit'})
+        self.assertEqual(experiment.settings.asrt_types, {1: 'noASRT', 2: 'implicit', 3: 'implicit', 4: 'implicit',
+                                                          5: 'implicit', 6: 'noASRT', 7: 'implicit', 8: 'implicit', 9: 'implicit', 10: 'implicit'})
         self.assertEqual(experiment.settings.monitor_width, 34.2)
         self.assertEqual(experiment.settings.computer_name, "Laposka")
         self.assertEqual(experiment.settings.asrt_distance, 3)
@@ -210,7 +212,7 @@ class allSettingsDefTest(unittest.TestCase):
             output_file, output_file + "_reminder.txt")
 
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['reakció idő', 1, 1, 10, 75, 7, 12, 'implicit', 29.1, "Alma", 4, 2, "Blue", "Red",
+        gui_mock.addFieldValues(['reakció idő', 1, 1, 10, 75, 7, 12, 2, 'implicit', 29.1, "Alma", 4, 2, "Blue", "Red",
                                  "Yellow", 300, 'a', 's', 'd', 'f', 'g', False, 89, 78])
         experiment.all_settings_def()
 
@@ -221,7 +223,8 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.block_in_epochN, 7)
         self.assertEqual(experiment.settings.epochN, 12)
         self.assertEqual(experiment.settings.epochs, [12])
-        self.assertEqual(experiment.settings.asrt_types, {1: 'implicit'})
+        self.assertEqual(experiment.settings.asrt_types, {1: 'noASRT', 2: 'noASRT', 3: 'implicit', 4: 'implicit', 5: 'implicit', 6: 'implicit', 7: 'implicit',
+                                                          8: 'implicit', 9: 'implicit', 10: 'implicit', 11: 'implicit', 12: 'implicit'})
         self.assertEqual(experiment.settings.monitor_width, 29.1)
         self.assertEqual(experiment.settings.computer_name, "Alma")
         self.assertEqual(experiment.settings.asrt_distance, 4)
@@ -262,7 +265,8 @@ class allSettingsDefTest(unittest.TestCase):
         self.assertEqual(experiment.settings.block_in_epochN, 7)
         self.assertEqual(experiment.settings.epochN, 12)
         self.assertEqual(experiment.settings.epochs, [12])
-        self.assertEqual(experiment.settings.asrt_types, {1: 'implicit'})
+        self.assertEqual(experiment.settings.asrt_types, {1: 'noASRT', 2: 'noASRT', 3: 'implicit', 4: 'implicit', 5: 'implicit', 6: 'implicit', 7: 'implicit',
+                                                          8: 'implicit', 9: 'implicit', 10: 'implicit', 11: 'implicit', 12: 'implicit'})
         self.assertEqual(experiment.settings.monitor_width, 29.1)
         self.assertEqual(experiment.settings.computer_name, "Alma")
         self.assertEqual(experiment.settings.asrt_distance, 4)

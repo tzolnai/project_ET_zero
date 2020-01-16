@@ -11,7 +11,7 @@
 'RSI_time', (8192, 12)
 'asrt_size', (6144, 12)
 'epochs', (3584, 12)
-'asrt_types', (4096, 42)
+'asrt_types', (4096, 54)
 'acc_warning', (12288, 5)
 'asrt_background', (7680, 14)
 'key1', (8704, 11)
