@@ -79,7 +79,7 @@ class ExperimentSettings:
         self.epochN = None
         # list of epoch numbers of all sessions (e.g. [1, 2] (two sessions, first session has 1 epoch, the second has 2))
         self.epochs = None
-        # list of asrt types of all sessions (e.g. ['implicit', 'explicit'] (two sessions, first session is an implicit asrt, the second one is explicit))
+        # global epoch number -> asrt type mapping (e.g. {1 : 'implicit', 2 : 'explicit'} - (two epochs, first epoch is an implicit asrt, the second one is explicit))
         self.asrt_types = None
 
         # monitor's physical width in 'cm' (e.g. 29)
@@ -380,6 +380,8 @@ class ExperimentSettings:
         for i in range(self.numsessions):
             settings_dialog.addField(u'Session ' + str(i + 1) + u' epochok szama', 5)
         for i in range(self.numsessions):
+            settings_dialog.addField(u'Session ' + str(i + 1) + u' kezdő random epochok száma', 1)
+        for i in range(self.numsessions):
             settings_dialog.addField(u'Session ' + str(i + 1) + u' ASRT tipusa',
                                      choices=["implicit", "explicit", "noASRT"])
         returned_data = settings_dialog.show()
@@ -393,8 +395,17 @@ class ExperimentSettings:
             for k in range(self.numsessions):
                 self.epochN += returned_data[3 + k]
                 self.epochs.append(returned_data[3 + k])
+            epoch_number = 0
             for k in range(self.numsessions):
-                self.asrt_types[k + 1] = returned_data[3 + self.numsessions + k]
+                random_epochs = returned_data[3 + self.numsessions + k]
+                epoch_in_session = 0
+                for i in range(self.epochs[k]):
+                    epoch_number += 1
+                    epoch_in_session += 1
+                    if epoch_in_session <= random_epochs:
+                        self.asrt_types[epoch_number] = "noASRT"
+                    else:
+                        self.asrt_types[epoch_number] = returned_data[3 + (2 * self.numsessions) + k]
         else:
             core.quit()
 
@@ -805,8 +816,7 @@ class PersonDataHandler:
             N = data[0]
             epoch = experiment.stimepoch[N]
             PCode = experiment.which_code(epoch)
-            session = experiment.stim_sessionN[N]
-            asrt_type = experiment.settings.asrt_types[session]
+            asrt_type = experiment.settings.asrt_types[epoch]
             trial_type_high_low = experiment.calulate_trial_type_high_low(N)
 
             output_data = [experiment.settings.computer_name,
@@ -906,10 +916,9 @@ class PersonDataHandler:
                 break
             epoch = experiment.stimepoch[N]
             PCode = experiment.which_code(epoch)
-            session = experiment.stim_sessionN[N]
-            asrt_type = experiment.settings.asrt_types[session]
+            asrt_type = experiment.settings.asrt_types[epoch]
             if experiment.stimpr[N] == 'pattern':
-                if experiment.settings.asrt_types[session] == 'explicit':
+                if experiment.settings.asrt_types[epoch] == 'explicit':
                     stimcolor = experiment.colors['stimp']
                 else:
                     stimcolor = experiment.colors['stimr']
@@ -1248,11 +1257,11 @@ class Experiment:
         for i in range(self.settings.numsessions):
             for j in range(self.settings.epochs[i]):
                 epoch_number += 1
-                if self.settings.asrt_types[i + 1] == "noASRT":
+                if self.settings.asrt_types[epoch_number] == "noASRT":
                     settings_dialog.addFixedField(u'Epoch ' + str(epoch_number) + ' PCode', 'noPattern')
                 else:
                     settings_dialog.addField(u'Epoch ' + str(epoch_number) + ' PCode', choices=[
-                                            '1st', '2nd', '3rd', '4th', '5th', '6th'])
+                        '1st', '2nd', '3rd', '4th', '5th', '6th'])
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -1341,7 +1350,6 @@ class Experiment:
 
         all_trial_Nr = 0
         block_num = 0
-
         sessionsstarts = self.settings.get_session_starts()
         for trial_num in range(1, self.settings.get_maxtrial() + 1):
             for session_num in range(1, len(sessionsstarts)):
@@ -1360,7 +1368,7 @@ class Experiment:
                     current_trial_num += 1
 
                     all_trial_Nr += 1
-                    asrt_type = self.settings.asrt_types[self.stim_sessionN[all_trial_Nr]]
+                    asrt_type = self.settings.asrt_types[epoch]
 
                     current_stim = random.choice([1, 2, 3, 4])
                     self.stimlist[all_trial_Nr] = current_stim
@@ -1375,7 +1383,7 @@ class Experiment:
                     current_trial_num += 1
                     all_trial_Nr += 1
 
-                    asrt_type = self.settings.asrt_types[self.stim_sessionN[all_trial_Nr]]
+                    asrt_type = self.settings.asrt_types[epoch]
 
                     if self.settings.blockprepN % 2 == 1:
                         mod_pattern = 0
@@ -1596,7 +1604,7 @@ class Experiment:
         rt_mean = float(sum(RT_all_list)) / len(RT_all_list)
         rt_mean_str = str(rt_mean)[:5].replace('.', ',')
 
-        if self.settings.asrt_types[self.stim_sessionN[N - 1]] == 'explicit':
+        if self.settings.asrt_types[self.stimepoch[N - 1]] == 'explicit':
 
             try:
                 rt_mean_p = float(sum(RT_pattern_list)) / len(RT_pattern_list)
@@ -1734,7 +1742,7 @@ class Experiment:
 
             # set the actual stimulus' position and fill color
             if self.stimpr[N] == 'pattern':
-                if self.settings.asrt_types[self.stim_sessionN[N]] == 'explicit':
+                if self.settings.asrt_types[self.stimepoch[N]] == 'explicit':
                     stimP.fillColor = self.colors['stimp']
                 else:
                     stimP.fillColor = self.colors['stimr']
