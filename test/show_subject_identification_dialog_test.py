@@ -37,23 +37,19 @@ class showSubjectIdentificationDialogTest(unittest.TestCase):
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_identification_dialog()
 
-        self.assertEqual(experiment.subject_name, "alattomos-aladar")
         self.assertEqual(experiment.subject_number, 0)
         self.assertEqual(experiment.subject_group, 'kontrol')
 
         list_of_texts = gui_mock.getListOfTexts()
-        self.assertEqual(len(list_of_texts), 2)
+        self.assertEqual(len(list_of_texts), 1)
         self.assertEqual(list_of_texts[0], "")
-        self.assertEqual(list_of_texts[1], "")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 3)
-        self.assertEqual(list_of_fields[0].label, "Nev")
-        self.assertEqual(list_of_fields[0].initial, 'Alattomos Aladar')
-        self.assertEqual(list_of_fields[1].label, "Sorszam")
-        self.assertEqual(list_of_fields[1].initial, '0')
-        self.assertEqual(list_of_fields[2].label, "Csoport")
-        self.assertEqual(list_of_fields[2].initial, '')
+        self.assertEqual(len(list_of_fields), 2)
+        self.assertEqual(list_of_fields[0].label, "Ksz. sorszáma")
+        self.assertEqual(list_of_fields[0].initial, '0')
+        self.assertEqual(list_of_fields[1].label, "Csoport")
+        self.assertEqual(list_of_fields[1].initial, '')
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -67,84 +63,51 @@ class showSubjectIdentificationDialogTest(unittest.TestCase):
 
     def testCustomValues(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'kontrol', 'férfi', '25'])
+        gui_mock.addFieldValues([10, 'kontrol', 'férfi', '25'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
         subject_settings = experiment.show_subject_identification_dialog()
 
-        self.assertEqual(experiment.subject_name, "toth-bela")
-        self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.subject_group, 'kontrol')
-
-    def testAccentCharacters(self):
-        gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['áaéeíióoőöúuűüÁAÉEÍIÓOŐÖÚUŰÜ', 10, 'kontrol'])
-
-        experiment = asrt.Experiment("")
-        experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_identification_dialog()
-
-        self.assertEqual(experiment.subject_name, "aaeeiioooouuuuaaeeiioooouuuu")
-        self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.subject_group, 'kontrol')
-
-    def testSpecialCharacters(self):
-        gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['áaée íióoőö úuűüÁA ÉEÍIÓOŐÖ ÚUŰÜ', 10, 'kontrol'])
-
-        experiment = asrt.Experiment("")
-        experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.settings.groups = ["kontrol", "exp1"]
-        experiment.show_subject_identification_dialog()
-
-        self.assertEqual(experiment.subject_name, "aaee-iioooo-uuuuaa-eeiioooo-uuuu")
         self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.subject_group, 'kontrol')
 
     def testInvalidSubjectNumber(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Csaba', 'x', 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
+        gui_mock.addFieldValues(['x', 'kontrol', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_identification_dialog()
 
-        self.assertEqual(experiment.subject_name, "toth-csaba")
         self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.subject_group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
         list_of_texts = gui_mock.getListOfTexts()
-        self.assertEqual(len(list_of_texts), 4)
+        self.assertEqual(len(list_of_texts), 2)
         self.assertEqual(list_of_texts[0], "")
-        self.assertEqual(list_of_texts[1], "")
-        self.assertEqual(list_of_texts[2], "")
-        self.assertEqual(list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
+        self.assertEqual(list_of_texts[1], "Pozitív egész számot adj meg a sorszámhoz!")
 
     def testInvalidSubjectNumber2(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Csaba', -10, 'kontrol', 'Tóth Csaba', 10, 'kontrol'])
+        gui_mock.addFieldValues([-10, 'kontrol', 10, 'kontrol'])
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.groups = ["kontrol", "exp1"]
         experiment.show_subject_identification_dialog()
 
-        self.assertEqual(experiment.subject_name, "toth-csaba")
         self.assertEqual(experiment.subject_number, 10)
         self.assertEqual(experiment.subject_group, 'kontrol')
 
         # the dialog is displayed twice because for the first time invalid value was specified
         list_of_texts = gui_mock.getListOfTexts()
-        self.assertEqual(len(list_of_texts), 4)
+        self.assertEqual(len(list_of_texts), 2)
         self.assertEqual(list_of_texts[0], "")
-        self.assertEqual(list_of_texts[1], "")
-        self.assertEqual(list_of_texts[2], "")
-        self.assertEqual(list_of_texts[3], "Pozitív egész számot adj meg a sorszámhoz!")
+        self.assertEqual(list_of_texts[1], "Pozitív egész számot adj meg a sorszámhoz!")
 
     def testNoGroups(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -154,21 +117,17 @@ class showSubjectIdentificationDialogTest(unittest.TestCase):
         experiment.settings.groups = []
         experiment.show_subject_identification_dialog()
 
-        self.assertEqual(experiment.subject_name, "alattomos-aladar")
         self.assertEqual(experiment.subject_number, 0)
         self.assertEqual(experiment.subject_group, '')
 
         list_of_texts = gui_mock.getListOfTexts()
-        self.assertEqual(len(list_of_texts), 2)
+        self.assertEqual(len(list_of_texts), 1)
         self.assertEqual(list_of_texts[0], "")
-        self.assertEqual(list_of_texts[1], "")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 2)
-        self.assertEqual(list_of_fields[0].label, "Nev")
-        self.assertEqual(list_of_fields[0].initial, 'Alattomos Aladar')
-        self.assertEqual(list_of_fields[1].label, "Sorszam")
-        self.assertEqual(list_of_fields[1].initial, '0')
+        self.assertEqual(len(list_of_fields), 1)
+        self.assertEqual(list_of_fields[0].label, "Ksz. sorszáma")
+        self.assertEqual(list_of_fields[0].initial, '0')
 
 
 if __name__ == "__main__":

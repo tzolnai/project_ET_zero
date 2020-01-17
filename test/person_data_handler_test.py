@@ -67,7 +67,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testRoundTripSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -94,7 +94,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.save_person_settings(experiment)
 
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "")
 
         person_data_handler.load_person_settings(experiment)
 
@@ -122,7 +122,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testReadMissingPersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -145,7 +145,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testReadIncompletePersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -156,7 +156,7 @@ class personDataHandlerTest(unittest.TestCase):
             this_person_settings['stim_output_line'] = 12
 
             all_settings = {}
-            all_settings["alattomos-aladar_333_group1"] = this_person_settings
+            all_settings["subject_333_group1"] = this_person_settings
 
             all_settings_file['all_settings'] = all_settings
 
@@ -179,7 +179,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testUpdateExistingPersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -218,7 +218,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_IDs_file_path = self.constructFilePath("testCreateAllSubjectFiles")
         subject_list_file_path = self.constructFilePath("testCreateIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
         person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
@@ -228,19 +228,19 @@ class personDataHandlerTest(unittest.TestCase):
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_subject_file:
-            self.assertEqual(all_subject_file['ids'], ["alattomos-aladar_333_group1"])
-            self.assertEqual(all_subject_file["alattomos-aladar_333_group1"], ['male', '25', ['1th - 1234', '2nd - 1243']])
+            self.assertEqual(all_subject_file['ids'], ["subject_333_group1"])
+            self.assertEqual(all_subject_file["subject_333_group1"], ['male', '25', ['1th - 1234', '2nd - 1243']])
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
-                             "alattomos-aladar\t333\tgroup1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
+                             "subject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "333\tgroup1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
 
     def testAddSameSubjectToAllSubjectFiles(self):
         all_IDs_file_path = self.constructFilePath("testAddSameSubjectToAllSubjectFiles")
         subject_list_file_path = self.constructFilePath("testAddSameSubjectToAllSubjectFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
 
         # call this twice simulating of running the experiment with the same subject more times
         person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
@@ -252,31 +252,31 @@ class personDataHandlerTest(unittest.TestCase):
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_subject_file:
-            self.assertEqual(all_subject_file['ids'], ["alattomos-aladar_333_group1"])
-            self.assertEqual(all_subject_file["alattomos-aladar_333_group1"], ['male', '25', ['1th - 1234', '2nd - 1243']])
+            self.assertEqual(all_subject_file['ids'], ["subject_333_group1"])
+            self.assertEqual(all_subject_file["subject_333_group1"], ['male', '25', ['1th - 1234', '2nd - 1243']])
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
-                             "alattomos-aladar\t333\tgroup1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
+                             "subject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "333\tgroup1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
 
     def testAddMoreSubjectsToAllSubjectFile(self):
         all_IDs_file_path = self.constructFilePath("testAddMoreSubjectsToAllSubjectFile")
         subject_list_file_path = self.constructFilePath("testAddMoreSubjectsToAllSubjectFile.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_all_subject_attributes_files("male", "25", ['3rd - 1324', '2nd - 1243'])
 
         person_data_handler = asrt.PersonDataHandler(
-            "toth-csaba_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_all_subject_attributes_files("female", "32", ['1th - 1234', '2nd - 1243'])
 
         person_data_handler = asrt.PersonDataHandler(
-            "kertesz-bela_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_all_subject_attributes_files("male", "43", ['1th - 1234', '3rd - 1324'])
 
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_all_subject_attributes_files("male", "25", ['3rd - 1324', '2nd - 1243'])
 
         # output files exist
@@ -285,23 +285,23 @@ class personDataHandlerTest(unittest.TestCase):
         self.assertTrue(os.path.exists(subject_list_file_path))
 
         with shelve.open(all_IDs_file_path) as all_subject_file:
-            self.assertEqual(all_subject_file['ids'], ["alattomos-aladar_333_group1", 'toth-csaba_111_group2', 'kertesz-bela_222_group3'])
-            self.assertEqual(all_subject_file["alattomos-aladar_333_group1"], ['male', '25', ['3rd - 1324', '2nd - 1243']])
-            self.assertEqual(all_subject_file["toth-csaba_111_group2"], ['female', '32', ['1th - 1234', '2nd - 1243']])
-            self.assertEqual(all_subject_file["kertesz-bela_222_group3"], ['male', '43', ['1th - 1234', '3rd - 1324']])
+            self.assertEqual(all_subject_file['ids'], ["subject_333_group1", 'subject_111_group2', 'subject_222_group3'])
+            self.assertEqual(all_subject_file["subject_333_group1"], ['male', '25', ['3rd - 1324', '2nd - 1243']])
+            self.assertEqual(all_subject_file["subject_111_group2"], ['female', '32', ['1th - 1234', '2nd - 1243']])
+            self.assertEqual(all_subject_file["subject_222_group3"], ['male', '43', ['1th - 1234', '3rd - 1324']])
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
-                             "alattomos-aladar\t333\tgroup1\tmale\t25\t['3rd - 1324', '2nd - 1243']\n"
-                             "toth-csaba\t111\tgroup2\tfemale\t32\t['1th - 1234', '2nd - 1243']\n"
-                             "kertesz-bela\t222\tgroup3\tmale\t43\t['1th - 1234', '3rd - 1324']\n")
+                             "subject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "333\tgroup1\tmale\t25\t['3rd - 1324', '2nd - 1243']\n"
+                             "111\tgroup2\tfemale\t32\t['1th - 1234', '2nd - 1243']\n"
+                             "222\tgroup3\tmale\t43\t['1th - 1234', '3rd - 1324']\n")
 
     def testSaveSpecialGroupNameToAllSubjectFile(self):
         all_IDs_file_path = self.constructFilePath("testSaveSpecialGroupNameToAllSubjectFile")
         subject_list_file_path = self.constructFilePath("testSaveSpecialGroupNameToAllSubjectFile.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "")
         person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
         # output files exist
@@ -311,34 +311,34 @@ class personDataHandlerTest(unittest.TestCase):
 
         with shelve.open(all_IDs_file_path) as all_IDs_file:
             all_IDs = all_IDs_file['ids']
-            self.assertEqual(all_IDs, ["alattomos-aladar_333_group_1"])
+            self.assertEqual(all_IDs, ["subject_333_group_1"])
 
         with codecs.open(subject_list_file_path, 'r', encoding='utf-8') as subject_list_txt:
             self.assertEqual(subject_list_txt.read(),
-                             "subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
-                             "alattomos-aladar\t333\tgroup_1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
+                             "subject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n"
+                             "333\tgroup_1\tmale\t25\t['1th - 1234', '2nd - 1243']\n")
 
     def testAppendToEmptyOutput(self):
         output_file_path = self.constructFilePath("testAppendToEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group_1", "", "", "", output_file_path, "reaction-time")
 
         person_data_handler.append_to_output_file("something")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\tsomething")
 
     def testAppendToEmptyOutputET(self):
         output_file_path = self.constructFilePath("testAppendToEmptyOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group_1", "", "", "", output_file_path, "eye-tracking")
 
         person_data_handler.append_to_output_file("something")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -351,14 +351,14 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testAppendMoreTimesToOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group_1", "", "", "", output_file_path, "reaction-time")
 
         person_data_handler.append_to_output_file("\nsomething")
         person_data_handler.append_to_output_file("\nsomething2")
         person_data_handler.append_to_output_file("\nsomething3")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode\toutput_line\t"
                                                  "session\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
                                                  "something\nsomething2\nsomething3")
@@ -366,14 +366,14 @@ class personDataHandlerTest(unittest.TestCase):
     def testAppendMoreTimesToOutputET(self):
         output_file_path = self.constructFilePath("testAppendMoreTimesToOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group_1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group_1", "", "", "", output_file_path, "eye-tracking")
 
         person_data_handler.append_to_output_file("\nsomething")
         person_data_handler.append_to_output_file("\nsomething2")
         person_data_handler.append_to_output_file("\nsomething3")
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -385,14 +385,13 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteEmptyOutput(self):
         output_file_path = self.constructFilePath("testWriteEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group1", "", "", "", output_file_path, "reaction-time")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.computer_name = "Laposka"
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -426,10 +425,10 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_RT_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
-                                                 "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
+                                                 "Laposka\tgroup1\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t2\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
@@ -438,7 +437,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteEmptyOutputET(self):
         output_file_path = self.constructFilePath("testWriteEmptyOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -449,7 +448,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -489,7 +487,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -497,14 +495,14 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
                                                  "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataWithBigLastN(self):
         output_file_path = self.constructFilePath("testWriteETDataWithBigLastN.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -515,7 +513,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -553,7 +550,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -565,7 +562,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteETDataExplicitASRT(self):
         output_file_path = self.constructFilePath("testWriteETDataExplicitASRT.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -576,7 +573,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -616,7 +612,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -624,14 +620,14 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\texplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\texplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
                                                  "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataNoPatternASRT(self):
         output_file_path = self.constructFilePath("testWriteETDataExplicitASRT.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -642,7 +638,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -682,7 +677,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -690,21 +685,20 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\tnoASRT\tnoPattern\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\tnoASRT\tnoPattern\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
                                                  "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteExistingOutput(self):
         output_file_path = self.constructFilePath("testWriteExistingOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group1", "", "", "", output_file_path, "reaction-time")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.computer_name = "Laposka"
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -754,15 +748,15 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_RT_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
-                                                 "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
+                                                 "Laposka\tgroup1\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "1\t1\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
                                                  "Orange\tpattern\tnone\t321,2345\t0\t1\tz\t\n"
-                                                 "Laposka\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t13\t1\t2\t"
+                                                 "Laposka\tgroup1\t333\tmale\t25\timplicit\t1234\t13\t1\t2\t"
                                                  "1\t2\t0,111\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
@@ -771,7 +765,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteExistingOutputET(self):
         output_file_path = self.constructFilePath("testWriteExistingOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -782,7 +776,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -841,7 +834,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -849,10 +842,10 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t500.0\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t500.0\t59,1\t16,56\t"
                                                  "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t123.4\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t123.4\t59,1\t16,56\t"
                                                  "1,3\tGreen\trandom\tnone\t2\tstimulus_on_screen\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t"
                                                  "True\tTrue\tnan\tnan\tFalse\tFalse\t10000\t-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
@@ -860,14 +853,13 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testPointInComputerName.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group1", "", "", "", output_file_path, "reaction-time")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.computer_name = "I. Richárd"
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -901,10 +893,10 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_RT_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_name\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
+            self.assertEqual(output_file.read(), "computer_name\tsubject_group\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\t"
                                                  "PCode\toutput_line\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\tframe_time\tframe_sd\t"
                                                  "date\ttime\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tRT\terror\tstimulus\tresponse\tquit_log\t\n"
-                                                 "I. Richárd\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
+                                                 "I. Richárd\tgroup1\t333\tmale\t25\timplicit\t1234\t12\t1\t2\t"
                                                  "12\t1\t0,123\t59,1\t16,56\t1,3\t" +
                                                  str(stim_RT_time) + "\t" +
                                                  str(stim_RT_date) + "\t"
@@ -913,7 +905,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteRandomTrialOutputET(self):
         output_file_path = self.constructFilePath("testWriteOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -924,7 +916,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -964,7 +955,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -972,14 +963,14 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
                                                  "1,3\tblack\trandom\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\tFalse\tFalse\t3\t3\tFalse\tFalse\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteHighRandomTrialOutputET(self):
         output_file_path = self.constructFilePath("testWriteOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "alattomos-aladar_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -990,7 +981,6 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.settings.epochN = 5
         experiment.settings.block_in_epochN = 5
         experiment.subject_group = "group1"
-        experiment.subject_name = "alattomos-aladar"
         experiment.subject_number = 333
         experiment.subject_sex = "male"
         experiment.subject_age = "25"
@@ -1030,7 +1020,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.flush_ET_data_to_output(experiment)
 
         with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
-            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_name\tsubject_number\t"
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group\tsubject_number\t"
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
@@ -1038,7 +1028,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
-                                                 "Laposka\t1366\t768\tgroup1\talattomos-aladar\t333\tmale\t25\timplicit\t1234\t1\t1\t1\t5\t500.0\t59,1\t16,56\t"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t1\t1\t5\t500.0\t59,1\t16,56\t"
                                                  "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\tTrue\tFalse\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 

@@ -52,7 +52,7 @@ class participantIDTest(unittest.TestCase):
     def testNoSettingsFile(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'kontrol', 'férfi', 25, '3rd', '2nd'])
+            [10, 'kontrol', 'férfi', 25, '3rd', '2nd'])
 
         thispath = self.constructFilePath("NoSettingsFile")
         experiment = asrt.Experiment(thispath)
@@ -76,7 +76,6 @@ class participantIDTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_group, 'kontrol')
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.subject_name, "toth-bela")
         self.assertEqual(experiment.PCodes, {1: '3rd - 1324', 2: '2nd - 1243'})
         self.assertEqual(experiment.stim_output_line, 0)
         self.assertEqual(experiment.stim_sessionN, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1, 17: 1, 18: 1, 19: 1, 20: 1, 21: 1, 22: 1, 23: 1, 24: 1, 25: 1, 26: 1, 27: 1, 28: 1, 29: 1, 30: 1, 31: 1, 32: 1, 33: 1, 34: 1, 35: 1, 36: 1, 37: 1, 38: 1, 39: 1, 40: 1, 41: 1, 42: 1, 43: 1, 44: 1, 45: 1, 46: 1, 47: 1, 48: 1,
@@ -96,7 +95,7 @@ class participantIDTest(unittest.TestCase):
 
         # Check person data handler's properties too
         self.assertEqual(experiment.person_data.subject_id,
-                         "toth-bela_10_kontrol")
+                         "subject_10_kontrol")
         self.assertEqual(experiment.person_data.all_settings_file_path, os.path.join(
             thispath, "settings", experiment.person_data.subject_id))
         self.assertEqual(experiment.person_data.all_IDs_file_path, os.path.join(
@@ -117,7 +116,7 @@ class participantIDTest(unittest.TestCase):
     def testExistingSettingsFile(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'kontrol', 'nő', 30, '3rd', '2nd', 'Tóth Béla', 10, 'kontrol'])
+            [10, 'kontrol', 'nő', 30, '3rd', '2nd', 10, 'kontrol'])
 
         thispath = self.constructFilePath("NoSettingsFile")
         experiment = asrt.Experiment(thispath)
@@ -156,7 +155,6 @@ class participantIDTest(unittest.TestCase):
 
         self.assertEqual(experiment.subject_group, 'kontrol')
         self.assertEqual(experiment.subject_number, 10)
-        self.assertEqual(experiment.subject_name, "toth-bela")
         self.assertEqual(experiment.PCodes, {1: '3rd - 1324', 2: '2nd - 1243'})
         self.assertEqual(experiment.stim_output_line, 0)
         self.assertEqual(experiment.stim_sessionN, {1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1, 10: 1, 11: 1, 12: 1, 13: 1, 14: 1, 15: 1, 16: 1, 17: 1, 18: 1, 19: 1, 20: 1, 21: 1, 22: 1, 23: 1, 24: 1, 25: 1, 26: 1, 27: 1, 28: 1, 29: 1, 30: 1, 31: 1, 32: 1, 33: 1, 34: 1, 35: 1, 36: 1, 37: 1, 38: 1, 39: 1, 40: 1, 41: 1, 42: 1, 43: 1, 44: 1, 45: 1, 46: 1, 47: 1, 48: 1,

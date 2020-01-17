@@ -143,9 +143,9 @@ class integrationETTest(unittest.TestCase):
     def tearDown(self):
         if self.update_references:
             reference_file_path = os.path.join(
-                self.current_dir, "reference", "toth-bela_10__log.txt")
+                self.current_dir, "reference", "subject_10__log.txt")
             workdir_output = os.path.join(
-                self.work_dir, "logs", "toth-bela_10__log.txt")
+                self.work_dir, "logs", "subject_10__log.txt")
 
             with codecs.open(workdir_output, 'r', encoding='utf-8') as workdir_output_file:
                 output_lines = workdir_output_file.readlines()
@@ -155,7 +155,7 @@ class integrationETTest(unittest.TestCase):
                     ref_lines = reference_file.readlines()
 
                 for i in range(1, len(output_lines)):
-                    output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[14], ref_lines[i].split('\t')[14])
+                    output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[13], ref_lines[i].split('\t')[13])
 
             with codecs.open(reference_file_path, 'w', encoding='utf-8') as reference_file:
                 for line in output_lines:
@@ -243,9 +243,9 @@ class integrationETTest(unittest.TestCase):
             return
 
         reference_file_path = os.path.join(
-            self.current_dir, "reference", "toth-bela_10__log.txt")
+            self.current_dir, "reference", "subject_10__log.txt")
         workdir_output = os.path.join(
-            self.work_dir, "logs", "toth-bela_10__log.txt")
+            self.work_dir, "logs", "subject_10__log.txt")
 
         with open(reference_file_path, "r") as ref_file:
             with open(workdir_output, "r") as output_file:
@@ -271,57 +271,56 @@ class integrationETTest(unittest.TestCase):
                     self.assertEqual(ref_values[1], act_values[1])  # monitor_width_pixel
                     self.assertEqual(ref_values[2], act_values[2])  # monitor_height_pixel
                     self.assertEqual(ref_values[3], act_values[3])  # subject_group
-                    self.assertEqual(ref_values[4], act_values[4])  # subject_name
-                    self.assertEqual(ref_values[5], act_values[5])  # subject_number
-                    self.assertEqual(ref_values[6], act_values[6])  # subject_sex
-                    self.assertEqual(ref_values[7], act_values[7])  # subject_age
-                    self.assertEqual(ref_values[8], act_values[8])  # asrt_type
-                    self.assertEqual(ref_values[9], act_values[9])  # PCode
-                    self.assertEqual(ref_values[10], act_values[10])  # session
-                    self.assertEqual(ref_values[11], act_values[11])  # epoch
-                    self.assertEqual(ref_values[12], act_values[12])  # block
-                    self.assertEqual(ref_values[13], act_values[13])  # trial
+                    self.assertEqual(ref_values[4], act_values[4])  # subject_number
+                    self.assertEqual(ref_values[5], act_values[5])  # subject_sex
+                    self.assertEqual(ref_values[6], act_values[6])  # subject_age
+                    self.assertEqual(ref_values[7], act_values[7])  # asrt_type
+                    self.assertEqual(ref_values[8], act_values[8])  # PCode
+                    self.assertEqual(ref_values[9], act_values[9])  # session
+                    self.assertEqual(ref_values[10], act_values[10])  # epoch
+                    self.assertEqual(ref_values[11], act_values[11])  # block
+                    self.assertEqual(ref_values[12], act_values[12])  # trial
                     # RSI
                     self.assertAlmostEqual(
-                        float(ref_values[14].replace(",", ".")),
-                        float(act_values[14].replace(",", ".")), delta=(0.002 if timing_small_delta else 0.1))
-                    self.assertEqual(ref_values[15], act_values[15])  # frame_rate
-                    self.assertEqual(ref_values[16], act_values[16])  # frame_time
-                    self.assertEqual(ref_values[17], act_values[17])  # frame_sd
-                    self.assertEqual(ref_values[18], act_values[18])  # stimulus color
-                    self.assertEqual(ref_values[19], act_values[19])  # trial_type_pr
-                    self.assertEqual(ref_values[20], act_values[20])  # triplet_type_hl
-                    self.assertEqual(ref_values[21], act_values[21])  # stimulus
-                    self.assertEqual(ref_values[22], act_values[22])  # trial_phase
-                    self.assertEqual(ref_values[23], act_values[23])  # left_gaze_data_X_ADCS
-                    self.assertEqual(ref_values[24], act_values[24])  # left_gaze_data_Y_ADCS
-                    self.assertEqual(ref_values[25], act_values[25])  # right_gaze_data_X_ADCS
-                    self.assertEqual(ref_values[26], act_values[26])  # right_gaze_data_Y_ADCS
-                    self.assertEqual(ref_values[27], act_values[27])  # left_gaze_data_X_PCMCS
-                    self.assertEqual(ref_values[28], act_values[28])  # left_gaze_data_Y_PCMCS
-                    self.assertEqual(ref_values[29], act_values[29])  # right_gaze_data_X_PCMCS
-                    self.assertEqual(ref_values[30], act_values[30])  # right_gaze_data_Y_PCMCS
-                    self.assertEqual(ref_values[31], act_values[31])  # left_gaze_validity
-                    self.assertEqual(ref_values[32], act_values[32])  # right_gaze_validity
-                    self.assertEqual(ref_values[33], act_values[33])  # left_pupil_diameter
-                    self.assertEqual(ref_values[34], act_values[34])  # right_pupil_diameter
-                    self.assertEqual(ref_values[35], act_values[35])  # left_pupil_validity
-                    self.assertEqual(ref_values[36], act_values[36])  # right_pupil_validity
-                    self.assertEqual(ref_values[37], act_values[37])  # gaze_data_time_stamp
-                    self.assertEqual(ref_values[38], act_values[38])  # stimulus_1_position_X_PCMCS
-                    self.assertEqual(ref_values[39], act_values[39])  # stimulus_1_position_Y_PCMCS
-                    self.assertEqual(ref_values[40], act_values[40])  # stimulus_2_position_X_PCMCS
-                    self.assertEqual(ref_values[41], act_values[41])  # stimulus_2_position_Y_PCMCS
-                    self.assertEqual(ref_values[42], act_values[42])  # stimulus_3_position_X_PCMCS
-                    self.assertEqual(ref_values[43], act_values[43])  # stimulus_3_position_Y_PCMCS
-                    self.assertEqual(ref_values[44], act_values[44])  # stimulus_4_position_X_PCMCS
-                    self.assertEqual(ref_values[45], act_values[45])  # stimulus_4_position_Y_PCMCS
-                    self.assertEqual(ref_values[46], act_values[46])  # quit_log
+                        float(ref_values[13].replace(",", ".")),
+                        float(act_values[13].replace(",", ".")), delta=(0.002 if timing_small_delta else 0.1))
+                    self.assertEqual(ref_values[14], act_values[14])  # frame_rate
+                    self.assertEqual(ref_values[15], act_values[15])  # frame_time
+                    self.assertEqual(ref_values[16], act_values[16])  # frame_sd
+                    self.assertEqual(ref_values[17], act_values[17])  # stimulus color
+                    self.assertEqual(ref_values[18], act_values[18])  # trial_type_pr
+                    self.assertEqual(ref_values[19], act_values[19])  # triplet_type_hl
+                    self.assertEqual(ref_values[20], act_values[20])  # stimulus
+                    self.assertEqual(ref_values[21], act_values[21])  # trial_phase
+                    self.assertEqual(ref_values[22], act_values[22])  # left_gaze_data_X_ADCS
+                    self.assertEqual(ref_values[23], act_values[23])  # left_gaze_data_Y_ADCS
+                    self.assertEqual(ref_values[24], act_values[24])  # right_gaze_data_X_ADCS
+                    self.assertEqual(ref_values[25], act_values[25])  # right_gaze_data_Y_ADCS
+                    self.assertEqual(ref_values[26], act_values[26])  # left_gaze_data_X_PCMCS
+                    self.assertEqual(ref_values[27], act_values[27])  # left_gaze_data_Y_PCMCS
+                    self.assertEqual(ref_values[28], act_values[28])  # right_gaze_data_X_PCMCS
+                    self.assertEqual(ref_values[29], act_values[29])  # right_gaze_data_Y_PCMCS
+                    self.assertEqual(ref_values[30], act_values[30])  # left_gaze_validity
+                    self.assertEqual(ref_values[31], act_values[31])  # right_gaze_validity
+                    self.assertEqual(ref_values[32], act_values[32])  # left_pupil_diameter
+                    self.assertEqual(ref_values[33], act_values[33])  # right_pupil_diameter
+                    self.assertEqual(ref_values[34], act_values[34])  # left_pupil_validity
+                    self.assertEqual(ref_values[35], act_values[35])  # right_pupil_validity
+                    self.assertEqual(ref_values[36], act_values[36])  # gaze_data_time_stamp
+                    self.assertEqual(ref_values[37], act_values[37])  # stimulus_1_position_X_PCMCS
+                    self.assertEqual(ref_values[38], act_values[38])  # stimulus_1_position_Y_PCMCS
+                    self.assertEqual(ref_values[39], act_values[39])  # stimulus_2_position_X_PCMCS
+                    self.assertEqual(ref_values[40], act_values[40])  # stimulus_2_position_Y_PCMCS
+                    self.assertEqual(ref_values[41], act_values[41])  # stimulus_3_position_X_PCMCS
+                    self.assertEqual(ref_values[42], act_values[42])  # stimulus_3_position_Y_PCMCS
+                    self.assertEqual(ref_values[43], act_values[43])  # stimulus_4_position_X_PCMCS
+                    self.assertEqual(ref_values[44], act_values[44])  # stimulus_4_position_Y_PCMCS
+                    self.assertEqual(ref_values[45], act_values[45])  # quit_log
 
     def testSimpleTestCase(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -331,7 +330,7 @@ class integrationETTest(unittest.TestCase):
 
     def testExplicitASRT(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -341,7 +340,7 @@ class integrationETTest(unittest.TestCase):
 
     def testMoreBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -352,7 +351,7 @@ class integrationETTest(unittest.TestCase):
     def testMoreSessions(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd'])
+            [10, 'férfi', 25, '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -362,9 +361,8 @@ class integrationETTest(unittest.TestCase):
 
     def testMoreSessionsSubsequently(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '5th', 'noPattern',
-                                 '1st', 'Tóth Béla', 10, 'Tóth Béla', 10,
-                                 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '5th', 'noPattern',
+                                 '1st', 10, 10, 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -377,7 +375,7 @@ class integrationETTest(unittest.TestCase):
         # reset StaticPeriod
         core.StaticPeriod = self.StaticPeriod
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -387,7 +385,7 @@ class integrationETTest(unittest.TestCase):
 
     def testWithoutPrepTrials(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd', '3rd', '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '3rd', '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -397,7 +395,7 @@ class integrationETTest(unittest.TestCase):
 
     def testQuitInsideABlock(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
         self.visual_mock.setReturnKeyList(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'q'])
@@ -409,7 +407,7 @@ class integrationETTest(unittest.TestCase):
 
     def testContinueAfterUnexpectedQuit(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
         self.visual_mock.setReturnKeyList(['c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c',
@@ -424,7 +422,7 @@ class integrationETTest(unittest.TestCase):
 
     def testContinueAfterQuitAtBlockEnd(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '5th', '5th', '3rd', '3rd', 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '5th', '5th', '5th', '3rd', '3rd', 10])
 
         keylist = []
         for i in range(3 + 127):
@@ -443,7 +441,7 @@ class integrationETTest(unittest.TestCase):
 
     def testRandomBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', 'noPattern', 'noPattern', 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '3rd', 'noPattern', 'noPattern', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -481,7 +479,7 @@ class integrationETTest(unittest.TestCase):
 
     def testInvalidGazeData(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.experiment.wait_for_eye_response = self.wait_for_eye_response_override_invalid_data
 
@@ -517,7 +515,7 @@ class integrationETTest(unittest.TestCase):
 
     def testGazeDataAveraging(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.experiment.wait_for_eye_response = self.wait_for_eye_response_override_averaging_data
 

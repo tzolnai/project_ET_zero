@@ -98,22 +98,22 @@ class integrationTest(unittest.TestCase):
         core.StaticPeriod = DummyStaticPeriod
 
         # Change this variable to update all reference file
-        self.update_references = False
-        self.update_RSI_reference = False
+        self.update_references = True
+        self.update_RSI_reference = True
 
     def tearDown(self):
         if self.update_references:
             reference_file_path = os.path.join(
-                self.current_dir, "reference", "toth-bela_10__log.txt")
+                self.current_dir, "reference", "subject_10__log.txt")
             workdir_output = os.path.join(
-                self.work_dir, "logs", "toth-bela_10__log.txt")
+                self.work_dir, "logs", "subject_10__log.txt")
 
             with codecs.open(workdir_output, 'r', encoding='utf-8') as workdir_output_file:
                 output_lines = workdir_output_file.readlines()
 
             for i in range(1, len(output_lines)):
+                output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[16], "_")
                 output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[17], "_")
-                output_lines[i] = output_lines[i].replace(output_lines[i].split('\t')[18], "_")
 
             if not self.update_RSI_reference:
                 with codecs.open(reference_file_path, 'r', encoding='utf-8') as reference_file:
@@ -206,9 +206,9 @@ class integrationTest(unittest.TestCase):
             return
 
         reference_file_path = os.path.join(
-            self.current_dir, "reference", "toth-bela_10__log.txt")
+            self.current_dir, "reference", "subject_10__log.txt")
         workdir_output = os.path.join(
-            self.work_dir, "logs", "toth-bela_10__log.txt")
+            self.work_dir, "logs", "subject_10__log.txt")
 
         with open(reference_file_path, "r") as ref_file:
             with open(workdir_output, "r") as output_file:
@@ -232,38 +232,37 @@ class integrationTest(unittest.TestCase):
 
                     self.assertEqual(ref_values[0], act_values[0])  # computer name
                     self.assertEqual(ref_values[1], act_values[1])  # group
-                    self.assertEqual(ref_values[2], act_values[2])  # subject name
-                    self.assertEqual(ref_values[3], act_values[3])  # subject number
-                    self.assertEqual(ref_values[4], act_values[4])  # subject sex
-                    self.assertEqual(ref_values[5], act_values[5])  # subject age
-                    self.assertEqual(ref_values[6], act_values[6])  # asrt type
-                    self.assertEqual(ref_values[7], act_values[7])  # pcode
-                    self.assertEqual(ref_values[8], act_values[8])  # output_line
-                    self.assertEqual(ref_values[9], act_values[9])  # session
-                    self.assertEqual(ref_values[10], act_values[10])  # epoch
-                    self.assertEqual(ref_values[11], act_values[11])  # block
-                    self.assertEqual(ref_values[12], act_values[12])  # trial
+                    self.assertEqual(ref_values[2], act_values[2])  # subject number
+                    self.assertEqual(ref_values[3], act_values[3])  # subject sex
+                    self.assertEqual(ref_values[4], act_values[4])  # subject age
+                    self.assertEqual(ref_values[5], act_values[5])  # asrt type
+                    self.assertEqual(ref_values[6], act_values[6])  # pcode
+                    self.assertEqual(ref_values[7], act_values[7])  # output_line
+                    self.assertEqual(ref_values[8], act_values[8])  # session
+                    self.assertEqual(ref_values[9], act_values[9])  # epoch
+                    self.assertEqual(ref_values[10], act_values[10])  # block
+                    self.assertEqual(ref_values[11], act_values[11])  # trial
                     self.assertAlmostEqual(
-                        float(ref_values[13].replace(",", ".")),
-                        float(act_values[13].replace(",", ".")), delta=(0.002 if timing_small_delta else 0.1))
-                    self.assertEqual(ref_values[14], act_values[14])  # frame_rate
-                    self.assertEqual(ref_values[15], act_values[15])  # frame_time
-                    self.assertEqual(ref_values[16], act_values[16])  # frame_sd
-                    datetime.strptime(act_values[17], '%H:%M:%S.%f')  # date
-                    datetime.strptime(act_values[18], '%d/%m/%Y')  # time
-                    self.assertEqual(ref_values[19], act_values[19])  # stimulus color
-                    self.assertEqual(ref_values[20], act_values[20])  # trial_type_pr
-                    self.assertEqual(ref_values[21], act_values[21])  # triplet_type_hl
-                    self.assertEqual(ref_values[22], act_values[22])  # RT
-                    self.assertEqual(ref_values[23], act_values[23])  # error
-                    self.assertEqual(ref_values[24], act_values[24])  # stimulus
-                    self.assertEqual(ref_values[25], act_values[25])  # response
-                    self.assertEqual(ref_values[26], act_values[26])  # quitlog
+                        float(ref_values[12].replace(",", ".")),
+                        float(act_values[12].replace(",", ".")), delta=(0.002 if timing_small_delta else 0.1))
+                    self.assertEqual(ref_values[13], act_values[13])  # frame_rate
+                    self.assertEqual(ref_values[14], act_values[14])  # frame_time
+                    self.assertEqual(ref_values[15], act_values[15])  # frame_sd
+                    datetime.strptime(act_values[16], '%H:%M:%S.%f')  # date
+                    datetime.strptime(act_values[17], '%d/%m/%Y')  # time
+                    self.assertEqual(ref_values[18], act_values[18])  # stimulus color
+                    self.assertEqual(ref_values[19], act_values[19])  # trial_type_pr
+                    self.assertEqual(ref_values[20], act_values[20])  # triplet_type_hl
+                    self.assertEqual(ref_values[21], act_values[21])  # RT
+                    self.assertEqual(ref_values[22], act_values[22])  # error
+                    self.assertEqual(ref_values[23], act_values[23])  # stimulus
+                    self.assertEqual(ref_values[24], act_values[24])  # response
+                    self.assertEqual(ref_values[25], act_values[25])  # quitlog
 
     def testSimpleTestCase(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -281,7 +280,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -293,7 +292,7 @@ class integrationTest(unittest.TestCase):
     def testExplicitASRT(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -312,7 +311,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -323,7 +322,7 @@ class integrationTest(unittest.TestCase):
     def testMoreBlocks(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -335,7 +334,7 @@ class integrationTest(unittest.TestCase):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            ['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd'])
+            [10, 'férfi', 25, '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -441,7 +440,7 @@ class integrationTest(unittest.TestCase):
     def testContinueAfterUnexpectedQuit(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', 10])
 
         # override this method to get the stimlist to be able to generate the keylist
         self.presentation = self.experiment.presentation
@@ -498,7 +497,7 @@ class integrationTest(unittest.TestCase):
     def testContinueAfterQuitAtBlockEnd(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '5th', '5th', '5th', '3rd', '3rd', 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '5th', '5th', '5th', '3rd', '3rd', 10])
 
         # override this method to get the stimlist to be able to generate the keylist
         self.presentation = self.experiment.presentation
@@ -520,9 +519,8 @@ class integrationTest(unittest.TestCase):
     def testMoreSessionsSubsequently(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '5th', 'noPattern',
-                                 '1st', 'Tóth Béla', 10, 'Tóth Béla', 10,
-                                 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '5th', 'noPattern',
+                                 '1st', 10, 10, 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -535,7 +533,7 @@ class integrationTest(unittest.TestCase):
         # reset StaticPeriod
         core.StaticPeriod = self.StaticPeriod
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -559,7 +557,7 @@ class integrationTest(unittest.TestCase):
 
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -570,7 +568,7 @@ class integrationTest(unittest.TestCase):
     def testWithoutPrepTrials(self):
         # for setting participant data
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', '3rd', '3rd', '3rd'])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '3rd', '3rd', '3rd', '3rd'])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
@@ -580,7 +578,7 @@ class integrationTest(unittest.TestCase):
 
     def testRandomBlocks(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['Tóth Béla', 10, 'férfi', 25, '3rd', '3rd', 'noPattern', 'noPattern', 'Tóth Béla', 10])
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '3rd', 'noPattern', 'noPattern', 10])
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
