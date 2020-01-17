@@ -776,11 +776,12 @@ class PersonDataHandler:
             with codecs.open(self.subject_list_file_path, 'w', encoding='utf-8') as subject_list_file:
                 subject_list_IO = StringIO()
                 # write header
-                subject_list_IO.write('subject_name\tsubject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n')
+                subject_list_IO.write('subject_id\tsubject_group\tsubject_sex\tsubject_age\tsubject_PCodes\n')
 
                 # write subject data
                 for id in all_IDs:
-                    id_segmented = id.replace('_', '\t', 2)
+                    id_segmented = id[len("subject_"):]
+                    id_segmented = id_segmented.replace('_', '\t', 1)
                     subject_list_IO.write(id_segmented)
                     subject_list_IO.write('\t')
                     subject_list_IO.write(all_subject_file[id][0])
@@ -821,7 +822,6 @@ class PersonDataHandler:
 
             output_data = [experiment.settings.computer_name,
                            experiment.subject_group,
-                           experiment.subject_name,
                            experiment.subject_number,
                            experiment.subject_sex,
                            experiment.subject_age,
@@ -869,7 +869,6 @@ class PersonDataHandler:
 
         heading_list = ['computer_name',
                         'subject_group',
-                        'subject_name',
                         'subject_number',
                         'subject_sex',
                         'subject_age',
@@ -950,7 +949,6 @@ class PersonDataHandler:
                            experiment.mymonitor.getSizePix()[0],
                            experiment.mymonitor.getSizePix()[1],
                            experiment.subject_group,
-                           experiment.subject_name,
                            experiment.subject_number,
                            experiment.subject_sex,
                            experiment.subject_age,
@@ -1019,7 +1017,6 @@ class PersonDataHandler:
                         'monitor_width_pixel',
                         'monitor_height_pixel',
                         'subject_group',
-                        'subject_name',
                         'subject_number',
                         'subject_sex',
                         'subject_age',
@@ -1117,8 +1114,6 @@ class Experiment:
         self.subject_group = None
         # serial number of the current subject
         self.subject_number = None
-        # name of the current subject
-        self.subject_name = None
         # sex of the subject (e.g. male, female, other)
         self.subject_sex = None
         # age of the subject (e.g. 23 (years))
@@ -1188,21 +1183,14 @@ class Experiment:
         itsOK = False
         while not itsOK:
             settings_dialog = gui.Dlg(title=u'Beállítások')
-            settings_dialog.addText('')
             settings_dialog.addText(warningtext, color='Red')
-            settings_dialog.addField(u'Nev', u"Alattomos Aladar")
-            settings_dialog.addField(u'Sorszam', "0")
+            settings_dialog.addField(u'Ksz. sorszáma', "0")
             if len(self.settings.groups) > 1:
                 settings_dialog.addField(u'Csoport', choices=self.settings.groups)
 
             returned_data = settings_dialog.show()
             if settings_dialog.OK:
-                name = returned_data[0]
-                name = normalize_string(name, "-")
-                name = name.replace("_", "-")
-                self.subject_name = name
-
-                subject_number = returned_data[1]
+                subject_number = returned_data[0]
                 try:
                     subject_number = int(subject_number)
                     if subject_number >= 0:
@@ -1217,7 +1205,7 @@ class Experiment:
                     continue
 
                 if len(self.settings.groups) > 1:
-                    self.subject_group = returned_data[2]
+                    self.subject_group = returned_data[1]
                 else:
                     self.subject_group = ""
             else:
@@ -1413,7 +1401,7 @@ class Experiment:
         self.show_subject_identification_dialog()
 
         # unique subject ID
-        subject_id = self.subject_name + '_' + str(self.subject_number) + '_' + self.subject_group
+        subject_id = 'subject_' + str(self.subject_number) + '_' + self.subject_group
 
         # init subject data handler with the rigth file paths
         all_settings_file_path = os.path.join(self.workdir_path, "settings", subject_id)
