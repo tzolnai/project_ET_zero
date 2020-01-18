@@ -1236,61 +1236,115 @@ class Experiment:
     def show_subject_attributes_dialog(self):
         """Select pattern sequences for the different sessions for the current subject."""
 
-        settings_dialog = gui.Dlg(title=u'Beállítások')
-        settings_dialog.addText('')
-        settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
-        settings_dialog.addField(u'Életkor', "25")
+        # Use a custom dialog for our specific experiment
+        if self.settings.numsessions == 2 and self.settings.epochs[1] == 3:
 
-        epoch_number = 0
-        for i in range(self.settings.numsessions):
-            for j in range(self.settings.epochs[i]):
-                epoch_number += 1
-                if self.settings.asrt_types[epoch_number] == "noASRT":
-                    settings_dialog.addFixedField(u'Epoch ' + str(epoch_number) + ' PCode', 'noPattern')
+            settings_dialog = gui.Dlg(title=u'Beállítások')
+            settings_dialog.addText('')
+            settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
+            settings_dialog.addField(u'Életkor', "25")
+            settings_dialog.addField(u'Első PCode', choices=['1st', '2nd', '3rd', '4th', '5th', '6th'])
+            settings_dialog.addField(u'Második PCode', choices=['1st', '2nd', '3rd', '4th', '5th', '6th'])
+
+            returned_data = settings_dialog.show()
+            if settings_dialog.OK:
+                self.PCodes = {}
+
+                subject_sex = returned_data[0]
+                subject_age = returned_data[1]
+                for i in range(self.settings.epochN):
+                    if self.settings.asrt_types[i + 1] == 'noASRT':
+                        PCode = 'noPattern'
+                    elif i == self.settings.epochs[0] + 1:
+                        PCode = returned_data[3]
+                    else:
+                        PCode = returned_data[2]
+                    if PCode == '1st':
+                        self.PCodes[i + 1] = '1st - 1234'
+                    elif PCode == '2nd':
+                        self.PCodes[i + 1] = '2nd - 1243'
+                    elif PCode == '3rd':
+                        self.PCodes[i + 1] = '3rd - 1324'
+                    elif PCode == '4th':
+                        self.PCodes[i + 1] = '4th - 1342'
+                    elif PCode == '5th':
+                        self.PCodes[i + 1] = '5th - 1423'
+                    elif PCode == '6th':
+                        self.PCodes[i + 1] = '6th - 1432'
+                    else:
+                        self.PCodes[i + 1] = 'noPattern'
+
+                if subject_sex == "férfi":
+                    self.subject_sex = "male"
+                elif subject_sex == "nő":
+                    self.subject_sex = "female"
                 else:
-                    settings_dialog.addField(u'Epoch ' + str(epoch_number) + ' PCode', choices=[
-                        '1st', '2nd', '3rd', '4th', '5th', '6th'])
+                    self.subject_sex = "other"
 
-        returned_data = settings_dialog.show()
-        if settings_dialog.OK:
-            self.PCodes = {}
-
-            subject_sex = returned_data[0]
-            subject_age = returned_data[1]
-            for i in range(epoch_number):
-                PCode = returned_data[i + 2]
-                if PCode == '1st':
-                    self.PCodes[i + 1] = '1st - 1234'
-                elif PCode == '2nd':
-                    self.PCodes[i + 1] = '2nd - 1243'
-                elif PCode == '3rd':
-                    self.PCodes[i + 1] = '3rd - 1324'
-                elif PCode == '4th':
-                    self.PCodes[i + 1] = '4th - 1342'
-                elif PCode == '5th':
-                    self.PCodes[i + 1] = '5th - 1423'
-                elif PCode == '6th':
-                    self.PCodes[i + 1] = '6th - 1432'
-                else:
-                    self.PCodes[i + 1] = 'noPattern'
-
-            index = self.settings.numsessions
-
-            if subject_sex == "férfi":
-                self.subject_sex = "male"
-            elif subject_sex == "nő":
-                self.subject_sex = "female"
+                try:
+                    subject_age = int(subject_age)
+                    self.subject_age = str(subject_age)
+                except:
+                    core.quit()
+                return self.PCodes
             else:
-                self.subject_sex = "other"
-
-            try:
-                subject_age = int(subject_age)
-                self.subject_age = str(subject_age)
-            except:
                 core.quit()
-            return self.PCodes
-        else:
-            core.quit()
+        else:  # keep the original / more general code here
+            settings_dialog = gui.Dlg(title=u'Beállítások')
+            settings_dialog.addText('')
+            settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
+            settings_dialog.addField(u'Életkor', "25")
+
+            epoch_number = 0
+            for i in range(self.settings.numsessions):
+                for j in range(self.settings.epochs[i]):
+                    epoch_number += 1
+                    if self.settings.asrt_types[epoch_number] == "noASRT":
+                        settings_dialog.addFixedField(u'Epoch ' + str(epoch_number) + ' PCode', 'noPattern')
+                    else:
+                        settings_dialog.addField(u'Epoch ' + str(epoch_number) + ' PCode', choices=[
+                            '1st', '2nd', '3rd', '4th', '5th', '6th'])
+
+            returned_data = settings_dialog.show()
+            if settings_dialog.OK:
+                self.PCodes = {}
+
+                subject_sex = returned_data[0]
+                subject_age = returned_data[1]
+                for i in range(epoch_number):
+                    PCode = returned_data[i + 2]
+                    if PCode == '1st':
+                        self.PCodes[i + 1] = '1st - 1234'
+                    elif PCode == '2nd':
+                        self.PCodes[i + 1] = '2nd - 1243'
+                    elif PCode == '3rd':
+                        self.PCodes[i + 1] = '3rd - 1324'
+                    elif PCode == '4th':
+                        self.PCodes[i + 1] = '4th - 1342'
+                    elif PCode == '5th':
+                        self.PCodes[i + 1] = '5th - 1423'
+                    elif PCode == '6th':
+                        self.PCodes[i + 1] = '6th - 1432'
+                    else:
+                        self.PCodes[i + 1] = 'noPattern'
+
+                index = self.settings.numsessions
+
+                if subject_sex == "férfi":
+                    self.subject_sex = "male"
+                elif subject_sex == "nő":
+                    self.subject_sex = "female"
+                else:
+                    self.subject_sex = "other"
+
+                try:
+                    subject_age = int(subject_age)
+                    self.subject_age = str(subject_age)
+                except:
+                    core.quit()
+                return self.PCodes
+            else:
+                core.quit()
 
     def which_code(self, epoch_number):
         """Convert sessions pattern code to a raw code containing only the series of stimulus numbers."""

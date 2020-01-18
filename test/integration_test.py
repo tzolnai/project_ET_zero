@@ -98,8 +98,8 @@ class integrationTest(unittest.TestCase):
         core.StaticPeriod = DummyStaticPeriod
 
         # Change this variable to update all reference file
-        self.update_references = True
-        self.update_RSI_reference = True
+        self.update_references = False
+        self.update_RSI_reference = False
 
     def tearDown(self):
         if self.update_references:
