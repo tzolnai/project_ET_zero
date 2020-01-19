@@ -1,0 +1,34 @@
+Beállítások
+
+Monitor Width: 	34,2
+Computer Name: 	Laposka
+Experiment type:	eye-tracking
+Groups:	nincsenek csoportok
+Sessions:	2
+Epochs in sessions:	5, 3
+Blocks in epochs:	5
+Preparatory Trials\Block:	2
+Trials\Block:	80
+RSI:	0,5
+Asrt stim distance:	10,0
+Asrt stim size:	1,0
+Asrt stim color (implicit):	Orange
+Asrt stim color (explicit, cued):	Green
+Background color:	Ivory
+AOI size:	3,0
+Fixation threshold for stimulus:	12
+Fixation threshold for instructions:	36
+
+Az alábbi beállítások minden személyre érvényesek és irányadóak
+
+A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,
+az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,
+úgy az asrt.py és az instrukciókat tartalmazó inst_and_feedback.txt fájlt másold át egy,
+másik könyvtárba is, és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.
+
+Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő
+beállítások vannak elmentve.
+
+A settings/settings fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl
+törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,
+jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.
