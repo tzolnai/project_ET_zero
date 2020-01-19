@@ -16,6 +16,9 @@ jobs:
           git submodule init
           git submodule update
 
+      - name: Install pyWinhook
+        run: pip install pyWinhook==1.6.1
+
       - name: Install PsychoPy
         run: pip install psychopy==3.2.3
 
