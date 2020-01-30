@@ -32,7 +32,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
     def testDefaults(self):
         gui_mock = pgm.PsychoPyGuiMock()
 
-        experiment = asrt.Experiment("")
+        experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.numsessions = 2
@@ -64,7 +64,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['férfi', 25, '1st', '6th'])
 
-        experiment = asrt.Experiment("")
+        experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.numsessions = 2
@@ -83,7 +83,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.setReturnValue(False)
 
-        experiment = asrt.Experiment("")
+        experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.numsessions = 2
         experiment.settings.epochs = [2, 3]
@@ -97,7 +97,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['férfi', 25, '3rd', '6th'])
 
-        experiment = asrt.Experiment("")
+        experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
 
         experiment.settings.numsessions = 2
@@ -118,7 +118,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(['férfi', "alma", '1st'])
 
-        experiment = asrt.Experiment("")
+        experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.numsessions = 2
         experiment.settings.epochs = [2, 3]

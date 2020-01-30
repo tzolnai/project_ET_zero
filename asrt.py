@@ -1070,7 +1070,7 @@ class PersonDataHandler:
 class Experiment:
     """ Class for running the ASRT experiment."""
 
-    def __init__(self, workdir_path):
+    def __init__(self, workdir_path, project_ET_zero = False):
         # working directory of the experiment, the script reads settings and writer output under this directory
         self.workdir_path = workdir_path
 
@@ -1145,6 +1145,8 @@ class Experiment:
         self.trial_phase = None
         # this variable has a meaning during presentation, last measured RSI
         self.last_RSI = None
+
+        self.project_ET_zero = project_ET_zero
 
     def all_settings_def(self):
 
@@ -1237,7 +1239,7 @@ class Experiment:
         """Select pattern sequences for the different sessions for the current subject."""
 
         # Use a custom dialog for our specific experiment
-        if self.settings.numsessions == 2 and self.settings.epochs[1] == 3:
+        if self.project_ET_zero:
 
             settings_dialog = gui.Dlg(title=u'Beállítások')
             settings_dialog.addText('')
@@ -1999,5 +2001,5 @@ class Experiment:
 
 if __name__ == "__main__":
     thispath = os.path.split(os.path.abspath(__file__))[0]
-    experiment = Experiment(thispath)
+    experiment = Experiment(thispath, true)
     experiment.run()
