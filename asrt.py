@@ -61,7 +61,7 @@ class ExperimentSettings:
        These settings apply to all subjects in the specific experiment.
     """
 
-    def __init__(self, settings_file_path, reminder_file_path):
+    def __init__(self, settings_file_path, reminder_file_path, project_ET_zero = False):
         # type of the experiment (reaction time or eyetracking
         self.experiment_type = None
         # number of sessions (e.g. 10)
@@ -132,6 +132,9 @@ class ExperimentSettings:
         self.settings_file_path = settings_file_path
         # settings reminder text file's path
         self.reminder_file_path = reminder_file_path
+
+        self.project_ET_zero = project_ET_zero
+        self.validation_trialN = 20
 
     def read_from_file(self):
         """Open settings shelve file in read-only mode and read all settings from it.
@@ -277,33 +280,68 @@ class ExperimentSettings:
     def get_maxtrial(self):
         """Get number of all trials in the whole experiment (in all sessions)."""
 
-        return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
+        if self.project_ET_zero:
+            return ((self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN) + (self.validation_trialN * self.numsessions)
+        else: # keep original code here
+            return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
 
     def get_block_starts(self):
         """Return with a list of numbers indicating the first trials of the different blocks."""
 
-        if self.blockstarts == None:
-            self.blockstarts = [1]
-            for i in range(1, self.epochN * self.block_in_epochN + 2):
-                self.blockstarts.append(
-                    i * (self.blocklengthN + self.blockprepN) + 1)
+        if self.project_ET_zero:
+            if self.blockstarts == None:
+                self.blockstarts = [1]
+
+                sessions_starts = self.get_session_starts()
+                for i in range(len(sessions_starts) - 1):
+                    start = sessions_starts[i]
+                    self.blockstarts.append(start + self.validation_trialN)
+                    for j in range(1, self.epochs[i] * self.block_in_epochN + 1):
+                        self.blockstarts.append(
+                            start + self.validation_trialN + j * (self.blocklengthN + self.blockprepN))
+
+                    if i == len(sessions_starts) - 2:
+                        self.blockstarts.append(
+                            start + self.validation_trialN + (self.epochs[i] * self.block_in_epochN + 1) * (self.blocklengthN + self.blockprepN))
+
+        else: # keep original code here
+            if self.blockstarts == None:
+                self.blockstarts = [1]
+                for i in range(1, self.epochN * self.block_in_epochN + 2):
+                    self.blockstarts.append(
+                        i * (self.blocklengthN + self.blockprepN) + 1)
 
         return self.blockstarts
 
     def get_session_starts(self):
         """Return with a list of numbers indicating the first trials of the different sessions."""
 
-        if self.sessionstarts == None:
-            self.sessionstarts = [1]
-            epochs_cumulative = []
-            e_temp = 0
-            for e in self.epochs:
-                e_temp += e
-                epochs_cumulative.append(e_temp)
+        if self.project_ET_zero:
+            if self.sessionstarts == None:
+                self.sessionstarts = [1]
+                epochs_cumulative = []
+                e_temp = 0
+                for e in self.epochs:
+                    e_temp += e
+                    epochs_cumulative.append(e_temp)
 
-            for e in epochs_cumulative:
-                self.sessionstarts.append(
-                    e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1)
+                session = 0
+                for e in epochs_cumulative:
+                    session += 1
+                    self.sessionstarts.append(
+                        e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1 + (session * self.validation_trialN))
+        else: # keep original code here
+            if self.sessionstarts == None:
+                self.sessionstarts = [1]
+                epochs_cumulative = []
+                e_temp = 0
+                for e in self.epochs:
+                    e_temp += e
+                    epochs_cumulative.append(e_temp)
+
+                for e in epochs_cumulative:
+                    self.sessionstarts.append(
+                        e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1)
 
         return self.sessionstarts
 
@@ -1403,6 +1441,23 @@ class Experiment:
 
         for epoch in range(1, self.settings.epochN + 1):
 
+            if self.project_ET_zero:
+                if all_trial_Nr + 1 in sessionsstarts:
+                    current_trial_num = 0
+
+                    for i in range(self.settings.validation_trialN):
+                        current_trial_num += 1
+
+                        all_trial_Nr += 1
+                        asrt_type = self.settings.asrt_types[epoch]
+
+                        current_stim = random.choice([1, 2, 3, 4])
+                        self.stimlist[all_trial_Nr] = current_stim
+                        self.stimpr[all_trial_Nr] = "random"
+                        self.stimtrial[all_trial_Nr] = current_trial_num
+                        self.stimblock[all_trial_Nr] = 0
+                        self.stimepoch[all_trial_Nr] = epoch
+
             for block in range(1, self.settings.block_in_epochN + 1):
                 block_num += 1
                 current_trial_num = 0
@@ -1943,7 +1998,7 @@ class Experiment:
         # load experiment settings if exist or ask the user to specify them
         all_settings_file_path = os.path.join(self.workdir_path, "settings", "settings")
         reminder_file_path = os.path.join(self.workdir_path, "settings", "settings_reminder.txt")
-        self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
+        self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path, self.project_ET_zero)
         self.all_settings_def()
 
         # specify predefined dictionaries
@@ -2001,5 +2056,5 @@ class Experiment:
 
 if __name__ == "__main__":
     thispath = os.path.split(os.path.abspath(__file__))[0]
-    experiment = Experiment(thispath, true)
+    experiment = Experiment(thispath, True)
     experiment.run()
