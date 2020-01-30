@@ -11,7 +11,7 @@
 'computer_name', (5120, 17)
 'asrt_distance', (5632, 12)
 'asrt_size', (6144, 12)
-'asrt_rcolor', (6656, 16)
+'asrt_rcolor', (6656, 18)
 'asrt_pcolor', (7168, 15)
 'asrt_background', (7680, 15)
 'RSI_time', (8192, 12)

@@ -428,6 +428,70 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                              'törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,\n' +
                              'jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.\n')
 
+    def testProjectETZero(self):
+        output_file = self.constructFilePath("testRoundTripCustomValuesET")
+        exp_settings = asrt.ExperimentSettings(output_file, "", True)
+
+        exp_settings.experiment_type = 'eye-tracking'
+        exp_settings.numsessions = 2
+        exp_settings.groups = []
+        exp_settings.blockprepN = 2
+        exp_settings.blocklengthN = 80
+        exp_settings.block_in_epochN = 5
+        exp_settings.epochN = 8
+        exp_settings.epochs = [5, 3]
+        exp_settings.asrt_types = ["noASRT", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit"]
+        exp_settings.monitor_width = 53.7
+        exp_settings.computer_name = "Laposka"
+        exp_settings.asrt_distance = 15.0
+        exp_settings.asrt_size = 1.5
+        exp_settings.asrt_rcolor = "DarkBlue"
+        exp_settings.asrt_pcolor = "Green"
+        exp_settings.asrt_background = "Ivory"
+        exp_settings.RSI_time = 0.5
+        exp_settings.AOI_size = 5.0
+        exp_settings.stim_fixation_threshold = 12
+        exp_settings.instruction_fixation_threshold = 36
+
+        exp_settings.write_to_file()
+
+        exp_settings = asrt.ExperimentSettings(output_file, "", True)
+        exp_settings.read_from_file()
+
+        self.assertEqual(exp_settings.experiment_type, "eye-tracking")
+        self.assertEqual(exp_settings.groups, [])
+        self.assertEqual(exp_settings.blockprepN, 2)
+        self.assertEqual(exp_settings.blocklengthN, 80)
+        self.assertEqual(exp_settings.block_in_epochN, 5)
+        self.assertEqual(exp_settings.epochN, 8)
+        self.assertEqual(exp_settings.epochs, [5, 3])
+        self.assertEqual(exp_settings.asrt_types, ["noASRT", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit"])
+        self.assertEqual(exp_settings.monitor_width, 53.7)
+        self.assertEqual(exp_settings.computer_name, "Laposka")
+        self.assertEqual(exp_settings.asrt_distance, 15.0)
+        self.assertEqual(exp_settings.asrt_size, 1.5)
+        self.assertEqual(exp_settings.asrt_rcolor, "DarkBlue")
+        self.assertEqual(exp_settings.asrt_pcolor, "Green")
+        self.assertEqual(exp_settings.asrt_background, "Ivory")
+        self.assertEqual(exp_settings.RSI_time, 0.5)
+        self.assertEqual(exp_settings.AOI_size, 5.0)
+        self.assertEqual(exp_settings.stim_fixation_threshold, 12)
+        self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
+        self.assertEqual(exp_settings.key1, None)
+        self.assertEqual(exp_settings.key2, None)
+        self.assertEqual(exp_settings.key3, None)
+        self.assertEqual(exp_settings.key4, None)
+        self.assertEqual(exp_settings.key_quit, 'q')
+        self.assertEqual(exp_settings.whether_warning, None)
+        self.assertEqual(exp_settings.speed_warning, None)
+        self.assertEqual(exp_settings.acc_warning, None)
+        self.assertEqual(exp_settings.get_maxtrial(), 3320)
+        self.assertEqual(exp_settings.get_session_starts(), [1, 2071, 3321])
+        self.assertEqual(exp_settings.get_block_starts(), [1, 21, 103, 185, 267, 349, 431, 513, 595, 677, 759, 841, 923, 1005, 1087, 1169,
+                                                           1251, 1333, 1415, 1497, 1579, 1661, 1743, 1825, 1907, 1989, 2071,
+                                                           2091, 2173, 2255, 2337, 2419, 2501, 2583, 2665, 2747, 2829, 2911,
+                                                           2993, 3075, 3157, 3239, 3321, 3403])
+        self.assertEqual(exp_settings.get_key_list(), ['q'])
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

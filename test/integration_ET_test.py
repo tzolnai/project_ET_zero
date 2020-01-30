@@ -531,7 +531,7 @@ class integrationETTest(unittest.TestCase):
 
         self.visual_mock = pvm.PsychoPyVisualMock()
 
-        self.experiment.porject_ET_zero = True
+        self.experiment.project_ET_zero = True
         self.experiment.run(window_gammaErrorPolicy='ignore')
         self.experiment.run(window_gammaErrorPolicy='ignore')
 

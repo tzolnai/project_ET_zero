@@ -100,5 +100,5 @@ if __name__ == "__main__":
     with mouse.Listener(on_move=on_move) as listener:
         thispath = os.path.split(os.path.abspath(__file__))[0]
         thispath = os.path.split(thispath)[0]
-        experiment = asrt.Experiment(thispath)
+        experiment = asrt.Experiment(thispath, True)
         experiment.run(False, True)

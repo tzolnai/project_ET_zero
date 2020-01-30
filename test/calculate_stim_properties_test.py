@@ -862,6 +862,134 @@ class calculateStimpropertiesTest(unittest.TestCase):
                 else:
                     self.assertEqual(experiment.stimpr[i + 1], "random")
 
+    def testProjectETZero(self):
+        experiment = asrt.Experiment("", True)
+        experiment.settings = asrt.ExperimentSettings("", "", True)
+        experiment.settings.numsessions = 2
+        experiment.settings.epochN = 8
+        experiment.settings.epochs = [5, 3]
+        experiment.settings.block_in_epochN = 5
+        experiment.settings.blockprepN = 2
+        experiment.settings.blocklengthN = 80
+        experiment.settings.asrt_rcolor = "DarkBlue"
+        experiment.settings.asrt_pcolor = "Green"
+        experiment.settings.asrt_types = {1: 'noASRT', 2: 'implicit', 3: 'implicit', 4: 'implicit', 5: 'implicit', 6: 'implicit', 7: 'implicit',
+                                          8: 'implicit'}
+
+        experiment.stim_sessionN = {}
+        experiment.end_at = {}
+        experiment.stimepoch = {}
+        experiment.stimblock = {}
+        experiment.stimtrial = {}
+        experiment.stimlist = {}
+        experiment.stimpr = {}
+        experiment.PCodes = {}
+        for i in range(experiment.settings.epochN):
+            experiment.PCodes[i + 1] = "1st - 1234"
+        experiment.calculate_stim_properties()
+
+        self.assertEqual(len(experiment.stim_sessionN),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.end_at),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimepoch),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimblock),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimtrial),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimlist),
+                         experiment.settings.get_maxtrial())
+        self.assertEqual(len(experiment.stimpr),
+                         experiment.settings.get_maxtrial())
+
+        for i in range(len(experiment.stim_sessionN)):
+            if i < experiment.settings.get_session_starts()[1] - 1:
+                self.assertEqual(experiment.stim_sessionN[i + 1], 1)
+            else:
+                self.assertEqual(experiment.stim_sessionN[i + 1], 2)
+
+        for i in range(len(experiment.end_at)):
+            if i < experiment.settings.get_session_starts()[1] - 1:
+                self.assertEqual(
+                    experiment.end_at[i + 1], experiment.settings.get_session_starts()[1])
+            else:
+                self.assertEqual(
+                    experiment.end_at[i + 1], experiment.settings.get_session_starts()[2])
+
+        epoch = 1
+        counter = 0
+        for i in range(len(experiment.stimepoch)):
+            counter += 1
+            if epoch == 1 or epoch == 6:
+                if counter == (experiment.settings.blockprepN + experiment.settings.blocklengthN) * experiment.settings.block_in_epochN + experiment.settings.validation_trialN + 1:
+                    counter = 1
+                    epoch += 1
+            elif counter == (experiment.settings.blockprepN + experiment.settings.blocklengthN) * experiment.settings.block_in_epochN + 1:
+                counter = 1
+                epoch += 1
+            self.assertEqual(experiment.stimepoch[i + 1], epoch);
+
+        block = 1
+        counter = 0
+        for i in range(len(experiment.stimblock)):
+            counter += 1
+            if block == 1 or block == 27:
+                if counter == experiment.settings.validation_trialN + 1:
+                    counter = 1
+                    block += 1
+            elif counter == (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1:
+                counter = 1
+                block += 1
+
+            if block == 1 or block == 27:
+                self.assertEqual(experiment.stimblock[i + 1], 0)
+            elif block < 27:
+                self.assertEqual(experiment.stimblock[i + 1], block - 1)
+            else:
+                self.assertEqual(experiment.stimblock[i + 1], block - 2)
+
+        block = 1
+        counter = 0
+        for i in range(len(experiment.stimtrial)):            
+            counter += 1
+            if block == 1 or block == 27:
+                if counter == experiment.settings.validation_trialN + 1:
+                    counter = 1
+                    block += 1
+            elif counter == (experiment.settings.blockprepN + experiment.settings.blocklengthN) + 1:
+                counter = 1
+                block += 1
+
+            self.assertEqual(experiment.stimtrial[i + 1], counter)
+
+        count_1 = 0
+        count_2 = 0
+        count_3 = 0
+        oount_4 = 0
+        for i in range(len(experiment.stimlist)):
+            if experiment.stimpr[i + 1] == "pattern":
+                if experiment.stimlist[i + 1] == 1:
+                    count_1 += 1
+                elif experiment.stimlist[i + 1] == 2:
+                    count_2 += 1
+                elif experiment.stimlist[i + 1] == 3:
+                    count_3 += 1
+                elif experiment.stimlist[i + 1] == 4:
+                    oount_4 += 1
+
+        self.assertEqual(count_1, 350)
+        self.assertEqual(count_2, 350)
+        self.assertEqual(count_3, 350)
+        self.assertEqual(oount_4, 350)
+
+        for i in range(len(experiment.stimpr)):
+            if (experiment.stimblock[i + 1] != 0 and experiment.stimepoch[i + 1] != 1 and
+                experiment.stimtrial[i + 1] > experiment.settings.blockprepN and experiment.stimtrial[i + 1] % 2 == 1 ):
+                self.assertEqual(experiment.stimpr[i + 1], "pattern")
+            else:
+                self.assertEqual(experiment.stimpr[i + 1], "random")
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
