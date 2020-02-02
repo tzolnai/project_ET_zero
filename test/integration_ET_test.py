@@ -537,6 +537,25 @@ class integrationETTest(unittest.TestCase):
 
         self.checkOutputFile()
 
+    def testPorjectETZeroRecalibration(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '5th', 10, 10])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+        keylist = []
+        for i in range(24):
+            keylist.append('r')
+        self.visual_mock.setReturnKeyList(keylist)
+
+        self.experiment.project_ET_zero = True
+        with self.assertRaises(SystemExit):
+            self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile()
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests

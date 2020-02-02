@@ -465,7 +465,8 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.block_in_epochN, 5)
         self.assertEqual(exp_settings.epochN, 8)
         self.assertEqual(exp_settings.epochs, [5, 3])
-        self.assertEqual(exp_settings.asrt_types, ["noASRT", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit", "implicit"])
+        self.assertEqual(exp_settings.asrt_types, ["noASRT", "implicit", "implicit", "implicit",
+                                                   "implicit", "implicit", "implicit", "implicit", "implicit"])
         self.assertEqual(exp_settings.monitor_width, 53.7)
         self.assertEqual(exp_settings.computer_name, "Laposka")
         self.assertEqual(exp_settings.asrt_distance, 15.0)
@@ -492,6 +493,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
                                                            2091, 2173, 2255, 2337, 2419, 2501, 2583, 2665, 2747, 2829, 2911,
                                                            2993, 3075, 3157, 3239, 3321, 3403])
         self.assertEqual(exp_settings.get_key_list(), ['q'])
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
