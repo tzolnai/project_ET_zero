@@ -61,7 +61,7 @@ class ExperimentSettings:
        These settings apply to all subjects in the specific experiment.
     """
 
-    def __init__(self, settings_file_path, reminder_file_path, project_ET_zero = False):
+    def __init__(self, settings_file_path, reminder_file_path, project_ET_zero=False):
         # type of the experiment (reaction time or eyetracking
         self.experiment_type = None
         # number of sessions (e.g. 10)
@@ -282,7 +282,7 @@ class ExperimentSettings:
 
         if self.project_ET_zero:
             return ((self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN) + (self.validation_trialN * self.numsessions)
-        else: # keep original code here
+        else:  # keep original code here
             return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
 
     def get_block_starts(self):
@@ -304,7 +304,7 @@ class ExperimentSettings:
                         self.blockstarts.append(
                             start + self.validation_trialN + (self.epochs[i] * self.block_in_epochN + 1) * (self.blocklengthN + self.blockprepN))
 
-        else: # keep original code here
+        else:  # keep original code here
             if self.blockstarts == None:
                 self.blockstarts = [1]
                 for i in range(1, self.epochN * self.block_in_epochN + 2):
@@ -330,7 +330,7 @@ class ExperimentSettings:
                     session += 1
                     self.sessionstarts.append(
                         e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1 + (session * self.validation_trialN))
-        else: # keep original code here
+        else:  # keep original code here
             if self.sessionstarts == None:
                 self.sessionstarts = [1]
                 epochs_cumulative = []
@@ -718,6 +718,21 @@ class InstructionHelper:
             blocknumber += 1
 
         self.__print_to_screen(feedback, experiment.mywindow)
+
+    def feedback_ET_validation(self, experiment, extreme_RT_count):
+        """Display feedback screen in the end of validation block.
+        """
+        feedback = "A validáló blokknak vége.\n"
+        feedback += "A blokkban mért extrém reakciódidők száma: " + str(extreme_RT_count) + ".\n\n"
+        feedback += "Kísérletvezető: folytatás (c) vagy újrakalibráció (r)." + "\n"
+
+        self.__print_to_screen(feedback, experiment.mywindow)
+
+        tempkey = event.waitKeys(keyList=['c', 'r', 'q'])
+        if 'r' in tempkey or 'q' in tempkey:
+            return 'quit'
+        else:
+            return 'continue'
 
 
 class PersonDataHandler:
@@ -1108,7 +1123,7 @@ class PersonDataHandler:
 class Experiment:
     """ Class for running the ASRT experiment."""
 
-    def __init__(self, workdir_path, project_ET_zero = False):
+    def __init__(self, workdir_path, project_ET_zero=False):
         # working directory of the experiment, the script reads settings and writer output under this directory
         self.workdir_path = workdir_path
 
@@ -1527,7 +1542,7 @@ class Experiment:
         # try to load settings and progress for the given subject ID
         self.person_data.load_person_settings(self)
 
-        if self.last_N > 0:
+        if bool(self.PCodes):
             # the current subject already started the experiment
             self.show_subject_continuation_dialog()
         # we have a new subject
@@ -1737,6 +1752,33 @@ class Experiment:
 
         # wait some time
         core.wait(10.0)
+
+        if not end_of_session:
+            self.fixation_cross.draw()
+            self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
+            response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_fixation_threshold)
+            if response == -1:
+                return 'quit'
+            else:
+                return 'continue'
+
+        return 'continue'
+
+    def show_feedback_ET_validation(self, RT_all_list, end_of_session):
+        """ Display feedback in the end of the blocks, showing some data about reaction time."""
+
+        extreme_RT_count = 0
+        for rt in RT_all_list:
+            if rt > 1.0:  # 1 sec
+                extreme_RT_count += 1
+
+        whatnow = self.instructions.feedback_ET_validation(self, extreme_RT_count)
+
+        # wait some time
+        core.wait(10.0)
+
+        if whatnow == 'quit':
+            return 'quit'
 
         if not end_of_session:
             self.fixation_cross.draw()
@@ -1959,13 +2001,24 @@ class Experiment:
                     # continue eye-tracking
                     self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
 
-                self.person_data.save_person_settings(self)
+                if self.project_ET_zero:
+                    validation_block = self.stimblock[self.last_N - 1] == 0
+                    if validation_block:
+                        whatnow = self.show_feedback_ET_validation(RT_all_list, N == self.end_at[N - 1])
+                        if whatnow == 'quit':
+                            index = self.settings.get_block_starts().index(N)
+                            self.last_N = self.settings.get_block_starts()[index - 1] - 1
+                    self.person_data.save_person_settings(self)
+                    if not validation_block:
+                        whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
 
-                if self.settings.experiment_type == 'reaction-time':
-                    whatnow = self.show_feedback_RT(N, number_of_patterns, patternERR, responses_in_block,
-                                                    accs_in_block, RT_all_list, RT_pattern_list)
-                else:
-                    whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
+                else:  # keep original code
+                    self.person_data.save_person_settings(self)
+                    if self.settings.experiment_type == 'reaction-time':
+                        whatnow = self.show_feedback_RT(N, number_of_patterns, patternERR, responses_in_block,
+                                                        accs_in_block, RT_all_list, RT_pattern_list)
+                    else:
+                        whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
 
                 if whatnow == 'quit':
                     if N >= 1:
