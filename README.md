@@ -35,7 +35,7 @@ When instruction file is in place you can run the script by `python asrt.py` com
 
 ### References
 
-* I-DT: Dispersion-Threshold identification of fixations:
+I-DT: Dispersion-Threshold identification of fixations:
 
 [Salvucci, D. D., & Goldberg, J. H. (2000, November). Identifying fixations and saccades in eye-tracking protocols.
 In Proceedings of the 2000 symposium on Eye tracking research & applications (pp. 71-78).](https://www.researchgate.net/publication/220811146_Identifying_fixations_and_saccades_in_eye-tracking_protocols)
