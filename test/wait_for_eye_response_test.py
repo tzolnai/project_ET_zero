@@ -45,8 +45,10 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
-        experiment.settings.AOI_size = 0.1
+        experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -71,7 +73,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.5
+        experiment.settings.dispersion_threshold = 0.2
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -98,7 +102,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.5
+        experiment.settings.dispersion_threshold = 0.2
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -134,7 +140,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -170,7 +178,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -188,7 +198,7 @@ class waitForEyeResponseTest(unittest.TestCase):
             thread.join(3.0)
             self.assertTrue(thread.is_alive())
 
-        thread.join()
+        thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
     def testLotsOfInvalidData(self):
@@ -200,7 +210,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -225,7 +237,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         for i in range(experiment.current_sampling_window // 2):
             experiment.eye_data_callback(gazeData)
 
-        thread.join()
+        thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
     def testLockMainLoopLock(self):
@@ -237,7 +249,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.2, 0.2)
@@ -262,7 +276,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         for i in range(experiment.current_sampling_window // 2):
             experiment.eye_data_callback(gazeData)
 
-        thread.join()
+        thread.join(3.0)
         self.assertTrue(not thread.is_alive())
         self.assertTrue(not experiment.main_loop_lock.locked())
 
@@ -275,7 +289,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.1
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
         thread.start()
@@ -292,7 +308,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        thread.join()
+        thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
     def testNotEnoughData(self):
@@ -304,7 +320,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.1
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -323,7 +341,7 @@ class waitForEyeResponseTest(unittest.TestCase):
 
         experiment.eye_data_callback(gazeData)
 
-        thread.join()
+        thread.join(3.0)
         self.assertTrue(not thread.is_alive())
         self.assertTrue(not experiment.main_loop_lock.locked())
 
@@ -336,7 +354,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.1
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (200, 200)
@@ -369,7 +389,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.1
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.6, 0.6)
@@ -394,7 +416,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         for i in range(experiment.current_sampling_window // 2):
             experiment.eye_data_callback(gazeData)
 
-        thread.join()
+        thread.join(3.0)
         self.assertTrue(not thread.is_alive())
         self.assertTrue(not experiment.main_loop_lock.locked())
 
@@ -406,12 +428,14 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
-        experiment.settings.AOI_size = 0.1
+        experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.15
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         gazeData = {}
-        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
-        gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_point_on_display_area'] = (0.45, 0.55)
+        gazeData['right_gaze_point_on_display_area'] = (0.45, 0.55)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         experiment.eye_data_callback(gazeData)
@@ -424,8 +448,8 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 0
         experiment.eye_data_callback(gazeData)
 
-        gazeData['left_gaze_point_on_display_area'] = (0.3, 0.7)
-        gazeData['right_gaze_point_on_display_area'] = (0.3, 0.7)
+        gazeData['left_gaze_point_on_display_area'] = (0.41, 0.61)
+        gazeData['right_gaze_point_on_display_area'] = (0.42, 0.63)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         experiment.eye_data_callback(gazeData)
@@ -434,27 +458,15 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 0
         experiment.eye_data_callback(gazeData)
 
-        gazeData['left_gaze_point_on_display_area'] = (0.2, 0.8)
-        gazeData['right_gaze_point_on_display_area'] = (0.2, 0.8)
+        gazeData['left_gaze_point_on_display_area'] = (0.39, 0.57)
+        gazeData['right_gaze_point_on_display_area'] = (0.38, 0.59)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         experiment.eye_data_callback(gazeData)
 
-        # Now we are not calculate averages.
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.33, 0.64), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.5, 0.5), experiment.current_sampling_window // 2, ))
         thread.start()
         thread.join(3.0)
-        self.assertTrue(thread.is_alive())
-
-        gazeData['left_gaze_point_on_display_area'] = (0.30, 0.60)
-        gazeData['right_gaze_point_on_display_area'] = (0.30, 0.60)
-        gazeData['left_gaze_point_validity'] = 1
-        gazeData['right_gaze_point_validity'] = 1
-
-        for i in range(experiment.current_sampling_window // 2):
-            experiment.eye_data_callback(gazeData)
-
-        thread.join()
         self.assertTrue(not thread.is_alive())
 
     def testMainLoopLockIsReleasedByQuit(self):
@@ -466,7 +478,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         experiment.main_loop_lock.acquire()
 
@@ -485,7 +499,9 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
         experiment.settings.AOI_size = 0.2
+        experiment.settings.dispersion_threshold = 0.1
         experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
