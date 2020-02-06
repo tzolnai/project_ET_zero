@@ -105,6 +105,8 @@ class ExperimentSettings:
         self.stim_fixation_threshold = None
         # count of samples used to identify fixation on fixation cross on an instruction screen
         self.instruction_fixation_threshold = None
+        # dispersion threshold in cm
+        self.dispersion_threshold = 2.0
 
         # key for the first stimulus (e.g. 'z')
         self.key1 = None
@@ -1636,6 +1638,21 @@ class Experiment:
                      ((pos_ADCS[1] * monitor_height_cm) - shift_y) * - 1)
         return pos_PCMCS
 
+    def distance_ADCS_to_PCMCS(self, distance_ADCS):
+        ''' Convert distance from tobii active display coordinate system (ADCS) to PsychoPy coordinate system with cm unit (PCMCS).
+
+            Active display coordinate system: http://developer.tobiipro.com/commonconcepts/coordinatesystems.html
+            PsychoPy coordinate system with cm unit: https://www.psychopy.org/general/units.html        
+        '''
+        aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+        monitor_width_cm = self.settings.monitor_width
+        monitor_height_cm = monitor_width_cm * aspect_ratio
+
+        # scale coordinates from normalized coordinates to cm unit coordinates
+        distance_PCMCS = (distance_ADCS[0] * monitor_width_cm,
+                          distance_ADCS[1] * monitor_height_cm)
+        return distance_PCMCS
+
     def wait_for_eye_response(self, expected_eye_pos, fixation_threshold):
 
         while (True):
@@ -1654,19 +1671,44 @@ class Experiment:
 
                 # check that gaze positions are in the speicific AOI
                 count = 0
+                sum_x = 0
+                sum_y = 0
+                max_x = -10.0
+                max_y = -10.0
+                min_x = 10.0
+                min_y = 10.0
+                count = 0
                 for pos in reversed(self.gaze_data_list):
-                    if pos[0] == None or pos[1] == None:
-                        continue
-
-                    if self.point_is_in_rectangle(self.ADCS_to_PCMCS(pos), expected_eye_pos, self.settings.AOI_size):
+                    pos_x = pos[0]
+                    pos_y = pos[1]
+                    if pos_x != None and pos_y != None:
+                        sum_x += pos_x
+                        sum_y += pos_y
+                        max_x = max(max_x, pos_x)
+                        max_y = max(max_y, pos_y)
+                        min_x = min(min_x, pos_x)
+                        min_y = min(min_y, pos_y)
                         count += 1
-                    else:
-                        break
 
                     if count >= fixation_threshold:
                         break
 
-                if count >= fixation_threshold:
+                # Do we have engough data for a fixation?
+                if count < fixation_threshold:
+                    continue
+
+                # Is the eye data within the given dispersion?
+                dispersion_vector_norm = ((max_x - min_x), (max_y - min_y))
+                dispersion_vector_cm = self.distance_ADCS_to_PCMCS(dispersion_vector_norm)
+                dispersion_cm = dispersion_vector_cm[0] + dispersion_vector_cm[1]
+                if dispersion_cm > self.settings.dispersion_threshold:
+                    continue
+
+                # Calculate fixation position
+                avg_pos_norm = (sum_x / fixation_threshold, sum_y / fixation_threshold)
+                avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
+
+                if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
                     if self.main_loop_lock.locked():
                         self.main_loop_lock.release()
                     return 1

@@ -32,3 +32,10 @@ Before running the ASRT script you need to place an instruction file in the same
 The instruction file should have the name `inst_and_feedback.txt`. You can find example instruction files under `inst_examples` folder.
 
 When instruction file is in place you can run the script by `python asrt.py` command or by running the `asrt.py` file from PsychoPy.
+
+### References
+
+I-DT: Dispersion-Threshold identification of fixations:
+[Salvucci, D. D., & Goldberg, J. H. (2000, November). Identifying fixations and saccades in eye-tracking protocols.
+In Proceedings of the 2000 symposium on Eye tracking research & applications (pp. 71-78).]
+(https://www.researchgate.net/publication/220811146_Identifying_fixations_and_saccades_in_eye-tracking_protocols)
