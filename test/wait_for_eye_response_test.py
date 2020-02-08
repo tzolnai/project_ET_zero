@@ -41,7 +41,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -59,7 +59,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         for i in range(100):
             experiment.eye_data_callback(gazeData)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
@@ -68,7 +68,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -88,7 +88,7 @@ class waitForEyeResponseTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.4, 0.4), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.4, 0.4), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
@@ -97,7 +97,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -111,8 +111,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
-        print(experiment.current_sampling_window // 2)
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         gazeData = {}
@@ -121,13 +120,22 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 0
         gazeData['right_gaze_point_validity'] = 0
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.4, 0.4), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.4, 0.4), experiment.current_sampling_window, ))
         thread.start()
+        thread.join(3.0)
+        self.assertTrue(thread.is_alive())
+        
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        for i in range(experiment.current_sampling_window):
+            experiment.eye_data_callback(gazeData)
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
@@ -135,7 +143,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -150,7 +158,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         gazeData = {}
@@ -159,12 +167,12 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.12, 0.12), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.12, 0.12), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
@@ -173,7 +181,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -192,7 +200,7 @@ class waitForEyeResponseTest(unittest.TestCase):
             experiment.eye_data_callback(gazeData)
 
         with experiment.shared_data_lock:
-            thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
+            thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window, ))
             thread.start()
 
             thread.join(3.0)
@@ -205,7 +213,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -223,7 +231,7 @@ class waitForEyeResponseTest(unittest.TestCase):
             experiment.eye_data_callback(gazeData)
         self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.25, 0.25), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.25, 0.25), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(thread.is_alive())
@@ -234,7 +242,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         thread.join(3.0)
@@ -244,7 +252,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -259,10 +267,10 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.5, 0.5), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.5, 0.5), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(thread.is_alive())
@@ -273,7 +281,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         thread.join(3.0)
@@ -284,7 +292,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -293,7 +301,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment.ADCS_to_PCMCS = DummyConvert
         experiment.distance_ADCS_to_PCMCS = DummyConvert
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(thread.is_alive())
@@ -315,7 +323,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -330,10 +338,10 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2 - 1):
+        for i in range(experiment.current_sampling_window - 1):
             experiment.eye_data_callback(gazeData)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(thread.is_alive())
@@ -349,7 +357,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -364,7 +372,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
@@ -372,10 +380,10 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
@@ -384,7 +392,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -399,10 +407,10 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.45, 0.45), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(thread.is_alive())
@@ -413,7 +421,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
 
-        for i in range(experiment.current_sampling_window // 2):
+        for i in range(experiment.current_sampling_window):
             experiment.eye_data_callback(gazeData)
 
         thread.join(3.0)
@@ -424,7 +432,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 8
+        experiment.current_sampling_window = 4
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -444,18 +452,10 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_on_display_area'] = (0.4, 0.6)
         experiment.eye_data_callback(gazeData)
 
-        gazeData['left_gaze_point_validity'] = 0
-        gazeData['right_gaze_point_validity'] = 0
-        experiment.eye_data_callback(gazeData)
-
         gazeData['left_gaze_point_on_display_area'] = (0.41, 0.61)
         gazeData['right_gaze_point_on_display_area'] = (0.42, 0.63)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
-        experiment.eye_data_callback(gazeData)
-
-        gazeData['left_gaze_point_validity'] = 0
-        gazeData['right_gaze_point_validity'] = 0
         experiment.eye_data_callback(gazeData)
 
         gazeData['left_gaze_point_on_display_area'] = (0.39, 0.57)
@@ -464,7 +464,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_validity'] = 1
         experiment.eye_data_callback(gazeData)
 
-        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.5, 0.5), experiment.current_sampling_window // 2, ))
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.5, 0.5), experiment.current_sampling_window, ))
         thread.start()
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
@@ -473,7 +473,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -486,7 +486,7 @@ class waitForEyeResponseTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
-        experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window // 2)
+        experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window)
 
         self.assertTrue(not experiment.main_loop_lock.locked())
 
@@ -494,7 +494,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.current_sampling_window = 24
+        experiment.current_sampling_window = 12
         experiment.last_N = 10
         experiment.last_RSI = 400.0
         experiment.trial_phase = "before_stimulus"
@@ -505,7 +505,7 @@ class waitForEyeResponseTest(unittest.TestCase):
 
         visual_mock = pvm.PsychoPyVisualMock()
         visual_mock.setReturnKeyList(['q'])
-        experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window // 2)
+        experiment.wait_for_eye_response((0.33, 0.64), experiment.current_sampling_window)
 
         self.assertTrue(not experiment.main_loop_lock.locked())
 
