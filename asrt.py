@@ -106,7 +106,7 @@ class ExperimentSettings:
         # count of samples used to identify fixation on fixation cross on an instruction screen
         self.instruction_fixation_threshold = None
         # dispersion threshold in cm
-        self.dispersion_threshold = 2.0
+        self.dispersion_threshold = None
 
         # key for the first stimulus (e.g. 'z')
         self.key1 = None
@@ -172,6 +172,7 @@ class ExperimentSettings:
                     self.AOI_size = settings_file['AOI_size']
                     self.stim_fixation_threshold = settings_file['stim_fixation_threshold']
                     self.instruction_fixation_threshold = settings_file['instruction_fixation_threshold']
+                    self.dispersion_threshold = settings_file['dispersion_threshold']
 
                 if self.experiment_type == 'reaction-time':
                     self.key1 = settings_file['key1']
@@ -217,6 +218,7 @@ class ExperimentSettings:
                 settings_file['AOI_size'] = self.AOI_size
                 settings_file['stim_fixation_threshold'] = self.stim_fixation_threshold
                 settings_file['instruction_fixation_threshold'] = self.instruction_fixation_threshold
+                settings_file['dispersion_threshold'] = self.dispersion_threshold
 
             if self.experiment_type == 'reaction-time':
                 settings_file['key1'] = self.key1
@@ -260,7 +262,8 @@ class ExperimentSettings:
             if self.experiment_type == 'eye-tracking':
                 reminder += str('AOI size:' + '\t' + str(self.AOI_size).replace('.', ',') + '\n' +
                                 'Fixation threshold for stimulus:' + '\t' + str(self.stim_fixation_threshold) + '\n' +
-                                'Fixation threshold for instructions:' + '\t' + str(self.instruction_fixation_threshold) + '\n')
+                                'Fixation threshold for instructions:' + '\t' + str(self.instruction_fixation_threshold) + '\n' +
+                                'Dispersion threshold:' + '\t' + str(self.dispersion_threshold).replace('.', ',') + '\n')
 
             reminder += str('\n' +
                             'Az alábbi beállítások minden személyre érvényesek és irányadóak\n\n' +
@@ -484,6 +487,7 @@ class ExperimentSettings:
             settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3.0)
             settings_dialog.addField(u'Stimulusnál használt fixációs küszöbérték (mintavételek száma):', 12)
             settings_dialog.addField(u'Instrukcióknál használt fixációs küszöbérték (mintavételek száma):', 36)
+            settings_dialog.addField(u'Diszperzió küszöbérték (cm):', 2.0)
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:
@@ -500,6 +504,7 @@ class ExperimentSettings:
                 self.AOI_size = returned_data[8]
                 self.stim_fixation_threshold = returned_data[9]
                 self.instruction_fixation_threshold = returned_data[10]
+                self.dispersion_threshold = returned_data[11]
 
         else:
             core.quit()
