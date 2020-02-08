@@ -26,3 +26,4 @@
 'AOI_size', (12800, 12)
 'stim_fixation_threshold', (14336, 5)
 'instruction_fixation_threshold', (14848, 5)
+'dispersion_threshold', (15360, 12)

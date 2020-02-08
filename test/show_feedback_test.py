@@ -322,6 +322,7 @@ class showFeedbackTest(unittest.TestCase):
                                                         color='black', pos=experiment.fixation_cross_pos)
             experiment.settings.instruction_fixation_threshold = 36
             experiment.current_sampling_window = 36
+            experiment.settings.dispersion_threshold = 2.0
             experiment.settings.AOI_size = 1.0
             experiment.settings.monitor_width = 47.6
             experiment.monitor_settings()
@@ -466,6 +467,7 @@ class showFeedbackTest(unittest.TestCase):
             experiment.settings.instruction_fixation_threshold = 36
             experiment.current_sampling_window = 36
             experiment.settings.AOI_size = 1.0
+            experiment.settings.dispersion_threshold = 2.0
             experiment.settings.monitor_width = 47.6
             experiment.monitor_settings()
             for i in range(0, experiment.settings.instruction_fixation_threshold):

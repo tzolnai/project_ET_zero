@@ -53,6 +53,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.settings.monitor_width = 47.5
         experiment.settings.AOI_size = 1.0
+        experiment.settings.dispersion_threshold = 2.0
         sampling_window = 36
 
         experiment.mymonitor = monitors.Monitor('myMon')

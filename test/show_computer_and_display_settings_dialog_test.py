@@ -47,6 +47,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.AOI_size, None)
         self.assertEqual(exp_settings.stim_fixation_threshold, None)
         self.assertEqual(exp_settings.instruction_fixation_threshold, None)
+        self.assertEqual(exp_settings.dispersion_threshold, None)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
@@ -90,6 +91,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.AOI_size, 3.0)
         self.assertEqual(exp_settings.stim_fixation_threshold, 12)
         self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
+        self.assertEqual(exp_settings.dispersion_threshold, 2.0)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 3)
@@ -98,7 +100,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_texts[2], "Eye-tracking paraméterek...")
 
         list_of_fields = gui_mock.getListOfFields()
-        self.assertEqual(len(list_of_fields), 11)
+        self.assertEqual(len(list_of_fields), 12)
         self.assertEqual(list_of_fields[0].label, "Hasznos kepernyo szelessege (cm)")
         self.assertEqual(list_of_fields[0].initial, 34.2)
         self.assertEqual(list_of_fields[1].label, "Szamitogep fantazianeve (ekezet nelkul)")
@@ -121,6 +123,8 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[9].initial, 12)
         self.assertEqual(list_of_fields[10].label, "Instrukcióknál használt fixációs küszöbérték (mintavételek száma):")
         self.assertEqual(list_of_fields[10].initial, 36)
+        self.assertEqual(list_of_fields[11].label, "Diszperzió küszöbérték (cm):")
+        self.assertEqual(list_of_fields[11].initial, 2.0)
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()
@@ -150,7 +154,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
     def testCustomValuesET(self):
         gui_mock = pgm.PsychoPyGuiMock()
         gui_mock.addFieldValues(
-            [47.6, "Alma", 15.3, 1.5, "DarkBlue", "White", "Green", 500, 4.0, 12, 36])
+            [47.6, "Alma", 15.3, 1.5, "DarkBlue", "White", "Green", 500, 4.0, 12, 36, 3.3])
 
         exp_settings = asrt.ExperimentSettings("", "")
         exp_settings.experiment_type = 'eye-tracking'
@@ -167,6 +171,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.AOI_size, 4.0)
         self.assertEqual(exp_settings.stim_fixation_threshold, 12)
         self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
+        self.assertEqual(exp_settings.dispersion_threshold, 3.3)
 
 
 if __name__ == "__main__":
