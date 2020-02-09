@@ -1821,9 +1821,6 @@ class Experiment:
 
         whatnow = self.instructions.feedback_ET_validation(self, extreme_RT_count)
 
-        # wait some time
-        core.wait(10.0)
-
         if whatnow == 'quit':
             return 'quit'
 
