@@ -4,10 +4,10 @@ Monitor Width: 	53,7
 Computer Name: 	Laposka
 Experiment type:	eye-tracking
 Groups:	nincsenek csoportok
-Sessions:	1
-Epochs in sessions:	5
+Sessions:	2
+Epochs in sessions:	5, 3
 Blocks in epochs:	5
-Preparatory Trials\Block:	0
+Preparatory Trials\Block:	2
 Trials\Block:	80
 RSI:	0,5
 Asrt stim distance:	15,0
