@@ -487,7 +487,7 @@ class ExperimentSettings:
             settings_dialog.addField(u'AOI négyzetek oldahossza (cm):', 3.0)
             settings_dialog.addField(u'Stimulusnál használt fixációs küszöbérték (mintavételek száma):', 12)
             settings_dialog.addField(u'Instrukcióknál használt fixációs küszöbérték (mintavételek száma):', 36)
-            settings_dialog.addField(u'Diszperzió küszöbérték (cm):', 2.0)
+            settings_dialog.addField(u'Diszperzió küszöbérték (cm):', 1.0)
 
         returned_data = settings_dialog.show()
         if settings_dialog.OK:

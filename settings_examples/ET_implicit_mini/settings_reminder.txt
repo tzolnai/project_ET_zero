@@ -18,7 +18,7 @@ Background color:	Ivory
 AOI size:	4,0
 Fixation threshold for stimulus:	12
 Fixation threshold for instructions:	36
-Dispersion threshold:	2,0
+Dispersion threshold:	1,0
 
 Az alábbi beállítások minden személyre érvényesek és irányadóak
 
