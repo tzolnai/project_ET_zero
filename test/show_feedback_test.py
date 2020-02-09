@@ -492,7 +492,7 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 3)
 
-            self.assertEqualWithEOL(drawing_list[0].text, "A validáló blokknak vége.\n"
+            self.assertEqualWithEOL(drawing_list[0].text, "A teszt blokknak vége. Szólj a kísérletvezetőnek!\n\n"
                                                           "A blokkban mért extrém reakciódidők száma: 4.\n\n"
                                                           "Kísérletvezető: folytatás (c) vagy újrakalibráció (r).\n")
             self.assertEqualWithEOL(drawing_list[1].text, "+")
@@ -539,7 +539,7 @@ class showFeedbackTest(unittest.TestCase):
             drawing_list = visual_mock.getListOfDrawings()
             self.assertEqual(len(drawing_list), 1)
 
-            self.assertEqualWithEOL(drawing_list[0].text, "A validáló blokknak vége.\n"
+            self.assertEqualWithEOL(drawing_list[0].text, "A teszt blokknak vége. Szólj a kísérletvezetőnek!\n\n"
                                                           "A blokkban mért extrém reakciódidők száma: 4.\n\n"
                                                           "Kísérletvezető: folytatás (c) vagy újrakalibráció (r).\n")
 

@@ -885,7 +885,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
-        self.assertEqualWithEOL(drawing_list[0].text, "A validáló blokknak vége.\n"
+        self.assertEqualWithEOL(drawing_list[0].text, "A teszt blokknak vége. Szólj a kísérletvezetőnek!\n\n"
                                                       "A blokkban mért extrém reakciódidők száma: 2.\n\n"
                                                       "Kísérletvezető: folytatás (c) vagy újrakalibráció (r).\n")
 
@@ -911,7 +911,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
-        self.assertEqualWithEOL(drawing_list[0].text, "A validáló blokknak vége.\n"
+        self.assertEqualWithEOL(drawing_list[0].text, "A teszt blokknak vége. Szólj a kísérletvezetőnek!\n\n"
                                                       "A blokkban mért extrém reakciódidők száma: 2.\n\n"
                                                       "Kísérletvezető: folytatás (c) vagy újrakalibráció (r).\n")
 
@@ -937,7 +937,7 @@ class drawInstructionsTest(unittest.TestCase):
 
         drawing_list = visual_mock.getListOfDrawings()
         self.assertEqual(len(drawing_list), 1)
-        self.assertEqualWithEOL(drawing_list[0].text, "A validáló blokknak vége.\n"
+        self.assertEqualWithEOL(drawing_list[0].text, "A teszt blokknak vége. Szólj a kísérletvezetőnek!\n\n"
                                                       "A blokkban mért extrém reakciódidők száma: 2.\n\n"
                                                       "Kísérletvezető: folytatás (c) vagy újrakalibráció (r).\n")
 
