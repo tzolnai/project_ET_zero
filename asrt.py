@@ -729,7 +729,7 @@ class InstructionHelper:
     def feedback_ET_validation(self, experiment, extreme_RT_count):
         """Display feedback screen in the end of validation block.
         """
-        feedback = "A validáló blokknak vége.\n"
+        feedback = "A teszt blokknak vége. Szólj a kísérletvezetőnek!\n\n"
         feedback += "A blokkban mért extrém reakciódidők száma: " + str(extreme_RT_count) + ".\n\n"
         feedback += "Kísérletvezető: folytatás (c) vagy újrakalibráció (r)." + "\n"
 
