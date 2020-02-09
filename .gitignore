@@ -1,8 +1,10 @@
 *.pyc
 *logs/*
 *logs\*
-*settings/*
-*settings\*
+*settings\participant*
+*settings/participant*
+*settings\subject*
+*settings/subject*
 *externals/*
 *externals\*
 .coverage
