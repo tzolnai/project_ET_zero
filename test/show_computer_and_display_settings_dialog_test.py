@@ -91,7 +91,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(exp_settings.AOI_size, 3.0)
         self.assertEqual(exp_settings.stim_fixation_threshold, 12)
         self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
-        self.assertEqual(exp_settings.dispersion_threshold, 1.0)
+        self.assertEqual(exp_settings.dispersion_threshold, 2.0)
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 3)
@@ -124,7 +124,7 @@ class showComputerAndDisplaySettingsDialogTest(unittest.TestCase):
         self.assertEqual(list_of_fields[10].label, "Instrukcióknál használt fixációs küszöbérték (mintavételek száma):")
         self.assertEqual(list_of_fields[10].initial, 36)
         self.assertEqual(list_of_fields[11].label, "Diszperzió küszöbérték (cm):")
-        self.assertEqual(list_of_fields[11].initial, 1.0)
+        self.assertEqual(list_of_fields[11].initial, 2.0)
 
     def testCancel(self):
         gui_mock = pgm.PsychoPyGuiMock()

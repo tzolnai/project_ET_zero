@@ -462,11 +462,11 @@ class integrationETTest(unittest.TestCase):
         for i in range(sampling_window):
             eye_pos = self.PCMCS_to_ADCS(expected_eye_pos)
             if i % 2 == 0:
-                eye_pos = (eye_pos[0] + 0.01, eye_pos[1])
+                eye_pos = (eye_pos[0] + 0.01, eye_pos[1] - 0.01)
                 gazeData['left_gaze_point_on_display_area'] = eye_pos
                 gazeData['right_gaze_point_on_display_area'] = eye_pos
             else:
-                eye_pos = (eye_pos[0], eye_pos[1] + 0.01)
+                eye_pos = (eye_pos[0] - 0.01, eye_pos[1] + 0.01)
                 gazeData['left_gaze_point_on_display_area'] = eye_pos
                 gazeData['right_gaze_point_on_display_area'] = eye_pos
 
