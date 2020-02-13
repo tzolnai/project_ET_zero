@@ -8,7 +8,7 @@
 'epochs', (3584, 12)
 'asrt_types', (4096, 64)
 'monitor_width', (4608, 12)
-'computer_name', (5120, 17)
+'computer_name', (5120, 15)
 'asrt_distance', (5632, 12)
 'asrt_size', (6144, 12)
 'asrt_rcolor', (6656, 18)

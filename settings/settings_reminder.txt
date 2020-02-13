@@ -1,7 +1,7 @@
 Beállítások
 
-Monitor Width: 	53,7
-Computer Name: 	Laposka
+Monitor Width: 	52,7
+Computer Name: 	ET-PC
 Experiment type:	eye-tracking
 Groups:	nincsenek csoportok
 Sessions:	2
