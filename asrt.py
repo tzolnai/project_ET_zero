@@ -1902,7 +1902,7 @@ class Experiment:
 
         # start recording gaze data
         if self.eye_tracker is not None:
-            self.current_sampling_window = self.settings.instruction_fixation_threshold
+            self.current_sampling_window = int(self.settings.instruction_fixation_threshold * 1.2)
             self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
 
         # show instructions or continuation message
@@ -1919,7 +1919,7 @@ class Experiment:
             self.mywindow.flip()
             with self.shared_data_lock:
                 if self.eye_tracker is not None:
-                    self.current_sampling_window = self.settings.stim_fixation_threshold
+                    self.current_sampling_window = int(self.settings.stim_fixation_threshold * 1.2)
                     self.gaze_data_list.clear()
                 self.last_N = N - 1
                 self.trial_phase = "before_stimulus"
@@ -2033,7 +2033,7 @@ class Experiment:
                     self.trial_phase = "before_stimulus"
                     self.last_RSI = -1
                     if self.eye_tracker is not None:
-                        self.current_sampling_window = self.settings.instruction_fixation_threshold
+                        self.current_sampling_window = int(self.settings.instruction_fixation_threshold * 1.2)
                         self.gaze_data_list.clear()
 
                 if self.settings.experiment_type == 'reaction-time':
