@@ -928,7 +928,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
             elif counter == (experiment.settings.blockprepN + experiment.settings.blocklengthN) * experiment.settings.block_in_epochN + 1:
                 counter = 1
                 epoch += 1
-            self.assertEqual(experiment.stimepoch[i + 1], epoch);
+            self.assertEqual(experiment.stimepoch[i + 1], epoch)
 
         block = 1
         counter = 0
@@ -951,7 +951,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         block = 1
         counter = 0
-        for i in range(len(experiment.stimtrial)):            
+        for i in range(len(experiment.stimtrial)):
             counter += 1
             if block == 1 or block == 27:
                 if counter == experiment.settings.validation_trialN + 1:
@@ -985,7 +985,7 @@ class calculateStimpropertiesTest(unittest.TestCase):
 
         for i in range(len(experiment.stimpr)):
             if (experiment.stimblock[i + 1] != 0 and experiment.stimepoch[i + 1] != 1 and
-                experiment.stimtrial[i + 1] > experiment.settings.blockprepN and experiment.stimtrial[i + 1] % 2 == 1 ):
+                    experiment.stimtrial[i + 1] > experiment.settings.blockprepN and experiment.stimtrial[i + 1] % 2 == 1):
                 self.assertEqual(experiment.stimpr[i + 1], "pattern")
             else:
                 self.assertEqual(experiment.stimpr[i + 1], "random")

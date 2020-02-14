@@ -24,7 +24,6 @@ import asrt
 import os
 
 
-
 class ExperimentSettingsDumper():
 
     def dump(self, file_path, file_name):
@@ -33,6 +32,7 @@ class ExperimentSettingsDumper():
         exp_settings = asrt.ExperimentSettings(os.path.join(file_path, file_name), os.path.join(file_path, "settings_reminder.txt"))
         exp_settings.read_from_file()
         exp_settings.write_out_reminder()
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

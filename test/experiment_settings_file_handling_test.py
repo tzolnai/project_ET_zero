@@ -232,7 +232,7 @@ class experimentSettingsFileHandlingTest(unittest.TestCase):
         self.assertEqual(exp_settings.RSI_time, 0.12)
         self.assertEqual(exp_settings.AOI_size, 1.5)
         self.assertEqual(exp_settings.stim_fixation_threshold, 12)
-        self.assertEqual(exp_settings.instruction_fixation_threshold, 36)        
+        self.assertEqual(exp_settings.instruction_fixation_threshold, 36)
         self.assertEqual(exp_settings.dispersion_threshold, 2.0)
         self.assertEqual(exp_settings.key1, None)
         self.assertEqual(exp_settings.key2, None)

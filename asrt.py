@@ -1665,7 +1665,7 @@ class Experiment:
         # Find first valid data before the missing data sample
         valid_before = invalid_index - 1
         while (valid_before >= 0 and
-              (gaze_data_list[valid_before][0] == None or gaze_data_list[valid_before][1] == None)):
+               (gaze_data_list[valid_before][0] == None or gaze_data_list[valid_before][1] == None)):
             valid_before -= 1
 
         if valid_before < 0:
@@ -1674,7 +1674,7 @@ class Experiment:
         # Find first valid data after the missing data sample
         valid_after = invalid_index + 1
         while (valid_after < len(gaze_data_list) and
-              (gaze_data_list[valid_after][0] == None or gaze_data_list[valid_after][1] == None)):
+               (gaze_data_list[valid_after][0] == None or gaze_data_list[valid_after][1] == None)):
             valid_after += 1
 
         if valid_after >= len(gaze_data_list):

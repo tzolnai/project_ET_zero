@@ -449,7 +449,7 @@ class integrationETTest(unittest.TestCase):
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile()
- 
+
     def wait_for_eye_response_override_averaging_data(self, expected_eye_pos, sampling_window):
         gazeData = {}
         gazeData['left_gaze_point_validity'] = 1
