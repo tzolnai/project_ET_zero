@@ -1658,6 +1658,42 @@ class Experiment:
                           distance_ADCS[1] * monitor_height_cm)
         return distance_PCMCS
 
+    def linear_interpolation(self, gaze_data_list, invalid_index):
+        # Do we have an actual invalid data here?
+        assert (gaze_data_list[invalid_index][0] == None or gaze_data_list[invalid_index][1] == None)
+
+        # Find first valid data before the missing data sample
+        valid_before = invalid_index - 1
+        while (valid_before >= 0 and
+              (gaze_data_list[valid_before][0] == None or gaze_data_list[valid_before][1] == None)):
+            valid_before -= 1
+
+        if valid_before < 0:
+            return None
+
+        # Find first valid data after the missing data sample
+        valid_after = invalid_index + 1
+        while (valid_after < len(gaze_data_list) and
+              (gaze_data_list[valid_after][0] == None or gaze_data_list[valid_after][1] == None)):
+            valid_after += 1
+
+        if valid_after >= len(gaze_data_list):
+            return None
+
+        # We calulate distances in sample count
+        full_distance = valid_after - valid_before
+        before_distance = invalid_index - valid_before
+        after_distance = valid_after - invalid_index
+        before_scale_factor = after_distance / full_distance
+        after_scale_factor = before_distance / full_distance
+
+        new_x = (gaze_data_list[valid_before][0] * before_scale_factor +
+                 gaze_data_list[valid_after][0] * after_scale_factor)
+        new_y = (gaze_data_list[valid_before][1] * before_scale_factor +
+                 gaze_data_list[valid_after][1] * after_scale_factor)
+
+        return (new_x, new_y)
+
     def wait_for_eye_response(self, expected_eye_pos, fixation_threshold):
 
         while (True):
@@ -1674,7 +1710,7 @@ class Experiment:
 
                 last_item = self.gaze_data_list[-1]
 
-                # check that gaze positions are in the speicific AOI
+                # calculate avarage and max distance
                 count = 0
                 sum_x = 0
                 sum_y = 0
@@ -1683,9 +1719,21 @@ class Experiment:
                 min_x = 10.0
                 min_y = 10.0
                 count = 0
-                for pos in reversed(self.gaze_data_list):
-                    pos_x = pos[0]
-                    pos_y = pos[1]
+                invalid_count = 0
+                for i in range(len(self.gaze_data_list)):
+                    pos_x = self.gaze_data_list[i][0]
+                    pos_y = self.gaze_data_list[i][1]
+
+                    # We interpolate the invalid data lineary
+                    if pos_x == None or pos_y == None:
+                        invalid_count += 1
+                        interpolated_data = self.linear_interpolation(self.gaze_data_list, i)
+                        if interpolated_data == None:
+                            break
+                        else:
+                            pos_x = interpolated_data[0]
+                            pos_y = interpolated_data[1]
+
                     if pos_x != None and pos_y != None:
                         sum_x += pos_x
                         sum_y += pos_y
@@ -1698,8 +1746,15 @@ class Experiment:
                     if count >= fixation_threshold:
                         break
 
+                    if invalid_count > fixation_threshold * 0.2:
+                        break
+
                 # Do we have engough data for a fixation?
                 if count < fixation_threshold:
+                    continue
+
+                # We have too many invalid data (we allow maximum 20% to be invalid)
+                if invalid_count > fixation_threshold * 0.2:
                     continue
 
                 # Is the eye data within the given dispersion?
@@ -1902,7 +1957,7 @@ class Experiment:
 
         # start recording gaze data
         if self.eye_tracker is not None:
-            self.current_sampling_window = int(self.settings.instruction_fixation_threshold * 1.2)
+            self.current_sampling_window = self.settings.instruction_fixation_threshold
             self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
 
         # show instructions or continuation message
@@ -1919,7 +1974,7 @@ class Experiment:
             self.mywindow.flip()
             with self.shared_data_lock:
                 if self.eye_tracker is not None:
-                    self.current_sampling_window = int(self.settings.stim_fixation_threshold * 1.2)
+                    self.current_sampling_window = self.settings.stim_fixation_threshold
                     self.gaze_data_list.clear()
                 self.last_N = N - 1
                 self.trial_phase = "before_stimulus"
@@ -2033,7 +2088,7 @@ class Experiment:
                     self.trial_phase = "before_stimulus"
                     self.last_RSI = -1
                     if self.eye_tracker is not None:
-                        self.current_sampling_window = int(self.settings.instruction_fixation_threshold * 1.2)
+                        self.current_sampling_window = self.settings.instruction_fixation_threshold
                         self.gaze_data_list.clear()
 
                 if self.settings.experiment_type == 'reaction-time':
