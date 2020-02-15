@@ -105,6 +105,41 @@ class linearInterpolationTest(unittest.TestCase):
         self.assertAlmostEqual(result[0], 0.6, delta=0.001)
         self.assertAlmostEqual(result[1], 0.7, delta=0.001)
 
+    def testMoreMissingData3(self):
+        experiment = asrt.Experiment("")
+
+        gaze_data_list = [(0.8, 0.8), (0.4, 0.5), (None, None), (None, None), (None, None), (None, None), (0.7, 0.8), (0.8, 0.8), (0.8, 0.8)]
+
+        result = experiment.linear_interpolation(gaze_data_list, 2)
+        self.assertAlmostEqual(result[0], 0.46, delta=0.001)
+        self.assertAlmostEqual(result[1], 0.56, delta=0.001)
+
+    def testMoreMissingData4(self):
+        experiment = asrt.Experiment("")
+
+        gaze_data_list = [(0.8, 0.8), (0.4, 0.5), (None, None), (None, None), (None, None), (None, None), (0.7, 0.8), (0.8, 0.8), (0.8, 0.8)]
+
+        result = experiment.linear_interpolation(gaze_data_list, 3)
+        self.assertAlmostEqual(result[0], 0.52, delta=0.001)
+        self.assertAlmostEqual(result[1], 0.62, delta=0.001)
+
+    def testMoreMissingData5(self):
+        experiment = asrt.Experiment("")
+
+        gaze_data_list = [(0.8, 0.8), (0.4, 0.5), (None, None), (None, None), (None, None), (None, None), (0.7, 0.8), (0.8, 0.8), (0.8, 0.8)]
+
+        result = experiment.linear_interpolation(gaze_data_list, 4)
+        self.assertAlmostEqual(result[0], 0.58, delta=0.001)
+        self.assertAlmostEqual(result[1], 0.68, delta=0.001)
+
+    def testMoreMissingData6(self):
+        experiment = asrt.Experiment("")
+
+        gaze_data_list = [(0.8, 0.8), (0.4, 0.5), (None, None), (None, None), (None, None), (None, None), (0.7, 0.8), (0.8, 0.8), (0.8, 0.8)]
+
+        result = experiment.linear_interpolation(gaze_data_list, 5)
+        self.assertAlmostEqual(result[0], 0.64, delta=0.001)
+        self.assertAlmostEqual(result[1], 0.74, delta=0.001)
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
