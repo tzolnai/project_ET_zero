@@ -1749,12 +1749,12 @@ class Experiment:
                     if invalid_count > fixation_threshold * 0.2:
                         break
 
-                # Do we have engough data for a fixation?
-                if count < fixation_threshold:
-                    continue
-
                 # We have too many invalid data (we allow maximum 20% to be invalid)
                 if invalid_count > fixation_threshold * 0.2:
+                    continue
+
+                # Do we have engough data for a fixation?
+                if count < fixation_threshold:
                     continue
 
                 # Is the eye data within the given dispersion?
