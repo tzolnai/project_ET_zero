@@ -551,7 +551,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
-    def testTwoInvalidEyeData(self):
+    def testThreeInvalidEyeData(self):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -576,6 +576,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
         gazeData['left_gaze_point_validity'] = 0
         gazeData['right_gaze_point_validity'] = 0
+        experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
 
@@ -617,6 +618,7 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
         gazeData['left_gaze_point_validity'] = 0
         gazeData['right_gaze_point_validity'] = 0
+        experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
@@ -762,6 +764,7 @@ class waitForEyeResponseTest(unittest.TestCase):
 
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
+
 
 if __name__ == "__main__":
     unittest.main()  # run all tests
