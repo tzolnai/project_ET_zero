@@ -1746,11 +1746,11 @@ class Experiment:
                     if count >= fixation_threshold:
                         break
 
-                    if invalid_count > fixation_threshold * 0.25:
+                    if invalid_count > fixation_threshold * 0.2:
                         break
 
-                # We have too many invalid data (we allow maximum 25% to be invalid)
-                if invalid_count > fixation_threshold * 0.25:
+                # We have too many invalid data (we allow maximum 20% to be invalid)
+                if invalid_count > fixation_threshold * 0.2:
                     continue
 
                 # Do we have engough data for a fixation?
