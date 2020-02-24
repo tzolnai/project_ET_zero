@@ -141,6 +141,5 @@ class linearInterpolationTest(unittest.TestCase):
         self.assertAlmostEqual(result[0], 0.64, delta=0.001)
         self.assertAlmostEqual(result[1], 0.74, delta=0.001)
 
-
 if __name__ == "__main__":
     unittest.main()  # run all tests
