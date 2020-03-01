@@ -47,6 +47,8 @@ ASRT (alternating SRT, alternating serial reaction time task)
 
 * [Howard Jr, J. H., & Howard, D. V. (1997). Age differences in implicit learning of higher order dependencies in serial patterns. Psychology and aging, 12(4), 634.](https://www.researchgate.net/profile/James_Howard11/publication/13812889_Age_differences_in_implicit_learning_of_higher_order_dependencies_in_serial_patterns/links/0deec52423cfe984b4000000.pdf)
 
+* [Kóbor, A., Janacsek, K., Takács, Á., & Nemeth, D. (2017). Statistical learning leads to persistent memory: Evidence for one-year consolidation. Scientific reports, 7(1), 1-10.](https://www.nature.com/articles/s41598-017-00807-3?WT.feed_name=subjects_biological-sciences)
+
 * [Simor, P., Zavecz, Z., Horvath, K., Éltető, N., Török, C., Pesthy, O., ... & Nemeth, D. (2019). Deconstructing procedural memory: Different learning trajectories and consolidation of sequence and statistical learning. Frontiers in psychology, 9, 2708.](https://www.frontiersin.org/articles/10.3389/fpsyg.2018.02708/full)
 
 I-DT: Dispersion-Threshold identification of fixations
