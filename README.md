@@ -33,6 +33,14 @@ The instruction file should have the name `inst_and_feedback.txt`. You can find 
 
 When instruction file is in place you can run the script by `python asrt.py` command or by running the `asrt.py` file from PsychoPy.
 
+### Credits
+
+This code is forked from this github repository: https://github.com/hallgatoemese/asrt.
+
+The original codes' author is **Emese Szegedi-Hallgató** ([hallgatoemese](https://github.com/hallgatoemese))
+
+The code was rewritten and was extended with eye-tracker capabilities by **Tamás Zolnai** ([tzolnai](https://github.com/tzolnai))
+
 ### References
 
 ASRT (alternating SRT, alternating serial reaction time task)
