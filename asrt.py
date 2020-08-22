@@ -636,7 +636,7 @@ class InstructionHelper:
                 experiment.fixation_cross.draw()
                 self.__print_to_screen(inst, experiment.mywindow)
                 core.wait(2.0)
-                response = experiment.wait_for_eye_response(experiment.fixation_cross_pos, experiment.settings.instruction_fixation_threshold)
+                response = experiment.wait_for_eye_response([experiment.fixation_cross_pos], experiment.settings.instruction_fixation_threshold)
                 if response == -1:
                     core.quit()
 
@@ -745,7 +745,8 @@ class InstructionHelper:
 class PersonDataHandler:
     """Class for handle subject related settings and data."""
 
-    def __init__(self, subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path, output_file_type):
+    def __init__(self, subject_id, all_settings_file_path, all_IDs_file_path, subject_list_file_path, output_file_path,
+                 output_file_type, jacobi_output_file_path, jacobi_ET_output_file_path):
         # generated, unique ID of the subject (consist of a name, a number and an optional group name
         self.subject_id = subject_id
         # path to the settings file of the current subject storing the state of the experiment
@@ -760,6 +761,11 @@ class PersonDataHandler:
         self.output_file_type = output_file_type
         # we store all neccessary data in this list of lists to be able to generate the output at the end of all blocks
         self.output_data_buffer = []
+        # output text files for the measured data during jacobi test
+        self.jacobi_ET_output_file_path = jacobi_ET_output_file_path
+        self.jacobi_output_file_path = jacobi_output_file_path
+        # output buffer used to store data during jacobi test
+        self.jacobi_output_data_buffer = []
 
     def load_person_settings(self, experiment):
         """Open settings file of the current subject and read the current state."""
@@ -1131,6 +1137,236 @@ class PersonDataHandler:
 
         for h in heading_list:
             output_file.write(h + '\t')
+
+    def flush_jacobi_ET_data_to_output(self, experiment):
+        """ Write out the ouptut data of the current trial into the output text file (eye-tracking exp. type)."""
+        assert self.output_file_type == 'eye-tracking'
+
+        output_buffer = StringIO()
+        data_len = len(self.output_data_buffer)
+        for data in self.output_data_buffer:
+
+            if data[2] == 0:
+                continue
+            epoch = 2
+            PCode = experiment.which_code(epoch)
+            asrt_type = experiment.settings.asrt_types[epoch]
+
+            left_gaze_data_ADCS = data[4]['left_gaze_point_on_display_area']
+            right_gaze_data_ADCS = data[4]['right_gaze_point_on_display_area']
+            left_eye_distance = data[4]['left_gaze_origin_in_user_coordinate_system'][2]
+            right_eye_distance = data[4]['right_gaze_origin_in_user_coordinate_system'][2]
+            left_gaze_validity = bool(data[4]['left_gaze_point_validity'])
+            right_gaze_validity = bool(data[4]['right_gaze_point_validity'])
+
+            if left_gaze_validity:
+                left_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(left_gaze_data_ADCS)
+            else:
+                left_gaze_data_PCMCS = (float('nan'), float('nan'))
+
+            if right_gaze_validity:
+                right_gaze_data_PCMCS = experiment.ADCS_to_PCMCS(right_gaze_data_ADCS)
+            else:
+                right_gaze_data_PCMCS = (float('nan'), float('nan'))
+
+            left_pupil_diameter = data[4]['left_pupil_diameter']
+            right_pupil_diameter = data[4]['right_pupil_diameter']
+            left_pupil_validity = bool(data[4]['left_pupil_validity'])
+            right_pupil_validity = bool(data[4]['right_pupil_validity'])
+
+            output_data = [experiment.settings.computer_name,
+                           experiment.mymonitor.getSizePix()[0],
+                           experiment.mymonitor.getSizePix()[1],
+                           experiment.subject_group,
+                           experiment.subject_number,
+                           experiment.subject_sex,
+                           experiment.subject_age,
+                           asrt_type,
+                           PCode,
+
+                           data[0],
+                           data[1],
+                           data[2],
+
+                           experiment.frame_rate,
+                           experiment.frame_time,
+                           experiment.frame_sd,
+
+                           data[3],
+                           left_gaze_data_ADCS[0],
+                           left_gaze_data_ADCS[1],
+                           right_gaze_data_ADCS[0],
+                           right_gaze_data_ADCS[1],
+                           left_gaze_data_PCMCS[0],
+                           left_gaze_data_PCMCS[1],
+                           right_gaze_data_PCMCS[0],
+                           right_gaze_data_PCMCS[1],
+                           left_eye_distance,
+                           right_eye_distance,
+                           left_gaze_validity,
+                           right_gaze_validity,
+                           left_pupil_diameter,
+                           right_pupil_diameter,
+                           left_pupil_validity,
+                           right_pupil_validity,
+                           data[5],
+                           experiment.dict_pos[1][0],
+                           experiment.dict_pos[1][1],
+                           experiment.dict_pos[2][0],
+                           experiment.dict_pos[2][1],
+                           experiment.dict_pos[3][0],
+                           experiment.dict_pos[3][1],
+                           experiment.dict_pos[4][0],
+                           experiment.dict_pos[4][1]]
+
+            output_buffer.write("\n")
+            for data in output_data:
+                if isinstance(data, numbers.Number):
+                    data = str(data)
+                    data = data.replace('.', ',')
+                else:
+                    data = str(data)
+                output_buffer.write(data + '\t')
+
+        with codecs.open(self.jacobi_ET_output_file_path, 'w', encoding='utf-8') as output_file:
+            self.add_jacobi_ET_heading_to_output(output_file)
+            output_file.write(output_buffer.getvalue())
+
+        output_buffer.close()
+        # make sure we don't get more data here durig writing it out
+        assert data_len == len(self.output_data_buffer)
+        self.output_data_buffer.clear()
+
+    def add_jacobi_ET_heading_to_output(self, output_file):
+        """Add the first line to the ouput with the names of the different variables (eye-tracking exp. type)."""
+        assert self.output_file_type == 'eye-tracking'
+
+        heading_list = ['computer_name',
+                        'monitor_width_pixel',
+                        'monitor_height_pixel',
+                        'subject_group',
+                        'subject_number',
+                        'subject_sex',
+                        'subject_age',
+                        'asrt_type',
+                        'PCode',
+
+                        'test_type',
+                        'run',
+                        'trial',
+
+                        'frame_rate',
+                        'frame_time',
+                        'frame_sd',
+
+                        'trial_phase',
+                        'left_gaze_data_X_ADCS',
+                        'left_gaze_data_Y_ADCS',
+                        'right_gaze_data_X_ADCS',
+                        'right_gaze_data_Y_ADCS',
+                        'left_gaze_data_X_PCMCS',
+                        'left_gaze_data_Y_PCMCS',
+                        'right_gaze_data_X_PCMCS',
+                        'right_gaze_data_Y_PCMCS',
+                        'left_eye_distance',
+                        'right_eye_distance',
+                        'left_gaze_validity',
+                        'right_gaze_validity',
+                        'left_pupil_diameter',
+                        'right_pupil_diameter',
+                        'left_pupil_validity',
+                        'right_pupil_validity',
+                        'gaze_data_time_stamp',
+                        'stimulus_1_position_X_PCMCS',
+                        'stimulus_1_position_Y_PCMCS',
+                        'stimulus_2_position_X_PCMCS',
+                        'stimulus_2_position_Y_PCMCS',
+                        'stimulus_3_position_X_PCMCS',
+                        'stimulus_3_position_Y_PCMCS',
+                        'stimulus_4_position_X_PCMCS',
+                        'stimulus_4_position_Y_PCMCS']
+
+        for h in heading_list:
+            output_file.write(h + '\t')
+
+    def add_jacobi_heading_to_output(self, output_file):
+        """Add the first line to the ouput with the names of the different variables (eye-tracking exp. type)."""
+        assert self.output_file_type == 'eye-tracking'
+
+        heading_list = ['computer_name',
+                        'monitor_width_pixel',
+                        'monitor_height_pixel',
+                        'subject_group',
+                        'subject_number',
+                        'subject_sex',
+                        'subject_age',
+                        'asrt_type',
+                        'PCode',
+
+                        'test_type',
+                        'run',
+                        'trial',
+
+                        'frame_rate',
+                        'frame_time',
+                        'frame_sd',
+
+                        'response']
+
+        for h in heading_list:
+            output_file.write(h + '\t')
+
+    def flush_jacobi_data_to_output(self, experiment):
+        """ Write out the ouptut data of the current trial into the output text file (eye-tracking exp. type)."""
+        assert self.output_file_type == 'eye-tracking'
+
+        output_buffer = StringIO()
+        data_len = len(self.jacobi_output_data_buffer)
+        for data in self.jacobi_output_data_buffer:
+
+            if data[2] == 0:
+                continue
+            epoch = 2
+            PCode = experiment.which_code(epoch)
+            asrt_type = experiment.settings.asrt_types[epoch]
+
+            output_data = [experiment.settings.computer_name,
+                           experiment.mymonitor.getSizePix()[0],
+                           experiment.mymonitor.getSizePix()[1],
+                           experiment.subject_group,
+                           experiment.subject_number,
+                           experiment.subject_sex,
+                           experiment.subject_age,
+                           asrt_type,
+                           PCode,
+
+                           data[0],
+                           data[1],
+                           data[2],
+
+                           experiment.frame_rate,
+                           experiment.frame_time,
+                           experiment.frame_sd,
+
+                           data[3]]
+
+            output_buffer.write("\n")
+            for data in output_data:
+                if isinstance(data, numbers.Number):
+                    data = str(data)
+                    data = data.replace('.', ',')
+                else:
+                    data = str(data)
+                output_buffer.write(data + '\t')
+
+        with codecs.open(self.jacobi_output_file_path, 'w', encoding='utf-8') as output_file:
+            self.add_jacobi_heading_to_output(output_file)
+            output_file.write(output_buffer.getvalue())
+
+        output_buffer.close()
+        # make sure we don't get more data here durig writing it out
+        assert data_len == len(self.jacobi_output_data_buffer)
+        self.jacobi_output_data_buffer.clear()
 
 
 class Experiment:
@@ -1548,9 +1784,12 @@ class Experiment:
         subject_list_file_path = os.path.join(self.workdir_path, "subject_settings",
                                               "participants_in_experiment.txt")
         output_file_path = os.path.join(self.workdir_path, "logs", subject_id + '_log.txt')
+        jacobi_output_file_path = os.path.join(self.workdir_path, "logs", subject_id + '_jacobi_log.txt')
+        jacobi_ET_output_file_path = os.path.join(self.workdir_path, "logs", subject_id + '_jacobi_ET_log.txt')
         self.person_data = PersonDataHandler(subject_id, all_settings_file_path,
                                              all_IDs_file_path, subject_list_file_path,
-                                             output_file_path, self.settings.experiment_type)
+                                             output_file_path, self.settings.experiment_type,
+                                             jacobi_output_file_path, jacobi_ET_output_file_path)
 
         # try to load settings and progress for the given subject ID
         self.person_data.load_person_settings(self)
@@ -1700,7 +1939,7 @@ class Experiment:
 
         return (new_x, new_y)
 
-    def wait_for_eye_response(self, expected_eye_pos, fixation_threshold):
+    def wait_for_eye_response(self, expected_eye_pos_list, fixation_threshold):
 
         while (True):
             if 'q' in event.getKeys():
@@ -1774,10 +2013,11 @@ class Experiment:
                 avg_pos_norm = (sum_x / fixation_threshold, sum_y / fixation_threshold)
                 avg_pos_cm = self.ADCS_to_PCMCS(avg_pos_norm)
 
-                if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos, self.settings.AOI_size):
-                    if self.main_loop_lock.locked():
-                        self.main_loop_lock.release()
-                    return 1
+                for i in range(len(expected_eye_pos_list)):
+                    if self.point_is_in_rectangle(avg_pos_cm, expected_eye_pos_list[i], self.settings.AOI_size):
+                        if self.main_loop_lock.locked():
+                            self.main_loop_lock.release()
+                        return i + 1
 
     def monitor_settings(self):
         """Specify monitor settings."""
@@ -1864,7 +2104,7 @@ class Experiment:
         if not end_of_session:
             self.fixation_cross.draw()
             self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
-            response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_fixation_threshold)
+            response = self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
             if response == -1:
                 return 'quit'
             else:
@@ -1888,7 +2128,7 @@ class Experiment:
         if not end_of_session:
             self.fixation_cross.draw()
             self.print_to_screen("A következő blokkra lépéshez néz a keresztre!")
-            response = self.wait_for_eye_response(self.fixation_cross_pos, self.settings.instruction_fixation_threshold)
+            response = self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
             if response == -1:
                 return 'quit'
             else:
@@ -1905,7 +2145,7 @@ class Experiment:
             return (self.pressed_dict[press[0][0]], press[0][1])
         # for ET version we wait for getting the right response (there is no wrong answer)
         else:
-            response = self.wait_for_eye_response(self.dict_pos[expected_response], self.settings.stim_fixation_threshold)
+            response = self.wait_for_eye_response([self.dict_pos[expected_response]], self.settings.stim_fixation_threshold)
             # this RT is not precise, but good enough to give a feedback for the subject
             if response == 1:
                 return (expected_response, response_clock.getTime())
@@ -2148,6 +2388,282 @@ class Experiment:
                 if self.eye_tracker is not None:
                     self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback)
                 break
+
+    def jacobi_ET_presentation(self):
+        """Doing jacobi method for checking the implicit learning."""
+
+        # It's meant to be used only for implicit experiments.
+        assert('explicit' not in self.settings.asrt_types.values())
+
+        # init presented objects
+        stimR = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
+                              fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
+        stimbg = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
+                               fillColor=None, lineColor=self.colors['linecolor'])
+
+        # place the fixation cross to the bottom-right corner of the screen
+        aspect_ratio = self.mymonitor.getSizePix()[1] / self.mymonitor.getSizePix()[0]
+        monitor_width_cm = self.settings.monitor_width
+        monitor_height_cm = monitor_width_cm * aspect_ratio
+        self.fixation_cross_pos = (monitor_width_cm / 2 - 3, -(monitor_height_cm / 2 - 3))
+        self.fixation_cross = visual.TextStim(win=self.mywindow, text="+", height=3, units="cm", color='black', pos=self.fixation_cross_pos)
+
+        # start recording gaze data
+        self.jacobi_run = 0
+        self.jacobi_trial = 0
+        self.jacobi_trial_phase = 'none'
+        self.jacobi_test_phase = 'none'
+        self.person_data.output_data_buffer.clear()
+        self.person_data.jacobi_output_data_buffer.clear()
+        self.current_sampling_window = self.settings.instruction_fixation_threshold
+        self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback_jacobi, as_dictionary=True)
+
+        # show initial message
+        jacobi_inst = "A következőkben az lesz a feladatot, hogy a tekinteteddel jelöld ki az egyes köröket.\n\n"
+        jacobi_inst += "Egy kör kékre vált, ha sikerült kijelölni.\n\n"
+        jacobi_inst += "Ha egy üres helyre nézel a kijelölés törlődik, így kétszer egymás után ki tudod jelülni ugyanazt a kört.\n\n"
+        jacobi_inst += "A gyakorlás megkezdéséhez néz a keresztre!\n\n"
+        self.fixation_cross.draw()
+        self.print_to_screen(jacobi_inst)
+        self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+
+        # first practice (select two circles)
+        instruction_text = "Jelöld ki először a bal felső, majd a jobb felső kört!\n\n"
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 1)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 2)
+        core.wait(2.0)
+
+        # second practice
+        instruction_text = "Jelöld ki rendre a bal felső, a jobb felső, a bal alsó, majd a jobb alsó köröket!\n\n"
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 1)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 2)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 3)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[4], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[4]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 4)
+        core.wait(2.0)
+
+        # third practice
+        instruction_text = "Jelöld ki kétszer a bal felső kört, majd egyszer a jobb felsőt, végül kétszer a bal alsó kört!\n\n"
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 1)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 1)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 2)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 3)
+        core.wait(0.5)
+        self.wait_for_leave_pos(self.dict_pos[3], self.settings.stim_fixation_threshold, instruction_text)
+        self.draw_jacobi_screen(instruction_text)
+        self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
+        self.draw_jacobi_screen(instruction_text, 3)
+        core.wait(2.0)
+
+        # inclusion test
+        jacobi_inst = "Vége a gyakorlásnak.\n\n"
+        jacobi_inst += "A következő feladat az lesz, hogy próbáld meg olyan sorrendben kijelölni a köröket, amely sorrendben a kísérlet első felében megjelentek.\n\n"
+        jacobi_inst += "A feladat elkezdéséhez néz a keresztre!\n\n"
+        self.fixation_cross.draw()
+        self.print_to_screen(jacobi_inst)
+        self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+
+        self.jacobi_test_phase = 'inclusion'
+        self.run_jacobi_test()
+
+        # exclusion test
+        jacobi_warn = "FIGYELEM! Most változik a feladatot!\n\n"
+        warningtext = visual.TextStim(self.mywindow, text=jacobi_warn, units="cm", height=0.8, wrapWidth=20, color="red", pos=(0, 4))
+        warningtext.draw()
+
+        jacobi_inst = "Az előzőekhez képest most az lesz a feladatot, hogy MÁS sorrendben jelöld ki a köröket, amely sorrendben a kísérlet első felében megjelentek.\n\n"
+        jacobi_inst += "A feladat elkezdéséhez néz a keresztre!\n\n"
+        self.fixation_cross.draw()
+        self.print_to_screen(jacobi_inst)
+        self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+
+        self.jacobi_test_phase = 'exclusion'
+        self.run_jacobi_test()
+
+        # stop registering more eye-tracking data
+        self.eye_tracker.unsubscribe_from(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback_jacobi)
+        self.person_data.flush_jacobi_data_to_output(self)
+        self.person_data.flush_jacobi_ET_data_to_output(self)
+
+        self.instructions.show_ending(self)
+
+    def draw_jacobi_screen(self, text, active_stimulus=-1):
+        ypos = self.settings.asrt_distance / 2.0 + 3.0
+        instruction = visual.TextStim(self.mywindow, text=text, units='cm', height=0.8, wrapWidth=20, color='black', pos=(0, ypos))
+        instruction.draw()
+
+        stimbg = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
+                               fillColor=None, lineColor=self.colors['linecolor'])
+        self.stim_bg(stimbg)
+
+        if active_stimulus != -1:
+            stim_circle = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
+                                        fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
+
+            stim_circle.setPos(self.dict_pos[active_stimulus])
+            stim_circle.draw()
+
+        self.mywindow.flip()
+
+    def run_jacobi_test(self):
+        eye_pos_list = [self.dict_pos[1], self.dict_pos[2], self.dict_pos[3], self.dict_pos[4]]
+        run_count = 4
+
+        for j in range(run_count):
+            run_size = 24
+            for i in range(run_size):
+                self.draw_jacobi_screen("")
+                with self.shared_data_lock:
+                    self.jacobi_run = j + 1
+                    self.jacobi_trial = i + 1
+                    self.jacobi_trial_phase = "before_reaction"
+
+                response = self.wait_for_eye_response(eye_pos_list, self.settings.stim_fixation_threshold)
+                self.draw_jacobi_screen("", response)
+
+                with self.shared_data_lock:
+                    self.jacobi_trial_phase = "after_reaction"
+
+                self.person_data.jacobi_output_data_buffer.append([self.jacobi_test_phase, self.jacobi_run, self.jacobi_trial, response])
+
+                core.wait(0.5)
+                self.wait_for_leave_pos(self.dict_pos[response], self.settings.stim_fixation_threshold)
+
+                with self.shared_data_lock:
+                    self.jacobi_trial_phase = "after_AOI_left"
+
+            # end of run
+            if j < run_count - 1:
+                jacobi_inst = "Most pihenhetsz egy kicsit.\n\n"
+                self.print_to_screen(jacobi_inst)
+
+                core.wait(10.0)
+
+                jacobi_inst = "A feladat folytatásához néz a keresztre!\n\n"
+                self.fixation_cross.draw()
+                self.print_to_screen(jacobi_inst)
+                self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+
+    def wait_for_leave_pos(self, expected_eye_pos, fixation_threshold, text=''):
+
+        while (True):
+            if 'q' in event.getKeys():
+                if self.main_loop_lock.locked():
+                    self.main_loop_lock.release()
+                return -1
+
+            self.main_loop_lock.acquire()
+
+            with self.shared_data_lock:
+                if len(self.gaze_data_list) < fixation_threshold:
+                    continue
+
+                count = 0
+                invalid_count = 0
+                outside_eye_pos = True
+                for i in range(len(self.gaze_data_list)):
+                    pos_x = self.gaze_data_list[i][0]
+                    pos_y = self.gaze_data_list[i][1]
+
+                    # We interpolate the invalid data lineary
+                    if pos_x == None or pos_y == None:
+                        invalid_count += 1
+                        interpolated_data = self.linear_interpolation(self.gaze_data_list, i)
+                        if interpolated_data == None:
+                            break
+                        else:
+                            pos_x = interpolated_data[0]
+                            pos_y = interpolated_data[1]
+
+                    if pos_x != None and pos_y != None:
+                        count += 1
+                        pos_norm = (pos_x, pos_y)
+                        pos_cm = self.ADCS_to_PCMCS(pos_norm)
+                        if self.point_is_in_rectangle(pos_cm, expected_eye_pos, self.settings.AOI_size):
+                            outside_eye_pos = False
+
+                    if count >= fixation_threshold:
+                        break
+
+                    if invalid_count > fixation_threshold * 0.334:
+                        break
+
+                # We have too many invalid data (we allow maximum 33.3333% to be invalid)
+                if invalid_count > fixation_threshold * 0.334:
+                    continue
+
+                # Do we have engough data for a decision?
+                if count == fixation_threshold and outside_eye_pos:
+                    return 1
+
+    def eye_data_callback_jacobi(self, origGazeData):
+        gazeData = copy.deepcopy(origGazeData)
+        time_stamp = tobii.get_system_time_stamp()
+        left_gaze_XY = gazeData['left_gaze_point_on_display_area']
+        right_gaze_XY = gazeData['right_gaze_point_on_display_area']
+        left_gaze_valid = gazeData['left_gaze_point_validity']
+        right_gaze_valid = gazeData['right_gaze_point_validity']
+
+        x_coord = None
+        y_coord = None
+        if left_gaze_valid and right_gaze_valid:
+            x_coord = (left_gaze_XY[0] + right_gaze_XY[0]) / 2
+            y_coord = (left_gaze_XY[1] + right_gaze_XY[1]) / 2
+        elif left_gaze_valid:
+            x_coord = left_gaze_XY[0]
+            y_coord = left_gaze_XY[1]
+        elif right_gaze_valid:
+            x_coord = right_gaze_XY[0]
+            y_coord = right_gaze_XY[1]
+
+        with self.shared_data_lock:
+            if x_coord != None and y_coord != None:
+                self.gaze_data_list.append((x_coord, y_coord))
+            else:
+                self.gaze_data_list.append((None, None))
+
+            if len(self.gaze_data_list) > self.current_sampling_window:
+                self.gaze_data_list.pop(0)
+                assert len(self.gaze_data_list) == self.current_sampling_window
+
+            self.person_data.output_data_buffer.append([self.jacobi_test_phase, self.jacobi_run,
+                                                        self.jacobi_trial, self.jacobi_trial_phase, gazeData, time_stamp])
+
+        if self.main_loop_lock.locked():
+            self.main_loop_lock.release()
 
     def run(self, full_screen=True, mouse_visible=False, window_gammaErrorPolicy='raise'):
         ensure_dir(os.path.join(self.workdir_path, "logs"))

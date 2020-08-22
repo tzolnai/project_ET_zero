@@ -69,3 +69,11 @@ Fixation duration threshold
 Linear interpolation of missing data
 
 * [Olsen, A. (2012). The Tobii I-VT fixation filter. Tobii Technology, 1-21.](https://stemedhub.org/resources/2173/download/Tobii_WhitePaper_TobiiIVTFixationFilter.pdf)
+
+Jacobi PDP test
+
+* [Jacoby, L. L. (1991). A process dissociation framework: Separating automatic from intentional uses of memory. Journal of memory and language, 30(5), 513-541.](https://www.sciencedirect.com/science/article/abs/pii/0749596X9190025F)
+
+* [Destrebecqz, A., & Cleeremans, A. (2001). Can sequence learning be implicit? New evidence with the process dissociation procedure. Psychonomic bulletin & review, 8(2), 343-350.](https://link.springer.com/article/10.3758/BF03196171)
+
+* [Kóbor, A., Janacsek, K., Takács, Á., & Nemeth, D. (2017). Statistical learning leads to persistent memory: Evidence for one-year consolidation. Scientific reports, 7(1), 1-10.](https://www.nature.com/articles/s41598-017-00807-3?WT.feed_name=subjects_biological-sciences)
