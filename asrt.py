@@ -2188,6 +2188,9 @@ class Experiment:
                            monitor=self.mymonitor, units="cm", gammaErrorPolicy=window_gammaErrorPolicy) as self.mywindow:
             self.mywindow.mouseVisible = mouse_visible
 
+            # call explicit activate here to make sure the exp window has the focus.
+            self.mywindow.winHandle.activate()
+
             # init eye-tracker if needed
             if self.settings.experiment_type == 'eye-tracking':
                 self.init_eyetracker()
