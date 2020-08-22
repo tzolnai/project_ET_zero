@@ -1537,9 +1537,9 @@ class Experiment:
         subject_id = 'subject_' + str(self.subject_number) + '_' + self.subject_group
 
         # init subject data handler with the rigth file paths
-        all_settings_file_path = os.path.join(self.workdir_path, "settings", subject_id)
-        all_IDs_file_path = os.path.join(self.workdir_path, "settings", "participant_settings")
-        subject_list_file_path = os.path.join(self.workdir_path, "settings",
+        all_settings_file_path = os.path.join(self.workdir_path, "subject_settings", subject_id)
+        all_IDs_file_path = os.path.join(self.workdir_path, "subject_settings", "participant_settings")
+        subject_list_file_path = os.path.join(self.workdir_path, "subject_settings",
                                               "participants_in_experiment.txt")
         output_file_path = os.path.join(self.workdir_path, "logs", subject_id + '_log.txt')
         self.person_data = PersonDataHandler(subject_id, all_settings_file_path,
@@ -2146,6 +2146,7 @@ class Experiment:
     def run(self, full_screen=True, mouse_visible=False, window_gammaErrorPolicy='raise'):
         ensure_dir(os.path.join(self.workdir_path, "logs"))
         ensure_dir(os.path.join(self.workdir_path, "settings"))
+        ensure_dir(os.path.join(self.workdir_path, "subject_settings"))
 
         # load experiment settings if exist or ask the user to specify them
         all_settings_file_path = os.path.join(self.workdir_path, "settings", "settings")

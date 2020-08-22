@@ -70,7 +70,7 @@ class participantIDTest(unittest.TestCase):
         experiment.settings.asrt_types[1] = "implicit"
         experiment.settings.asrt_types[2] = "implicit"
 
-        asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
 
         experiment.participant_id()
 
@@ -97,11 +97,11 @@ class participantIDTest(unittest.TestCase):
         self.assertEqual(experiment.person_data.subject_id,
                          "subject_10_kontrol")
         self.assertEqual(experiment.person_data.all_settings_file_path, os.path.join(
-            thispath, "settings", experiment.person_data.subject_id))
+            thispath, "subject_settings", experiment.person_data.subject_id))
         self.assertEqual(experiment.person_data.all_IDs_file_path, os.path.join(
-            thispath, "settings", "participant_settings"))
+            thispath, "subject_settings", "participant_settings"))
         self.assertEqual(experiment.person_data.subject_list_file_path, os.path.join(
-            thispath, "settings", "participants_in_experiment.txt"))
+            thispath, "subject_settings", "participants_in_experiment.txt"))
         self.assertEqual(experiment.person_data.output_file_path, os.path.join(
             thispath, "logs", experiment.person_data.subject_id + "_log.txt"))
 
@@ -134,7 +134,7 @@ class participantIDTest(unittest.TestCase):
         experiment.settings.asrt_types[1] = "implicit"
         experiment.settings.asrt_types[2] = "implicit"
 
-        asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
 
         # call once to get the participant settings
         experiment.participant_id()

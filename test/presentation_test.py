@@ -101,8 +101,10 @@ class presentationTest(unittest.TestCase):
 
         # set user settings
         asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
         asrt.ensure_dir(os.path.join(thispath, "logs"))
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
         gui_mock = pgm.PsychoPyGuiMock()
@@ -215,9 +217,10 @@ class presentationTest(unittest.TestCase):
                                                    "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
-                thispath, "settings", "toth-bela_10__log.txt"))
+                thispath, "subject_settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
     def testExplixitASRT(self):
@@ -238,8 +241,10 @@ class presentationTest(unittest.TestCase):
 
         # set user settings
         asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
         asrt.ensure_dir(os.path.join(thispath, "logs"))
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
         gui_mock = pgm.PsychoPyGuiMock()
@@ -358,9 +363,10 @@ class presentationTest(unittest.TestCase):
                                                    "Legyél gyorsabb!\r\n\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
-                thispath, "settings", "toth-bela_10__log.txt"))
+                thispath, "subject_settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
     def testQuitInsideABlock(self):
@@ -381,8 +387,10 @@ class presentationTest(unittest.TestCase):
 
         # set user settings
         asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
         asrt.ensure_dir(os.path.join(thispath, "logs"))
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
         gui_mock = pgm.PsychoPyGuiMock()
@@ -492,9 +500,10 @@ class presentationTest(unittest.TestCase):
             self.assertEqual(quit.text, "Kilépés...\nAdatok mentése...")
 
             self.assertTrue(os.path.join(
-                thispath, "settings", "toth-bela_10__log.txt"))
+                thispath, "subject_settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
     def testWrongPressedButton(self):
@@ -516,8 +525,10 @@ class presentationTest(unittest.TestCase):
 
         # set user settings
         asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
         asrt.ensure_dir(os.path.join(thispath, "logs"))
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
         gui_mock = pgm.PsychoPyGuiMock()
@@ -651,9 +662,10 @@ class presentationTest(unittest.TestCase):
                                                    "Átlagos reakcióidőd a bejósolható elemeknél: 0,0 másodperc\r\n\r\n\r\n")
 
             self.assertTrue(os.path.join(
-                thispath, "settings", "toth-bela_10__log.txt"))
+                thispath, "subject_settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
     def testQuitOnFeedbackScreen(self):
@@ -675,8 +687,10 @@ class presentationTest(unittest.TestCase):
 
         # set user settings
         asrt.ensure_dir(os.path.join(thispath, "settings"))
+        asrt.ensure_dir(os.path.join(thispath, "subject_settings"))
         asrt.ensure_dir(os.path.join(thispath, "logs"))
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
         gui_mock = pgm.PsychoPyGuiMock()
@@ -801,9 +815,10 @@ class presentationTest(unittest.TestCase):
             self.assertEqual(quit.text, "Kilépés...\nAdatok mentése...")
 
             self.assertTrue(os.path.join(
-                thispath, "settings", "toth-bela_10__log.txt"))
+                thispath, "subject_settings", "toth-bela_10__log.txt"))
 
         self.clearDir(os.path.join(thispath, "settings"))
+        self.clearDir(os.path.join(thispath, "subject_settings"))
         self.clearDir(os.path.join(thispath, "logs"))
 
 
