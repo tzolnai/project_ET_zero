@@ -88,8 +88,10 @@ def find_variable_str_index(string, variable_pos):
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("You need to specify the path of an output txt file.")
+        exit(1)
 
     if not os.path.isfile(sys.argv[1]):
         print("The passed parameter should be a valid file's path: " + sys.argv[1])
+        exit(1)
 
     convert(sys.argv[1], sys.argv[2])
