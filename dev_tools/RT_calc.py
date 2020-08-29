@@ -56,7 +56,7 @@ def convert(raw_file_name, new_file_name):
                 if start_time_found and end_time_found:
                     new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
                 elif start_time_found:
-                    end_time = int(line.split('\t')[time_stamp_pos])
+                    end_time = int(raw_lines[current_line - 1].split('\t')[time_stamp_pos])
                     new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
                 else:
                     new_file_data.write("0")
@@ -71,7 +71,7 @@ def convert(raw_file_name, new_file_name):
             start_time_found = True
 
         if line.split('\t')[trial_phase_pos] == "after_reaction" and not end_time_found:
-            end_time = int(line.split('\t')[time_stamp_pos])
+            end_time = int(raw_lines[current_line - 1].split('\t')[time_stamp_pos])
             end_time_found = True
         current_line += 1
 
