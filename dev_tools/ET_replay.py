@@ -63,6 +63,7 @@ class EyeTrackingReplay():
             last_trial_phase = 'before_stimulus'
             sampling_counter = 0
             block_displayed = False
+            eye_pos_drawn = False
             for line in output_lines[1:]:
 
                 trial_pos = output_lines[0].split('\t').index("trial")
@@ -81,6 +82,9 @@ class EyeTrackingReplay():
                 block_number = line.split('\t')[block_pos]
                 RSI_time = line.split('\t')[RSI_pos]
 
+                if str(block_number) == "0":
+                    continue
+
                 if current_trial == '1' and trial_phase == 'before_stimulus':
                     if not block_displayed:
                         text_stim = visual.TextStim(experiment.mywindow, text=block_number + ". blokk kezdete...",
@@ -95,10 +99,19 @@ class EyeTrackingReplay():
                 block_displayed = False
                 if sampling_counter > 4:
                     sampling_counter = 0
-                    left_gaze_XY = (float(line.split('\t')[23].replace(',', '.')), float(line.split('\t')[24].replace(',', '.')))
-                    left_gaze_valid = bool(line.split('\t')[32])
-                    right_gaze_XY = (float(line.split('\t')[25].replace(',', '.')), float(line.split('\t')[26].replace(',', '.')))
-                    right_gaze_valid = bool(line.split('\t')[33])
+
+                    left_gazeX_pos = output_lines[0].split('\t').index("left_gaze_data_X_PCMCS")
+                    left_gazeY_pos = output_lines[0].split('\t').index("left_gaze_data_Y_PCMCS")
+                    left_gaze_valid_pos = output_lines[0].split('\t').index("left_gaze_validity")
+                    right_gazeX_pos = output_lines[0].split('\t').index("right_gaze_data_X_PCMCS")
+                    right_gazeY_pos = output_lines[0].split('\t').index("right_gaze_data_Y_PCMCS")
+                    right_gaze_valid_pos = output_lines[0].split('\t').index("right_gaze_validity")
+
+                    left_gaze_XY = (float(line.split('\t')[left_gazeX_pos].replace(',', '.')), float(line.split('\t')[left_gazeY_pos].replace(',', '.')))
+                    left_gaze_valid = bool(line.split('\t')[left_gaze_valid_pos])
+                    right_gaze_XY = (float(line.split('\t')[right_gazeX_pos].replace(',', '.')), float(line.split('\t')[right_gazeY_pos].replace(',', '.')))
+                    right_gaze_valid = bool(line.split('\t')[right_gaze_valid_pos])
+
                     x_coord = None
                     y_coord = None
                     if left_gaze_valid and right_gaze_valid:
@@ -111,9 +124,9 @@ class EyeTrackingReplay():
                         x_coord = right_gaze_XY[0]
                         y_coord = right_gaze_XY[1]
 
-                    eye_pos.setPos(experiment.ADCS_to_PCMCS((x_coord, y_coord)))
-                    eye_pos.draw()
-                    eye_pos_drawn = True
+                    if x_coord != None and y_coord != None:
+                        eye_pos.setPos((x_coord, y_coord))
+                        eye_pos_drawn = True
 
                 if current_trial != last_trial or last_trial_phase != trial_phase or eye_pos_drawn:
                     experiment.stim_bg(stimbg)
@@ -135,6 +148,8 @@ class EyeTrackingReplay():
                     text_stim = visual.TextStim(experiment.mywindow, text=current_trial + ". trial",
                                                 units='cm', height=0.8, wrapWidth=20, color='black', pos=(0.0, 12.0))
                     text_stim.draw()
+                    if eye_pos_drawn:
+                        eye_pos.draw()
                     experiment.mywindow.flip()
 
                 core.wait(0.008)
