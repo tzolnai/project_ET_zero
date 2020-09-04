@@ -81,7 +81,6 @@ def convert(raw_file_name, new_file_name, experiment):
     reminder_file_path = os.path.join(experiment.workdir_path, "settings", "settings_reminder.txt")
     experiment.settings = asrt.ExperimentSettings(all_settings_file_path, reminder_file_path, experiment.project_ET_zero)
     experiment.all_settings_def()
-    experiment.settings.dispersion_threshold = 3.0
     
     # find out the current subject
     experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
@@ -104,14 +103,9 @@ def convert(raw_file_name, new_file_name, experiment):
     
         if ignore_trial:
             if last_trial == line.split('\t')[trial_pos]:
-                if line_to_write.split('\t')[block_pos] != "0":
-                    print("ignore line")
-                continue
                 current_line += 1
+                continue
             else:
-                if line_to_write.split('\t')[block_pos] != "0":
-                    print("go to next trial")
-                    print(line.split('\t')[trial_pos])
                 last_trial = line.split('\t')[trial_pos]
                 start_time_found = False
                 end_time_found = False
@@ -120,9 +114,9 @@ def convert(raw_file_name, new_file_name, experiment):
        
         current_stimulus = int(line.split('\t')[stim_pos])
         left_gaze_XY = (float(line.split('\t')[left_gazeX_pos].replace(',', '.')), float(line.split('\t')[left_gazeY_pos].replace(',', '.')))
-        left_gaze_valid = bool(line.split('\t')[left_gaze_valid_pos])
+        left_gaze_valid = line.split('\t')[left_gaze_valid_pos] == 'True'
         right_gaze_XY = (float(line.split('\t')[right_gazeX_pos].replace(',', '.')), float(line.split('\t')[right_gazeY_pos].replace(',', '.')))
-        right_gaze_valid = bool(line.split('\t')[right_gaze_valid_pos])
+        right_gaze_valid = line.split('\t')[right_gaze_valid_pos] == 'True'
 
         # call eye_data_callback
         gazeData = {}
@@ -136,36 +130,30 @@ def convert(raw_file_name, new_file_name, experiment):
         if line.split('\t')[trial_phase_pos] == "stimulus_on_screen":
             global keys
             keys = [[],['q']]
-            response = experiment.wait_for_eye_response(dict_pos[current_stimulus], experiment.current_sampling_window)
+            response = experiment.wait_for_eye_response(dict_pos[current_stimulus], experiment.settings.stim_fixation_threshold)
             if experiment.main_loop_lock.locked():
                 experiment.main_loop_lock.release()
             keys = []
             if response != -1:
                 fixation_found = True
-                print ("fixation_found")
 
         if last_trial != line.split('\t')[trial_pos] or line == raw_lines[len(raw_lines) - 1] or fixation_found:
             line_to_write = raw_lines[current_line - 1]
             end_pos = find_variable_str_index(line_to_write, trial_phase_pos)
             if line_to_write.split('\t')[block_pos] != "0":
-                print("writedata")
                 new_file_data.write(line_to_write[:end_pos])
                 new_file_data.write('\t')
 
                 if start_time_found and end_time_found:
                     new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
                 elif start_time_found:
-                    end_time = int(line.split('\t')[time_stamp_pos])
+                    end_time = int(raw_lines[current_line - 1].split('\t')[time_stamp_pos])
                     new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
                 else:
                     new_file_data.write("0")
                 new_file_data.write('\n')
 
             if last_trial == line.split('\t')[trial_pos]:
-                if line_to_write.split('\t')[block_pos] != "0":
-                    print("ignore_trial")
-                    print(last_trial)
-                    print(str((end_time - start_time) / 1000.0).replace(".", ","))
                 ignore_trial = True
 
             last_trial = line.split('\t')[trial_pos]
@@ -178,7 +166,7 @@ def convert(raw_file_name, new_file_name, experiment):
             start_time_found = True
 
         if line.split('\t')[trial_phase_pos] == "after_reaction" and not end_time_found:
-            end_time = int(line.split('\t')[time_stamp_pos])
+            end_time = int(raw_lines[current_line - 1].split('\t')[time_stamp_pos])
             end_time_found = True
         current_line += 1
 
