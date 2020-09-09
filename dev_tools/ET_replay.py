@@ -39,10 +39,10 @@ class EyeTrackingReplay():
         experiment.all_settings_def()
 
         experiment.monitor_settings()
-        experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-0.5), float(experiment.settings.asrt_distance) * (-0.5)),
-                               2: (float(experiment.settings.asrt_distance) * 0.5, float(experiment.settings.asrt_distance) * (-0.5)),
-                               3: (float(experiment.settings.asrt_distance) * (-0.5), float(experiment.settings.asrt_distance) * 0.5),
-                               4: (float(experiment.settings.asrt_distance) * 0.5, float(experiment.settings.asrt_distance) * 0.5)}
+        experiment.dict_pos = {1: (float(experiment.settings.asrt_distance) * (-0.5), float(experiment.settings.asrt_distance) * 0.5),
+                               2: (float(experiment.settings.asrt_distance) * 0.5, float(experiment.settings.asrt_distance) * 0.5),
+                               3: (float(experiment.settings.asrt_distance) * (-0.5), float(experiment.settings.asrt_distance) * (-0.5)),
+                               4: (float(experiment.settings.asrt_distance) * 0.5, float(experiment.settings.asrt_distance) * (-0.5))}
         experiment.colors = {'wincolor': 'White', 'linecolor': 'black',
                              'stimp': experiment.settings.asrt_pcolor, 'stimr': experiment.settings.asrt_rcolor}
 

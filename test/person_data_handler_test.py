@@ -469,7 +469,7 @@ class personDataHandlerTest(unittest.TestCase):
         experiment.stimlist = {1: 1}
         experiment.colors = {'wincolor': 'black', 'linecolor': 'black', 'stimp': 'black', 'stimr': 'black'}
         experiment.mymonitor = self.my_monitor
-        experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
+        experiment.dict_pos = {1: (-0.5, 0.5), 2: (0.5, 0.5), 3: (-0.5, -0.5), 4: (0.5, -0.5)}
 
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)

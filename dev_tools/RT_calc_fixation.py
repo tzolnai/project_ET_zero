@@ -98,10 +98,10 @@ def convert(raw_file_name, new_file_name, experiment):
     experiment.distance_ADCS_to_PCMCS = DummyConvert
 
     # stim positions
-    dict_pos = {1: (float(-7.5), float(-7.5)),
-                2: (float(7.5), float(-7.5)),
-                3: (float(-7.5), float(7.5)),
-                4: (float(7.5), float(7.5))}
+    dict_pos = {1: (float(-7.5), float(7.5)),
+                2: (float(7.5), float(7.5)),
+                3: (float(-7.5), float(-7.5)),
+                4: (float(7.5), float(-7.5))}
 
     ignore_trial = False
 

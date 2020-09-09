@@ -2175,10 +2175,10 @@ class Experiment:
                              4: (float(self.settings.asrt_distance) * 1.5, 0)}
         # eye-tracking exp: stimulus circles placed in a rectangle shape
         else:
-            self.dict_pos = {1: (float(self.settings.asrt_distance) * (-0.5), float(self.settings.asrt_distance) * (-0.5)),
-                             2: (float(self.settings.asrt_distance) * 0.5, float(self.settings.asrt_distance) * (-0.5)),
-                             3: (float(self.settings.asrt_distance) * (-0.5), float(self.settings.asrt_distance) * 0.5),
-                             4: (float(self.settings.asrt_distance) * 0.5, float(self.settings.asrt_distance) * 0.5)}
+            self.dict_pos = {1: (float(self.settings.asrt_distance) * (-0.5), float(self.settings.asrt_distance) * 0.5),
+                             2: (float(self.settings.asrt_distance) * 0.5, float(self.settings.asrt_distance) * 0.5),
+                             3: (float(self.settings.asrt_distance) * (-0.5), float(self.settings.asrt_distance) * (-0.5)),
+                             4: (float(self.settings.asrt_distance) * 0.5, float(self.settings.asrt_distance) * (-0.5))}
 
         # read instruction strings
         inst_feedback_path = os.path.join(self.workdir_path, "inst_and_feedback.txt")
