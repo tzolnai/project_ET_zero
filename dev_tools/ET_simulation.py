@@ -38,6 +38,8 @@ class EyeTrackerMock:
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -76,21 +78,29 @@ def on_move(x, y):
             if g_counter % 10 != 0:
                 gazeData['left_gaze_point_on_display_area'] = (xCoord + 0.02, yCoord)
                 gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.02, yCoord)
+                gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+                gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
                 gazeData['left_gaze_point_validity'] = 1
                 gazeData['right_gaze_point_validity'] = 1
             elif g_counter % 30 == 20:
                 gazeData['left_gaze_point_on_display_area'] = (xCoord + 0.02, yCoord)
                 gazeData['right_gaze_point_on_display_area'] = (float('nan'), float('nan'))
+                gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+                gazeData['right_gaze_origin_in_user_coordinate_system'] = (float('nan'), float('nan'), float('nan'))
                 gazeData['left_gaze_point_validity'] = 1
                 gazeData['right_gaze_point_validity'] = 0
             elif g_counter % 30 == 10:
                 gazeData['left_gaze_point_on_display_area'] = (float('nan'), float('nan'))
                 gazeData['right_gaze_point_on_display_area'] = (xCoord - 0.02, yCoord)
+                gazeData['left_gaze_origin_in_user_coordinate_system'] = (float('nan'), float('nan'), float('nan'))
+                gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
                 gazeData['left_gaze_point_validity'] = 0
                 gazeData['right_gaze_point_validity'] = 1
             else:
                 gazeData['left_gaze_point_on_display_area'] = (float('nan'), float('nan'))
                 gazeData['right_gaze_point_on_display_area'] = (float('nan'), float('nan'))
+                gazeData['left_gaze_origin_in_user_coordinate_system'] = (float('nan'), float('nan'), float('nan'))
+                gazeData['right_gaze_origin_in_user_coordinate_system'] = (float('nan'), float('nan'), float('nan'))
                 gazeData['left_gaze_point_validity'] = 0
                 gazeData['right_gaze_point_validity'] = 0
 

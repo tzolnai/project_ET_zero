@@ -987,6 +987,8 @@ class PersonDataHandler:
             trial_type_high_low = experiment.calulate_trial_type_high_low(N)
             left_gaze_data_ADCS = data[3]['left_gaze_point_on_display_area']
             right_gaze_data_ADCS = data[3]['right_gaze_point_on_display_area']
+            left_eye_distance = data[3]['left_gaze_origin_in_user_coordinate_system'][2]
+            right_eye_distance = data[3]['right_gaze_origin_in_user_coordinate_system'][2]
             left_gaze_validity = bool(data[3]['left_gaze_point_validity'])
             right_gaze_validity = bool(data[3]['right_gaze_point_validity'])
 
@@ -1038,6 +1040,8 @@ class PersonDataHandler:
                            left_gaze_data_PCMCS[1],
                            right_gaze_data_PCMCS[0],
                            right_gaze_data_PCMCS[1],
+                           left_eye_distance,
+                           right_eye_distance,
                            left_gaze_validity,
                            right_gaze_validity,
                            left_pupil_diameter,
@@ -1106,6 +1110,8 @@ class PersonDataHandler:
                         'left_gaze_data_Y_PCMCS',
                         'right_gaze_data_X_PCMCS',
                         'right_gaze_data_Y_PCMCS',
+                        'left_eye_distance',
+                        'right_eye_distance',
                         'left_gaze_validity',
                         'right_gaze_validity',
                         'left_pupil_diameter',
