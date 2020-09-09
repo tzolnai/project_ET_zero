@@ -157,7 +157,6 @@ class OutputValidation(unittest.TestCase):
         epoch_column = data_table["epoch"]
         self.assertTrue(len(session_column) > 0)
 
-
         for row in range(len(session_column)):
             if epoch_column[row] in [1, 2, 3, 4, 5]:
                 self.assertEqual(session_column[row], 1)
@@ -183,10 +182,10 @@ class OutputValidation(unittest.TestCase):
             epoch_number = epoch_column[row]
             if block_number == 0:
                 self.assertTrue(epoch_number == 1 or epoch_number == 6)
-            else:                
+            else:
                 self.assertEqual(epoch_number, (block_number - 1) // 5 + 1)
             self.assertTrue(epoch_number >= 1 and epoch_number <= 8)
-            
+
             if row != 0:
                 self.assertTrue(epoch_number == epoch_column[row - 1] or
                                 epoch_number == epoch_column[row - 1] + 1)
@@ -206,7 +205,7 @@ class OutputValidation(unittest.TestCase):
             block_number = block_column[row]
             if row > 0 and trial_column[row] == 1 and trial_column[row - 1] != 1 and block_number != 0:
                 expected_block_number += 1
-            
+
             if block_number != 0:
                 self.assertEqual(block_number, expected_block_number)
             else:
@@ -251,7 +250,7 @@ class OutputValidation(unittest.TestCase):
                 self.assertTrue(trial_num >= 1 and trial_num <= 20)
             else:
                 self.assertTrue(trial_num >= 1 and trial_num <= 82)
-                
+
             if row != 0:
                 self.assertTrue(trial_num == trial_column[row - 1] or
                                 trial_num == trial_column[row - 1] + 1 or
@@ -704,25 +703,25 @@ class OutputValidation(unittest.TestCase):
     def validate(self, file_name):
         data_table = pandas.read_csv(file_name, sep='\t')
 
-        #self.validate_computer_name(data_table)
-        #self.validate_monitor_width(data_table)
-        #self.validate_monitor_height(data_table)
-        #self.validate_subject_group(data_table)
-        #self.validate_subject_number(data_table)
-        #self.validate_subject_sex(data_table)
-        #self.validate_subject_age(data_table)
-        #self.validate_asrt_type(data_table)
-        #self.validate_PCode(data_table)
-        #self.validate_session(data_table)
-        #self.validate_epoch_block_relation(data_table)
-        #self.validate_block_trial_relation(data_table)
-        #self.validate_trial_RSI_relation(data_table)
-        #self.validate_RSI_trial_phase_relation(data_table)
-        #self.validate_frame_rate(data_table)
-        #self.validate_frame_time(data_table)
-        #self.validate_frame_sd(data_table)
-        #self.validate_stimulus_color(data_table)
-        #self.validate_trial_type_pr(data_table)
+        # self.validate_computer_name(data_table)
+        # self.validate_monitor_width(data_table)
+        # self.validate_monitor_height(data_table)
+        # self.validate_subject_group(data_table)
+        # self.validate_subject_number(data_table)
+        # self.validate_subject_sex(data_table)
+        # self.validate_subject_age(data_table)
+        # self.validate_asrt_type(data_table)
+        # self.validate_PCode(data_table)
+        # self.validate_session(data_table)
+        # self.validate_epoch_block_relation(data_table)
+        # self.validate_block_trial_relation(data_table)
+        # self.validate_trial_RSI_relation(data_table)
+        # self.validate_RSI_trial_phase_relation(data_table)
+        # self.validate_frame_rate(data_table)
+        # self.validate_frame_time(data_table)
+        # self.validate_frame_sd(data_table)
+        # self.validate_stimulus_color(data_table)
+        # self.validate_trial_type_pr(data_table)
         self.validate_triplet_type_hl(data_table)
         self.validate_stimulus(data_table)
         # self.validate_RSI_interval_sampling(data_table)

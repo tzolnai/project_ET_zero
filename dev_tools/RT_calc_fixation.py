@@ -28,22 +28,28 @@ from io import StringIO
 import tobii_research as tobii
 from psychopy import visual, event
 
+
 def get_system_time_stamp_mock():
     return 1000000
 
+
 tobii.get_system_time_stamp = get_system_time_stamp_mock
 
-def GetKeys(keyList=[], modifiers = False, timeStamped = False):
+
+def GetKeys(keyList=[], modifiers=False, timeStamped=False):
     global keys
     current_keys = keys[0]
     keys = keys[1:]
     return current_keys
 
+
 keys = []
 event.getKeys = GetKeys
 
+
 def DummyConvert(pos):
     return pos
+
 
 def convert(raw_file_name, new_file_name, experiment):
 
@@ -75,13 +81,13 @@ def convert(raw_file_name, new_file_name, experiment):
     end_time_found = False
     current_line = 1
     fixation_found = False
-    
+
     # load settings
     all_settings_file_path = os.path.join(experiment.workdir_path, "settings", "settings")
     reminder_file_path = os.path.join(experiment.workdir_path, "settings", "settings_reminder.txt")
     experiment.settings = asrt.ExperimentSettings(all_settings_file_path, reminder_file_path, experiment.project_ET_zero)
     experiment.all_settings_def()
-    
+
     # find out the current subject
     experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
 
@@ -90,17 +96,17 @@ def convert(raw_file_name, new_file_name, experiment):
     experiment.current_sampling_window = experiment.settings.stim_fixation_threshold
     experiment.ADCS_to_PCMCS = DummyConvert
     experiment.distance_ADCS_to_PCMCS = DummyConvert
-    
+
     # stim positions
     dict_pos = {1: (float(-7.5), float(-7.5)),
                 2: (float(7.5), float(-7.5)),
                 3: (float(-7.5), float(7.5)),
                 4: (float(7.5), float(7.5))}
-                
+
     ignore_trial = False
-    
+
     for line in raw_lines[1:]:
-    
+
         if ignore_trial:
             if last_trial == line.split('\t')[trial_pos]:
                 current_line += 1
@@ -111,7 +117,7 @@ def convert(raw_file_name, new_file_name, experiment):
                 end_time_found = False
                 fixation_found = False
                 ignore_trial = False
-       
+
         current_stimulus = int(line.split('\t')[stim_pos])
         left_gaze_XY = (float(line.split('\t')[left_gazeX_pos].replace(',', '.')), float(line.split('\t')[left_gazeY_pos].replace(',', '.')))
         left_gaze_valid = line.split('\t')[left_gaze_valid_pos] == 'True'
@@ -129,7 +135,7 @@ def convert(raw_file_name, new_file_name, experiment):
         # call fixation algorithm
         if line.split('\t')[trial_phase_pos] == "stimulus_on_screen":
             global keys
-            keys = [[],['q']]
+            keys = [[], ['q']]
             response = experiment.wait_for_eye_response(dict_pos[current_stimulus], experiment.settings.stim_fixation_threshold)
             if experiment.main_loop_lock.locked():
                 experiment.main_loop_lock.release()

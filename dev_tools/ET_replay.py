@@ -107,9 +107,11 @@ class EyeTrackingReplay():
                     right_gazeY_pos = output_lines[0].split('\t').index("right_gaze_data_Y_PCMCS")
                     right_gaze_valid_pos = output_lines[0].split('\t').index("right_gaze_validity")
 
-                    left_gaze_XY = (float(line.split('\t')[left_gazeX_pos].replace(',', '.')), float(line.split('\t')[left_gazeY_pos].replace(',', '.')))
+                    left_gaze_XY = (float(line.split('\t')[left_gazeX_pos].replace(',', '.')),
+                                    float(line.split('\t')[left_gazeY_pos].replace(',', '.')))
                     left_gaze_valid = bool(line.split('\t')[left_gaze_valid_pos])
-                    right_gaze_XY = (float(line.split('\t')[right_gazeX_pos].replace(',', '.')), float(line.split('\t')[right_gazeY_pos].replace(',', '.')))
+                    right_gaze_XY = (float(line.split('\t')[right_gazeX_pos].replace(',', '.')),
+                                     float(line.split('\t')[right_gazeY_pos].replace(',', '.')))
                     right_gaze_valid = bool(line.split('\t')[right_gaze_valid_pos])
 
                     x_coord = None

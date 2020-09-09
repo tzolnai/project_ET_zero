@@ -808,5 +808,6 @@ class waitForEyeResponseTest(unittest.TestCase):
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
+
 if __name__ == "__main__":
     unittest.main()  # run all tests
