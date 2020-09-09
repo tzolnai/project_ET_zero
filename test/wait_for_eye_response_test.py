@@ -592,6 +592,49 @@ class waitForEyeResponseTest(unittest.TestCase):
         thread.join(3.0)
         self.assertTrue(not thread.is_alive())
 
+    def testFourInvalidEyeData(self):
+        experiment = asrt.Experiment("")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.settings = asrt.ExperimentSettings("", "")
+        experiment.current_sampling_window = 12
+        experiment.last_N = 10
+        experiment.last_RSI = 400.0
+        experiment.trial_phase = "before_stimulus"
+        experiment.settings.AOI_size = 0.5
+        experiment.settings.dispersion_threshold = 0.2
+        experiment.ADCS_to_PCMCS = DummyConvert
+        experiment.distance_ADCS_to_PCMCS = DummyConvert
+
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        for i in range(experiment.current_sampling_window):
+            experiment.eye_data_callback(gazeData)
+
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
+        gazeData['left_gaze_point_validity'] = 0
+        gazeData['right_gaze_point_validity'] = 0
+        experiment.eye_data_callback(gazeData)
+        experiment.eye_data_callback(gazeData)
+        experiment.eye_data_callback(gazeData)
+        experiment.eye_data_callback(gazeData)
+
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        experiment.eye_data_callback(gazeData)
+
+        self.assertEqual(len(experiment.gaze_data_list), experiment.current_sampling_window)
+
+        thread = threading.Thread(target=experiment.wait_for_eye_response, args=((0.4, 0.4), experiment.current_sampling_window, ))
+        thread.start()
+        thread.join(3.0)
+        self.assertTrue(not thread.is_alive())
+
     def testTooManyInvalidEyeData(self):
         experiment = asrt.Experiment("")
         experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
@@ -617,6 +660,8 @@ class waitForEyeResponseTest(unittest.TestCase):
         gazeData['right_gaze_point_on_display_area'] = (0.25, 0.4)
         gazeData['left_gaze_point_validity'] = 0
         gazeData['right_gaze_point_validity'] = 0
+        experiment.eye_data_callback(gazeData)
+        experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
         experiment.eye_data_callback(gazeData)
