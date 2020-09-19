@@ -33,7 +33,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testWindowSize(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10
@@ -54,7 +54,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testWindowSize2(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10
@@ -78,7 +78,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testInvalidEyeData(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10
@@ -138,7 +138,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testDataListAppend(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10
@@ -161,7 +161,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testUnlockMainLoopLock(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10
@@ -181,7 +181,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testSharedDataLock(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10
@@ -206,7 +206,7 @@ class eyeDataCallBackTest(unittest.TestCase):
 
     def testLotsOfInvalidData(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 24
         experiment.last_N = 10

@@ -312,7 +312,7 @@ class showFeedbackTest(unittest.TestCase):
 
         with self.initWindow() as experiment.mywindow:
             experiment.settings = asrt.ExperimentSettings("", "")
-            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
             experiment.settings.experiment_type = 'eye-tracking'
             experiment.stimblock = {4: 10}
             experiment.last_N = 4
@@ -366,7 +366,7 @@ class showFeedbackTest(unittest.TestCase):
 
         with self.initWindow() as experiment.mywindow:
             experiment.settings = asrt.ExperimentSettings("", "")
-            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
             experiment.settings.experiment_type = 'eye-tracking'
             experiment.stimblock = {4: 10}
             experiment.last_N = 4
@@ -408,7 +408,7 @@ class showFeedbackTest(unittest.TestCase):
 
         with self.initWindow() as experiment.mywindow:
             experiment.settings = asrt.ExperimentSettings("", "")
-            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
             experiment.settings.experiment_type = 'eye-tracking'
             experiment.stimblock = {4: 10}
             experiment.last_N = 4
@@ -459,7 +459,7 @@ class showFeedbackTest(unittest.TestCase):
 
         with self.initWindow() as experiment.mywindow:
             experiment.settings = asrt.ExperimentSettings("", "", True)
-            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
             experiment.settings.experiment_type = 'eye-tracking'
             experiment.fixation_cross_pos = (0.0, 0.0)
             experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",
@@ -507,7 +507,7 @@ class showFeedbackTest(unittest.TestCase):
 
         with self.initWindow() as experiment.mywindow:
             experiment.settings = asrt.ExperimentSettings("", "", True)
-            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+            experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
             experiment.settings.experiment_type = 'eye-tracking'
             experiment.fixation_cross_pos = (0.0, 0.0)
             experiment.fixation_cross = visual.TextStim(win=experiment.mywindow, text="+", height=3, units="cm",

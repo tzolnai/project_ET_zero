@@ -148,7 +148,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         experiment.fixation_cross_pos = (0.0, 0.0)
@@ -310,7 +310,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         experiment.fixation_cross_pos = (0.0, 0.0)
@@ -451,7 +451,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
 
@@ -789,7 +789,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         experiment.stimblock = {4: 2}
@@ -816,7 +816,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         experiment.stimblock = {4: 10}
@@ -843,7 +843,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         experiment.stimblock = {4: 10}
@@ -873,7 +873,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "", True)
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         extreme_RT_count = 2
@@ -899,7 +899,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "", True)
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         extreme_RT_count = 2
@@ -925,7 +925,7 @@ class drawInstructionsTest(unittest.TestCase):
         self.initWindow()
         experiment.mywindow = self.mywindow
         experiment.settings = asrt.ExperimentSettings("", "", True)
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "eye-tracking", "", "")
         experiment.settings.experiment_type = 'eye-tracking'
         experiment.settings.key_quit = 'q'
         extreme_RT_count = 2

@@ -71,6 +71,8 @@ class EyeTrackerMock:
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -222,10 +224,12 @@ class integrationETTest(unittest.TestCase):
 
         return pos_ADCS
 
-    def wait_for_eye_response_override(self, expected_eye_pos, sampling_window):
+    def wait_for_eye_response_override(self, expected_eye_pos_list, sampling_window):
         gazeData = {}
-        gazeData['left_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
-        gazeData['right_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+        gazeData['left_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos_list[0])
+        gazeData['right_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos_list[0])
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -236,7 +240,7 @@ class integrationETTest(unittest.TestCase):
         for i in range(sampling_window):
             self.experiment.eye_data_callback(gazeData)
 
-        return self.experiment.wait_for_eye_response_original(expected_eye_pos, sampling_window)
+        return self.experiment.wait_for_eye_response_original(expected_eye_pos_list, sampling_window)
 
     def checkOutputFile(self, timing_small_delta=False):
         if self.update_references:
@@ -302,20 +306,22 @@ class integrationETTest(unittest.TestCase):
                     self.assertEqual(ref_values[29], act_values[29])  # right_gaze_data_Y_PCMCS
                     self.assertEqual(ref_values[30], act_values[30])  # left_gaze_validity
                     self.assertEqual(ref_values[31], act_values[31])  # right_gaze_validity
-                    self.assertEqual(ref_values[32], act_values[32])  # left_pupil_diameter
-                    self.assertEqual(ref_values[33], act_values[33])  # right_pupil_diameter
-                    self.assertEqual(ref_values[34], act_values[34])  # left_pupil_validity
-                    self.assertEqual(ref_values[35], act_values[35])  # right_pupil_validity
-                    self.assertEqual(ref_values[36], act_values[36])  # gaze_data_time_stamp
-                    self.assertEqual(ref_values[37], act_values[37])  # stimulus_1_position_X_PCMCS
-                    self.assertEqual(ref_values[38], act_values[38])  # stimulus_1_position_Y_PCMCS
-                    self.assertEqual(ref_values[39], act_values[39])  # stimulus_2_position_X_PCMCS
-                    self.assertEqual(ref_values[40], act_values[40])  # stimulus_2_position_Y_PCMCS
-                    self.assertEqual(ref_values[41], act_values[41])  # stimulus_3_position_X_PCMCS
-                    self.assertEqual(ref_values[42], act_values[42])  # stimulus_3_position_Y_PCMCS
-                    self.assertEqual(ref_values[43], act_values[43])  # stimulus_4_position_X_PCMCS
-                    self.assertEqual(ref_values[44], act_values[44])  # stimulus_4_position_Y_PCMCS
-                    self.assertEqual(ref_values[45], act_values[45])  # quit_log
+                    self.assertEqual(ref_values[32], act_values[32])  # left_gaze_distance
+                    self.assertEqual(ref_values[33], act_values[33])  # right_gaze_distance
+                    self.assertEqual(ref_values[34], act_values[34])  # left_pupil_diameter
+                    self.assertEqual(ref_values[35], act_values[35])  # right_pupil_diameter
+                    self.assertEqual(ref_values[36], act_values[36])  # left_pupil_validity
+                    self.assertEqual(ref_values[37], act_values[37])  # right_pupil_validity
+                    self.assertEqual(ref_values[38], act_values[38])  # gaze_data_time_stamp
+                    self.assertEqual(ref_values[39], act_values[39])  # stimulus_1_position_X_PCMCS
+                    self.assertEqual(ref_values[40], act_values[40])  # stimulus_1_position_Y_PCMCS
+                    self.assertEqual(ref_values[41], act_values[41])  # stimulus_2_position_X_PCMCS
+                    self.assertEqual(ref_values[42], act_values[42])  # stimulus_2_position_Y_PCMCS
+                    self.assertEqual(ref_values[43], act_values[43])  # stimulus_3_position_X_PCMCS
+                    self.assertEqual(ref_values[44], act_values[44])  # stimulus_3_position_Y_PCMCS
+                    self.assertEqual(ref_values[45], act_values[45])  # stimulus_4_position_X_PCMCS
+                    self.assertEqual(ref_values[46], act_values[46])  # stimulus_4_position_Y_PCMCS
+                    self.assertEqual(ref_values[47], act_values[47])  # quit_log
 
     def testSimpleTestCase(self):
         # for setting participant data
@@ -450,8 +456,10 @@ class integrationETTest(unittest.TestCase):
 
         self.checkOutputFile()
 
-    def wait_for_eye_response_override_averaging_data(self, expected_eye_pos, sampling_window):
+    def wait_for_eye_response_override_averaging_data(self, expected_eye_pos_list, sampling_window):
         gazeData = {}
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -460,7 +468,7 @@ class integrationETTest(unittest.TestCase):
         gazeData['right_pupil_validity'] = 1
 
         for i in range(sampling_window):
-            eye_pos = self.PCMCS_to_ADCS(expected_eye_pos)
+            eye_pos = self.PCMCS_to_ADCS(expected_eye_pos_list[0])
             if i % 2 == 0:
                 eye_pos = (eye_pos[0] + 0.01, eye_pos[1] - 0.01)
                 gazeData['left_gaze_point_on_display_area'] = eye_pos
@@ -472,7 +480,7 @@ class integrationETTest(unittest.TestCase):
 
             self.experiment.eye_data_callback(gazeData)
 
-        return self.experiment.wait_for_eye_response_original(expected_eye_pos, sampling_window)
+        return self.experiment.wait_for_eye_response_original(expected_eye_pos_list, sampling_window)
 
     def testGazeDataAveraging(self):
         gui_mock = pgm.PsychoPyGuiMock()

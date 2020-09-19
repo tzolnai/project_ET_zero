@@ -32,7 +32,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
     @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testGazeDataCallback(self):
         experiment = asrt.Experiment("")
-        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+        experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
         experiment.settings = asrt.ExperimentSettings("", "")
         experiment.current_sampling_window = 36
 
@@ -66,7 +66,7 @@ class eyeTrackingTimingTest(unittest.TestCase):
 
         clock = core.Clock()
         for i in range(100):
-            experiment.wait_for_eye_response([0.5, 0.5], sampling_window // 2)
+            experiment.wait_for_eye_response([[0.5, 0.5]], sampling_window // 2)
         run_time = clock.getTime()
         self.assertAlmostEqual(run_time, 0.0, delta=0.1)
 

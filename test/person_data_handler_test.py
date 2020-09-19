@@ -67,7 +67,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testRoundTripSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -94,7 +94,7 @@ class personDataHandlerTest(unittest.TestCase):
         person_data_handler.save_person_settings(experiment)
 
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "", "", "")
 
         person_data_handler.load_person_settings(experiment)
 
@@ -122,7 +122,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testReadMissingPersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -145,7 +145,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testReadIncompletePersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -179,7 +179,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_settings_file_path = self.constructFilePath(
             "testUpdateExistingPersonSettings")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", all_settings_file_path, "", "", "", "")
+            "subject_333_group1", all_settings_file_path, "", "", "", "", "", "")
 
         experiment = asrt.Experiment("")
 
@@ -218,7 +218,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_IDs_file_path = self.constructFilePath("testCreateAllSubjectFiles")
         subject_list_file_path = self.constructFilePath("testCreateIDsFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
 
         person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
@@ -240,7 +240,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_IDs_file_path = self.constructFilePath("testAddSameSubjectToAllSubjectFiles")
         subject_list_file_path = self.constructFilePath("testAddSameSubjectToAllSubjectFiles.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
 
         # call this twice simulating of running the experiment with the same subject more times
         person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
@@ -264,19 +264,19 @@ class personDataHandlerTest(unittest.TestCase):
         all_IDs_file_path = self.constructFilePath("testAddMoreSubjectsToAllSubjectFile")
         subject_list_file_path = self.constructFilePath("testAddMoreSubjectsToAllSubjectFile.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
         person_data_handler.update_all_subject_attributes_files("male", "25", ['3rd - 1324', '2nd - 1243'])
 
         person_data_handler = asrt.PersonDataHandler(
-            "subject_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_111_group2", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
         person_data_handler.update_all_subject_attributes_files("female", "32", ['1th - 1234', '2nd - 1243'])
 
         person_data_handler = asrt.PersonDataHandler(
-            "subject_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_222_group3", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
         person_data_handler.update_all_subject_attributes_files("male", "43", ['1th - 1234', '3rd - 1324'])
 
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group1", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
         person_data_handler.update_all_subject_attributes_files("male", "25", ['3rd - 1324', '2nd - 1243'])
 
         # output files exist
@@ -301,7 +301,7 @@ class personDataHandlerTest(unittest.TestCase):
         all_IDs_file_path = self.constructFilePath("testSaveSpecialGroupNameToAllSubjectFile")
         subject_list_file_path = self.constructFilePath("testSaveSpecialGroupNameToAllSubjectFile.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "")
+            "subject_333_group_1", "", all_IDs_file_path, subject_list_file_path, "", "", "", "")
         person_data_handler.update_all_subject_attributes_files("male", "25", ['1th - 1234', '2nd - 1243'])
 
         # output files exist
@@ -321,7 +321,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testAppendToEmptyOutput(self):
         output_file_path = self.constructFilePath("testAppendToEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group_1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group_1", "", "", "", output_file_path, "reaction-time", "", "")
 
         person_data_handler.append_to_output_file("something")
 
@@ -333,7 +333,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testAppendToEmptyOutputET(self):
         output_file_path = self.constructFilePath("testAppendToEmptyOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group_1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group_1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         person_data_handler.append_to_output_file("something")
 
@@ -342,7 +342,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\tsomething")
@@ -351,7 +351,7 @@ class personDataHandlerTest(unittest.TestCase):
         output_file_path = self.constructFilePath(
             "testAppendMoreTimesToOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group_1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group_1", "", "", "", output_file_path, "reaction-time", "", "")
 
         person_data_handler.append_to_output_file("\nsomething")
         person_data_handler.append_to_output_file("\nsomething2")
@@ -366,7 +366,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testAppendMoreTimesToOutputET(self):
         output_file_path = self.constructFilePath("testAppendMoreTimesToOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group_1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group_1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         person_data_handler.append_to_output_file("\nsomething")
         person_data_handler.append_to_output_file("\nsomething2")
@@ -377,7 +377,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\nsomething\nsomething2\nsomething3")
@@ -385,7 +385,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteEmptyOutput(self):
         output_file_path = self.constructFilePath("testWriteEmptyOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group1", "", "", "", output_file_path, "reaction-time", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -437,7 +437,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteEmptyOutputET(self):
         output_file_path = self.constructFilePath("testWriteEmptyOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -474,6 +474,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -491,18 +493,18 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
-                                                 "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\t10\t10\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "-0,5\t0,5\t0,5\t0,5\t-0,5\t-0,5\t0,5\t-0,5\t")
 
     def testWriteETDataWithBigLastN(self):
         output_file_path = self.constructFilePath("testWriteETDataWithBigLastN.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -537,6 +539,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -554,7 +558,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t")
@@ -562,7 +566,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteETDataExplicitASRT(self):
         output_file_path = self.constructFilePath("testWriteETDataExplicitASRT.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -599,6 +603,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10.5)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10.5)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -616,18 +622,18 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\texplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\t10,5\t10,5\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteETDataNoPatternASRT(self):
         output_file_path = self.constructFilePath("testWriteETDataExplicitASRT.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -664,6 +670,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -681,18 +689,18 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\tnoASRT\tnoPattern\t1\t2\t12\t21\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\t10\t10\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteExistingOutput(self):
         output_file_path = self.constructFilePath("testWriteExistingOutput.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group1", "", "", "", output_file_path, "reaction-time", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -765,7 +773,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteExistingOutputET(self):
         output_file_path = self.constructFilePath("testWriteExistingOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -800,6 +808,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = 3
@@ -821,6 +831,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.75, 0.75)
         gazeData['right_gaze_point_on_display_area'] = (0.25, 0.25)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 1
         gazeData['left_pupil_diameter'] = float('nan')
@@ -838,22 +850,22 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\t10\t10\tTrue\tTrue\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t1\t12\t2\t123.4\t59,1\t16,56\t"
-                                                 "1,3\tGreen\trandom\tnone\t2\tstimulus_on_screen\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t"
+                                                 "1,3\tGreen\trandom\tnone\t2\tstimulus_on_screen\t0,75\t0,75\t0,25\t0,25\t11,900000000000002\t-6,690483162518303\t-11,9\t6,690483162518302\t10\t10\t"
                                                  "True\tTrue\tnan\tnan\tFalse\tFalse\t10000\t-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testPointInComputerNameOrDate(self):
         output_file_path = self.constructFilePath(
             "testPointInComputerName.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "reaction-time")
+            "subject_333_group1", "", "", "", output_file_path, "reaction-time", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -905,7 +917,7 @@ class personDataHandlerTest(unittest.TestCase):
     def testWriteRandomTrialOutputET(self):
         output_file_path = self.constructFilePath("testWriteOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -942,6 +954,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 0
         gazeData['right_gaze_point_validity'] = 0
         gazeData['left_pupil_diameter'] = 3
@@ -959,18 +973,18 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t2\t12\t1\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\trandom\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\tFalse\tFalse\t3\t3\tFalse\tFalse\t10000\t"
+                                                 "1,3\tblack\trandom\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\t10\t10\tFalse\tFalse\t3\t3\tFalse\tFalse\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
     def testWriteHighRandomTrialOutputET(self):
         output_file_path = self.constructFilePath("testWriteOutputET.txt")
         person_data_handler = asrt.PersonDataHandler(
-            "subject_333_group1", "", "", "", output_file_path, "eye-tracking")
+            "subject_333_group1", "", "", "", output_file_path, "eye-tracking", "", "")
 
         experiment = asrt.Experiment("")
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -1007,6 +1021,8 @@ class personDataHandlerTest(unittest.TestCase):
         gazeData = {}
         gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
         gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
         gazeData['left_gaze_point_validity'] = 1
         gazeData['right_gaze_point_validity'] = 0
         gazeData['left_pupil_diameter'] = 3
@@ -1024,12 +1040,12 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "subject_sex\tsubject_age\tasrt_type\tPCode\tsession\tepoch\tblock\ttrial\tRSI_time\tframe_rate\t"
                                                  "frame_time\tframe_sd\tstimulus_color\ttrial_type_pr\ttriplet_type_hl\tstimulus\ttrial_phase\t"
                                                  "left_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS\tleft_gaze_data_X_PCMCS\t"
-                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_gaze_validity\tright_gaze_validity\t"
+                                                 "left_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity\tright_gaze_validity\t"
                                                  "left_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\t"
                                                  "stimulus_1_position_Y_PCMCS\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS\t"
                                                  "stimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\tquit_log\t\n"
                                                  "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\t1\t1\t1\t5\t500.0\t59,1\t16,56\t"
-                                                 "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\tTrue\tFalse\t3\t3\tTrue\tTrue\t10000\t"
+                                                 "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\t10\t10\tTrue\tFalse\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
 
