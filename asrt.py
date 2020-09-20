@@ -1140,13 +1140,14 @@ class PersonDataHandler:
 
     def flush_jacobi_ET_data_to_output(self, experiment):
         """ Write out the ouptut data of the current trial into the output text file (eye-tracking exp. type)."""
-        assert self.output_file_type == 'eye-tracking'
+        assert(self.output_file_type == 'eye-tracking')
+        assert(experiment.settings.epochN >= 2)
 
         output_buffer = StringIO()
         data_len = len(self.output_data_buffer)
         for data in self.output_data_buffer:
 
-            if data[2] == 0:
+            if data[1] == 0 or data[2] == 0:
                 continue
             epoch = 2
             PCode = experiment.which_code(epoch)
@@ -1318,13 +1319,13 @@ class PersonDataHandler:
 
     def flush_jacobi_data_to_output(self, experiment):
         """ Write out the ouptut data of the current trial into the output text file (eye-tracking exp. type)."""
-        assert self.output_file_type == 'eye-tracking'
+        assert(self.output_file_type == 'eye-tracking')
+        assert(experiment.settings.epochN >= 2)
 
         output_buffer = StringIO()
-        data_len = len(self.jacobi_output_data_buffer)
         for data in self.jacobi_output_data_buffer:
 
-            if data[2] == 0:
+            if data[1] == 0 or data[2] == 0:
                 continue
             epoch = 2
             PCode = experiment.which_code(epoch)
@@ -1364,8 +1365,6 @@ class PersonDataHandler:
             output_file.write(output_buffer.getvalue())
 
         output_buffer.close()
-        # make sure we don't get more data here durig writing it out
-        assert data_len == len(self.jacobi_output_data_buffer)
         self.jacobi_output_data_buffer.clear()
 
 
