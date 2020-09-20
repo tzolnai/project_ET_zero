@@ -1827,6 +1827,12 @@ class Experiment:
         self.eye_tracker = allTrackers[0]
 
     def eye_data_callback(self, origGazeData):
+        self.eye_data_callback_gen(origGazeData, False)
+
+    def eye_data_callback_jacobi(self, origGazeData):
+        self.eye_data_callback_gen(origGazeData, True)
+
+    def eye_data_callback_gen(self, origGazeData, jacobi=False):
         gazeData = copy.deepcopy(origGazeData)
         time_stamp = tobii.get_system_time_stamp()
         left_gaze_XY = gazeData['left_gaze_point_on_display_area']
@@ -1856,7 +1862,11 @@ class Experiment:
                 self.gaze_data_list.pop(0)
                 assert len(self.gaze_data_list) == self.current_sampling_window
 
-            self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
+            if jacobi:
+                self.person_data.output_data_buffer.append([self.jacobi_test_phase, self.jacobi_run,
+                                                            self.jacobi_trial, self.jacobi_trial_phase, gazeData, time_stamp])
+            else:
+                self.person_data.output_data_buffer.append([self.last_N, self.last_RSI, self.trial_phase, gazeData, time_stamp])
 
         if self.main_loop_lock.locked():
             self.main_loop_lock.release()
@@ -2629,42 +2639,6 @@ class Experiment:
                 # Do we have engough data for a decision?
                 if count == fixation_threshold and outside_eye_pos:
                     return 1
-
-    def eye_data_callback_jacobi(self, origGazeData):
-        gazeData = copy.deepcopy(origGazeData)
-        time_stamp = tobii.get_system_time_stamp()
-        left_gaze_XY = gazeData['left_gaze_point_on_display_area']
-        right_gaze_XY = gazeData['right_gaze_point_on_display_area']
-        left_gaze_valid = gazeData['left_gaze_point_validity']
-        right_gaze_valid = gazeData['right_gaze_point_validity']
-
-        x_coord = None
-        y_coord = None
-        if left_gaze_valid and right_gaze_valid:
-            x_coord = (left_gaze_XY[0] + right_gaze_XY[0]) / 2
-            y_coord = (left_gaze_XY[1] + right_gaze_XY[1]) / 2
-        elif left_gaze_valid:
-            x_coord = left_gaze_XY[0]
-            y_coord = left_gaze_XY[1]
-        elif right_gaze_valid:
-            x_coord = right_gaze_XY[0]
-            y_coord = right_gaze_XY[1]
-
-        with self.shared_data_lock:
-            if x_coord != None and y_coord != None:
-                self.gaze_data_list.append((x_coord, y_coord))
-            else:
-                self.gaze_data_list.append((None, None))
-
-            if len(self.gaze_data_list) > self.current_sampling_window:
-                self.gaze_data_list.pop(0)
-                assert len(self.gaze_data_list) == self.current_sampling_window
-
-            self.person_data.output_data_buffer.append([self.jacobi_test_phase, self.jacobi_run,
-                                                        self.jacobi_trial, self.jacobi_trial_phase, gazeData, time_stamp])
-
-        if self.main_loop_lock.locked():
-            self.main_loop_lock.release()
 
     def run(self, full_screen=True, mouse_visible=False, window_gammaErrorPolicy='raise'):
         ensure_dir(os.path.join(self.workdir_path, "logs"))
