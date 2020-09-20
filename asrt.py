@@ -2520,10 +2520,13 @@ class Experiment:
 
         self.instructions.show_ending(self)
 
-    def draw_jacobi_screen(self, text, active_stimulus=-1):
+    def draw_jacobi_screen(self, text='', active_stimulus=-1):
+        assert(active_stimulus == -1 or active_stimulus in range(1, 4))
+
         ypos = self.settings.asrt_distance / 2.0 + 3.0
-        instruction = visual.TextStim(self.mywindow, text=text, units='cm', height=0.8, wrapWidth=20, color='black', pos=(0, ypos))
-        instruction.draw()
+        if text != '':
+            instruction = visual.TextStim(self.mywindow, text=text, units='cm', height=0.8, wrapWidth=20, color='black', pos=(0, ypos))
+            instruction.draw()
 
         stimbg = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
                                fillColor=None, lineColor=self.colors['linecolor'])
@@ -2531,9 +2534,7 @@ class Experiment:
 
         if active_stimulus != -1:
             stim_circle = visual.Circle(win=self.mywindow, radius=self.settings.asrt_size, units="cm",
-                                        fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[1])
-
-            stim_circle.setPos(self.dict_pos[active_stimulus])
+                                        fillColor=self.colors['stimr'], lineColor=self.colors['linecolor'], pos=self.dict_pos[active_stimulus])
             stim_circle.draw()
 
         self.mywindow.flip()
@@ -2545,7 +2546,7 @@ class Experiment:
         for j in range(run_count):
             run_size = 24
             for i in range(run_size):
-                self.draw_jacobi_screen("")
+                self.draw_jacobi_screen()
                 with self.shared_data_lock:
                     self.jacobi_run = j + 1
                     self.jacobi_trial = i + 1
