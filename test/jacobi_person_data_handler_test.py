@@ -259,8 +259,8 @@ class jacobiPersonDataHandlerTest(unittest.TestCase):
         experiment.frame_sd = 1.3
 
         jacobi_test_phase = 'inclusion'
-        jacobi_run = 0
-        jacobi_trial = 4
+        jacobi_run = 1
+        jacobi_trial = 0
         jacobi_trial_phase = 'before_reaction'
         time_stamp = 10000
         experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
@@ -292,6 +292,67 @@ class jacobiPersonDataHandlerTest(unittest.TestCase):
                                                  "\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\tstimulus_1_position_Y_PCMCS"
                                                  "\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS"
                                                  "\tstimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\t")
+
+    def testInvalidETDataOutput(self):
+        output_file_path = self.constructFilePath("testWriteEmptyOutputET.txt")
+        person_data_handler = asrt.PersonDataHandler(
+            "subject_333_group1", "", "", "", "", "eye-tracking", "", output_file_path)
+
+        experiment = asrt.Experiment("")
+        experiment.settings = asrt.ExperimentSettings("", "")
+
+        experiment.settings.computer_name = "Laposka"
+        experiment.settings.epochN = 2
+        experiment.settings.monitor_width = 47.6
+        experiment.subject_group = "group1"
+        experiment.subject_number = 333
+        experiment.subject_sex = "male"
+        experiment.subject_age = "25"
+        experiment.settings.asrt_types = {1: 'implicit', 2: 'implicit'}
+        experiment.PCodes = {1: '1st - 1234', 2: '1st - 1234'}
+        experiment.mymonitor = self.my_monitor
+
+        experiment.frame_rate = 59.1
+        experiment.frame_time = 16.56
+        experiment.frame_sd = 1.3
+
+        jacobi_test_phase = 'inclusion'
+        jacobi_run = 1
+        jacobi_trial = 4
+        jacobi_trial_phase = 'before_reaction'
+        time_stamp = 10000
+        experiment.dict_pos = {1: (-0.5, -0.5), 2: (0.5, -0.5), 3: (-0.5, 0.5), 4: (0.5, 0.5)}
+
+        gazeData = {}
+        gazeData['left_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['right_gaze_point_on_display_area'] = (0.5, 0.5)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 9)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 6)
+        gazeData['left_gaze_point_validity'] = 0
+        gazeData['right_gaze_point_validity'] = 0
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
+
+        person_data_handler.output_data_buffer.append([jacobi_test_phase, jacobi_run, jacobi_trial, jacobi_trial_phase, gazeData, time_stamp])
+
+        person_data_handler.flush_jacobi_ET_data_to_output(experiment)
+
+        with codecs.open(output_file_path, 'r', encoding='utf-8') as output_file:
+            self.assertEqual(output_file.read(), "computer_name\tmonitor_width_pixel\tmonitor_height_pixel\tsubject_group"
+                                                 "\tsubject_number\tsubject_sex\tsubject_age\tasrt_type\tPCode"
+                                                 "\ttest_type\trun\ttrial\tframe_rate\tframe_time\tframe_sd\ttrial_phase"
+                                                 "\tleft_gaze_data_X_ADCS\tleft_gaze_data_Y_ADCS\tright_gaze_data_X_ADCS\tright_gaze_data_Y_ADCS"
+                                                 "\tleft_gaze_data_X_PCMCS\tleft_gaze_data_Y_PCMCS\tright_gaze_data_X_PCMCS"
+                                                 "\tright_gaze_data_Y_PCMCS\tleft_eye_distance\tright_eye_distance\tleft_gaze_validity"
+                                                 "\tright_gaze_validity\tleft_pupil_diameter\tright_pupil_diameter\tleft_pupil_validity"
+                                                 "\tright_pupil_validity\tgaze_data_time_stamp\tstimulus_1_position_X_PCMCS\tstimulus_1_position_Y_PCMCS"
+                                                 "\tstimulus_2_position_X_PCMCS\tstimulus_2_position_Y_PCMCS\tstimulus_3_position_X_PCMCS"
+                                                 "\tstimulus_3_position_Y_PCMCS\tstimulus_4_position_X_PCMCS\tstimulus_4_position_Y_PCMCS\t\n"
+                                                 "Laposka\t1366\t768\tgroup1\t333\tmale\t25\timplicit\t1234\tinclusion\t1\t4\t59,1\t16,56"
+                                                 "\t1,3\tbefore_reaction\t0,5\t0,5\t0,5\t0,5\tnan\tnan\tnan\tnan\t9\t6\tFalse\tFalse"
+                                                 "\t3\t3\tTrue\tTrue\t10000\t-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
 
 if __name__ == "__main__":

@@ -62,7 +62,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
     def testCustomValue(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['férfi', 25, '1st', '6th'])
+        gui_mock.addFieldValues(['más', 25, '1st', '6th'])
 
         experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -76,7 +76,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.PCodes), 5)
         self.assertEqual(experiment.PCodes, {1: '1st - 1234', 2: '1st - 1234', 3: '1st - 1234', 4: '6th - 1432', 5: '1st - 1234'})
-        self.assertEqual(experiment.subject_sex, "male")
+        self.assertEqual(experiment.subject_sex, "other")
         self.assertEqual(experiment.subject_age, "25")
 
     def testCancel(self):
@@ -95,7 +95,7 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
     def testNoASRTEpochs(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['férfi', 25, '3rd', '6th'])
+        gui_mock.addFieldValues(['férfi', 25, '3rd', '2nd'])
 
         experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
@@ -110,13 +110,13 @@ class showSubjectAttributesDialogTest(unittest.TestCase):
 
         self.assertEqual(len(experiment.PCodes), 8)
         self.assertEqual(experiment.PCodes, {1: 'noPattern', 2: '3rd - 1324', 3: '3rd - 1324', 4: '3rd - 1324', 5: '3rd - 1324',
-                                             6: '3rd - 1324', 7: '6th - 1432', 8: '3rd - 1324'})
+                                             6: '3rd - 1324', 7: '2nd - 1243', 8: '3rd - 1324'})
         self.assertEqual(experiment.subject_sex, "male")
         self.assertEqual(experiment.subject_age, "25")
 
     def testWrongSubjectNumber(self):
         gui_mock = pgm.PsychoPyGuiMock()
-        gui_mock.addFieldValues(['férfi', "alma", '1st'])
+        gui_mock.addFieldValues(['nő', "alma", '4th'])
 
         experiment = asrt.Experiment("", True)
         experiment.settings = asrt.ExperimentSettings("", "")
