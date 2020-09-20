@@ -1940,6 +1940,7 @@ class Experiment:
         return (new_x, new_y)
 
     def wait_for_eye_response(self, expected_eye_pos_list, fixation_threshold):
+        assert (len(expected_eye_pos_list) == 1 or len(expected_eye_pos_list) == 4)
 
         while (True):
             if 'q' in event.getKeys():
