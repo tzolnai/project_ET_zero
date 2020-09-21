@@ -27,15 +27,18 @@ import time
 import shelve
 import dbm
 import codecs
+import pytest
 from psychopy import monitors
-import tobii_research as tobii
 
+try:
+    import tobii_research as tobii
+    g_tobii_available = False
 
-def get_system_time_stamp_mock():
-    return 1000000
-
-
-tobii.get_system_time_stamp = get_system_time_stamp_mock
+    def get_system_time_stamp_mock():
+        return 1000000
+    tobii.get_system_time_stamp = get_system_time_stamp_mock
+except:
+    g_tobii_available = False
 
 
 class personDataHandlerTest(unittest.TestCase):
@@ -1057,6 +1060,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "1,3\tblack\trandom\thigh\t2\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\tnan\tnan\t10\t10\tTrue\tFalse\t3\t3\tTrue\tTrue\t10000\t"
                                                  "-0,5\t-0,5\t0,5\t-0,5\t-0,5\t0,5\t0,5\t0,5\t")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testNormalEyeDataCallback(self):
         output_file_path = self.constructFilePath("testNormalEyeDataCallback.txt")
 
@@ -1122,6 +1126,7 @@ class personDataHandlerTest(unittest.TestCase):
                                                  "1,3\tblack\tpattern\tnone\t1\tstimulus_on_screen\t0,5\t0,5\t0,5\t0,5\t0,0\t-0,0\t0,0\t-0,0\t10\t10\tTrue\tTrue\t3\t3\tTrue\tTrue\t1000000\t"
                                                  "-0,5\t0,5\t0,5\t0,5\t-0,5\t-0,5\t0,5\t-0,5\t")
 
+    @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
     def testJacobiEyeDataCallback(self):
         output_file_path = self.constructFilePath("testJacobiEyeDataCallback.txt")
 
