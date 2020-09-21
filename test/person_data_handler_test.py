@@ -32,7 +32,7 @@ from psychopy import monitors
 
 try:
     import tobii_research as tobii
-    g_tobii_available = False
+    g_tobii_available = True
 
     def get_system_time_stamp_mock():
         return 1000000

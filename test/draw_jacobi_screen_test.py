@@ -170,6 +170,8 @@ class drawJacobiScreenTest(unittest.TestCase):
             self.assertTrue(isinstance(stim_background_circle, pvm.Circle))
             self.assertEqual(stim_background_circle.lineColor, 'black')
             self.assertEqual(stim_background_circle.fillColor, None)
+            self.assertAlmostEqual(stim_background_circle.pos[0], experiment.dict_pos[i][0], delta=0.001)
+            self.assertAlmostEqual(stim_background_circle.pos[1], experiment.dict_pos[i][1], delta=0.001)
 
         active_stim = drawing_list[5]
         self.assertTrue(isinstance(active_stim, pvm.Circle))

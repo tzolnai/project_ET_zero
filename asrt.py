@@ -2437,6 +2437,10 @@ class Experiment:
         self.print_to_screen(jacobi_inst)
         self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
 
+        with self.shared_data_lock:
+            self.current_sampling_window = self.settings.stim_fixation_threshold
+            self.gaze_data_list.clear()
+
         # first practice (select two circles)
         instruction_text = "Jelöld ki először a bal felső, majd a jobb felső kört!\n\n"
         self.draw_jacobi_screen(instruction_text)
@@ -2460,7 +2464,7 @@ class Experiment:
         self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
@@ -2498,6 +2502,10 @@ class Experiment:
         self.draw_jacobi_screen(instruction_text, 3)
         core.wait(2.0)
 
+        with self.shared_data_lock:
+            self.current_sampling_window = self.settings.instruction_fixation_threshold
+            self.gaze_data_list.clear()
+
         # inclusion test
         jacobi_inst = "Vége a gyakorlásnak.\n\n"
         jacobi_inst += "A következő feladat az lesz, hogy próbáld meg olyan sorrendben kijelölni a köröket, amely sorrendben a kísérlet első felében megjelentek.\n\n"
@@ -2514,6 +2522,9 @@ class Experiment:
         warningtext = visual.TextStim(self.mywindow, text=jacobi_warn, units="cm", height=0.8, wrapWidth=20, color="red", pos=(0, 4))
         warningtext.draw()
 
+        with self.shared_data_lock:
+            self.current_sampling_window = self.settings.instruction_fixation_threshold
+            self.gaze_data_list.clear()
         jacobi_inst = "Az előzőekhez képest most az lesz a feladatot, hogy MÁS sorrendben jelöld ki a köröket, amely sorrendben a kísérlet első felében megjelentek.\n\n"
         jacobi_inst += "A feladat elkezdéséhez néz a keresztre!\n\n"
         self.fixation_cross.draw()
@@ -2528,10 +2539,8 @@ class Experiment:
         self.person_data.flush_jacobi_data_to_output(self)
         self.person_data.flush_jacobi_ET_data_to_output(self)
 
-        self.instructions.show_ending(self)
-
     def draw_jacobi_screen(self, text='', active_stimulus=-1):
-        assert(active_stimulus == -1 or active_stimulus in range(1, 4))
+        assert(active_stimulus == -1 or active_stimulus in range(1, 5))
 
         ypos = self.settings.asrt_distance / 2.0 + 3.0
         if text != '':
@@ -2550,6 +2559,9 @@ class Experiment:
         self.mywindow.flip()
 
     def run_jacobi_test(self):
+        with self.shared_data_lock:
+            self.current_sampling_window = self.settings.stim_fixation_threshold
+            self.gaze_data_list.clear()
         eye_pos_list = [self.dict_pos[1], self.dict_pos[2], self.dict_pos[3], self.dict_pos[4]]
         run_count = 4
 
@@ -2581,12 +2593,20 @@ class Experiment:
                 jacobi_inst = "Most pihenhetsz egy kicsit.\n\n"
                 self.print_to_screen(jacobi_inst)
 
-                core.wait(10.0)
+                with self.shared_data_lock:
+                    self.current_sampling_window = self.settings.instruction_fixation_threshold
+                    self.gaze_data_list.clear()
+
+                core.wait(5.0)
 
                 jacobi_inst = "A feladat folytatásához néz a keresztre!\n\n"
                 self.fixation_cross.draw()
                 self.print_to_screen(jacobi_inst)
                 self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+
+                with self.shared_data_lock:
+                    self.current_sampling_window = self.settings.stim_fixation_threshold
+                    self.gaze_data_list.clear()
 
     def wait_for_leave_pos(self, expected_eye_pos, fixation_threshold):
 
