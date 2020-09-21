@@ -34,6 +34,7 @@ import tobii_research as tobii
 def get_system_time_stamp_mock():
     return 1000000
 
+
 tobii.get_system_time_stamp = get_system_time_stamp_mock
 
 

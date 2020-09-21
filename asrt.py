@@ -2443,7 +2443,7 @@ class Experiment:
         self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
@@ -2455,7 +2455,7 @@ class Experiment:
         self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
@@ -2465,7 +2465,7 @@ class Experiment:
         self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[4], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[4], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[4]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 4)
@@ -2477,22 +2477,22 @@ class Experiment:
         self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
         core.wait(0.5)
-        self.wait_for_leave_pos(self.dict_pos[3], self.settings.stim_fixation_threshold, instruction_text)
+        self.wait_for_leave_pos(self.dict_pos[3], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
         self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
@@ -2588,7 +2588,7 @@ class Experiment:
                 self.print_to_screen(jacobi_inst)
                 self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
 
-    def wait_for_leave_pos(self, expected_eye_pos, fixation_threshold, text=''):
+    def wait_for_leave_pos(self, expected_eye_pos, fixation_threshold):
 
         while (True):
             if 'q' in event.getKeys():
@@ -2638,6 +2638,8 @@ class Experiment:
 
                 # Do we have engough data for a decision?
                 if count == fixation_threshold and outside_eye_pos:
+                    if self.main_loop_lock.locked():
+                        self.main_loop_lock.release()
                     return 1
 
     def run(self, full_screen=True, mouse_visible=False, window_gammaErrorPolicy='raise'):
