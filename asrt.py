@@ -1532,9 +1532,8 @@ class Experiment:
         else:
             expstart11 = gui.Dlg(title=u'Feladat indítása...')
             expstart11.addText(u'A személy adatait beolvastam.')
-            expstart11.addText(u'A személy végigcsinálta a feladatot.')
+            expstart11.addText(u'A jacobi teszt maradt hátra.')
             expstart11.show()
-            core.quit()
 
     def show_subject_attributes_dialog(self):
         """Select pattern sequences for the different sessions for the current subject."""
@@ -2718,16 +2717,18 @@ class Experiment:
             # check frame rate
             self.frame_check()
 
-            # show experiment screen
-            self.presentation()
+            if self.last_N + 1 <= self.settings.get_maxtrial():
+                # show experiment screen
+                self.presentation()
 
-            # save user data
-            self.person_data.save_person_settings(self)
-            self.person_data.append_to_output_file('sessionend_planned_quit')
+                # save user data
+                self.person_data.save_person_settings(self)
+                self.person_data.append_to_output_file('sessionend_planned_quit')
+            else:
+                self.jacobi_ET_presentation()
 
             # show ending screen
             self.instructions.show_ending(self)
-
 
 if __name__ == "__main__":
     thispath = os.path.split(os.path.abspath(__file__))[0]
