@@ -49,13 +49,12 @@ class showSubjectContinuationDialogTest(unittest.TestCase):
             experiment.stimepoch[i] = i / 5
             experiment.stimblock[i] = i / (experiment.settings.blockprepN + experiment.settings.blocklengthN)
 
-        with self.assertRaises(SystemExit):
-            experiment.show_subject_continuation_dialog()
+        experiment.show_subject_continuation_dialog()
 
         list_of_texts = gui_mock.getListOfTexts()
         self.assertEqual(len(list_of_texts), 2)
         self.assertEqual(list_of_texts[0], "A személy adatait beolvastam.")
-        self.assertEqual(list_of_texts[1], "A személy végigcsinálta a feladatot.")
+        self.assertEqual(list_of_texts[1], "A jacobi teszt maradt hátra.")
 
     def testNullTrial(self):
         gui_mock = pgm.PsychoPyGuiMock()

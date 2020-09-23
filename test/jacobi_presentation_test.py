@@ -29,6 +29,7 @@ import psychopy_visual_mock as pvm
 import psychopy_gui_mock as pgm
 from psychopy import visual, logging, core
 import platform
+import pytest
 
 try:
     import tobii_research as tobii
@@ -382,8 +383,8 @@ class jacobiPresentationTest(unittest.TestCase):
             self.assertTrue(isinstance(drawing, pvm.TextStim))
             self.assertEqualWithEOL(drawing.text, "A következőkben az lesz a feladatot, hogy a tekinteteddel jelöld ki az egyes köröket.\n\n"
                                                   "Egy kör kékre vált, ha sikerült kijelölni.\n\n"
-                                    "Ha egy üres helyre nézel a kijelölés törlődik, így kétszer egymás után ki tudod jelülni ugyanazt a kört.\n\n"
-                                    "A gyakorlás megkezdéséhez néz a keresztre!\n\n")
+                                                  "Ha üres helyre nézel a kijelölés törlődik, így akár kétszer egymás után is ki tudod jelölni ugyanazt a kört.\n\n"
+                                                  "A gyakorlás megkezdéséhez néz a keresztre!\n\n")
             index = index + 1
 
             # practices
