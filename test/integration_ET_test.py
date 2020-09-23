@@ -59,6 +59,19 @@ def choice_mock(list):
     return random_generator_g
 
 
+def choice_mock2(list):
+    global random_generator_g
+    if random_generator_g == 1:
+        random_generator_g = 2
+    elif random_generator_g == 2:
+        random_generator_g = 3
+    elif random_generator_g == 3:
+        random_generator_g = 4
+    else:
+        random_generator_g = 1
+    return list[random_generator_g - 1]
+
+
 def DummyFunction(*argv):
     pass
 
@@ -116,6 +129,7 @@ class integrationETTest(unittest.TestCase):
         self.experiment.frame_check = self.frame_check_override
         self.experiment.wait_for_eye_response_original = self.experiment.wait_for_eye_response
         self.experiment.wait_for_eye_response = self.wait_for_eye_response_override
+        self.experiment.wait_for_leave_pos_original = self.experiment.wait_for_leave_pos
         self.experiment.monitor_settings = self.monitor_settings_override
 
         global random_generator_g
@@ -144,10 +158,8 @@ class integrationETTest(unittest.TestCase):
 
     def tearDown(self):
         if self.update_references:
-            reference_file_path = os.path.join(
-                self.current_dir, "reference", "subject_10__log.txt")
-            workdir_output = os.path.join(
-                self.work_dir, "logs", "subject_10__log.txt")
+            reference_file_path = os.path.join(self.current_dir, "reference", "subject_10__log.txt")
+            workdir_output = os.path.join(self.work_dir, "logs", "subject_10__log.txt")
 
             with codecs.open(workdir_output, 'r', encoding='utf-8') as workdir_output_file:
                 output_lines = workdir_output_file.readlines()
@@ -167,6 +179,7 @@ class integrationETTest(unittest.TestCase):
 
         self.experiment.frame_check = self.frame_check
         self.experiment.wait_for_eye_response = self.experiment.wait_for_eye_response_original
+        self.experiment.wait_for_leave_pos = self.experiment.wait_for_leave_pos_original
         core.StaticPeriod = self.StaticPeriod
 
     def copyFilesToWorkdir(self):
@@ -322,6 +335,120 @@ class integrationETTest(unittest.TestCase):
                     self.assertEqual(ref_values[45], act_values[45])  # stimulus_4_position_X_PCMCS
                     self.assertEqual(ref_values[46], act_values[46])  # stimulus_4_position_Y_PCMCS
                     self.assertEqual(ref_values[47], act_values[47])  # quit_log
+
+    def checkJacobiETOutputFile(self, timing_small_delta=False):
+        if self.update_references:
+            return
+
+        reference_file_path = os.path.join(self.current_dir, "reference", "subject_10__jacobi_ET_log.txt")
+        workdir_output = os.path.join(self.work_dir, "logs", "subject_10__jacobi_ET_log.txt")
+
+        with open(reference_file_path, "r") as ref_file:
+            with open(workdir_output, "r") as output_file:
+                while True:
+                    ref_line = ref_file.readline()
+                    output_line = output_file.readline()
+
+                    # make sure both files have the same number of lines
+                    self.assertEqual(bool(ref_line), bool(output_line))
+
+                    if not ref_line or not output_line:
+                        break
+
+                    ref_values = ref_line.split("\t")
+                    act_values = output_line.split("\t")
+
+                    if ref_values[0] == "computer_name":
+                        # first line is equal (headers)
+                        self.assertEqual(ref_line, output_line)
+                        continue
+
+                    self.assertEqual(ref_values[0], act_values[0])  # computer name
+                    self.assertEqual(ref_values[1], act_values[1])  # monitor_width_pixel
+                    self.assertEqual(ref_values[2], act_values[2])  # monitor_height_pixel
+                    self.assertEqual(ref_values[3], act_values[3])  # subject_group
+                    self.assertEqual(ref_values[4], act_values[4])  # subject_number
+                    self.assertEqual(ref_values[5], act_values[5])  # subject_sex
+                    self.assertEqual(ref_values[6], act_values[6])  # subject_age
+                    self.assertEqual(ref_values[7], act_values[7])  # asrt_type
+                    self.assertEqual(ref_values[8], act_values[8])  # PCode
+                    self.assertEqual(ref_values[9], act_values[9])  # test_type
+                    self.assertEqual(ref_values[10], act_values[10])  # run
+                    self.assertEqual(ref_values[11], act_values[11])  # trial
+                    self.assertEqual(ref_values[12], act_values[12])  # frame_rate
+                    self.assertEqual(ref_values[12], act_values[12])  # frame_time
+                    self.assertEqual(ref_values[14], act_values[14])  # frame_sd
+                    self.assertEqual(ref_values[15], act_values[15])  # trial_phase
+                    self.assertEqual(ref_values[16], act_values[16])  # left_gaze_data_X_ADCS
+                    self.assertEqual(ref_values[17], act_values[17])  # left_gaze_data_Y_ADCS
+                    self.assertEqual(ref_values[18], act_values[18])  # right_gaze_data_X_ADCS
+                    self.assertEqual(ref_values[19], act_values[19])  # right_gaze_data_Y_ADCS
+                    self.assertEqual(ref_values[20], act_values[20])  # left_gaze_data_X_PCMCS
+                    self.assertEqual(ref_values[21], act_values[21])  # left_gaze_data_Y_PCMCS
+                    self.assertEqual(ref_values[22], act_values[22])  # right_gaze_data_X_PCMCS
+                    self.assertEqual(ref_values[23], act_values[23])  # right_gaze_data_Y_PCMCS
+                    self.assertEqual(ref_values[24], act_values[24])  # left_gaze_validity
+                    self.assertEqual(ref_values[25], act_values[25])  # right_gaze_validity
+                    self.assertEqual(ref_values[26], act_values[26])  # left_gaze_distance
+                    self.assertEqual(ref_values[27], act_values[27])  # right_gaze_distance
+                    self.assertEqual(ref_values[28], act_values[28])  # left_pupil_diameter
+                    self.assertEqual(ref_values[29], act_values[29])  # right_pupil_diameter
+                    self.assertEqual(ref_values[30], act_values[30])  # left_pupil_validity
+                    self.assertEqual(ref_values[31], act_values[31])  # right_pupil_validity
+                    self.assertEqual(ref_values[32], act_values[32])  # gaze_data_time_stamp
+                    self.assertEqual(ref_values[33], act_values[33])  # stimulus_1_position_X_PCMCS
+                    self.assertEqual(ref_values[34], act_values[34])  # stimulus_1_position_Y_PCMCS
+                    self.assertEqual(ref_values[35], act_values[35])  # stimulus_2_position_X_PCMCS
+                    self.assertEqual(ref_values[36], act_values[36])  # stimulus_2_position_Y_PCMCS
+                    self.assertEqual(ref_values[37], act_values[37])  # stimulus_3_position_X_PCMCS
+                    self.assertEqual(ref_values[38], act_values[38])  # stimulus_3_position_Y_PCMCS
+                    self.assertEqual(ref_values[39], act_values[39])  # stimulus_4_position_X_PCMCS
+                    self.assertEqual(ref_values[40], act_values[40])  # stimulus_4_position_Y_PCMCS
+
+    def checkJacobiOutputFile(self, timing_small_delta=False):
+        if self.update_references:
+            return
+
+        reference_file_path = os.path.join(self.current_dir, "reference", "subject_10__jacobi_log.txt")
+        workdir_output = os.path.join(self.work_dir, "logs", "subject_10__jacobi_log.txt")
+
+        with open(reference_file_path, "r") as ref_file:
+            with open(workdir_output, "r") as output_file:
+                while True:
+                    ref_line = ref_file.readline()
+                    output_line = output_file.readline()
+
+                    # make sure both files have the same number of lines
+                    self.assertEqual(bool(ref_line), bool(output_line))
+
+                    if not ref_line or not output_line:
+                        break
+
+                    ref_values = ref_line.split("\t")
+                    act_values = output_line.split("\t")
+
+                    if ref_values[0] == "computer_name":
+                        # first line is equal (headers)
+                        self.assertEqual(ref_line, output_line)
+                        continue
+
+                    self.assertEqual(ref_values[0], act_values[0])  # computer name
+                    self.assertEqual(ref_values[1], act_values[1])  # monitor_width_pixel
+                    self.assertEqual(ref_values[2], act_values[2])  # monitor_height_pixel
+                    self.assertEqual(ref_values[3], act_values[3])  # subject_group
+                    self.assertEqual(ref_values[4], act_values[4])  # subject_number
+                    self.assertEqual(ref_values[5], act_values[5])  # subject_sex
+                    self.assertEqual(ref_values[6], act_values[6])  # subject_age
+                    self.assertEqual(ref_values[7], act_values[7])  # asrt_type
+                    self.assertEqual(ref_values[8], act_values[8])  # PCode
+                    self.assertEqual(ref_values[9], act_values[9])  # test_type
+                    self.assertEqual(ref_values[10], act_values[10])  # run
+                    self.assertEqual(ref_values[11], act_values[11])  # trial
+                    self.assertEqual(ref_values[12], act_values[12])  # frame_rate
+                    self.assertEqual(ref_values[12], act_values[12])  # frame_time
+                    self.assertEqual(ref_values[14], act_values[14])  # frame_sd
+                    self.assertEqual(ref_values[15], act_values[15])  # trial_phase
+                    self.assertEqual(ref_values[16], act_values[16])  # response
 
     def testSimpleTestCase(self):
         # for setting participant data
@@ -529,6 +656,103 @@ class integrationETTest(unittest.TestCase):
         self.experiment.run(window_gammaErrorPolicy='ignore')
 
         self.checkOutputFile()
+
+    def wait_for_eye_response_jacobi_override(self, expected_eye_pos_list, sampling_window):
+        gazeData = {}
+        if len(expected_eye_pos_list) > 1:
+            expected_eye_pos = choice_mock2(expected_eye_pos_list)
+        else:
+            expected_eye_pos = expected_eye_pos_list[0]
+
+        gazeData['left_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+        gazeData['right_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(expected_eye_pos)
+
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
+
+        for i in range(sampling_window):
+            self.experiment.eye_data_callback_jacobi(gazeData)
+
+        return self.experiment.wait_for_eye_response_original(expected_eye_pos_list, sampling_window)
+
+    def wait_for_leave_pos_override(self, expected_eye_pos, sampling_window):
+        gazeData = {}
+        new_expected_eye_pos = (expected_eye_pos[0] + 4.0, expected_eye_pos[1] + 4.0)
+        gazeData['left_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(new_expected_eye_pos)
+        gazeData['right_gaze_point_on_display_area'] = self.PCMCS_to_ADCS(new_expected_eye_pos)
+        gazeData['left_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['right_gaze_origin_in_user_coordinate_system'] = (10, 10, 10)
+        gazeData['left_gaze_point_validity'] = 1
+        gazeData['right_gaze_point_validity'] = 1
+        gazeData['left_pupil_diameter'] = 3
+        gazeData['right_pupil_diameter'] = 3
+        gazeData['left_pupil_validity'] = 1
+        gazeData['right_pupil_validity'] = 1
+
+        for i in range(sampling_window):
+            self.experiment.eye_data_callback_jacobi(gazeData)
+
+        return self.experiment.wait_for_leave_pos_original(expected_eye_pos, sampling_window)
+
+    def testPorjectETZeroJacobi(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '5th', 10, 10])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.project_ET_zero = True
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.experiment.wait_for_eye_response = self.wait_for_eye_response_jacobi_override
+        self.experiment.wait_for_leave_pos = self.wait_for_leave_pos_override
+
+        # run jacobi phase
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile()
+
+        self.checkJacobiETOutputFile()
+
+        self.checkJacobiOutputFile()
+
+    def testPorjectETZeroJacobiRerun(self):
+        gui_mock = pgm.PsychoPyGuiMock()
+        gui_mock.addFieldValues([10, 'férfi', 25, '3rd', '5th', 10, 10, 10])
+
+        self.visual_mock = pvm.PsychoPyVisualMock()
+
+        self.experiment.project_ET_zero = True
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.experiment.wait_for_eye_response = self.wait_for_eye_response_jacobi_override
+        self.experiment.wait_for_leave_pos = self.wait_for_leave_pos_override
+
+        # run jacobi phase
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkOutputFile()
+
+        self.checkJacobiETOutputFile()
+
+        self.checkJacobiOutputFile()
+
+        # remove output
+        self.clearDir(os.path.join(self.work_dir, "logs"))
+
+        # run jacobi again
+        self.experiment.run(window_gammaErrorPolicy='ignore')
+
+        self.checkJacobiETOutputFile()
+
+        self.checkJacobiOutputFile()
 
 
 if __name__ == "__main__":

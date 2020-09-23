@@ -1,0 +1,35 @@
+Beállítások
+
+Monitor Width: 	52,7
+Computer Name: 	ET-PC
+Experiment type:	eye-tracking
+Groups:	nincsenek csoportok
+Sessions:	2
+Epochs in sessions:	5, 3
+Blocks in epochs:	5
+Preparatory Trials\Block:	2
+Trials\Block:	80
+RSI:	0,5
+Asrt stim distance:	15,0
+Asrt stim size:	1,5
+Asrt stim color (implicit):	DarkBlue
+Asrt stim color (explicit, cued):	Green
+Background color:	Ivory
+AOI size:	4,0
+Fixation threshold for stimulus:	12
+Fixation threshold for instructions:	24
+Dispersion threshold:	2,8
+
+Az alábbi beállítások minden személyre érvényesek és irányadóak
+
+A beállítások azokra a kísérletekre vonatkoznak, amelyeket ebből a mappából,
+az itt található scripttel indítottak. Ha más beállításokat (is) szeretnél alkalmazni,
+úgy az asrt.py és az instrukciókat tartalmazó inst_and_feedback.txt fájlt másold át egy,
+másik könyvtárba is, és annak a scriptnek az indításakor megadhatod a kívánt másmilyen beállításokat.
+
+Figyelj rá, hogy mindig abból a könyvtárból indítsd a scriptet, ahol a számodra megfelelő
+beállítások vannak elmentve.
+
+A settings/settings fájl kitörlésével a beállítások megváltoztathatóak; ugyanakkor a fájl
+törlése a későbbi átláthatóság miatt nem javasolt. Ha mégis a törlés mellett döntenél,
+jelen .txt fájlt előtte másold le, hogy a korábbi beállításokra is emlékezhess, ha szükséges lesz.
