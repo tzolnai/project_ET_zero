@@ -2730,6 +2730,7 @@ class Experiment:
             # show ending screen
             self.instructions.show_ending(self)
 
+
 if __name__ == "__main__":
     thispath = os.path.split(os.path.abspath(__file__))[0]
     experiment = Experiment(thispath, True)

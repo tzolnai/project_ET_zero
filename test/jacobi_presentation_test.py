@@ -76,6 +76,7 @@ def choice_mock(list):
 # ignore warnings comming from psychopy
 logging.console.setLevel(logging.ERROR)
 
+
 @pytest.mark.skipif(not asrt.g_tobii_available, reason="Can't run without tobii package")
 class jacobiPresentationTest(unittest.TestCase):
 
