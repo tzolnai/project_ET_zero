@@ -2430,7 +2430,7 @@ class Experiment:
         # show initial message
         jacobi_inst = "A következőkben az lesz a feladatot, hogy a tekinteteddel jelöld ki az egyes köröket.\n\n"
         jacobi_inst += "Egy kör kékre vált, ha sikerült kijelölni.\n\n"
-        jacobi_inst += "Ha egy üres helyre nézel a kijelölés törlődik, így kétszer egymás után ki tudod jelülni ugyanazt a kört.\n\n"
+        jacobi_inst += "Ha üres helyre nézel a kijelölés törlődik, így akár kétszer egymás után is ki tudod jelölni ugyanazt a kört.\n\n"
         jacobi_inst += "A gyakorlás megkezdéséhez néz a keresztre!\n\n"
         self.fixation_cross.draw()
         self.print_to_screen(jacobi_inst)
