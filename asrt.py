@@ -2434,7 +2434,7 @@ class Experiment:
         jacobi_inst += "A gyakorlás megkezdéséhez néz a keresztre!\n\n"
         self.fixation_cross.draw()
         self.print_to_screen(jacobi_inst)
-        self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
 
         with self.shared_data_lock:
             self.current_sampling_window = self.settings.stim_fixation_threshold
@@ -2443,61 +2443,61 @@ class Experiment:
         # first practice (select two circles)
         instruction_text = "Jelöld ki először a bal felső, majd a jobb felső kört!\n\n"
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
         core.wait(2.0)
 
         # second practice
         instruction_text = "Jelöld ki rendre a bal felső, a jobb felső, a bal alsó, majd a jobb alsó köröket!\n\n"
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[4], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[4]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[4]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 4)
         core.wait(2.0)
 
         # third practice
         instruction_text = "Jelöld ki kétszer a bal felső kört, majd egyszer a jobb felsőt, végül kétszer a bal alsó kört!\n\n"
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[1]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 1)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[1], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[2]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 2)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[2], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
         core.wait(0.5)
         self.wait_for_leave_pos(self.dict_pos[3], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text)
-        self.wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.dict_pos[3]], self.settings.stim_fixation_threshold)
         self.draw_jacobi_screen(instruction_text, 3)
         core.wait(2.0)
 
@@ -2511,7 +2511,7 @@ class Experiment:
         jacobi_inst += "A feladat elkezdéséhez néz a keresztre!\n\n"
         self.fixation_cross.draw()
         self.print_to_screen(jacobi_inst)
-        self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
 
         self.jacobi_test_phase = 'inclusion'
         self.run_jacobi_test()
@@ -2528,7 +2528,7 @@ class Experiment:
         jacobi_inst += "A feladat elkezdéséhez néz a keresztre!\n\n"
         self.fixation_cross.draw()
         self.print_to_screen(jacobi_inst)
-        self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+        self.jacobi_wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
 
         self.jacobi_test_phase = 'exclusion'
         self.run_jacobi_test()
@@ -2573,7 +2573,7 @@ class Experiment:
                     self.jacobi_trial = i + 1
                     self.jacobi_trial_phase = "before_reaction"
 
-                response = self.wait_for_eye_response(eye_pos_list, self.settings.stim_fixation_threshold)
+                response = self.jacobi_wait_for_eye_response(eye_pos_list, self.settings.stim_fixation_threshold)
                 self.draw_jacobi_screen("", response)
 
                 with self.shared_data_lock:
@@ -2601,11 +2601,18 @@ class Experiment:
                 jacobi_inst = "A feladat folytatásához néz a keresztre!\n\n"
                 self.fixation_cross.draw()
                 self.print_to_screen(jacobi_inst)
-                self.wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
+                self.jacobi_wait_for_eye_response([self.fixation_cross_pos], self.settings.instruction_fixation_threshold)
 
                 with self.shared_data_lock:
                     self.current_sampling_window = self.settings.stim_fixation_threshold
                     self.gaze_data_list.clear()
+
+    def jacobi_wait_for_eye_response(self, expected_eye_pos_list, fixation_threshold):
+        response = self.wait_for_eye_response(expected_eye_pos_list, fixation_threshold)
+        if response == -1:
+            core.quit()
+        else:
+            return response
 
     def wait_for_leave_pos(self, expected_eye_pos, fixation_threshold):
 
