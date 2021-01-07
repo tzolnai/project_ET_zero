@@ -79,3 +79,14 @@ Jacobi PDP test
 * [Destrebecqz, A., & Cleeremans, A. (2001). Can sequence learning be implicit? New evidence with the process dissociation procedure. Psychonomic bulletin & review, 8(2), 343-350.](https://link.springer.com/article/10.3758/BF03196171)
 
 * [Kóbor, A., Janacsek, K., Takács, Á., & Nemeth, D. (2017). Statistical learning leads to persistent memory: Evidence for one-year consolidation. Scientific reports, 7(1), 1-10.](https://www.nature.com/articles/s41598-017-00807-3?WT.feed_name=subjects_biological-sciences)
+
+Oculomotor activation
+
+* [Vakil, E., Bloch, A., & Cohen, H. (2017). Anticipation measures of sequence learning: manual versus oculomotor versions of the serial reaction time task. The Quarterly Journal of Experimental Psychology, 70(3), 579-589.](https://journals.sagepub.com/doi/pdf/10.1080/17470218.2016.1172095?casa_token=YLxCT1H_B8cAAAAA:6kFyQ1yW1qfe2NZP-mSdfLnAVxLDIal-QaF4siYPOz5wRb-d9zgr5IyrYGS44O47wOImxUf_PEMZ1Q)
+
+Technical documentation
+
+* [Accuracy and precision Test report Tobii Pro X3-120 fw 1.7.1](https://www.tobiipro.com/siteassets/tobii-pro/accuracy-and-precision-tests/tobii-pro-x3-120-accuracy-and-precision-test-report.pdf)
+
+* [Tobii Pro Python SDK reference](http://developer.tobiipro.com/python/python-sdk-reference-guide.html)
+
