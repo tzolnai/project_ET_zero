@@ -103,14 +103,3 @@ def calcRTColumn(raw_file_name):
 def generateRTData(raw_file_name, new_file_name):
     RT_data = calcRTColumn(raw_file_name)
     generateOutput(raw_file_name, new_file_name, RT_data)
-
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("You need to specify the path of an output txt file.")
-        exit(1)
-
-    if not os.path.isfile(sys.argv[1]):
-        print("The passed parameter should be a valid file's path: " + sys.argv[1])
-        exit(1)
-
-    generateRTData(sys.argv[1], sys.argv[2])

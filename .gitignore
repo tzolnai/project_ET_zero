@@ -8,3 +8,5 @@
 *externals/*
 *externals\*
 .coverage
+*data_analysis\data*
+*data_analysis/data*
