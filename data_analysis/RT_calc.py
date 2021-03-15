@@ -17,75 +17,92 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import shelve
 import sys
-import codecs
-from io import StringIO
+import pandas
+import math
 
+def generateOutput(raw_file_name, new_file_name, RT_data):
+    # use the input data headers
+    input_data = pandas.read_csv(raw_file_name, sep='\t')
+    output_data = pandas.DataFrame(columns=input_data.columns)
 
-def convert(raw_file_name, new_file_name):
+    # remove some useless fields
+    output_data = output_data.drop(columns=['RSI_time', 'trial_phase', 'left_gaze_data_X_ADCS', 'left_gaze_data_Y_ADCS',
+                      'right_gaze_data_X_ADCS', 'right_gaze_data_Y_ADCS', 'left_gaze_data_X_PCMCS',
+                      'left_gaze_data_Y_PCMCS', 'right_gaze_data_X_PCMCS', 'right_gaze_data_Y_PCMCS',
+                      'left_eye_distance', 'right_eye_distance', 'left_gaze_validity', 'right_gaze_validity',
+                      'left_pupil_diameter', 'right_pupil_diameter', 'left_pupil_validity', 'right_pupil_validity',
+                      'gaze_data_time_stamp', 'stimulus_1_position_X_PCMCS', 'stimulus_1_position_Y_PCMCS',
+                      'stimulus_2_position_X_PCMCS', 'stimulus_2_position_Y_PCMCS', 'stimulus_3_position_X_PCMCS',
+                      'stimulus_3_position_Y_PCMCS', 'stimulus_4_position_X_PCMCS', 'stimulus_4_position_Y_PCMCS', 'quit_log', 'Unnamed: 48'])
 
-    with codecs.open(raw_file_name, 'r', encoding='utf-8') as raw_output_file:
-        raw_lines = raw_output_file.readlines()
+    output_index = 0
+    last_trial = "0"
+    for index, row in input_data.iterrows():
+        # we ignore 0 indexed blocks, which are calibration validation blocks.
+        if str(row['block']) == "0":
+            continue
 
-    new_file_data = StringIO()
-    end_pos = raw_lines[0].find("trial_phase")
-    new_file_data.write(raw_lines[0][:end_pos])
-    new_file_data.write('RT (ms)')
-    new_file_data.write('\n')
+        # insert one row of each trial data
+        if row['trial'] != last_trial:
+            last_trial = row['trial']
+            output_data.loc[output_index] = row
+            output_index += 1
 
-    trial_pos = raw_lines[0].split('\t').index("trial")
-    block_pos = raw_lines[0].split('\t').index("block")
-    trial_phase_pos = raw_lines[0].split('\t').index("trial_phase")
-    time_stamp_pos = raw_lines[0].split('\t').index("gaze_data_time_stamp")
+    # reaction time of the trial
+    assert(len(output_data.index) == len(RT_data))
+    output_data['RT (ms)'] = RT_data
+
+    output_data.to_csv(new_file_name, sep='\t', index=False)
+
+def calcRTColumn(raw_file_name):
+    input_data = pandas.read_csv(raw_file_name, sep='\t')
 
     last_trial = "1"
     start_time = 0
     end_time = 0
     start_time_found = False
     end_time_found = False
-    current_line = 1
-    for line in raw_lines[1:]:
-        if last_trial != line.split('\t')[trial_pos] or line == raw_lines[len(raw_lines) - 1]:
-            line_to_write = raw_lines[current_line - 1]
-            end_pos = find_variable_str_index(line_to_write, trial_phase_pos)
-            if line_to_write.split('\t')[block_pos] != "0":
-                new_file_data.write(line_to_write[:end_pos])
-                new_file_data.write('\t')
+    RT_data = []
+    previous_row = -1
 
+    for index, row in input_data.iterrows():
+        # we are at the end of the trial (actually at the first row of the next trial)
+        if last_trial != str(row['trial']) or index == len(input_data.index) - 1:
+            # we ignore 0 indexed blocks, which are calibration validation blocks.
+            if isinstance(previous_row, pandas.Series) and str(previous_row['block']) != "0":
+                # We calculate the elapsed time during the stimulus was on the screen.
                 if start_time_found and end_time_found:
-                    new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
+                    RT_data.append(str((end_time - start_time) / 1000.0).replace(".", ","))
+                # if there is not endtime, then it means the software was fast enough to step
+                # on to the next trial instantly after the stimulus was hidden.
                 elif start_time_found:
-                    end_time = int(line.split('\t')[time_stamp_pos])
-                    new_file_data.write(str((end_time - start_time) / 1000.0).replace(".", ","))
+                    end_time = int(previous_row['gaze_data_time_stamp'])
+                    RT_data.append(str((end_time - start_time) / 1000.0).replace(".", ","))
                 else:
-                    new_file_data.write("0")
-                new_file_data.write('\n')
+                    RT_data.append("0")
 
-            last_trial = line.split('\t')[trial_pos]
+            last_trial = str(row['trial'])
             start_time_found = False
             end_time_found = False
 
-        if line.split('\t')[trial_phase_pos] == "stimulus_on_screen" and not start_time_found:
-            start_time = int(line.split('\t')[time_stamp_pos])
+        # stimulus appears on the screen -> start time
+        if row['trial_phase'] == "stimulus_on_screen" and not start_time_found:
+            start_time = int(row['gaze_data_time_stamp'])
             start_time_found = True
 
-        if line.split('\t')[trial_phase_pos] == "after_reaction" and not end_time_found:
-            end_time = int(line.split('\t')[time_stamp_pos])
+        # stimulus disappear from the screen -> end time
+        if row['trial_phase']== "after_reaction" and not end_time_found:
+            end_time = int(previous_row['gaze_data_time_stamp'])
             end_time_found = True
-        current_line += 1
 
-    with codecs.open(new_file_name, 'w', encoding='utf-8') as new_output_file:
-        new_output_file.write(new_file_data.getvalue())
-    new_file_data.close()
+        previous_row = row
 
+    return RT_data
 
-def find_variable_str_index(string, variable_pos):
-    begin_index = 0
-    for i in range(variable_pos - 1):
-        begin_index = string.find("\t", begin_index) + 1
-    return string.find("\t", begin_index)
-
+def generateRTData(raw_file_name, new_file_name):
+    RT_data = calcRTColumn(raw_file_name)
+    generateOutput(raw_file_name, new_file_name, RT_data)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -96,4 +113,4 @@ if __name__ == "__main__":
         print("The passed parameter should be a valid file's path: " + sys.argv[1])
         exit(1)
 
-    convert(sys.argv[1], sys.argv[2])
+    generateRTData(sys.argv[1], sys.argv[2])
