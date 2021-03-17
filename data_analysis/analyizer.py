@@ -23,6 +23,7 @@ import time
 
 import RT_calc as rtc
 import extend_data as ed
+import compute_learning as cl
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -60,6 +61,24 @@ def extend_RT_data(input_dir, output_dir):
 
         break
 
+def compute_implicit_learning(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'implicit_learning.txt')
+    cl.computeImplicitLearning(input_dir, output_file)
+
+def compute_sequence_learning(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'sequence_learning.txt')
+    cl.computeSequenceLearning(input_dir, output_file)
+
+def compute_statistical_learning(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'statistical_learning.txt')
+    cl.computeStatisticalLearning(input_dir, output_file)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("You need to specify an input folder for raw data files.")
@@ -76,4 +95,16 @@ if __name__ == "__main__":
     
     extended_RT_data_dir = os.path.join(script_dir, 'data', 'RT_data_extended')
 
-    extend_RT_data(RT_data_dir, extended_RT_data_dir)
+    #extend_RT_data(RT_data_dir, extended_RT_data_dir)
+
+    implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
+
+    compute_implicit_learning(extended_RT_data_dir, implicit_learning_dir)
+
+    sequence_learning_dir = os.path.join(script_dir, 'data', 'sequence_learning')
+
+    compute_sequence_learning(extended_RT_data_dir, sequence_learning_dir)
+
+    statistical_learning_dir = os.path.join(script_dir, 'data', 'statistical_learning')
+
+    compute_statistical_learning(extended_RT_data_dir, statistical_learning_dir)
