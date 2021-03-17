@@ -30,6 +30,18 @@ def computeRepetitionColumn(data_table):
 
     return repetition_column
 
+def computeTrillColumn(data_table):
+    trill_column = []
+    stimulus_column = data_table["stimulus"]
+
+    for i in range(len(stimulus_column)):
+        if i > 1 and stimulus_column[i] == stimulus_column[i - 2]:
+            trill_column.append(True)
+        else:
+            trill_column.append(False)
+
+    return trill_column
+
 def extendRTData(input_file, output_file):
     data_table = pandas.read_csv(input_file, sep='\t')
 
@@ -37,5 +49,10 @@ def extendRTData(input_file, output_file):
     repetition_data = computeRepetitionColumn(data_table)
     assert(len(repetition_data) == len(data_table.index))
     data_table["repetition"] = repetition_data
+
+    # trill: first item and third item of trial triplet is the same: e.g. 1x1, 2x2, etc.
+    trill_data = computeTrillColumn(data_table)
+    assert(len(trill_data) == len(data_table.index))
+    data_table["trill"] = trill_data
 
     data_table.to_csv(output_file, sep='\t', index=False)
