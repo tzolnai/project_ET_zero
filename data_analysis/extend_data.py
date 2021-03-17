@@ -42,6 +42,25 @@ def computeTrillColumn(data_table):
 
     return trill_column
 
+def computeHighLowBasedOnLearningSequence(data_table):
+    high_low_column = []
+    stimulus_column = data_table["stimulus"]
+
+    # get the learning sequence
+    learning_sequence = data_table["PCode"][5 * 82]
+    learning_sequence += learning_sequence[0]
+
+    for i in range(len(stimulus_column)):
+        if i > 1:
+            if (str(stimulus_column[i - 2]) + str(stimulus_column[i])) in learning_sequence:
+                high_low_column.append('high')
+            else:
+                high_low_column.append('low')
+        else:
+            high_low_column.append('none')
+
+    return high_low_column
+
 def extendRTData(input_file, output_file):
     data_table = pandas.read_csv(input_file, sep='\t')
 
@@ -54,5 +73,10 @@ def extendRTData(input_file, output_file):
     trill_data = computeTrillColumn(data_table)
     assert(len(trill_data) == len(data_table.index))
     data_table["trill"] = trill_data
+
+    # calculate frequency based on learning sequence
+    high_low_data = computeHighLowBasedOnLearningSequence(data_table)
+    assert(len(high_low_data) == len(data_table.index))
+    data_table["high_low_learning"] = high_low_data
 
     data_table.to_csv(output_file, sep='\t', index=False)
