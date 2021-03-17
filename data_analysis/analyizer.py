@@ -22,6 +22,7 @@ import shutil
 import time
 
 import RT_calc as rtc
+import extend_data as ed
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -47,6 +48,18 @@ def compute_RT_data(input_dir, output_dir):
 
         break
 
+def extend_RT_data(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+
+            input_file = os.path.join(input_dir, file)
+            output_file = os.path.join(output_dir, os.path.splitext(file)[0] + '_extended.txt')
+            ed.extendRTData(input_file, output_file)
+
+        break
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("You need to specify an input folder for raw data files.")
@@ -59,4 +72,8 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     RT_data_dir = os.path.join(script_dir, 'data', 'RT_data')
 
-    compute_RT_data(sys.argv[1], RT_data_dir)
+    #compute_RT_data(sys.argv[1], RT_data_dir)
+    
+    extended_RT_data_dir = os.path.join(script_dir, 'data', 'RT_data_extended')
+
+    extend_RT_data(RT_data_dir, extended_RT_data_dir)
