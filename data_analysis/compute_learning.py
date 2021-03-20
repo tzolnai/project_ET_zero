@@ -164,7 +164,21 @@ def calcEpochMedianRTsStatistical(input_file):
     return random_high_median_array, random_low_median_array
 
 def computeLearning(input_dir, output_file, type):
-    learning_data = pandas.DataFrame()
+    if type == 'implicit':
+        learning_data = pandas.DataFrame(columns=['subject', 'epoch_1_low', 'epoch_2_low', 'epoch_3_low', 'epoch_4_low',
+                                         'epoch_5_low', 'epoch_6_low', 'epoch_7_low', 'epoch_8_low',
+                                         'epoch_1_high', 'epoch_2_high', 'epoch_3_high', 'epoch_4_high',
+                                         'epoch_5_high', 'epoch_6_high', 'epoch_7_high', 'epoch_8_high'])
+    elif type == 'sequence':
+        learning_data = pandas.DataFrame(columns=['subject', 'epoch_1_pattern_high', 'epoch_2_pattern_high', 'epoch_3_pattern_high', 'epoch_4_pattern_high',
+                                         'epoch_5_pattern_high', 'epoch_6_pattern_high', 'epoch_7_pattern_high', 'epoch_8_pattern_high',
+                                         'epoch_1_random_high', 'epoch_2_random_high', 'epoch_3_random_high', 'epoch_4_random_high',
+                                         'epoch_5_random_high', 'epoch_6_random_high', 'epoch_7_random_high', 'epoch_8_random_high'])
+    elif type == 'statistical':
+        learning_data = pandas.DataFrame(columns=['subject', 'epoch_1_random_high', 'epoch_2_random_high', 'epoch_3_random_high', 'epoch_4_random_high',
+                                         'epoch_5_random_high', 'epoch_6_random_high', 'epoch_7_random_high', 'epoch_8_random_high',
+                                         'epoch_1_random_low', 'epoch_2_random_low', 'epoch_3_random_low', 'epoch_4_random_low',
+                                         'epoch_5_random_low', 'epoch_6_random_low', 'epoch_7_random_low', 'epoch_8_random_low'])
 
     for root, dirs, files in os.walk(input_dir):
         for file in files:
@@ -174,16 +188,13 @@ def computeLearning(input_dir, output_file, type):
 
             if type == 'implicit':
                 low_medians, high_medians = calcEpochMedianRTsImplicit(input_file)
-                learning_data['subject_' + str(subject) + '_high_data'] = high_medians
-                learning_data['subject_' + str(subject) + '_low_data'] = low_medians
+                learning_data.loc[len(learning_data)] = [subject] + low_medians + high_medians
             elif type == 'sequence':
                 pattern_high_medians, random_high_medians = calcEpochMedianRTsSequence(input_file)
-                learning_data['subject_' + str(subject) + '_pattern_high_data'] = pattern_high_medians
-                learning_data['subject_' + str(subject) + '_random_high_data'] = random_high_medians
+                learning_data.loc[len(learning_data)] = [subject] + pattern_high_medians + random_high_medians
             elif type == 'statistical':
                 random_high_medians, random_low_medians = calcEpochMedianRTsStatistical(input_file)
-                learning_data['subject_' + str(subject) + '_random_high_data'] = random_high_medians
-                learning_data['subject_' + str(subject) + '_random_low_data'] = random_low_medians
+                learning_data.loc[len(learning_data)] = [subject] + random_high_medians + random_low_medians
         break
 
     learning_data.to_csv(output_file, sep='\t', index=False)
