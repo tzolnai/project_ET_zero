@@ -24,6 +24,7 @@ import time
 import RT_calc as rtc
 import extend_data as ed
 import compute_learning as cl
+import compute_interference as ci
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -99,12 +100,16 @@ if __name__ == "__main__":
 
     implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
 
-    compute_implicit_learning(extended_RT_data_dir, implicit_learning_dir)
+    #compute_implicit_learning(extended_RT_data_dir, implicit_learning_dir)
 
     sequence_learning_dir = os.path.join(script_dir, 'data', 'sequence_learning')
 
-    compute_sequence_learning(extended_RT_data_dir, sequence_learning_dir)
+    #compute_sequence_learning(extended_RT_data_dir, sequence_learning_dir)
 
     statistical_learning_dir = os.path.join(script_dir, 'data', 'statistical_learning')
 
-    compute_statistical_learning(extended_RT_data_dir, statistical_learning_dir)
+    #compute_statistical_learning(extended_RT_data_dir, statistical_learning_dir)
+
+    interference_dir = os.path.join(script_dir, 'data', 'interference')
+
+    compute_interference_data(extended_RT_data_dir, interference_dir)
