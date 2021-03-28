@@ -25,6 +25,7 @@ import RT_calc as rtc
 import extend_data as ed
 import compute_learning as cl
 import compute_interference as ci
+import compute_jacobi as cj
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -80,6 +81,12 @@ def compute_statistical_learning(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'statistical_learning.txt')
     cl.computeStatisticalLearning(input_dir, output_file)
 
+def compute_jacobi_data(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'jacobi_results.txt')
+    cj.computeJacobiTestData(input_dir, output_file)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("You need to specify an input folder for raw data files.")
@@ -112,4 +119,8 @@ if __name__ == "__main__":
 
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
-    compute_interference_data(extended_RT_data_dir, interference_dir)
+    #compute_interference_data(extended_RT_data_dir, interference_dir)
+
+    jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
+
+    compute_jacobi_data(sys.argv[1], jacobi_result_dir)
