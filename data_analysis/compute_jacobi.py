@@ -69,7 +69,7 @@ def computeTrillFrequencies(jacobi_output_path):
     return inclusion_trill_count / 88 * 100, exclusion_trill_count / 88 * 100
 
 def computeJacobiTestData(input_dir, output_file):
-    jacobi_data = pandas.DataFrame(columns=['subject', 'inclusive_high_ratio', 'exclusive_high_ratio', 'inclusive_trill_ratio', 'exclusive_trill_ratio'])
+    jacobi_data = pandas.DataFrame(columns=['subject', 'inclusion_high_ratio', 'exclusion_high_ratio', 'inclusion_trill_ratio', 'exclusion_trill_ratio'])
 
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
