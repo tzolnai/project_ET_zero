@@ -21,7 +21,7 @@ import sys
 import pandas
 import math
 
-def generateOutput(raw_file_name, new_file_name, RT_data):
+def generateOutput(raw_file_name, new_file_name, RT_data, anticipation_data):
     # use the input data headers
     input_data = pandas.read_csv(raw_file_name, sep='\t')
     output_data = pandas.DataFrame(columns=input_data.columns)
@@ -52,6 +52,9 @@ def generateOutput(raw_file_name, new_file_name, RT_data):
     # reaction time of the trial
     assert(len(output_data.index) == len(RT_data))
     output_data['RT (ms)'] = RT_data
+
+    assert(len(output_data.index) == len(anticipation_data))
+    output_data['last_AOI_before_stimulus'] = anticipation_data
 
     output_data.to_csv(new_file_name, sep='\t', index=False)
 
@@ -100,6 +103,72 @@ def calcRTColumn(raw_file_name):
 
     return RT_data
 
+def convertToFloat(data):
+    return float(str(data).replace(",", "."))
+
+def getAOI(row):
+    left_gaze_validity = bool(row['left_gaze_validity'])
+    right_gaze_validity = bool(row['right_gaze_validity'])
+
+    left_gaze_X = convertToFloat(row['left_gaze_data_X_ADCS'])
+    left_gaze_Y = convertToFloat(row['left_gaze_data_Y_ADCS'])
+    right_gaze_X = convertToFloat(row['right_gaze_data_X_ADCS'])
+    right_gaze_Y = convertToFloat(row['right_gaze_data_Y_ADCS'])
+
+    if left_gaze_validity and right_gaze_validity:
+        X = (left_gaze_X + right_gaze_X) / 2.0
+        Y = (left_gaze_Y + right_gaze_Y) / 2.0
+    elif left_gaze_validity:
+        X = left_gaze_X
+        Y = left_gaze_Y
+    elif right_gaze_validity:
+        X = right_gaze_X
+        Y = right_gaze_Y
+    else:
+        return -1
+
+    if X <= 0.5 and Y <= 0.5:
+        return 1
+    elif X >= 0.5 and Y <= 0.5:
+        return 2
+    elif X <= 0.5 and Y >= 0.5:
+        return 3
+    else:
+        return 4
+
+def calcAnticipationColumn(raw_file_name):
+    input_data = pandas.read_csv(raw_file_name, sep='\t')
+
+    anticipation_data = []
+    last_AOI = -1
+    previous_row = -1
+
+    for index, row in input_data.iterrows():
+        if not isinstance(previous_row, pandas.Series) or str(previous_row['block']) == "0":
+            previous_row = row
+            continue
+
+        assert(isinstance(previous_row, pandas.Series))
+        last_trial = str(previous_row['trial'])
+
+        if last_trial != str(row['trial']) or index == len(input_data.index) - 1:
+            if last_trial == '1' or last_trial == '2' or last_AOI == -1:
+                anticipation_data.append('none')
+            else:
+                anticipation_data.append(last_AOI)
+            last_AOI = -1
+
+        # get AOI during RSI
+        if row['trial_phase'] == 'before_stimulus':
+            ret_value = getAOI(row)
+            if ret_value != -1:
+                last_AOI = ret_value
+
+        previous_row = row
+
+    return anticipation_data
+
 def computeTrialData(raw_file_name, new_file_name):
     RT_data = calcRTColumn(raw_file_name)
-    generateOutput(raw_file_name, new_file_name, RT_data)
+    anticipation_data = calcAnticipationColumn(raw_file_name)
+    generateOutput(raw_file_name, new_file_name, RT_data, anticipation_data)

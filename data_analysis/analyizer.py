@@ -26,6 +26,7 @@ import extend_data as ed
 import compute_learning as cl
 import compute_interference as ci
 import compute_jacobi as cj
+import compute_anticipatory as ca
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -93,6 +94,12 @@ def compute_jacobi_data(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'jacobi_results.txt')
     cj.computeJacobiTestData(input_dir, output_file)
 
+def compute_anticipatory_data(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'anticipatory_data.txt')
+    ca.computeAnticipatoryData(input_dir, output_file)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("You need to specify an input folder for raw data files.")
@@ -109,24 +116,28 @@ if __name__ == "__main__":
     
     extended_trial_data_dir = os.path.join(script_dir, 'data', 'trial_data_extended')
 
-    #extend_trial_data(trial_data_dir, extended_trial_data_dir)
+    extend_trial_data(trial_data_dir, extended_trial_data_dir)
 
     implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
 
-    compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
+    #compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
     sequence_learning_dir = os.path.join(script_dir, 'data', 'sequence_learning')
 
-    compute_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
+    #compute_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
 
     statistical_learning_dir = os.path.join(script_dir, 'data', 'statistical_learning')
 
-    compute_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
+    #compute_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
 
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
-    compute_interference_data(extended_trial_data_dir, interference_dir)
+    #compute_interference_data(extended_trial_data_dir, interference_dir)
 
     jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
-    compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+    #compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+
+    anticipatory_dir = os.path.join(script_dir, 'data', 'anticipatory_movements')
+
+    compute_anticipatory_data(extended_trial_data_dir, anticipatory_dir)

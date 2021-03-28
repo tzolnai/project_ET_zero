@@ -61,6 +61,42 @@ def computeHighLowBasedOnLearningSequence(data_table):
 
     return high_low_column
 
+def computeAnticipationColumn(data_table):
+    anticipation_column = []
+    stimulus_column = data_table["stimulus"]
+    last_AOI_column = data_table["last_AOI_before_stimulus"]
+
+    for i in range(len(stimulus_column)):
+        if last_AOI_column[i] == 'none':
+            anticipation_column.append(False)
+        elif int(last_AOI_column[i]) != int(stimulus_column[i - 1]):
+            anticipation_column.append(True)
+        else:
+            anticipation_column.append(False)
+
+    return anticipation_column
+
+def computeCorrectAnticipationColumn(data_table):
+    correct_anticipation_data = []
+    stimulus_column = data_table["stimulus"]
+    last_AOI_column = data_table["last_AOI_before_stimulus"]
+
+    # get the learning sequence
+    learning_sequence = data_table["PCode"][5 * 82]
+    learning_sequence += learning_sequence[0]
+
+    for i in range(len(stimulus_column)):
+        if last_AOI_column[i] == 'none' or i < 2:
+            correct_anticipation_data.append(False)
+        elif int(last_AOI_column[i]) == int(stimulus_column[i - 1]):
+            correct_anticipation_data.append(False)
+        elif str(stimulus_column[i - 2]) + str(last_AOI_column[i]) in learning_sequence:
+            correct_anticipation_data.append(True)
+        else:
+            correct_anticipation_data.append(False)
+
+    return correct_anticipation_data
+
 def extendTrialData(input_file, output_file):
     data_table = pandas.read_csv(input_file, sep='\t')
 
@@ -78,5 +114,15 @@ def extendTrialData(input_file, output_file):
     high_low_data = computeHighLowBasedOnLearningSequence(data_table)
     assert(len(high_low_data) == len(data_table.index))
     data_table["high_low_learning"] = high_low_data
+
+    # calculate whether anticipatory eye-movement was happened
+    anticipation_data = computeAnticipationColumn(data_table)
+    assert(len(anticipation_data) == len(data_table.index))
+    data_table["is_anticipation"] = anticipation_data
+
+    # calculate whether correct anticipatory eye-movement was happened
+    correct_anticipation_data = computeCorrectAnticipationColumn(data_table)
+    assert(len(correct_anticipation_data) == len(data_table.index))
+    data_table["correct_anticipation"] = correct_anticipation_data
 
     data_table.to_csv(output_file, sep='\t', index=False)
