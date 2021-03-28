@@ -100,6 +100,6 @@ def calcRTColumn(raw_file_name):
 
     return RT_data
 
-def generateRTData(raw_file_name, new_file_name):
+def computeTrialData(raw_file_name, new_file_name):
     RT_data = calcRTColumn(raw_file_name)
     generateOutput(raw_file_name, new_file_name, RT_data)

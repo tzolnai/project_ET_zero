@@ -61,7 +61,7 @@ def computeHighLowBasedOnLearningSequence(data_table):
 
     return high_low_column
 
-def extendRTData(input_file, output_file):
+def extendTrialData(input_file, output_file):
     data_table = pandas.read_csv(input_file, sep='\t')
 
     # previous trial has the stimulus at the same position -> repetition.
