@@ -81,6 +81,12 @@ def compute_statistical_learning(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'statistical_learning.txt')
     cl.computeStatisticalLearning(input_dir, output_file)
 
+def compute_interference_data(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'interference.txt')
+    ci.computeInterferenceData(input_dir, output_file)
+
 def compute_jacobi_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
