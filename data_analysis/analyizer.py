@@ -136,8 +136,8 @@ if __name__ == "__main__":
 
     jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
-    #compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+    compute_jacobi_data(sys.argv[1], jacobi_result_dir)
 
     anticipatory_dir = os.path.join(script_dir, 'data', 'anticipatory_movements')
 
-    compute_anticipatory_data(extended_trial_data_dir, anticipatory_dir)
+    #compute_anticipatory_data(extended_trial_data_dir, anticipatory_dir)

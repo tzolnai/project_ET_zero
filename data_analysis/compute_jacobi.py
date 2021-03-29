@@ -20,6 +20,8 @@ import os
 import pandas
 import statistics
 
+all_triplet_count = 88
+
 def computeHighFrequencies(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
@@ -44,7 +46,7 @@ def computeHighFrequencies(jacobi_output_path):
                     exclusion_high_count += 1
                 
     
-    return inclusion_high_count / 88 * 100, exclusion_high_count / 88 * 100
+    return inclusion_high_count, exclusion_high_count
 
 def computeTrillFrequencies(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
@@ -66,10 +68,12 @@ def computeTrillFrequencies(jacobi_output_path):
                     exclusion_trill_count += 1
                 
     
-    return inclusion_trill_count / 88 * 100, exclusion_trill_count / 88 * 100
+    return inclusion_trill_count, exclusion_trill_count
 
 def computeJacobiTestData(input_dir, output_file):
-    jacobi_data = pandas.DataFrame(columns=['subject', 'inclusion_high_ratio', 'exclusion_high_ratio', 'inclusion_trill_ratio', 'exclusion_trill_ratio'])
+    jacobi_data = pandas.DataFrame(columns=['subject', 'inclusion_high_ratio', 'exclusion_high_ratio',
+                                                       'inclusion_trill_ratio', 'exclusion_trill_ratio',
+                                                       'inclusion_high_ratio_without_trills', 'exclusion_high_ratio_without_trills'])
 
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
@@ -77,9 +81,14 @@ def computeJacobiTestData(input_dir, output_file):
                 continue
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
-            inclusion_high_ratio, exclusion_high_ratio = computeHighFrequencies(jacobi_output_path)
-            inclusion_trill_ratio, exclusion_trill_ratio = computeTrillFrequencies(jacobi_output_path)
-            jacobi_data.loc[len(jacobi_data)] = [subject, inclusion_high_ratio, exclusion_high_ratio, inclusion_trill_ratio, exclusion_trill_ratio]
+            inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path)
+            inclusion_trill_count, exclusion_trill_count = computeTrillFrequencies(jacobi_output_path)
+            jacobi_data.loc[len(jacobi_data)] = [subject, inclusion_high_count / all_triplet_count * 100,
+                                                          exclusion_high_count / all_triplet_count * 100,
+                                                          inclusion_trill_count / all_triplet_count * 100,
+                                                          exclusion_trill_count / all_triplet_count * 100,
+                                                          inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100,
+                                                          exclusion_high_count / (all_triplet_count - exclusion_trill_count) * 100]
 
         break
 
