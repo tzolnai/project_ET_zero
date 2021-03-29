@@ -37,6 +37,28 @@ def check_high_frequency(stim_list):
 
     print('High triplet frequency is: ' + str(high_count / trial_count * 100))
 
+def check_trill_frequency(stim_list):
+    trill_count = 0
+    for i in range(2, trial_count - 1):
+        if stim_list[i] == stim_list[i - 2]:
+            trill_count += 1
+
+    print('Trill triplet frequency is: ' + str(trill_count / trial_count * 100))
+
+def check_high_frequency_without_trills(stim_list):
+    pattern = "12341"
+    high_count = 0
+    for i in range(2, trial_count - 1):
+        if str(stim_list[i]) + str(stim_list[i - 2]) in pattern:
+            high_count += 1
+
+    trill_count = 0
+    for i in range(2, trial_count - 1):
+        if stim_list[i] == stim_list[i - 2]:
+            trill_count += 1
+
+    print('Trill triplet frequency is: ' + str(high_count / (trial_count - trill_count) * 100))
+
 
 def generate_stim_random_no_repeat(stim_list):
     for i in range(1, trial_count):
@@ -62,12 +84,6 @@ if __name__ == "__main__":
 
     check_high_frequency(stim_list)
 
-    stim_list = []
-    generate_stim_random_no_repeat(stim_list)
-
-    check_high_frequency(stim_list)
-
-    stim_list = []
-    generate_stim_random_no_repeat2(stim_list)
-
-    check_high_frequency(stim_list)
+    check_trill_frequency(stim_list)
+    
+    check_high_frequency_without_trills(stim_list)
