@@ -94,6 +94,10 @@ def compute_jacobi_data(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'jacobi_results.txt')
     cj.computeJacobiTestData(input_dir, output_file)
 
+def compute_jacobi_filter(input_dir, output_dir):
+    output_file = os.path.join(output_dir, 'jacobi_filter.txt')
+    cj.computeJacobiFilterCriteria(input_dir, output_file)
+
 def compute_anticipatory_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
@@ -137,6 +141,8 @@ if __name__ == "__main__":
     jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
     compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+
+    compute_jacobi_filter(sys.argv[1], jacobi_result_dir)
 
     anticipatory_dir = os.path.join(script_dir, 'data', 'anticipatory_movements')
 

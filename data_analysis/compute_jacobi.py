@@ -19,6 +19,7 @@
 import os
 import pandas
 import statistics
+import copy
 
 all_triplet_count = 88
 
@@ -89,6 +90,61 @@ def computeJacobiTestData(input_dir, output_file):
                                                           exclusion_trill_count / all_triplet_count * 100,
                                                           inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100,
                                                           exclusion_high_count / (all_triplet_count - exclusion_trill_count) * 100]
+
+        break
+
+    jacobi_data.to_csv(output_file, sep='\t', index=False)
+
+def computeStimFrequencies(jacobi_output_path):
+    data_table = pandas.read_csv(jacobi_output_path, sep='\t')
+
+    stimulus_column = data_table["response"]
+    test_type_column = data_table["test_type"]
+
+    response_counts_inclusion = {}
+    response_counts_inclusion[1] = 0
+    response_counts_inclusion[2] = 0
+    response_counts_inclusion[3] = 0
+    response_counts_inclusion[4] = 0
+    response_counts_exclusion = copy.deepcopy(response_counts_inclusion)
+    for i in range(len(stimulus_column)):
+        if test_type_column[i] == 'inclusion':
+            response_counts_inclusion[stimulus_column[i]] += 1
+        else:
+            assert(test_type_column[i] == 'exclusion')
+            response_counts_exclusion[stimulus_column[i]] += 1
+
+    return response_counts_inclusion, response_counts_exclusion
+
+def computeFilterCriteria(response_counts):
+    filter_criteria = 0
+    expected_count = 24
+    for i in response_counts:
+        filter_criteria += abs(expected_count - response_counts[i]) ** 2
+
+    return filter_criteria
+
+def computeJacobiFilterCriteria(input_dir, output_file):
+    jacobi_data = pandas.DataFrame(columns=['subject', 'response_1_count_inclusion', 'response_2_count_inclusion',
+                                            'response_3_count_inclusion', 'response_4_count_inclusion',
+                                            'response_1_count_exclusion', 'response_2_count_exclusion',
+                                            'response_3_count_exclusion', 'response_4_count_exclusion',
+                                            'filter_criteria_inclusion', 'filter_criteria_exclusion'])
+
+    for root, dirs, files in os.walk(input_dir):
+        for subject in dirs:
+            if subject.startswith('.'):
+                continue
+
+            jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
+            response_counts_inclusion, response_counts_exclusion = computeStimFrequencies(jacobi_output_path)
+            filter_criteria_inclusion = computeFilterCriteria(response_counts_inclusion)
+            filter_criteria_exclusion = computeFilterCriteria(response_counts_exclusion)
+            jacobi_data.loc[len(jacobi_data)] = [subject, response_counts_inclusion[1], response_counts_inclusion[2],
+                                                          response_counts_inclusion[3], response_counts_inclusion[4],
+                                                          response_counts_exclusion[1], response_counts_exclusion[2],
+                                                          response_counts_exclusion[3], response_counts_exclusion[4],
+                                                          filter_criteria_inclusion, filter_criteria_exclusion]
 
         break
 
