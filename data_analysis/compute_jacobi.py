@@ -100,36 +100,36 @@ def computeStimFrequencies(jacobi_output_path):
 
     stimulus_column = data_table["response"]
     test_type_column = data_table["test_type"]
+    run_column = data_table["run"]
 
     response_counts_inclusion = {}
-    response_counts_inclusion[1] = 0
-    response_counts_inclusion[2] = 0
-    response_counts_inclusion[3] = 0
-    response_counts_inclusion[4] = 0
+    for i in [1, 2, 3, 4]:
+        response_counts_inclusion[i] = {}
+        response_counts_inclusion[i][1] = 0
+        response_counts_inclusion[i][2] = 0
+        response_counts_inclusion[i][3] = 0
+        response_counts_inclusion[i][4] = 0
     response_counts_exclusion = copy.deepcopy(response_counts_inclusion)
     for i in range(len(stimulus_column)):
         if test_type_column[i] == 'inclusion':
-            response_counts_inclusion[stimulus_column[i]] += 1
+            response_counts_inclusion[int(run_column[i])][stimulus_column[i]] += 1
         else:
             assert(test_type_column[i] == 'exclusion')
-            response_counts_exclusion[stimulus_column[i]] += 1
+            response_counts_exclusion[int(run_column[i])][stimulus_column[i]] += 1
 
     return response_counts_inclusion, response_counts_exclusion
 
 def computeFilterCriteria(response_counts):
     filter_criteria = 0
-    expected_count = 24
-    for i in response_counts:
-        filter_criteria += abs(expected_count - response_counts[i]) ** 2
+    expected_count = 6
+    for i in [1, 2, 3, 4]:
+        for j in response_counts[i]:
+            filter_criteria += abs(expected_count - response_counts[i][j]) ** 2
 
     return filter_criteria
 
 def computeJacobiFilterCriteria(input_dir, output_file):
-    jacobi_data = pandas.DataFrame(columns=['subject', 'response_1_count_inclusion', 'response_2_count_inclusion',
-                                            'response_3_count_inclusion', 'response_4_count_inclusion',
-                                            'response_1_count_exclusion', 'response_2_count_exclusion',
-                                            'response_3_count_exclusion', 'response_4_count_exclusion',
-                                            'filter_criteria_inclusion', 'filter_criteria_exclusion'])
+    jacobi_data = pandas.DataFrame(columns=['subject', 'filter_criteria_inclusion', 'filter_criteria_exclusion'])
 
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
@@ -140,11 +140,7 @@ def computeJacobiFilterCriteria(input_dir, output_file):
             response_counts_inclusion, response_counts_exclusion = computeStimFrequencies(jacobi_output_path)
             filter_criteria_inclusion = computeFilterCriteria(response_counts_inclusion)
             filter_criteria_exclusion = computeFilterCriteria(response_counts_exclusion)
-            jacobi_data.loc[len(jacobi_data)] = [subject, response_counts_inclusion[1], response_counts_inclusion[2],
-                                                          response_counts_inclusion[3], response_counts_inclusion[4],
-                                                          response_counts_exclusion[1], response_counts_exclusion[2],
-                                                          response_counts_exclusion[3], response_counts_exclusion[4],
-                                                          filter_criteria_inclusion, filter_criteria_exclusion]
+            jacobi_data.loc[len(jacobi_data)] = [subject, filter_criteria_inclusion, filter_criteria_exclusion]
 
         break
 
