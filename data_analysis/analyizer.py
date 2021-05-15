@@ -28,6 +28,8 @@ import compute_interference as ci
 import compute_jacobi as cj
 import compute_anticipatory as ca
 import compute_missing_data_ratio as cmd
+import compute_distance as cd
+import compute_binocular_distance as cbd
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -111,6 +113,18 @@ def compute_missing_data_ratio(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'missing_data_ratio.txt')
     cmd.computeMissingDataRatio(input_dir, output_file)
 
+def compute_distance(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'distance_data.txt')
+    cd.computeDistance(input_dir, output_file)
+
+def compute_binocular_distance(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'binocular_distance_data.txt')
+    cbd.computeBinocularDistance(input_dir, output_file)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("You need to specify an input folder for raw data files.")
@@ -157,4 +171,12 @@ if __name__ == "__main__":
 
     missing_data_dir = os.path.join(script_dir, 'data', 'missing_data')
 
-    compute_missing_data_ratio(sys.argv[1], missing_data_dir)
+    #compute_missing_data_ratio(sys.argv[1], missing_data_dir)
+
+    distance_dir = os.path.join(script_dir, 'data', 'distance_data')
+
+    #compute_distance(sys.argv[1], distance_dir)
+
+    binocular_distance_dir = os.path.join(script_dir, 'data', 'binocular_distance_data')
+
+    compute_binocular_distance(sys.argv[1], binocular_distance_dir)
