@@ -61,7 +61,7 @@ class ExperimentSettings:
        These settings apply to all subjects in the specific experiment.
     """
 
-    def __init__(self, settings_file_path, reminder_file_path):
+    def __init__(self, settings_file_path, reminder_file_path, project_ET_zero=False):
         # type of the experiment (reaction time or eyetracking
         self.experiment_type = None
         # number of sessions (e.g. 10)
@@ -135,6 +135,7 @@ class ExperimentSettings:
         # settings reminder text file's path
         self.reminder_file_path = reminder_file_path
 
+        self.project_ET_zero = project_ET_zero
         self.validation_trialN = 20
 
     def read_from_file(self):
@@ -284,44 +285,68 @@ class ExperimentSettings:
     def get_maxtrial(self):
         """Get number of all trials in the whole experiment (in all sessions)."""
 
-        return ((self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN) + (self.validation_trialN * self.numsessions)
+        if self.project_ET_zero:
+            return ((self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN) + (self.validation_trialN * self.numsessions)
+        else:  # keep original code here
+            return (self.blockprepN + self.blocklengthN) * self.epochN * self.block_in_epochN
 
     def get_block_starts(self):
         """Return with a list of numbers indicating the first trials of the different blocks."""
 
-        if self.blockstarts == None:
-            self.blockstarts = [1]
+        if self.project_ET_zero:
+            if self.blockstarts == None:
+                self.blockstarts = [1]
 
-            sessions_starts = self.get_session_starts()
-            for i in range(len(sessions_starts) - 1):
-                start = sessions_starts[i]
-                self.blockstarts.append(start + self.validation_trialN)
-                for j in range(1, self.epochs[i] * self.block_in_epochN + 1):
-                    self.blockstarts.append(
-                        start + self.validation_trialN + j * (self.blocklengthN + self.blockprepN))
+                sessions_starts = self.get_session_starts()
+                for i in range(len(sessions_starts) - 1):
+                    start = sessions_starts[i]
+                    self.blockstarts.append(start + self.validation_trialN)
+                    for j in range(1, self.epochs[i] * self.block_in_epochN + 1):
+                        self.blockstarts.append(
+                            start + self.validation_trialN + j * (self.blocklengthN + self.blockprepN))
 
-                if i == len(sessions_starts) - 2:
+                    if i == len(sessions_starts) - 2:
+                        self.blockstarts.append(
+                            start + self.validation_trialN + (self.epochs[i] * self.block_in_epochN + 1) * (self.blocklengthN + self.blockprepN))
+
+        else:  # keep original code here
+            if self.blockstarts == None:
+                self.blockstarts = [1]
+                for i in range(1, self.epochN * self.block_in_epochN + 2):
                     self.blockstarts.append(
-                        start + self.validation_trialN + (self.epochs[i] * self.block_in_epochN + 1) * (self.blocklengthN + self.blockprepN))
+                        i * (self.blocklengthN + self.blockprepN) + 1)
 
         return self.blockstarts
 
     def get_session_starts(self):
         """Return with a list of numbers indicating the first trials of the different sessions."""
 
-        if self.sessionstarts == None:
-            self.sessionstarts = [1]
-            epochs_cumulative = []
-            e_temp = 0
-            for e in self.epochs:
-                e_temp += e
-                epochs_cumulative.append(e_temp)
+        if self.project_ET_zero:
+            if self.sessionstarts == None:
+                self.sessionstarts = [1]
+                epochs_cumulative = []
+                e_temp = 0
+                for e in self.epochs:
+                    e_temp += e
+                    epochs_cumulative.append(e_temp)
 
-            session = 0
-            for e in epochs_cumulative:
-                session += 1
-                self.sessionstarts.append(
-                    e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1 + (session * self.validation_trialN))
+                session = 0
+                for e in epochs_cumulative:
+                    session += 1
+                    self.sessionstarts.append(
+                        e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1 + (session * self.validation_trialN))
+        else:  # keep original code here
+            if self.sessionstarts == None:
+                self.sessionstarts = [1]
+                epochs_cumulative = []
+                e_temp = 0
+                for e in self.epochs:
+                    e_temp += e
+                    epochs_cumulative.append(e_temp)
+
+                for e in epochs_cumulative:
+                    self.sessionstarts.append(
+                        e * self.block_in_epochN * (self.blocklengthN + self.blockprepN) + 1)
 
         return self.sessionstarts
 
@@ -1346,7 +1371,7 @@ class PersonDataHandler:
 class Experiment:
     """ Class for running the ASRT experiment."""
 
-    def __init__(self, workdir_path):
+    def __init__(self, workdir_path, project_ET_zero=False):
         # working directory of the experiment, the script reads settings and writer output under this directory
         self.workdir_path = workdir_path
 
@@ -1421,6 +1446,8 @@ class Experiment:
         self.trial_phase = None
         # this variable has a meaning during presentation, last measured RSI
         self.last_RSI = None
+
+        self.project_ET_zero = project_ET_zero
 
     def all_settings_def(self):
 
@@ -1512,56 +1539,114 @@ class Experiment:
         """Select pattern sequences for the different sessions for the current subject."""
 
         # Use a custom dialog for our specific experiment
-        settings_dialog = gui.Dlg(title=u'Beállítások')
-        settings_dialog.addText('')
-        settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
-        settings_dialog.addField(u'Életkor', "25")
-        settings_dialog.addField(u'Első PCode', choices=['1st', '2nd', '3rd', '4th', '5th', '6th'])
-        settings_dialog.addField(u'Második PCode', choices=['1st', '2nd', '3rd', '4th', '5th', '6th'])
+        if self.project_ET_zero:
 
-        returned_data = settings_dialog.show()
-        if settings_dialog.OK:
-            self.PCodes = {}
+            settings_dialog = gui.Dlg(title=u'Beállítások')
+            settings_dialog.addText('')
+            settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
+            settings_dialog.addField(u'Életkor', "25")
+            settings_dialog.addField(u'Első PCode', choices=['1st', '2nd', '3rd', '4th', '5th', '6th'])
+            settings_dialog.addField(u'Második PCode', choices=['1st', '2nd', '3rd', '4th', '5th', '6th'])
 
-            subject_sex = returned_data[0]
-            subject_age = returned_data[1]
-            for i in range(self.settings.epochN):
-                if self.settings.asrt_types[i + 1] == 'noASRT':
-                    PCode = 'noPattern'
-                elif i == self.settings.epochs[0] + 1:
-                    PCode = returned_data[3]
+            returned_data = settings_dialog.show()
+            if settings_dialog.OK:
+                self.PCodes = {}
+
+                subject_sex = returned_data[0]
+                subject_age = returned_data[1]
+                for i in range(self.settings.epochN):
+                    if self.settings.asrt_types[i + 1] == 'noASRT':
+                        PCode = 'noPattern'
+                    elif i == self.settings.epochs[0] + 1:
+                        PCode = returned_data[3]
+                    else:
+                        PCode = returned_data[2]
+                    if PCode == '1st':
+                        self.PCodes[i + 1] = '1st - 1234'
+                    elif PCode == '2nd':
+                        self.PCodes[i + 1] = '2nd - 1243'
+                    elif PCode == '3rd':
+                        self.PCodes[i + 1] = '3rd - 1324'
+                    elif PCode == '4th':
+                        self.PCodes[i + 1] = '4th - 1342'
+                    elif PCode == '5th':
+                        self.PCodes[i + 1] = '5th - 1423'
+                    elif PCode == '6th':
+                        self.PCodes[i + 1] = '6th - 1432'
+                    else:
+                        self.PCodes[i + 1] = 'noPattern'
+
+                if subject_sex == "férfi":
+                    self.subject_sex = "male"
+                elif subject_sex == "nő":
+                    self.subject_sex = "female"
                 else:
-                    PCode = returned_data[2]
-                if PCode == '1st':
-                    self.PCodes[i + 1] = '1st - 1234'
-                elif PCode == '2nd':
-                    self.PCodes[i + 1] = '2nd - 1243'
-                elif PCode == '3rd':
-                    self.PCodes[i + 1] = '3rd - 1324'
-                elif PCode == '4th':
-                    self.PCodes[i + 1] = '4th - 1342'
-                elif PCode == '5th':
-                    self.PCodes[i + 1] = '5th - 1423'
-                elif PCode == '6th':
-                    self.PCodes[i + 1] = '6th - 1432'
-                else:
-                    self.PCodes[i + 1] = 'noPattern'
+                    self.subject_sex = "other"
 
-            if subject_sex == "férfi":
-                self.subject_sex = "male"
-            elif subject_sex == "nő":
-                self.subject_sex = "female"
+                try:
+                    subject_age = int(subject_age)
+                    self.subject_age = str(subject_age)
+                except:
+                    core.quit()
+                return self.PCodes
             else:
-                self.subject_sex = "other"
-
-            try:
-                subject_age = int(subject_age)
-                self.subject_age = str(subject_age)
-            except:
                 core.quit()
-            return self.PCodes
-        else:
-            core.quit()
+        else:  # keep the original / more general code here
+            settings_dialog = gui.Dlg(title=u'Beállítások')
+            settings_dialog.addText('')
+            settings_dialog.addField(u'Nem', choices=["férfi", "nő", "más"])
+            settings_dialog.addField(u'Életkor', "25")
+
+            epoch_number = 0
+            for i in range(self.settings.numsessions):
+                for j in range(self.settings.epochs[i]):
+                    epoch_number += 1
+                    if self.settings.asrt_types[epoch_number] == "noASRT":
+                        settings_dialog.addFixedField(u'Epoch ' + str(epoch_number) + ' PCode', 'noPattern')
+                    else:
+                        settings_dialog.addField(u'Epoch ' + str(epoch_number) + ' PCode', choices=[
+                            '1st', '2nd', '3rd', '4th', '5th', '6th'])
+
+            returned_data = settings_dialog.show()
+            if settings_dialog.OK:
+                self.PCodes = {}
+
+                subject_sex = returned_data[0]
+                subject_age = returned_data[1]
+                for i in range(epoch_number):
+                    PCode = returned_data[i + 2]
+                    if PCode == '1st':
+                        self.PCodes[i + 1] = '1st - 1234'
+                    elif PCode == '2nd':
+                        self.PCodes[i + 1] = '2nd - 1243'
+                    elif PCode == '3rd':
+                        self.PCodes[i + 1] = '3rd - 1324'
+                    elif PCode == '4th':
+                        self.PCodes[i + 1] = '4th - 1342'
+                    elif PCode == '5th':
+                        self.PCodes[i + 1] = '5th - 1423'
+                    elif PCode == '6th':
+                        self.PCodes[i + 1] = '6th - 1432'
+                    else:
+                        self.PCodes[i + 1] = 'noPattern'
+
+                index = self.settings.numsessions
+
+                if subject_sex == "férfi":
+                    self.subject_sex = "male"
+                elif subject_sex == "nő":
+                    self.subject_sex = "female"
+                else:
+                    self.subject_sex = "other"
+
+                try:
+                    subject_age = int(subject_age)
+                    self.subject_age = str(subject_age)
+                except:
+                    core.quit()
+                return self.PCodes
+            else:
+                core.quit()
 
     def which_code(self, epoch_number):
         """Convert sessions pattern code to a raw code containing only the series of stimulus numbers."""
@@ -1618,21 +1703,22 @@ class Experiment:
 
         for epoch in range(1, self.settings.epochN + 1):
 
-            if all_trial_Nr + 1 in sessionsstarts:
-                current_trial_num = 0
+            if self.project_ET_zero:
+                if all_trial_Nr + 1 in sessionsstarts:
+                    current_trial_num = 0
 
-                for i in range(self.settings.validation_trialN):
-                    current_trial_num += 1
+                    for i in range(self.settings.validation_trialN):
+                        current_trial_num += 1
 
-                    all_trial_Nr += 1
-                    asrt_type = self.settings.asrt_types[epoch]
+                        all_trial_Nr += 1
+                        asrt_type = self.settings.asrt_types[epoch]
 
-                    current_stim = random.choice([1, 2, 3, 4])
-                    self.stimlist[all_trial_Nr] = current_stim
-                    self.stimpr[all_trial_Nr] = "random"
-                    self.stimtrial[all_trial_Nr] = current_trial_num
-                    self.stimblock[all_trial_Nr] = 0
-                    self.stimepoch[all_trial_Nr] = epoch
+                        current_stim = random.choice([1, 2, 3, 4])
+                        self.stimlist[all_trial_Nr] = current_stim
+                        self.stimpr[all_trial_Nr] = "random"
+                        self.stimtrial[all_trial_Nr] = current_trial_num
+                        self.stimblock[all_trial_Nr] = 0
+                        self.stimepoch[all_trial_Nr] = epoch
 
             for block in range(1, self.settings.block_in_epochN + 1):
                 block_num += 1
@@ -2269,15 +2355,24 @@ class Experiment:
                     # continue eye-tracking
                     self.eye_tracker.subscribe_to(tobii.EYETRACKER_GAZE_DATA, self.eye_data_callback, as_dictionary=True)
 
-                validation_block = self.stimblock[self.last_N - 1] == 0
-                if validation_block:
-                    whatnow = self.show_feedback_ET_validation(RT_all_list, N == self.end_at[N - 1])
-                    if whatnow == 'quit':
-                        index = self.settings.get_block_starts().index(N)
-                        self.last_N = self.settings.get_block_starts()[index - 1] - 1
-                self.person_data.save_person_settings(self)
-                if not validation_block:
-                    whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
+                if self.project_ET_zero:
+                    validation_block = self.stimblock[self.last_N - 1] == 0
+                    if validation_block:
+                        whatnow = self.show_feedback_ET_validation(RT_all_list, N == self.end_at[N - 1])
+                        if whatnow == 'quit':
+                            index = self.settings.get_block_starts().index(N)
+                            self.last_N = self.settings.get_block_starts()[index - 1] - 1
+                    self.person_data.save_person_settings(self)
+                    if not validation_block:
+                        whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
+
+                else:  # keep original code
+                    self.person_data.save_person_settings(self)
+                    if self.settings.experiment_type == 'reaction-time':
+                        whatnow = self.show_feedback_RT(N, number_of_patterns, patternERR, responses_in_block,
+                                                        accs_in_block, RT_all_list, RT_pattern_list)
+                    else:
+                        whatnow = self.show_feedback_ET(RT_all_list, N == self.end_at[N - 1])
 
                 if whatnow == 'quit':
                     if N >= 1:
@@ -2581,7 +2676,7 @@ class Experiment:
         # load experiment settings if exist or ask the user to specify them
         all_settings_file_path = os.path.join(self.workdir_path, "settings", "settings")
         reminder_file_path = os.path.join(self.workdir_path, "settings", "settings_reminder.txt")
-        self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path)
+        self.settings = ExperimentSettings(all_settings_file_path, reminder_file_path, self.project_ET_zero)
         self.all_settings_def()
 
         # specify predefined dictionaries
