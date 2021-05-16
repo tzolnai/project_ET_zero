@@ -19,6 +19,7 @@
 import os
 import pandas
 import numpy
+import math
 
 def toFloat(data):
     return float(data.replace(",", "."))
@@ -41,7 +42,7 @@ def computeBinocularDistanceImpl(input):
             if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
                 X_distance = abs(toFloat(left_gaze_data_X_PCMCS[i]) - toFloat(right_gaze_data_X_PCMCS[i]))
                 Y_distance = abs(toFloat(left_gaze_data_Y_PCMCS[i]) - toFloat(right_gaze_data_Y_PCMCS[i]))
-                binocular_distance = (X_distance + Y_distance) / 2.0
+                binocular_distance = math.sqrt(pow(X_distance, 2) + pow(Y_distance, 2))
             
             if binocular_distance > 0.0:
                 all_binocular_distances.append(binocular_distance)
