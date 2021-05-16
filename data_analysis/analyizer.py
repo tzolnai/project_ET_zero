@@ -125,6 +125,12 @@ def compute_binocular_distance(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'binocular_distance_data.txt')
     cbd.computeBinocularDistance(input_dir, output_file)
 
+def compute_extreme_RT(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'extreme_RT_averages.txt')
+    cert.computeExtremeRTAverages(input_dir, output_file)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("You need to specify an input folder for raw data files.")
