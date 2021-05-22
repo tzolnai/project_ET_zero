@@ -30,6 +30,9 @@ import compute_anticipatory as ca
 import compute_missing_data_ratio as cmd
 import compute_distance as cd
 import compute_binocular_distance as cbd
+import compute_extreme_RT as cert
+
+gFilter = False
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -41,12 +44,26 @@ def setupOutputDir(dir_path):
         print("Could not make the output folder: " + dir_path)
         exit(1)
 
+def filter_subject(subject):
+    if gFilter:
+        return int(subject) in [47, # eye-screen distance (50,5 cm), missing data ratio (21,22%)
+                                39, # missing data ratio (19,73%)
+                                14, # missing data ratio (22,18%)
+                                17, # eye-eye distance (2,07 cm)
+                                27, # eye-eye distance (1,88 cm)
+                                ]
+    else:
+        return False
+
 def compute_trial_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
     for root, dirs, files in os.walk(input_dir):
         for subject_dir in dirs:
             if subject_dir.startswith('.'):
+                continue
+
+            if filter_subject(subject_dir):
                 continue
 
             raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
@@ -132,7 +149,7 @@ def compute_extreme_RT(input_dir, output_dir):
     cert.computeExtremeRTAverages(input_dir, output_file)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("You need to specify an input folder for raw data files.")
         exit(1)
 
@@ -140,49 +157,58 @@ if __name__ == "__main__":
         print("The passed first parameter should be a valid directory path: " + sys.argv[1])
         exit(1)
 
+    if len(sys.argv) == 3 and sys.argv[2] == "filtered":
+        gFilter = True
+    else:
+        gFilter = False
+
     script_dir = os.path.dirname(os.path.realpath(__file__))
     trial_data_dir = os.path.join(script_dir, 'data', 'trial_data')
 
-    #compute_trial_data(sys.argv[1], trial_data_dir)
+    compute_trial_data(sys.argv[1], trial_data_dir)
     
     extended_trial_data_dir = os.path.join(script_dir, 'data', 'trial_data_extended')
 
-    #extend_trial_data(trial_data_dir, extended_trial_data_dir)
+    extend_trial_data(trial_data_dir, extended_trial_data_dir)
 
     implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
 
-    #compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
+    compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
     sequence_learning_dir = os.path.join(script_dir, 'data', 'sequence_learning')
 
-    #compute_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
+    compute_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
 
     statistical_learning_dir = os.path.join(script_dir, 'data', 'statistical_learning')
 
-    #compute_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
+    compute_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
 
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
-    #compute_interference_data(extended_trial_data_dir, interference_dir)
+    compute_interference_data(extended_trial_data_dir, interference_dir)
 
     jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
-    #compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+    compute_jacobi_data(sys.argv[1], jacobi_result_dir)
 
-    #compute_jacobi_filter(sys.argv[1], jacobi_result_dir)
+    compute_jacobi_filter(sys.argv[1], jacobi_result_dir)
 
     anticipatory_dir = os.path.join(script_dir, 'data', 'anticipatory_movements')
 
-    #compute_anticipatory_data(extended_trial_data_dir, anticipatory_dir)
+    compute_anticipatory_data(extended_trial_data_dir, anticipatory_dir)
 
     missing_data_dir = os.path.join(script_dir, 'data', 'missing_data')
 
-    #compute_missing_data_ratio(sys.argv[1], missing_data_dir)
+    compute_missing_data_ratio(sys.argv[1], missing_data_dir)
 
     distance_dir = os.path.join(script_dir, 'data', 'distance_data')
 
-    #compute_distance(sys.argv[1], distance_dir)
+    compute_distance(sys.argv[1], distance_dir)
 
     binocular_distance_dir = os.path.join(script_dir, 'data', 'binocular_distance_data')
 
     compute_binocular_distance(sys.argv[1], binocular_distance_dir)
+
+    extreme_RT_dir = os.path.join(script_dir, 'data', 'extreme_RT_data')
+
+    compute_extreme_RT(extended_trial_data_dir, extreme_RT_dir)

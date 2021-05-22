@@ -20,6 +20,7 @@ import os
 import pandas
 import statistics
 import copy
+import analyizer
 
 all_triplet_count = 88
 
@@ -81,6 +82,9 @@ def computeJacobiTestData(input_dir, output_file):
             if subject.startswith('.'):
                 continue
 
+            if analyizer.filter_subject(subject):
+                continue
+
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
             inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path)
             inclusion_trill_count, exclusion_trill_count = computeTrillFrequencies(jacobi_output_path)
@@ -134,6 +138,9 @@ def computeJacobiFilterCriteria(input_dir, output_file):
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
+                continue
+
+            if analyizer.filter_subject(subject):
                 continue
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
