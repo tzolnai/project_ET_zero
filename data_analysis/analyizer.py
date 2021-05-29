@@ -26,6 +26,7 @@ import validate_trial_data as vtd
 import extend_data as ed
 import validate_extended_data as ved
 import compute_learning as cl
+import validate_learning as vl
 import compute_interference as ci
 import compute_jacobi as cj
 import compute_anticipatory as ca
@@ -119,17 +120,32 @@ def compute_implicit_learning(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'implicit_learning.txt')
     cl.computeImplicitLearning(input_dir, output_file)
 
+def validate_implicit_learning(input_dir, output_dir):
+
+    output_file = os.path.join(output_dir, 'implicit_learning.txt')
+    vl.validateImplicitLearning(input_dir, output_file)
+
 def compute_sequence_learning(input_dir, output_dir):
     setupOutputDir(output_dir)
 
     output_file = os.path.join(output_dir, 'sequence_learning.txt')
     cl.computeSequenceLearning(input_dir, output_file)
 
+def validate_sequence_learning(input_dir, output_dir):
+
+    output_file = os.path.join(output_dir, 'sequence_learning.txt')
+    vl.validateSequenceLearning(input_dir, output_file)
+
 def compute_statistical_learning(input_dir, output_dir):
     setupOutputDir(output_dir)
 
     output_file = os.path.join(output_dir, 'statistical_learning.txt')
     cl.computeStatisticalLearning(input_dir, output_file)
+
+def validate_statistical_learning(input_dir, output_dir):
+
+    output_file = os.path.join(output_dir, 'statistical_learning.txt')
+    vl.validateStatisticalLearning(input_dir, output_file)
 
 def compute_interference_data(input_dir, output_dir):
     setupOutputDir(output_dir)
@@ -209,13 +225,20 @@ if __name__ == "__main__":
 
     compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
+
+    validate_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
+
     sequence_learning_dir = os.path.join(script_dir, 'data', 'sequence_learning')
 
     compute_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
 
+    validate_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
+
     statistical_learning_dir = os.path.join(script_dir, 'data', 'statistical_learning')
 
     compute_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
+
+    validate_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
 
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
