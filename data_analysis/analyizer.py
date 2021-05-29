@@ -22,6 +22,7 @@ import shutil
 import time
 
 import calc_trial_data as ctd
+import validate_trial_data as vtd
 import extend_data as ed
 import compute_learning as cl
 import compute_interference as ci
@@ -66,9 +67,26 @@ def compute_trial_data(input_dir, output_dir):
             if filter_subject(subject_dir):
                 continue
 
+            print("Compute RT and anticipatory eye-movements data for subject: " + subject_dir)
             raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
             RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.txt')
             ctd.computeTrialData(raw_data_path, RT_data_path)
+
+        break
+
+def validate_trial_data(input_dir, output_dir):
+    for root, dirs, files in os.walk(input_dir):
+        for subject_dir in dirs:
+            if subject_dir.startswith('.'):
+                continue
+
+            if filter_subject(subject_dir):
+                continue
+
+            print("Validate RT and anticipatory eye-movements data for subject: " + subject_dir)
+            raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
+            RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.txt')
+            vtd.validateTrialData(raw_data_path, RT_data_path)
 
         break
 
@@ -166,6 +184,8 @@ if __name__ == "__main__":
     trial_data_dir = os.path.join(script_dir, 'data', 'trial_data')
 
     compute_trial_data(sys.argv[1], trial_data_dir)
+
+    validate_trial_data(sys.argv[1], trial_data_dir)
     
     extended_trial_data_dir = os.path.join(script_dir, 'data', 'trial_data_extended')
 
