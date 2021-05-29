@@ -28,6 +28,7 @@ import validate_extended_data as ved
 import compute_learning as cl
 import validate_learning as vl
 import compute_interference as ci
+import validate_interference as vi
 import compute_jacobi as cj
 import compute_anticipatory as ca
 import compute_missing_data_ratio as cmd
@@ -153,6 +154,10 @@ def compute_interference_data(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'interference.txt')
     ci.computeInterferenceData(input_dir, output_file)
 
+def validate_interference_data(input_dir, output_dir):
+    output_file = os.path.join(output_dir, 'interference.txt')
+    vi.validateInterferenceData(input_dir, output_file)
+
 def compute_jacobi_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
@@ -243,6 +248,8 @@ if __name__ == "__main__":
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
     compute_interference_data(extended_trial_data_dir, interference_dir)
+
+    validate_interference_data(extended_trial_data_dir, interference_dir)
 
     jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
