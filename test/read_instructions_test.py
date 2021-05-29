@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#    Copyright (C) <2019>  <Tamás Zolnai>    <zolnaitamas2000@gmail.com>
+#    Copyright (C) <2019-2021>  <Tamás Zolnai>    <zolnaitamas2000@gmail.com>
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
