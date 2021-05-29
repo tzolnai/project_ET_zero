@@ -47,13 +47,14 @@ def computeTrillColumn(data_table):
 def computeHighLowBasedOnLearningSequence(data_table):
     high_low_column = []
     stimulus_column = data_table["stimulus"]
+    trial_column = data_table["trial"]
 
     # get the learning sequence
     learning_sequence = data_table["PCode"][5 * 82]
     learning_sequence += learning_sequence[0]
 
     for i in range(len(stimulus_column)):
-        if i > 1:
+        if trial_column[i] > 2:
             if (str(stimulus_column[i - 2]) + str(stimulus_column[i])) in learning_sequence:
                 high_low_column.append('high')
             else:
