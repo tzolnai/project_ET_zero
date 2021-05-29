@@ -34,9 +34,10 @@ def computeRepetitionColumn(data_table):
 def computeTrillColumn(data_table):
     trill_column = []
     stimulus_column = data_table["stimulus"]
+    trial_column = data_table["trial"]
 
     for i in range(len(stimulus_column)):
-        if i > 1 and stimulus_column[i] == stimulus_column[i - 2]:
+        if trial_column[i] > 2 and stimulus_column[i] == stimulus_column[i - 2]:
             trill_column.append(True)
         else:
             trill_column.append(False)
