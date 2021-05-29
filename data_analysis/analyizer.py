@@ -50,6 +50,7 @@ def setupOutputDir(dir_path):
         exit(1)
 
 def filter_subject(subject):
+    # note: 4 additinal subject were filtered out on site (failed on calibration criteria)
     if gFilter:
         return int(subject) in [47, # eye-screen distance (50,5 cm), missing data ratio (21,22%)
                                 39, # missing data ratio (19,73%)
@@ -227,14 +228,12 @@ if __name__ == "__main__":
     extended_trial_data_dir = os.path.join(script_dir, 'data', 'trial_data_extended')
 
     extend_trial_data(trial_data_dir, extended_trial_data_dir)
-
+    
+    validate_extended_trial_data(extended_trial_data_dir)
 
     implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
 
-    validate_extended_trial_data(extended_trial_data_dir)
-
     compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
-
 
     validate_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
