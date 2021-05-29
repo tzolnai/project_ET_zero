@@ -24,6 +24,7 @@ import time
 import calc_trial_data as ctd
 import validate_trial_data as vtd
 import extend_data as ed
+import validate_extended_data as ved
 import compute_learning as cl
 import compute_interference as ci
 import compute_jacobi as cj
@@ -99,6 +100,16 @@ def extend_trial_data(input_dir, output_dir):
             input_file = os.path.join(input_dir, file)
             output_file = os.path.join(output_dir, os.path.splitext(file)[0] + '_extended.txt')
             ed.extendTrialData(input_file, output_file)
+
+        break
+
+def validate_extended_trial_data(input_dir):
+
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+
+            input_file = os.path.join(input_dir, file)
+            ved.validateExtendedTrialData(input_file)
 
         break
 
@@ -191,7 +202,10 @@ if __name__ == "__main__":
 
     extend_trial_data(trial_data_dir, extended_trial_data_dir)
 
+
     implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
+
+    validate_extended_trial_data(extended_trial_data_dir)
 
     compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
