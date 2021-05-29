@@ -21,9 +21,10 @@ import pandas
 def computeRepetitionColumn(data_table):
     repetition_column = []
     stimulus_column = data_table["stimulus"]
+    trial_column = data_table["trial"]
 
     for i in range(len(stimulus_column)):
-        if i > 0 and stimulus_column[i] == stimulus_column[i - 1]:
+        if trial_column[i] > 1 and stimulus_column[i] == stimulus_column[i - 1]:
             repetition_column.append(True)
         else:
             repetition_column.append(False)
