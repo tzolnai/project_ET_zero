@@ -51,11 +51,15 @@ def setupOutputDir(dir_path):
         exit(1)
 
 def filter_subject(subject):
-    # note: 4 additinal subject were filtered out on site (failed on calibration criteria)
+    # note_1: 4 additinal subjects were filtered out on site (failed on calibration validation)
+    # note_2: we use 30% as an upper limit for missing data ratio
+    # the biggest missing data ratios are the following:
+    #   subject 14: 22,18%
+    #   subject 47: 21,22%
+    #   subject 39: 19,73%
+
     if gFilter:
-        return int(subject) in [47, # eye-screen distance (50,5 cm), missing data ratio (21,22%)
-                                39, # missing data ratio (19,73%)
-                                14, # missing data ratio (22,18%)
+        return int(subject) in [47, # eye-screen distance (50,5 cm)
                                 17, # eye-eye distance (2,07 cm)
                                 27, # eye-eye distance (1,88 cm)
                                 ]
