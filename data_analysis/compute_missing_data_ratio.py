@@ -36,21 +36,62 @@ def computeMissingDataRatioImpl(input):
 
     return missing_data_count / all_data_count * 100.0
 
+def computeNonInterpolableMissingDataRatio(input):
+    data_table = pandas.read_csv(input, sep='\t')
+
+    trial_column = data_table["trial"]
+    left_gaze_validity = data_table["left_gaze_validity"]
+    right_gaze_validity = data_table["right_gaze_validity"]
+
+    all_data_count = 0
+    missing_data_count = 0
+    missing_data_gap_size = 0
+    for i in range(len(trial_column)):
+        if int(trial_column[i]) > 2:
+            all_data_count += 1
+            if not bool(left_gaze_validity[i]) and not bool(right_gaze_validity[i]):
+                missing_data_gap_size = 1
+
+                # find missing data before
+                for j in range(i - 1, -1, -1):
+                    if not bool(left_gaze_validity[j]) and not bool(right_gaze_validity[j]):
+                        missing_data_gap_size += 1
+                    else:
+                        break
+
+                # find missing data after
+                for j in range(i + 1, len(trial_column)):
+                    if not bool(left_gaze_validity[j]) and not bool(right_gaze_validity[j]):
+                        missing_data_gap_size += 1
+                    else:
+                        break
+
+                if missing_data_gap_size > 4:
+                    missing_data_count += 1
+
+    return missing_data_count / all_data_count * 100.0
+
 def computeMissingDataRatio(input_dir, output_file):
 
     missing_data_ratios = []
+    non_interpolable_missing_data_ratios = []
     subjects = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
                 continue
 
+            print("Compute missing data ratio for subject: " + subject)
             subjects.append(subject)
             input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
             result = computeMissingDataRatioImpl(input_file)
             missing_data_ratios.append(result)
+            result = computeNonInterpolableMissingDataRatio(input_file)
+            non_interpolable_missing_data_ratios.append(result)
 
         break
 
-    missing_data = pandas.DataFrame({'subject' : subjects, 'missing_data_ratio' : missing_data_ratios})
+    missing_data = pandas.DataFrame({'subject' : subjects,
+                                     'missing_data_ratio' : missing_data_ratios,
+                                     'non_interpolable_missing_data_ratio' : non_interpolable_missing_data_ratios})
     missing_data.to_csv(output_file, sep='\t', index=False)
