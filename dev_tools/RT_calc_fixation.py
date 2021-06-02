@@ -89,7 +89,7 @@ def convert(raw_file_name, new_file_name, experiment):
     experiment.all_settings_def()
 
     # find out the current subject
-    experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "")
+    experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
 
     # init eye data
     experiment.gaze_data_list.clear()
@@ -136,7 +136,7 @@ def convert(raw_file_name, new_file_name, experiment):
         if line.split('\t')[trial_phase_pos] == "stimulus_on_screen":
             global keys
             keys = [[], ['q']]
-            response = experiment.wait_for_eye_response(dict_pos[current_stimulus], experiment.settings.stim_fixation_threshold)
+            response = experiment.wait_for_eye_response([dict_pos[current_stimulus]], experiment.settings.stim_fixation_threshold)
             if experiment.main_loop_lock.locked():
                 experiment.main_loop_lock.release()
             keys = []
