@@ -37,6 +37,8 @@ import compute_missing_data_ratio as cmd
 import compute_distance as cd
 import compute_binocular_distance as cbd
 import compute_extreme_RT as cert
+import RT_calc_fixation as rtcf
+import compute_RT_variability as crtv
 
 gFilter = False
 
@@ -62,6 +64,9 @@ def filter_subject(subject):
         return int(subject) in [47, # eye-screen distance (50,5 cm)
                                 17, # eye-eye distance (2,07 cm)
                                 27, # eye-eye distance (1,88 cm)
+                                39,
+                                14,
+                                44
                                 ]
     else:
         return False
@@ -81,6 +86,24 @@ def compute_trial_data(input_dir, output_dir):
             raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
             RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.txt')
             ctd.computeTrialData(raw_data_path, RT_data_path)
+
+        break
+
+def compute_RT_data(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    for root, dirs, files in os.walk(input_dir):
+        for subject_dir in dirs:
+            if subject_dir.startswith('.'):
+                continue
+
+            if filter_subject(subject_dir):
+                continue
+
+            print("Compute RT data for subject: " + subject_dir)
+            raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
+            RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.txt')
+            rtcf.computeRTData(raw_data_path, RT_data_path)
 
         break
 
@@ -213,6 +236,12 @@ def compute_extreme_RT(input_dir, output_dir):
 
     output_file = os.path.join(output_dir, 'extreme_RT_averages.txt')
     cert.computeExtremeRTAverages(input_dir, output_file)
+
+def compute_RT_variability(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'RT_variability.txt')
+    crtv.computeRTVariability(input_dir, output_file)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
