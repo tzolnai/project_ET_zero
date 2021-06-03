@@ -87,6 +87,7 @@ def convert(raw_file_name, new_file_name, experiment):
     reminder_file_path = os.path.join(experiment.workdir_path, "settings", "settings_reminder.txt")
     experiment.settings = asrt.ExperimentSettings(all_settings_file_path, reminder_file_path, experiment.project_ET_zero)
     experiment.all_settings_def()
+    experiment.settings.dispersion_threshold = 3.5
 
     # find out the current subject
     experiment.person_data = asrt.PersonDataHandler("", "", "", "", "", "", "", "")
@@ -187,6 +188,11 @@ def find_variable_str_index(string, variable_pos):
         begin_index = string.find("\t", begin_index) + 1
     return string.find("\t", begin_index)
 
+def computeRTData(raw_data_path, RT_data_path):
+    thispath = os.path.split(os.path.abspath(__file__))[0]
+    thispath = os.path.split(thispath)[0]
+    experiment = asrt.Experiment(thispath, True)
+    convert(raw_data_path, RT_data_path, experiment)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
