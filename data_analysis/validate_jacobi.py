@@ -18,9 +18,8 @@
 
 import os
 import pandas
-import statistics
-import copy
 import analyizer
+from utils import strToFloat, floatToStr
 
 all_triplet_count = 88
 
@@ -58,10 +57,10 @@ def checkHighRatio(output_file, subject, inclusion_non_high_ratio, exclusion_non
         if row["subject"] == int(subject):
             subject_row = row
 
-    inclusion_high_ratio = subject_row["inclusion_high_ratio"]
+    inclusion_high_ratio = strToFloat(subject_row["inclusion_high_ratio"])
     assert(abs(100.0 - (inclusion_high_ratio + inclusion_non_high_ratio) < 0.001))
 
-    exclusion_high_ratio = subject_row["exclusion_high_ratio"]
+    exclusion_high_ratio = strToFloat(subject_row["exclusion_high_ratio"])
     assert(abs(100.0 - (exclusion_high_ratio + exclusion_non_high_ratio) < 0.001))
 
 def validateJacobiTestData(input_dir, output_file):

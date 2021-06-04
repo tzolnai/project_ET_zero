@@ -18,7 +18,7 @@
 
 import os
 import pandas
-import analyizer
+from utils import strToFloat, floatToStr
 
 def computeMissingDataRatioImpl(input):
     data_table = pandas.read_csv(input, sep='\t')
@@ -54,7 +54,6 @@ def computeMissingDataRatioImpl(input):
 def computeMissingDataRatio(input_dir, output_file):
 
     missing_data_ratios = []
-    non_interpolable_missing_data_ratios = []
     subjects = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
@@ -66,7 +65,7 @@ def computeMissingDataRatio(input_dir, output_file):
 
             input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
             result = computeMissingDataRatioImpl(input_file)
-            missing_data_ratios.append(analyizer.convertFromFloat(result))
+            missing_data_ratios.append(floatToStr(result))
 
         break
     missing_data = pandas.DataFrame({'subject' : subjects, 'missing_data_ratio' : missing_data_ratios})

@@ -50,12 +50,6 @@ def setupOutputDir(dir_path):
         print("Could not make the output folder: " + dir_path)
         exit(1)
 
-def convertToFloat(data):
-    return float(str(data).replace(",", "."))
-
-def convertFromFloat(data):
-    return str(data).replace(".", ",")
-
 def filter_subject(subject):
     # note_1: 4 additinal subjects were filtered out on site (failed on calibration validation)
 

@@ -18,9 +18,9 @@
 
 import os
 import pandas
-import statistics
 import copy
 import analyizer
+from utils import strToFloat, floatToStr
 
 all_triplet_count = 88
 
@@ -85,15 +85,17 @@ def computeJacobiTestData(input_dir, output_file):
             if analyizer.filter_subject(subject):
                 continue
 
+            print("Compute jacobi data for subject: " + str(subject))
+
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
             inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path)
             inclusion_trill_count, exclusion_trill_count = computeTrillFrequencies(jacobi_output_path)
-            jacobi_data.loc[len(jacobi_data)] = [subject, inclusion_high_count / all_triplet_count * 100,
-                                                          exclusion_high_count / all_triplet_count * 100,
-                                                          inclusion_trill_count / all_triplet_count * 100,
-                                                          exclusion_trill_count / all_triplet_count * 100,
-                                                          inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100,
-                                                          exclusion_high_count / (all_triplet_count - exclusion_trill_count) * 100]
+            jacobi_data.loc[len(jacobi_data)] = [subject, floatToStr(inclusion_high_count / all_triplet_count * 100),
+                                                          floatToStr(exclusion_high_count / all_triplet_count * 100),
+                                                          floatToStr(inclusion_trill_count / all_triplet_count * 100),
+                                                          floatToStr(exclusion_trill_count / all_triplet_count * 100),
+                                                          floatToStr(inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100),
+                                                          floatToStr(exclusion_high_count / (all_triplet_count - exclusion_trill_count) * 100)]
 
         break
 
@@ -142,6 +144,8 @@ def computeJacobiFilterCriteria(input_dir, output_file):
 
             if analyizer.filter_subject(subject):
                 continue
+
+            print("Compute jacobi filter data for subject: " + str(subject))
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
             response_counts_inclusion, response_counts_exclusion = computeStimFrequencies(jacobi_output_path)

@@ -18,7 +18,7 @@
 
 import os
 import pandas
-import statistics
+from utils import strToFloat, floatToStr
 
 def computeAnticipDataForOneSubject(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -36,8 +36,9 @@ def computeAnticipDataForOneSubject(input_file):
         # end of the epoch -> calc summary data
         if i == len(anticip_column) or current_epoch != epoch_column[i]:
             assert(correct_aniticip <= all_aniticip)
-            anticip_counts.append(all_aniticip)
-            correct_anticip_ratios.append(correct_aniticip / all_aniticip * 100.0)
+            anticip_counts.append(floatToStr(all_aniticip))
+            correct_ratio = correct_aniticip / all_aniticip * 100.0
+            correct_anticip_ratios.append(floatToStr(correct_ratio))
             all_aniticip = 0.0
             correct_aniticip = 0.0
 
@@ -65,6 +66,8 @@ def computeAnticipatoryData(input_dir, output_file):
 
             input_file = os.path.join(input_dir, file)
             subject = int(file.split('_')[1])
+
+            print("Compute anticipatory data for subject: " + str(subject))
 
             anticip_counts, correct_anticip_ratios = computeAnticipDataForOneSubject(input_file)
             anticip_data.loc[len(anticip_data)] = [subject] + anticip_counts + correct_anticip_ratios

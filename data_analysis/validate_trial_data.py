@@ -19,7 +19,7 @@
 import os
 import sys
 import pandas
-import analyizer
+from utils import strToFloat, floatToStr
 
 def checkRTOutput(trial_file_name, RT_upper_limits):
     trial_data = pandas.read_csv(trial_file_name, sep='\t')
@@ -27,7 +27,7 @@ def checkRTOutput(trial_file_name, RT_upper_limits):
     assert(len(trial_data.index) == len(RT_upper_limits))
 
     for index, row in trial_data.iterrows():
-        actual_RT = analyizer.convertToFloat(row["RT (ms)"])
+        actual_RT = strToFloat(row["RT (ms)"])
         assert(actual_RT < (RT_upper_limits[index] - 350.0))
 
 def calcRTUpperLimits(raw_file_name):
@@ -62,10 +62,10 @@ def getAOI(row):
     left_gaze_validity = bool(row['left_gaze_validity'])
     right_gaze_validity = bool(row['right_gaze_validity'])
 
-    left_gaze_X = analyizer.convertToFloat(row['left_gaze_data_X_ADCS'])
-    left_gaze_Y = analyizer.convertToFloat(row['left_gaze_data_Y_ADCS'])
-    right_gaze_X = analyizer.convertToFloat(row['right_gaze_data_X_ADCS'])
-    right_gaze_Y = analyizer.convertToFloat(row['right_gaze_data_Y_ADCS'])
+    left_gaze_X = strToFloat(row['left_gaze_data_X_ADCS'])
+    left_gaze_Y = strToFloat(row['left_gaze_data_Y_ADCS'])
+    right_gaze_X = strToFloat(row['right_gaze_data_X_ADCS'])
+    right_gaze_Y = strToFloat(row['right_gaze_data_Y_ADCS'])
 
     if left_gaze_validity and right_gaze_validity:
         X = (left_gaze_X + right_gaze_X) / 2.0

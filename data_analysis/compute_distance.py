@@ -19,14 +19,13 @@
 import os
 import pandas
 import numpy
-
-def toFloat(data):
-    return float(data.replace(",", "."))
+from utils import strToFloat, floatToStr
 
 def computeDistanceImpl(input):
     data_table = pandas.read_csv(input, sep='\t')
 
     trial_column = data_table["trial"]
+    block_column = data_table["block"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
     left_eye_distance = data_table["left_eye_distance"]
@@ -34,14 +33,14 @@ def computeDistanceImpl(input):
 
     all_distances = []
     for i in range(len(trial_column)):
-        if int(trial_column[i]) > 2:
+        if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
             distance = -1.0
             if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
-                distance = (toFloat(left_eye_distance[i]) + toFloat(right_eye_distance[i])) / 2.0
+                distance = (strToFloat(left_eye_distance[i]) + strToFloat(right_eye_distance[i])) / 2.0
             elif bool(left_gaze_validity[i]):
-                distance = toFloat(left_eye_distance[i])
+                distance = strToFloat(left_eye_distance[i])
             elif bool(right_gaze_validity[i]):
-                distance = toFloat(right_eye_distance[i])
+                distance = strToFloat(right_eye_distance[i])
             
             if distance > 0.0:
                 all_distances.append(distance)
@@ -57,10 +56,12 @@ def computeDistance(input_dir, output_file):
             if subject.startswith('.'):
                 continue
 
+            print("Compute eye-screen distance data for subject: " + subject)
+
             subjects.append(subject)
             input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
             result = computeDistanceImpl(input_file)
-            median_ditances.append(result)
+            median_ditances.append(floatToStr(result))
 
         break
 

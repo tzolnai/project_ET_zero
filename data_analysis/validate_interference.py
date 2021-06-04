@@ -18,7 +18,7 @@
 
 import os
 import pandas
-import statistics
+from utils import strToFloat, floatToStr
 
 def computeMinMaxOneSubject(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -43,7 +43,7 @@ def computeMinMaxOneSubject(input_file):
         # we ignore the first two trials, repetitions and trills
         if (epoch_column[i] == 7 and trial_column[i] > 2
            and repetition_column[i] == False and trill_column[i] == False):
-            RT = float(RT_column[i].replace(",", "."))
+            RT = strToFloat(RT_column[i])
             if trial_type_column[i] == 'high' and trial_type_interfer_column[i] == 'low':
                 if high_low_max < RT:
                     high_low_max = RT
@@ -71,15 +71,15 @@ def checkEpochMedian(input_file, subject, high_low_max, high_low_min, low_low_ma
         if row["subject"] == subject:
             subject_row = row
 
-    high_low_value = subject_row["epoch_7_high_low"]
+    high_low_value = strToFloat(subject_row["epoch_7_high_low"])
     assert(high_low_value < high_low_max)
     assert(high_low_value > high_low_min)
 
-    low_low_value = subject_row['epoch_7_low_low']
+    low_low_value = strToFloat(subject_row['epoch_7_low_low'])
     assert(low_low_value < low_low_max)
     assert(low_low_value > low_low_min)
 
-    low_high_value = subject_row['epoch_7_low_high']
+    low_high_value = strToFloat(subject_row['epoch_7_low_high'])
     assert(low_high_value < low_high_max)
     assert(low_high_value > low_high_min)
 

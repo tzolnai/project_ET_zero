@@ -19,6 +19,7 @@
 import os
 import pandas
 import numpy
+from utils import strToFloat, floatToStr
 
 def computeAnticipDataForOneSubject(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -40,8 +41,6 @@ def computeAnticipDataForOneSubject(input_file):
     return all_aniticip, correct_anticip_ratio
 
 def checkAnticipData(output_file, subject, all_aniticip, correct_anticip_ratio_all):
-    print("Validate anticip data for subject: " + str(subject))
-
     input_data = pandas.read_csv(output_file, sep='\t')
 
     for index, row in input_data.iterrows():
@@ -52,10 +51,10 @@ def checkAnticipData(output_file, subject, all_aniticip, correct_anticip_ratio_a
     output_correct_anticip_ratios = []
     for i in range(0,8):
         anticip_count_label = "epoch_" + str(i + 1) + "_anticip_count";
-        output_all_anticip += subject_row[anticip_count_label]
+        output_all_anticip += strToFloat(subject_row[anticip_count_label])
 
         correct_anticip_ratio_label = "epoch_" + str(i + 1) + "_correct_anticip_ratio";
-        output_correct_anticip_ratios.append(subject_row[correct_anticip_ratio_label])
+        output_correct_anticip_ratios.append(strToFloat(subject_row[correct_anticip_ratio_label]))
 
     assert(output_all_anticip == all_aniticip)
     assert(abs(correct_anticip_ratio_all - numpy.median(output_correct_anticip_ratios)) < 10.0)
@@ -66,6 +65,8 @@ def validateAnticipatoryData(input_dir, output_file):
 
             input_file = os.path.join(input_dir, file)
             subject = int(file.split('_')[1])
+
+            print("Validate anticipatory data for subject: " + str(subject))
 
             all_aniticip, correct_anticip_ratio = computeAnticipDataForOneSubject(input_file)
             checkAnticipData(output_file, subject, all_aniticip, correct_anticip_ratio)

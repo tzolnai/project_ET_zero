@@ -19,6 +19,7 @@
 import os
 import pandas
 import numpy
+from utils import strToFloat, floatToStr
 
 def calcAverageExtremeRT(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -45,11 +46,11 @@ def calcAverageExtremeRT(input_file):
             current_block = block_column[i]
 
         # extreme RT means that it's bigger than 1000 ms.
-        if float(RT_column[i].replace(',','.')) > 1000.0:
+        if strToFloat(RT_column[i]) > 1000.0:
             block_extreme_RTs += 1
 
     assert(len(all_extreme_RTs) == 40) # 40 blocks
-    return str(numpy.mean(all_extreme_RTs)).replace('.',',')
+    return floatToStr(numpy.mean(all_extreme_RTs))
 
 def computeExtremeRTAverages(input_dir, output_file):
     subjects = []
@@ -62,6 +63,8 @@ def computeExtremeRTAverages(input_dir, output_file):
             # get subject ID
             subject = int(file.split('_')[1])
             subjects.append(subject)
+
+            print("Compute extreme RT data for subject: " + str(subject))
 
             averages.append(calcAverageExtremeRT(input_file))
         break

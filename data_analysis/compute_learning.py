@@ -18,7 +18,8 @@
 
 import os
 import pandas
-import statistics
+import numpy
+from utils import strToFloat, floatToStr
 
 def calcEpochMedianRTsImplicit(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -39,11 +40,11 @@ def calcEpochMedianRTsImplicit(input_file):
         # end of the epoch -> calc median for low and high trials
         if i == len(RT_column) or current_epoch != epoch_column[i]:
             assert(len(high_RT_list) > 0)
-            high_median_array.append(statistics.median(high_RT_list))
+            high_median_array.append(floatToStr(numpy.median(high_RT_list)))
             high_RT_list = []
 
             assert(len(low_RT_list) > 0)
-            low_median_array.append(statistics.median(low_RT_list))
+            low_median_array.append(floatToStr(numpy.median(low_RT_list)))
             low_RT_list = []
 
             if i == len(RT_column):
@@ -54,9 +55,9 @@ def calcEpochMedianRTsImplicit(input_file):
         # we ignore the first two trials, repetitions and trills
         if trial_column[i] > 2 and repetition_column[i] == False and trill_column[i] == False:
             if trial_type_column[i] == 'high':
-                high_RT_list.append(float(RT_column[i].replace(",", ".")))
+                high_RT_list.append(strToFloat(RT_column[i]))
             elif trial_type_column[i] == 'low':
-                low_RT_list.append(float(RT_column[i].replace(",", ".")))
+                low_RT_list.append(strToFloat(RT_column[i]))
 
     # 8 epochs
     assert(len(low_median_array) == 8)
@@ -89,11 +90,11 @@ def calcEpochMedianRTsSequence(input_file):
                 random_high_median_array.append(0)
             else:
                 assert(len(patter_high_RT_list) > 0)
-                pattern_high_median_array.append(statistics.median(patter_high_RT_list))
+                pattern_high_median_array.append(floatToStr(numpy.median(patter_high_RT_list)))
                 patter_high_RT_list = []
 
                 assert(len(random_high_RT_list) > 0)
-                random_high_median_array.append(statistics.median(random_high_RT_list))
+                random_high_median_array.append(floatToStr(numpy.median(random_high_RT_list)))
                 random_high_RT_list = []
 
             if i == len(RT_column):
@@ -104,9 +105,9 @@ def calcEpochMedianRTsSequence(input_file):
         # we ignore the first two trials, repetitions and trills
         if trial_column[i] > 2 and repetition_column[i] == False and trill_column[i] == False and trial_type_hl_column[i] == 'high':
             if trial_type_pr_column[i] == 'pattern':
-                patter_high_RT_list.append(float(RT_column[i].replace(",", ".")))
+                patter_high_RT_list.append(strToFloat(RT_column[i]))
             elif trial_type_pr_column[i] == 'random':
-                random_high_RT_list.append(float(RT_column[i].replace(",", ".")))
+                random_high_RT_list.append(strToFloat(RT_column[i]))
 
     # 8 epochs
     assert(len(pattern_high_median_array) == 8)
@@ -139,11 +140,11 @@ def calcEpochMedianRTsStatistical(input_file):
                 random_low_median_array.append(0)
             else:
                 assert(len(random_high_RT_list) > 0)
-                random_high_median_array.append(statistics.median(random_high_RT_list))
+                random_high_median_array.append(floatToStr(numpy.median(random_high_RT_list)))
                 random_high_RT_list = []
 
                 assert(len(random_low_RT_list) > 0)
-                random_low_median_array.append(statistics.median(random_low_RT_list))
+                random_low_median_array.append(floatToStr(numpy.median(random_low_RT_list)))
                 random_low_RT_list = []
 
             if i == len(RT_column):
@@ -154,9 +155,9 @@ def calcEpochMedianRTsStatistical(input_file):
         # we ignore the first two trials, repetitions and trills
         if trial_column[i] > 2 and repetition_column[i] == False and trill_column[i] == False and trial_type_pr_column[i] == 'random':
             if trial_type_hl_column[i] == 'high':
-                random_high_RT_list.append(float(RT_column[i].replace(",", ".")))
+                random_high_RT_list.append(strToFloat(RT_column[i]))
             elif trial_type_hl_column[i] == 'low':
-                random_low_RT_list.append(float(RT_column[i].replace(",", ".")))
+                random_low_RT_list.append(strToFloat(RT_column[i]))
 
     # 8 epochs
     assert(len(random_high_median_array) == 8)
@@ -185,6 +186,8 @@ def computeLearning(input_dir, output_file, type):
 
             input_file = os.path.join(input_dir, file)
             subject = int(file.split('_')[1])
+
+            print("Compute " + type + " learning for subject: " + str(subject))
 
             if type == 'implicit':
                 low_medians, high_medians = calcEpochMedianRTsImplicit(input_file)

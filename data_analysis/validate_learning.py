@@ -18,7 +18,7 @@
 
 import os
 import pandas
-import statistics
+from utils import strToFloat, floatToStr
 
 def calcEpochMinMaxRTsImplicit(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -58,7 +58,7 @@ def calcEpochMinMaxRTsImplicit(input_file):
 
         # we ignore the first two trials, repetitions and trills
         if trial_column[i] > 2 and repetition_column[i] == False and trill_column[i] == False:
-            RT = float(RT_column[i].replace(",", "."))
+            RT = strToFloat(RT_column[i])
             if trial_type_column[i] == 'high':
                 if high_max < RT:
                     high_max = RT
@@ -88,12 +88,12 @@ def checkEpochMedianImplicit(input_file, subject, high_max_array, high_min_array
 
     for i in range(0,8):
         high_column_label = "epoch_" + str(i + 1) + "_high";
-        high_value = subject_row[high_column_label]
+        high_value = strToFloat(subject_row[high_column_label])
         assert(high_value < high_max_array[i])
         assert(high_value > high_min_array[i])
 
         low_column_label = "epoch_" + str(i + 1) + "_low";
-        low_value = subject_row[low_column_label]
+        low_value = strToFloat(subject_row[low_column_label])
         assert(low_value < low_max_array[i])
         assert(low_value > low_min_array[i])
 
@@ -135,7 +135,7 @@ def calcEpochMinMaxRTsSequence(input_file):
             current_epoch = epoch_column[i]
 
         if trial_column[i] > 2 and repetition_column[i] == False and trill_column[i] == False and trial_type_hl_column[i] == 'high':
-            RT = float(RT_column[i].replace(",", "."))
+            RT = strToFloat(RT_column[i])
             if trial_type_pr_column[i] == 'pattern':
                 if pattern_high_max < RT:
                     pattern_high_max = RT
@@ -165,12 +165,12 @@ def checkEpochMedianSequence(input_file, subject, pattern_high_max_array, patter
 
     for i in [1, 2, 3, 4, 5, 7]:
         pattern_high_column_label = "epoch_" + str(i + 1) + "_pattern_high";
-        pattern_high_value = subject_row[pattern_high_column_label]
+        pattern_high_value = strToFloat(subject_row[pattern_high_column_label])
         assert(pattern_high_value < pattern_high_max_array[i])
         assert(pattern_high_value > pattern_high_min_array[i])
 
         random_high_column_label = "epoch_" + str(i + 1) + "_random_high";
-        random_high_value = subject_row[random_high_column_label]
+        random_high_value = strToFloat(subject_row[random_high_column_label])
         assert(random_high_value < random_high_max_array[i])
         assert(random_high_value > random_high_min_array[i])
 
@@ -212,7 +212,7 @@ def calcEpochMinMaxRTsStatistical(input_file):
             current_epoch = epoch_column[i]
 
         if trial_column[i] > 2 and repetition_column[i] == False and trill_column[i] == False and trial_type_pr_column[i] == 'random':
-            RT = float(RT_column[i].replace(",", "."))
+            RT = strToFloat(RT_column[i])
             if trial_type_hl_column[i] == 'high':
                 if random_high_max < RT:
                     random_high_max = RT
@@ -242,12 +242,12 @@ def checkEpochMedianStatistical(input_file, subject, random_high_max_array, rand
 
     for i in [1, 2, 3, 4, 5, 7]:
         random_high_column_label = "epoch_" + str(i + 1) + "_random_high";
-        random_high_value = subject_row[random_high_column_label]
+        random_high_value = strToFloat(subject_row[random_high_column_label])
         assert(random_high_value < random_high_max_array[i])
         assert(random_high_value > random_high_min_array[i])
 
         random_low_column_label = "epoch_" + str(i + 1) + "_random_low";
-        random_low_value = subject_row[random_low_column_label]
+        random_low_value = strToFloat(subject_row[random_low_column_label])
         assert(random_low_value < random_low_max_array[i])
         assert(random_low_value > random_low_min_array[i])
 
