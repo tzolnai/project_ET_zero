@@ -19,7 +19,7 @@
 import os
 import sys
 import pandas
-import math
+import analyizer
 
 def generateOutput(raw_file_name, new_file_name, RT_data, anticipation_data):
     # use the input data headers
@@ -76,12 +76,14 @@ def calcRTColumn(raw_file_name):
             if isinstance(previous_row, pandas.Series) and str(previous_row['block']) != "0":
                 # We calculate the elapsed time during the stimulus was on the screen.
                 if start_time_found and end_time_found:
-                    RT_data.append(str((end_time - start_time) / 1000.0).replace(".", ","))
+                    RT_ms = (end_time - start_time) / 1000.0
+                    RT_data.append(analyizer.convertFromFloat(RT_ms))
                 # if there is not endtime, then it means the software was fast enough to step
                 # on to the next trial instantly after the stimulus was hidden.
                 elif start_time_found:
                     end_time = int(previous_row['gaze_data_time_stamp'])
-                    RT_data.append(str((end_time - start_time) / 1000.0).replace(".", ","))
+                    RT_ms = (end_time - start_time) / 1000.0
+                    RT_data.append(analyizer.convertFromFloat(RT_ms))
                 else:
                     RT_data.append("0")
 
@@ -103,17 +105,14 @@ def calcRTColumn(raw_file_name):
 
     return RT_data
 
-def convertToFloat(data):
-    return float(str(data).replace(",", "."))
-
 def getAOI(row):
     left_gaze_validity = bool(row['left_gaze_validity'])
     right_gaze_validity = bool(row['right_gaze_validity'])
 
-    left_gaze_X = convertToFloat(row['left_gaze_data_X_ADCS'])
-    left_gaze_Y = convertToFloat(row['left_gaze_data_Y_ADCS'])
-    right_gaze_X = convertToFloat(row['right_gaze_data_X_ADCS'])
-    right_gaze_Y = convertToFloat(row['right_gaze_data_Y_ADCS'])
+    left_gaze_X = analyizer.convertToFloat(row['left_gaze_data_X_ADCS'])
+    left_gaze_Y = analyizer.convertToFloat(row['left_gaze_data_Y_ADCS'])
+    right_gaze_X = analyizer.convertToFloat(row['right_gaze_data_X_ADCS'])
+    right_gaze_Y = analyizer.convertToFloat(row['right_gaze_data_Y_ADCS'])
 
     if left_gaze_validity and right_gaze_validity:
         X = (left_gaze_X + right_gaze_X) / 2.0
