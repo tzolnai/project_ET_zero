@@ -52,21 +52,22 @@ def setupOutputDir(dir_path):
         print("Could not make the output folder: " + dir_path)
         exit(1)
 
+def convertToFloat(data):
+    return float(str(data).replace(",", "."))
+
+def convertFromFloat(data):
+    return str(data).replace(".", ",")
+
 def filter_subject(subject):
     # note_1: 4 additinal subjects were filtered out on site (failed on calibration validation)
-    # note_2: we use 30% as an upper limit for missing data ratio
-    # the biggest missing data ratios are the following:
-    #   subject 14: 22,18%
-    #   subject 47: 21,22%
-    #   subject 39: 19,73%
 
     if gFilter:
-        return int(subject) in [47, # eye-screen distance (50,5 cm)
+        return int(subject) in [47, # eye-screen distance (50,5 cm), maximum missing data ratio (44.76%)
                                 17, # eye-eye distance (2,07 cm)
                                 27, # eye-eye distance (1,88 cm)
-                                39,
-                                14,
-                                44
+                                39, # maximum missing data ratio (30.17%)
+                                14, # maximum missing data ratio (26.63%)
+                                44, # maximum missing data ratio (26.81%)
                                 ]
     else:
         return False

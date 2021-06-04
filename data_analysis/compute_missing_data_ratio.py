@@ -18,58 +18,38 @@
 
 import os
 import pandas
+import analyizer
 
 def computeMissingDataRatioImpl(input):
     data_table = pandas.read_csv(input, sep='\t')
 
     trial_column = data_table["trial"]
+    block_column = data_table["block"]
+    epoch_column = data_table["epoch"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
 
-    all_data_count = 0
-    missing_data_count = 0
+    epoch_all = {}
+    epoch_missing = {}
     for i in range(len(trial_column)):
-        if int(trial_column[i]) > 2:
-            all_data_count += 1
+        if int(block_column[i]) > 0:
+            current_epoch = int(epoch_column[i])
+            if current_epoch in epoch_all.keys():
+                epoch_all[current_epoch] += 1
+            else:
+                epoch_all[current_epoch] = 1
+
             if not bool(left_gaze_validity[i]) and not bool(right_gaze_validity[i]):
-                missing_data_count += 1
+                if current_epoch in epoch_missing.keys():
+                    epoch_missing[current_epoch] += 1
+                else:
+                    epoch_missing[current_epoch] = 1
 
-    return missing_data_count / all_data_count * 100.0
+    epoch_summary = {}
+    for block in epoch_all.keys():
+        epoch_summary[block] = (epoch_missing[block] / epoch_all[block]) * 100.0
 
-def computeNonInterpolableMissingDataRatio(input):
-    data_table = pandas.read_csv(input, sep='\t')
-
-    trial_column = data_table["trial"]
-    left_gaze_validity = data_table["left_gaze_validity"]
-    right_gaze_validity = data_table["right_gaze_validity"]
-
-    all_data_count = 0
-    missing_data_count = 0
-    missing_data_gap_size = 0
-    for i in range(len(trial_column)):
-        if int(trial_column[i]) > 2:
-            all_data_count += 1
-            if not bool(left_gaze_validity[i]) and not bool(right_gaze_validity[i]):
-                missing_data_gap_size = 1
-
-                # find missing data before
-                for j in range(i - 1, -1, -1):
-                    if not bool(left_gaze_validity[j]) and not bool(right_gaze_validity[j]):
-                        missing_data_gap_size += 1
-                    else:
-                        break
-
-                # find missing data after
-                for j in range(i + 1, len(trial_column)):
-                    if not bool(left_gaze_validity[j]) and not bool(right_gaze_validity[j]):
-                        missing_data_gap_size += 1
-                    else:
-                        break
-
-                if missing_data_gap_size > 4:
-                    missing_data_count += 1
-
-    return missing_data_count / all_data_count * 100.0
+    return max(epoch_summary.values())
 
 def computeMissingDataRatio(input_dir, output_file):
 
@@ -83,15 +63,11 @@ def computeMissingDataRatio(input_dir, output_file):
 
             print("Compute missing data ratio for subject: " + subject)
             subjects.append(subject)
+
             input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
             result = computeMissingDataRatioImpl(input_file)
-            missing_data_ratios.append(result)
-            result = computeNonInterpolableMissingDataRatio(input_file)
-            non_interpolable_missing_data_ratios.append(result)
+            missing_data_ratios.append(analyizer.convertFromFloat(result))
 
         break
-
-    missing_data = pandas.DataFrame({'subject' : subjects,
-                                     'missing_data_ratio' : missing_data_ratios,
-                                     'non_interpolable_missing_data_ratio' : non_interpolable_missing_data_ratios})
+    missing_data = pandas.DataFrame({'subject' : subjects, 'missing_data_ratio' : missing_data_ratios})
     missing_data.to_csv(output_file, sep='\t', index=False)
