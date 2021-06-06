@@ -36,15 +36,20 @@ def calcEpochMedianRTsImplicit(input_file):
     low_RT_list = []
     high_median_array = []
     low_median_array = []
+    learning_array = []
     for i in range(len(RT_column) + 1):
         # end of the epoch -> calc median for low and high trials
         if i == len(RT_column) or current_epoch != epoch_column[i]:
             assert(len(high_RT_list) > 0)
-            high_median_array.append(floatToStr(numpy.median(high_RT_list)))
+            assert(len(low_RT_list) > 0)
+            high_median = numpy.median(high_RT_list)
+            low_median = numpy.median(low_RT_list)
+            learning_array.append(floatToStr(low_median - high_median))
+
+            high_median_array.append(floatToStr(high_median))
             high_RT_list = []
 
-            assert(len(low_RT_list) > 0)
-            low_median_array.append(floatToStr(numpy.median(low_RT_list)))
+            low_median_array.append(floatToStr(low_median))
             low_RT_list = []
 
             if i == len(RT_column):
@@ -62,7 +67,8 @@ def calcEpochMedianRTsImplicit(input_file):
     # 8 epochs
     assert(len(low_median_array) == 8)
     assert(len(high_median_array) == 8)
-    return low_median_array, high_median_array
+    assert(len(learning_array) == 8)
+    return low_median_array, high_median_array, learning_array
 
 def calcEpochMedianRTsSequence(input_file):
     input_data_table = pandas.read_csv(input_file, sep='\t')
@@ -169,7 +175,9 @@ def computeLearning(input_dir, output_file, type):
         learning_data = pandas.DataFrame(columns=['subject', 'epoch_1_low', 'epoch_2_low', 'epoch_3_low', 'epoch_4_low',
                                          'epoch_5_low', 'epoch_6_low', 'epoch_7_low', 'epoch_8_low',
                                          'epoch_1_high', 'epoch_2_high', 'epoch_3_high', 'epoch_4_high',
-                                         'epoch_5_high', 'epoch_6_high', 'epoch_7_high', 'epoch_8_high'])
+                                         'epoch_5_high', 'epoch_6_high', 'epoch_7_high', 'epoch_8_high',
+                                         'epoch_1_learning', 'epoch_2_learning', 'epoch_3_learning', 'epoch_4_learning',
+                                         'epoch_5_learning', 'epoch_6_learning', 'epoch_7_learning', 'epoch_8_learning'])
     elif type == 'sequence':
         learning_data = pandas.DataFrame(columns=['subject', 'epoch_1_pattern_high', 'epoch_2_pattern_high', 'epoch_3_pattern_high', 'epoch_4_pattern_high',
                                          'epoch_5_pattern_high', 'epoch_6_pattern_high', 'epoch_7_pattern_high', 'epoch_8_pattern_high',
@@ -190,8 +198,8 @@ def computeLearning(input_dir, output_file, type):
             print("Compute " + type + " learning for subject: " + str(subject))
 
             if type == 'implicit':
-                low_medians, high_medians = calcEpochMedianRTsImplicit(input_file)
-                learning_data.loc[len(learning_data)] = [subject] + low_medians + high_medians
+                low_medians, high_medians, learning_array = calcEpochMedianRTsImplicit(input_file)
+                learning_data.loc[len(learning_data)] = [subject] + low_medians + high_medians + learning_array
             elif type == 'sequence':
                 pattern_high_medians, random_high_medians = calcEpochMedianRTsSequence(input_file)
                 learning_data.loc[len(learning_data)] = [subject] + pattern_high_medians + random_high_medians
