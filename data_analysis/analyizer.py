@@ -38,7 +38,7 @@ import compute_distance as cd
 import compute_binocular_distance as cbd
 import compute_extreme_RT as cert
 
-gFilter = False
+gFilter = True
 
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
@@ -221,10 +221,10 @@ if __name__ == "__main__":
         print("The passed first parameter should be a valid directory path: " + sys.argv[1])
         exit(1)
 
-    if len(sys.argv) == 3 and sys.argv[2] == "filtered":
-        gFilter = True
-    else:
+    if len(sys.argv) == 3 and sys.argv[2] == "nofilter":
         gFilter = False
+    else:
+        gFilter = True
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     trial_data_dir = os.path.join(script_dir, 'data', 'trial_data')
