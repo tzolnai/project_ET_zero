@@ -70,5 +70,5 @@ def computeBinocularDistance(input_dir, output_file):
 
         break
 
-    binocular_distance_data = pandas.DataFrame({'subject' : subjects, 'median_binocular_distance_mm' : median_distances})
+    binocular_distance_data = pandas.DataFrame({'subject' : subjects, 'median_binocular_distance_cm' : median_distances})
     binocular_distance_data.to_csv(output_file, sep='\t', index=False)
