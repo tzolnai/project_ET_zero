@@ -22,11 +22,18 @@ import numpy
 import math
 from utils import strToFloat, floatToStr
 
-def computeBinocularDistanceImpl(input):
-    data_table = pandas.read_csv(input, sep='\t')
+def calcRMS(values):
+    square = 0.0
+    for i in range(len(values)):
+        square += pow(values[i], 2)
 
-    trial_column = data_table["trial"]
-    block_column = data_table["block"]
+    mean = square / float(len(values))
+
+    return math.sqrt(mean)
+
+def clacDistancesForFixation(j, k, data_table):
+
+    all_binocular_distances = []
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
     left_gaze_data_X_PCMCS = data_table["left_gaze_data_X_PCMCS"]
@@ -34,23 +41,36 @@ def computeBinocularDistanceImpl(input):
     right_gaze_data_X_PCMCS = data_table["right_gaze_data_X_PCMCS"]
     right_gaze_data_Y_PCMCS = data_table["right_gaze_data_Y_PCMCS"]
 
-    all_binocular_distances = []
-    for i in range(len(trial_column)):
-        if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
-            binocular_distance = -1.0
-            if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
-                left_X = strToFloat(left_gaze_data_X_PCMCS[i])
-                left_Y = strToFloat(left_gaze_data_Y_PCMCS[i])
-                right_X = strToFloat(right_gaze_data_X_PCMCS[i])
-                right_Y = strToFloat(right_gaze_data_Y_PCMCS[i])
-                X_distance = abs(left_X - right_X)
-                Y_distance = abs(left_Y - right_Y)
-                binocular_distance = math.sqrt(pow(X_distance, 2) + pow(Y_distance, 2))
-            
-            if binocular_distance > 0.0:
-                all_binocular_distances.append(binocular_distance)
+    for i in range(j, k + 1):
+        binocular_distance = -1.0
+        if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
+            left_X = strToFloat(left_gaze_data_X_PCMCS[i])
+            left_Y = strToFloat(left_gaze_data_Y_PCMCS[i])
+            right_X = strToFloat(right_gaze_data_X_PCMCS[i])
+            right_Y = strToFloat(right_gaze_data_Y_PCMCS[i])
+            X_distance = abs(left_X - right_X)
+            Y_distance = abs(left_Y - right_Y)
+            binocular_distance = math.sqrt(pow(X_distance, 2) + pow(Y_distance, 2))
 
-    return numpy.median(all_binocular_distances)
+        if binocular_distance > 0.0:
+            all_binocular_distances.append(binocular_distance)
+    return all_binocular_distances
+
+def computeBinocularDistanceImpl(input):
+    data_table = pandas.read_csv(input, sep='\t')
+
+    trial_column = data_table["trial"]
+    block_column = data_table["block"]
+
+    rmss = []
+    for i in range(len(trial_column) - 1):
+        if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
+            if trial_column[i] != trial_column[i + 1]: # end of trial -> 100 ms fixation
+                all_distances = clacDistancesForFixation(i - 11, i, data_table)
+                if len(all_distances) > 0:
+                    rmss.append(calcRMS(all_distances))
+
+    return numpy.median(rmss)
 
 def computeBinocularDistance(input_dir, output_file):
 
@@ -70,5 +90,5 @@ def computeBinocularDistance(input_dir, output_file):
 
         break
 
-    binocular_distance_data = pandas.DataFrame({'subject' : subjects, 'median_binocular_distance_cm' : median_distances})
+    binocular_distance_data = pandas.DataFrame({'subject' : subjects, 'RMS(E2E)_cm_median' : median_distances})
     binocular_distance_data.to_csv(output_file, sep='\t', index=False)
