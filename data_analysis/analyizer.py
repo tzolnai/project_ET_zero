@@ -37,6 +37,7 @@ import compute_missing_data_ratio as cmd
 import compute_distance as cd
 import compute_binocular_distance as cbd
 import compute_extreme_RT as cert
+import compute_rms as crms
 
 gFilter = True
 
@@ -203,7 +204,7 @@ def compute_distance(input_dir, output_dir):
 def compute_binocular_distance(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'binocular_distance_data.txt')
+    output_file = os.path.join(output_dir, 'RMS(E2E)_data.txt')
     cbd.computeBinocularDistance(input_dir, output_file)
 
 def compute_extreme_RT(input_dir, output_dir):
@@ -211,6 +212,12 @@ def compute_extreme_RT(input_dir, output_dir):
 
     output_file = os.path.join(output_dir, 'extreme_RT_averages.txt')
     cert.computeExtremeRTAverages(input_dir, output_file)
+
+def compute_RMS(input_dir, output_dir):
+    setupOutputDir(output_dir)
+
+    output_file = os.path.join(output_dir, 'RMS(S2S)_data.txt')
+    crms.computeRMS(input_dir, output_file)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -292,3 +299,7 @@ if __name__ == "__main__":
     extreme_RT_dir = os.path.join(script_dir, 'data', 'extreme_RT_data')
 
     compute_extreme_RT(extended_trial_data_dir, extreme_RT_dir)
+
+    RMS_dir = os.path.join(script_dir, 'data', 'RMS')
+
+    compute_RMS(sys.argv[1], RMS_dir)
