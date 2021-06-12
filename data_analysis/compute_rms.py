@@ -20,7 +20,7 @@ import os
 import pandas
 import numpy
 import math
-from utils import strToFloat, floatToStr
+from utils import strToFloat, floatToStr, calcRMS, convertToAngle
 
 def getPos(data_table, i):
     left_gaze_validity = data_table["left_gaze_validity"][i]
@@ -43,19 +43,6 @@ def getPos(data_table, i):
         return 0
 
     return (pos_X, pos_Y)
-
-def calcRMS(values):
-    square = 0.0
-    for i in range(len(values)):
-        square += pow(values[i], 2)
-
-    mean = square / float(len(values))
-
-    return math.sqrt(mean)
-
-def convertToAngle(value_cm):
-    eye_screen_distance_cm = 65.0
-    return math.degrees(math.atan(value_cm / eye_screen_distance_cm))
 
 def clacDistancesForFixation(j, k, data_table):
 

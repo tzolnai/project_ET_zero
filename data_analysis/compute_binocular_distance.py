@@ -20,20 +20,7 @@ import os
 import pandas
 import numpy
 import math
-from utils import strToFloat, floatToStr
-
-def calcRMS(values):
-    square = 0.0
-    for i in range(len(values)):
-        square += pow(values[i], 2)
-
-    mean = square / float(len(values))
-
-    return math.sqrt(mean)
-
-def convertToAngle(value_cm):
-    eye_screen_distance_cm = 65.0
-    return math.degrees(math.atan(value_cm / eye_screen_distance_cm))
+from utils import strToFloat, floatToStr, calcRMS, convertToAngle
 
 def clacDistancesForFixation(j, k, data_table):
 

@@ -16,8 +16,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import math
+
 def strToFloat(data):
     return float(str(data).replace(",", "."))
 
 def floatToStr(data):
     return str(data).replace(".", ",")
+
+def calcRMS(values):
+    square = 0.0
+    for i in range(len(values)):
+        square += pow(values[i], 2)
+
+    mean = square / float(len(values))
+
+    return math.sqrt(mean)
+
+def convertToAngle(value_cm):
+    eye_screen_distance_cm = 65.0
+    return math.degrees(math.atan(value_cm / eye_screen_distance_cm))
