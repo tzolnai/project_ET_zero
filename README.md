@@ -90,5 +90,5 @@ Technical documentation
 
 * [Tobii Pro Python SDK reference](http://developer.tobiipro.com/python/python-sdk-reference-guide.html)
 
-* [Tobii Pro X3–120 Eye Tracker: Product Description](https://www.tobiipro.com/siteassets/tobii-pro/product-descriptions/tobii-pro-x3-120-product-description.pdfhttps://www.tobiipro.com/siteassets/tobii-pro/product-descriptions/tobii-pro-x3-120-product-description.pdf)
+* [Tobii Pro X3–120 Eye Tracker: Product Description](https://www.tobiipro.com/siteassets/tobii-pro/product-descriptions/tobii-pro-x3-120-product-description.pdf)
 
