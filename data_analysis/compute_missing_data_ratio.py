@@ -18,6 +18,7 @@
 
 import os
 import pandas
+import numpy
 from utils import strToFloat, floatToStr
 
 def computeMissingDataRatioImpl(input):
@@ -46,8 +47,8 @@ def computeMissingDataRatioImpl(input):
                     epoch_missing[current_epoch] = 1
 
     epoch_summary = {}
-    for block in epoch_all.keys():
-        epoch_summary[block] = (epoch_missing[block] / epoch_all[block]) * 100.0
+    for epoch in epoch_all.keys():
+        epoch_summary[epoch] = (epoch_missing[epoch] / epoch_all[epoch]) * 100.0
 
     return max(epoch_summary.values())
 
