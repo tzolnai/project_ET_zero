@@ -88,7 +88,7 @@ Technical documentation
 
 * [Accuracy and precision Test report Tobii Pro X3-120 fw 1.7.1](https://www.tobiipro.com/siteassets/tobii-pro/accuracy-and-precision-tests/tobii-pro-x3-120-accuracy-and-precision-test-report.pdf)
 
-* [Tobii Pro Python SDK reference](http://developer.tobiipro.com/python/python-sdk-reference-guide.html
+* [Tobii Pro Python SDK reference](http://developer.tobiipro.com/python/python-sdk-reference-guide.html)
 
 * [Tobii Pro X3–120 Eye Tracker: Product Description](https://www.tobiipro.com/siteassets/tobii-pro/product-descriptions/tobii-pro-x3-120-product-description.pdfhttps://www.tobiipro.com/siteassets/tobii-pro/product-descriptions/tobii-pro-x3-120-product-description.pdf)
 
