@@ -176,8 +176,8 @@ def computeLearning(input_dir, output_file, type):
                                          'epoch_5_low', 'epoch_6_low', 'epoch_7_low', 'epoch_8_low',
                                          'epoch_1_high', 'epoch_2_high', 'epoch_3_high', 'epoch_4_high',
                                          'epoch_5_high', 'epoch_6_high', 'epoch_7_high', 'epoch_8_high',
-                                         'epoch_1_learning', 'epoch_2_learning', 'epoch_3_learning', 'epoch_4_learning',
-                                         'epoch_5_learning', 'epoch_6_learning', 'epoch_7_learning', 'epoch_8_learning'])
+                                         'epoch_1_learning_score', 'epoch_2_learning_score', 'epoch_3_learning_score', 'epoch_4_learning_score',
+                                         'epoch_5_learning_score', 'epoch_6_learning_score', 'epoch_7_learning_score', 'epoch_8_learning_score'])
     elif type == 'sequence':
         learning_data = pandas.DataFrame(columns=['subject', 'epoch_1_pattern_high', 'epoch_2_pattern_high', 'epoch_3_pattern_high', 'epoch_4_pattern_high',
                                          'epoch_5_pattern_high', 'epoch_6_pattern_high', 'epoch_7_pattern_high', 'epoch_8_pattern_high',
