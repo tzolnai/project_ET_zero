@@ -53,6 +53,10 @@ def calcRMS(values):
 
     return math.sqrt(mean)
 
+def convertToAngle(value_cm):
+    eye_screen_distance_cm = 65.0
+    return math.degrees(math.atan(value_cm / eye_screen_distance_cm))
+
 def clacDistancesForFixation(j, k, data_table):
 
     all_distances = []
@@ -61,7 +65,7 @@ def clacDistancesForFixation(j, k, data_table):
         next_pos = getPos(data_table, i + 1)
         if prev_pos != 0 and next_pos != 0:
             distance = math.sqrt(pow(prev_pos[0] - next_pos[0], 2) + pow(prev_pos[1] - next_pos[1], 2))
-            all_distances.append(distance)
+            all_distances.append(convertToAngle(distance))
     
     return all_distances
 
@@ -100,5 +104,5 @@ def computeRMS(input_dir, output_file):
 
         break
 
-    distance_data = pandas.DataFrame({'subject' : subjects, 'RMS(S2S)_cm_median' : RMS_values})
+    distance_data = pandas.DataFrame({'subject' : subjects, 'RMS(S2S)_median' : RMS_values})
     distance_data.to_csv(output_file, sep='\t', index=False)

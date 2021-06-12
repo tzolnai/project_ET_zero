@@ -56,8 +56,8 @@ def filter_subject(subject):
 
     if gFilter:
         return int(subject) in [47, # eye-screen distance (50.5 cm), maximum missing data ratio (44.76%)
-                                17, # RMS(E2E) (1.88 cm)
-                                27, # RMS(E2E) (1.76 cm)
+                                17, # RMS(E2E) (1.67°)
+                                27, # RMS(E2E) (1.55°)
                                 39, # maximum missing data ratio (30.17%)
                                 14, # maximum missing data ratio (26.63%)
                                 44, # maximum missing data ratio (26.81%)

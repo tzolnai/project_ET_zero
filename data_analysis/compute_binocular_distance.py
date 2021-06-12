@@ -31,6 +31,10 @@ def calcRMS(values):
 
     return math.sqrt(mean)
 
+def convertToAngle(value_cm):
+    eye_screen_distance_cm = 65.0
+    return math.degrees(math.atan(value_cm / eye_screen_distance_cm))
+
 def clacDistancesForFixation(j, k, data_table):
 
     all_binocular_distances = []
@@ -53,7 +57,7 @@ def clacDistancesForFixation(j, k, data_table):
             binocular_distance = math.sqrt(pow(X_distance, 2) + pow(Y_distance, 2))
 
         if binocular_distance > 0.0:
-            all_binocular_distances.append(binocular_distance)
+            all_binocular_distances.append(convertToAngle(binocular_distance))
     return all_binocular_distances
 
 def computeBinocularDistanceImpl(input):
@@ -90,5 +94,5 @@ def computeBinocularDistance(input_dir, output_file):
 
         break
 
-    binocular_distance_data = pandas.DataFrame({'subject' : subjects, 'RMS(E2E)_cm_median' : median_distances})
+    binocular_distance_data = pandas.DataFrame({'subject' : subjects, 'RMS(E2E)_median' : median_distances})
     binocular_distance_data.to_csv(output_file, sep='\t', index=False)
