@@ -45,11 +45,18 @@ def computeDistanceImpl(input):
             if distance > 0.0:
                 all_distances.append(distance)
 
-    return numpy.median(all_distances)
+    out_of_trackbox_count = 0
+    for i in range(len(all_distances)):
+        if all_distances[i] < 500.0 or all_distances[i] > 900.0:
+            out_of_trackbox_count += 1
+    out_of_trackbox_ratio = out_of_trackbox_count / len(all_distances) * 100.0
+
+    return numpy.median(all_distances), out_of_trackbox_ratio
 
 def computeDistance(input_dir, output_file):
 
     median_ditances = []
+    out_of_thebox_ratios = []
     subjects = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
@@ -60,10 +67,11 @@ def computeDistance(input_dir, output_file):
 
             subjects.append(subject)
             input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
-            result = computeDistanceImpl(input_file)
-            median_ditances.append(floatToStr(result))
+            median, out_of_trackbox = computeDistanceImpl(input_file)
+            median_ditances.append(floatToStr(median))
+            out_of_thebox_ratios.append(floatToStr(out_of_trackbox))
 
         break
 
-    distance_data = pandas.DataFrame({'subject' : subjects, 'median_distance_mm' : median_ditances})
+    distance_data = pandas.DataFrame({'subject' : subjects, 'median_distance_mm' : median_ditances, 'out_of_the_box_ratio' : out_of_thebox_ratios})
     distance_data.to_csv(output_file, sep='\t', index=False)
