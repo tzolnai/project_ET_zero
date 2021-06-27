@@ -33,7 +33,7 @@ def computeMissingDataRatioImpl(input):
     epoch_all = {}
     epoch_missing = {}
     for i in range(len(trial_column)):
-        if int(block_column[i]) > 0:
+        if int(trial_column[i]) > 2 and int(block_column[i]) > 0:
             current_epoch = int(epoch_column[i])
             if current_epoch in epoch_all.keys():
                 epoch_all[current_epoch] += 1
@@ -52,7 +52,37 @@ def computeMissingDataRatioImpl(input):
 
     return max(epoch_summary.values())
 
-def computeMissingDataRatio(input_dir, output_file):
+def computeMissingDataRatioJacobiImpl(input):
+    data_table = pandas.read_csv(input, sep='\t')
+
+    trial_column = data_table["trial"]
+    run_column = data_table["run"]
+    left_gaze_validity = data_table["left_gaze_validity"]
+    right_gaze_validity = data_table["right_gaze_validity"]
+
+    run_all = {}
+    run_missing = {}
+    for i in range(len(trial_column)):
+        if int(trial_column[i]) > 2:
+            current_run = int(run_column[i])
+            if current_run in run_all.keys():
+                run_all[current_run] += 1
+            else:
+                run_all[current_run] = 1
+
+            if not bool(left_gaze_validity[i]) and not bool(right_gaze_validity[i]):
+                if current_run in run_missing.keys():
+                    run_missing[current_run] += 1
+                else:
+                    run_missing[current_run] = 1
+
+    run_summary = {}
+    for run in run_all.keys():
+        run_summary[run] = (run_missing[run] / run_all[run]) * 100.0
+
+    return max(run_summary.values())
+
+def computeMissingDataRatio(input_dir, output_file, jacobi = False):
 
     missing_data_ratios = []
     subjects = []
@@ -61,11 +91,18 @@ def computeMissingDataRatio(input_dir, output_file):
             if subject.startswith('.'):
                 continue
 
-            print("Compute missing data ratio for subject: " + subject)
-            subjects.append(subject)
+            if not jacobi:
+                print("Compute missing data ratio for subject(ASRT): " + subject)
+                input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
+            else:
+                print("Compute missing data ratio for subject(jacobi): " + subject)
+                input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
-            input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
-            result = computeMissingDataRatioImpl(input_file)
+            subjects.append(subject)
+            if not jacobi:
+                result = computeMissingDataRatioImpl(input_file)
+            else:
+                result = computeMissingDataRatioJacobiImpl(input_file)
             missing_data_ratios.append(floatToStr(result))
 
         break

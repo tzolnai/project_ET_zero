@@ -21,29 +21,36 @@ import pandas
 import numpy
 from utils import strToFloat, floatToStr
 
-def computeDistanceImpl(input):
+def computeDistanceImpl(input, jacobi):
     data_table = pandas.read_csv(input, sep='\t')
 
     trial_column = data_table["trial"]
-    block_column = data_table["block"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
     left_eye_distance = data_table["left_eye_distance"]
     right_eye_distance = data_table["right_eye_distance"]
 
+    if not jacobi:
+        block_column = data_table["block"]
+
     all_distances = []
     for i in range(len(trial_column)):
-        if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
-            distance = -1.0
-            if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
-                distance = (strToFloat(left_eye_distance[i]) + strToFloat(right_eye_distance[i])) / 2.0
-            elif bool(left_gaze_validity[i]):
-                distance = strToFloat(left_eye_distance[i])
-            elif bool(right_gaze_validity[i]):
-                distance = strToFloat(right_eye_distance[i])
+        if int(trial_column[i]) <= 2:
+            continue
             
-            if distance > 0.0:
-                all_distances.append(distance)
+        if not jacobi and int(block_column[i]) == 0: # calibration validation
+            continue
+
+        distance = -1.0
+        if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
+            distance = (strToFloat(left_eye_distance[i]) + strToFloat(right_eye_distance[i])) / 2.0
+        elif bool(left_gaze_validity[i]):
+            distance = strToFloat(left_eye_distance[i])
+        elif bool(right_gaze_validity[i]):
+            distance = strToFloat(right_eye_distance[i])
+
+        if distance > 0.0:
+            all_distances.append(distance)
 
     out_of_trackbox_count = 0
     for i in range(len(all_distances)):
@@ -53,7 +60,7 @@ def computeDistanceImpl(input):
 
     return numpy.median(all_distances), out_of_trackbox_ratio
 
-def computeDistance(input_dir, output_file):
+def computeDistance(input_dir, output_file, jacobi = False):
 
     median_ditances = []
     out_of_thebox_ratios = []
@@ -63,11 +70,15 @@ def computeDistance(input_dir, output_file):
             if subject.startswith('.'):
                 continue
 
-            print("Compute eye-screen distance data for subject: " + subject)
+            if not jacobi:
+                print("Compute eye-screen distance data for subject (ASRT): " + subject)
+                input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
+            else:
+                print("Compute eye-screen distance data for subject (jacobi): " + subject)
+                input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
             subjects.append(subject)
-            input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
-            median, out_of_trackbox = computeDistanceImpl(input_file)
+            median, out_of_trackbox = computeDistanceImpl(input_file, jacobi)
             median_ditances.append(floatToStr(median))
             out_of_thebox_ratios.append(floatToStr(out_of_trackbox))
 

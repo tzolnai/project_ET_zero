@@ -189,23 +189,23 @@ def validate_anticipatory_data(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'anticipatory_data.txt')
     va.validateAnticipatoryData(input_dir, output_file)
 
-def compute_missing_data_ratio(input_dir, output_dir):
+def compute_missing_data_ratio(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
     output_file = os.path.join(output_dir, 'missing_data_ratio.txt')
-    cmd.computeMissingDataRatio(input_dir, output_file)
+    cmd.computeMissingDataRatio(input_dir, output_file, jacobi)
 
-def compute_distance(input_dir, output_dir):
+def compute_distance(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
     output_file = os.path.join(output_dir, 'distance_data.txt')
-    cd.computeDistance(input_dir, output_file)
+    cd.computeDistance(input_dir, output_file, jacobi)
 
-def compute_binocular_distance(input_dir, output_dir):
+def compute_binocular_distance(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
     output_file = os.path.join(output_dir, 'RMS(E2E)_data.txt')
-    cbd.computeBinocularDistance(input_dir, output_file)
+    cbd.computeBinocularDistance(input_dir, output_file, jacobi)
 
 def compute_extreme_RT(input_dir, output_dir):
     setupOutputDir(output_dir)
@@ -213,11 +213,11 @@ def compute_extreme_RT(input_dir, output_dir):
     output_file = os.path.join(output_dir, 'extreme_RT_averages.txt')
     cert.computeExtremeRTAverages(input_dir, output_file)
 
-def compute_RMS(input_dir, output_dir):
+def compute_RMS(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
     output_file = os.path.join(output_dir, 'RMS(S2S)_data.txt')
-    crms.computeRMS(input_dir, output_file)
+    crms.computeRMS(input_dir, output_file, jacobi)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -288,13 +288,25 @@ if __name__ == "__main__":
 
     compute_missing_data_ratio(sys.argv[1], missing_data_dir)
 
+    jacobi_missing_data_dir = os.path.join(script_dir, 'data', 'jacobi_missing_data')
+
+    compute_missing_data_ratio(sys.argv[1], jacobi_missing_data_dir, True)
+
     distance_dir = os.path.join(script_dir, 'data', 'distance_data')
 
     compute_distance(sys.argv[1], distance_dir)
 
+    jacobi_distance_dir = os.path.join(script_dir, 'data', 'jacobi_distance_data')
+
+    compute_distance(sys.argv[1], jacobi_distance_dir, True)
+
     binocular_distance_dir = os.path.join(script_dir, 'data', 'binocular_distance_data')
 
     compute_binocular_distance(sys.argv[1], binocular_distance_dir)
+
+    jacobi_binocular_distance_dir = os.path.join(script_dir, 'data', 'jacobi_binocular_distance_data')
+
+    compute_binocular_distance(sys.argv[1], jacobi_binocular_distance_dir, True)
 
     extreme_RT_dir = os.path.join(script_dir, 'data', 'extreme_RT_data')
 
@@ -303,3 +315,7 @@ if __name__ == "__main__":
     RMS_dir = os.path.join(script_dir, 'data', 'RMS')
 
     compute_RMS(sys.argv[1], RMS_dir)
+
+    jacobi_RMS_dir = os.path.join(script_dir, 'data', 'jacobi_RMS')
+
+    compute_RMS(sys.argv[1], jacobi_RMS_dir, True)
