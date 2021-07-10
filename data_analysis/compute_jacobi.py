@@ -82,9 +82,6 @@ def computeJacobiTestData(input_dir, output_file):
             if subject.startswith('.'):
                 continue
 
-            if analyizer.filter_subject(subject):
-                continue
-
             print("Compute jacobi data for subject: " + str(subject))
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')

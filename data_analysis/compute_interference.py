@@ -19,9 +19,9 @@
 import os
 import pandas
 import numpy
-from utils import strToFloat, floatToStr
+from utils import strToFloat, floatToStr, filter_epoch
 
-def computeInterferenceOneSubject(input_file):
+def computeInterferenceOneSubject(input_file, subject):
     input_data_table = pandas.read_csv(input_file, sep='\t')
 
     RT_column = input_data_table["RT (ms)"]
@@ -40,7 +40,7 @@ def computeInterferenceOneSubject(input_file):
 
         # we ignore the first two trials, repetitions and trills
         if (epoch_column[i] == 7 and trial_column[i] > 2
-           and repetition_column[i] == False and trill_column[i] == False):
+           and repetition_column[i] == False and trill_column[i] == False and not filter_epoch((subject, 7))):
             if trial_type_column[i] == 'high' and trial_type_interfer_column[i] == 'low':
                 high_low_list.append(strToFloat(RT_column[i]))
             elif trial_type_column[i] == 'low' and trial_type_interfer_column[i] == 'low':
@@ -61,7 +61,7 @@ def computeInterferenceData(input_dir, output_file):
 
             print("Compute interference measures for subject: " + str(subject))
 
-            high_low_median, low_low_median, low_high_median = computeInterferenceOneSubject(input_file)
+            high_low_median, low_low_median, low_high_median = computeInterferenceOneSubject(input_file, subject)
             learning_data.loc[len(learning_data)] = [subject, floatToStr(high_low_median), floatToStr(low_low_median), floatToStr(low_high_median)]
         break
 

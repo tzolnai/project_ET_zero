@@ -19,9 +19,9 @@
 import os
 import pandas
 import numpy
-from utils import strToFloat, floatToStr
+from utils import strToFloat, floatToStr, filter_epoch
 
-def calcEpochMedianRTsImplicit(input_file):
+def calcEpochMedianRTsImplicit(input_file, subject):
     input_data_table = pandas.read_csv(input_file, sep='\t')
 
     RT_column = input_data_table["RT (ms)"]
@@ -44,6 +44,11 @@ def calcEpochMedianRTsImplicit(input_file):
             assert(len(low_RT_list) > 0)
             high_median = numpy.median(high_RT_list)
             low_median = numpy.median(low_RT_list)
+
+            if filter_epoch((subject, int(current_epoch))):
+                high_median = float('nan')
+                low_median = float('nan')
+
             learning_array.append(floatToStr(low_median - high_median))
 
             high_median_array.append(floatToStr(high_median))
@@ -198,7 +203,7 @@ def computeLearning(input_dir, output_file, type):
             print("Compute " + type + " learning for subject: " + str(subject))
 
             if type == 'implicit':
-                low_medians, high_medians, learning_array = calcEpochMedianRTsImplicit(input_file)
+                low_medians, high_medians, learning_array = calcEpochMedianRTsImplicit(input_file, subject)
                 learning_data.loc[len(learning_data)] = [subject] + low_medians + high_medians + learning_array
             elif type == 'sequence':
                 pattern_high_medians, random_high_medians = calcEpochMedianRTsSequence(input_file)

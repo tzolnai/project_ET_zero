@@ -39,8 +39,6 @@ import compute_binocular_distance as cbd
 import compute_extreme_RT as cert
 import compute_rms as crms
 
-gFilter = True
-
 def setupOutputDir(dir_path):
     if os.path.exists(dir_path):
         shutil.rmtree(dir_path)
@@ -51,29 +49,12 @@ def setupOutputDir(dir_path):
         print("Could not make the output folder: " + dir_path)
         exit(1)
 
-def filter_subject(subject):
-    # note_1: 4 additinal subjects were filtered out on site (failed on calibration validation)
-
-    if gFilter:
-        return int(subject) in [47, # eye-screen distance (50.5 cm), maximum missing data ratio (44.76%)
-                                17, # RMS(E2E) (1.67°)
-                                27, # RMS(E2E) (1.55°)
-                                39, # maximum missing data ratio (30.17%)
-                                14, # maximum missing data ratio (26.63%)
-                                44, # maximum missing data ratio (26.81%)
-                                ]
-    else:
-        return False
-
 def compute_trial_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
     for root, dirs, files in os.walk(input_dir):
         for subject_dir in dirs:
             if subject_dir.startswith('.'):
-                continue
-
-            if filter_subject(subject_dir):
                 continue
 
             print("Compute RT and anticipatory eye-movements data for subject: " + subject_dir)
@@ -87,9 +68,6 @@ def validate_trial_data(input_dir, output_dir):
     for root, dirs, files in os.walk(input_dir):
         for subject_dir in dirs:
             if subject_dir.startswith('.'):
-                continue
-
-            if filter_subject(subject_dir):
                 continue
 
             print("Validate RT and anticipatory eye-movements data for subject: " + subject_dir)
@@ -227,11 +205,6 @@ if __name__ == "__main__":
     if not os.path.isdir(sys.argv[1]):
         print("The passed first parameter should be a valid directory path: " + sys.argv[1])
         exit(1)
-
-    if len(sys.argv) == 3 and sys.argv[2] == "nofilter":
-        gFilter = False
-    else:
-        gFilter = True
 
     script_dir = os.path.dirname(os.path.realpath(__file__))
     trial_data_dir = os.path.join(script_dir, 'data', 'trial_data')
