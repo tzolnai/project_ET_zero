@@ -61,17 +61,29 @@ def computeRMSImpl(input):
 
     trial_column = data_table["trial"]
     block_column = data_table["block"]
+    epoch_column = data_table["epoch"]
+    epoch_column = data_table["epoch"]
 
     rmss = []
+    epoch_rmss= {}
     for i in range(len(trial_column) - 1):
         if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
 
             if trial_column[i] != trial_column[i + 1]: # end of trial -> 100 ms fixation
                 all_distances = clacDistancesForFixation(i - 11, i, data_table)
                 if len(all_distances) > 0:
-                    rmss.append(calcRMS(all_distances))
+                    current_epoch = int(epoch_column[i])
+                    new_RMS = calcRMS(all_distances)
+                    if current_epoch in epoch_rmss.keys():
+                        epoch_rmss[current_epoch].append(new_RMS)
+                    else:
+                        epoch_rmss[current_epoch] = [new_RMS]
 
-    return numpy.median(rmss)
+    epoch_summary = numpy.zeros(8).tolist()
+    for epoch in epoch_rmss.keys():
+        epoch_summary[epoch - 1] = floatToStr(numpy.median(epoch_rmss[epoch]))
+
+    return epoch_summary
 
 def computeRMSJacobiImpl(input):
     data_table = pandas.read_csv(input, sep='\t')
@@ -93,8 +105,8 @@ def computeRMSJacobiImpl(input):
 
 def computeRMS(input_dir, output_file, jacobi = False):
 
-    RMS_values = []
-    subjects = []
+    epoch_rmss = []
+    epochs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -107,14 +119,16 @@ def computeRMS(input_dir, output_file, jacobi = False):
                 print("Compute RMS for subject(jacobi): " + subject)
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
-            subjects.append(subject)
+            for i in range(1,9):
+                epochs.append("subject_" + subject + "_" + str(i))
+
             if not jacobi:
                 RMS = computeRMSImpl(input_file)
             else:
                 RMS = computeRMSJacobiImpl(input_file)
-            RMS_values.append(floatToStr(RMS))
+            epoch_rmss += RMS
 
         break
 
-    distance_data = pandas.DataFrame({'subject' : subjects, 'RMS(S2S)_median' : RMS_values})
+    distance_data = pandas.DataFrame({'epoch' : epochs, 'RMS(S2S)_median' : epoch_rmss})
     distance_data.to_csv(output_file, sep='\t', index=False)

@@ -46,11 +46,11 @@ def computeMissingDataRatioImpl(input):
                 else:
                     epoch_missing[current_epoch] = 1
 
-    epoch_summary = {}
+    epoch_summary = numpy.zeros(8).tolist()
     for epoch in epoch_all.keys():
-        epoch_summary[epoch] = (epoch_missing[epoch] / epoch_all[epoch]) * 100.0
+        epoch_summary[epoch - 1] = floatToStr((epoch_missing[epoch] / epoch_all[epoch]) * 100.0)
 
-    return max(epoch_summary.values())
+    return epoch_summary
 
 def computeMissingDataRatioJacobiImpl(input):
     data_table = pandas.read_csv(input, sep='\t')
@@ -85,7 +85,7 @@ def computeMissingDataRatioJacobiImpl(input):
 def computeMissingDataRatio(input_dir, output_file, jacobi = False):
 
     missing_data_ratios = []
-    subjects = []
+    epochs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -98,13 +98,15 @@ def computeMissingDataRatio(input_dir, output_file, jacobi = False):
                 print("Compute missing data ratio for subject(jacobi): " + subject)
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
-            subjects.append(subject)
+            for i in range(1,9):
+                epochs.append("subject_" + subject + "_" + str(i))
+
             if not jacobi:
                 result = computeMissingDataRatioImpl(input_file)
             else:
                 result = computeMissingDataRatioJacobiImpl(input_file)
-            missing_data_ratios.append(floatToStr(result))
+            missing_data_ratios += result
 
         break
-    missing_data = pandas.DataFrame({'subject' : subjects, 'missing_data_ratio' : missing_data_ratios})
+    missing_data = pandas.DataFrame({'epoch' : epochs, 'missing_data_ratio' : missing_data_ratios})
     missing_data.to_csv(output_file, sep='\t', index=False)

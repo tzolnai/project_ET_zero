@@ -25,6 +25,7 @@ def computeDistanceImpl(input, jacobi):
     data_table = pandas.read_csv(input, sep='\t')
 
     trial_column = data_table["trial"]
+    epoch_column = data_table["epoch"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
     left_eye_distance = data_table["left_eye_distance"]
@@ -33,7 +34,7 @@ def computeDistanceImpl(input, jacobi):
     if not jacobi:
         block_column = data_table["block"]
 
-    all_distances = []
+    epoch_distances = {}
     for i in range(len(trial_column)):
         if int(trial_column[i]) <= 2:
             continue
@@ -50,21 +51,22 @@ def computeDistanceImpl(input, jacobi):
             distance = strToFloat(right_eye_distance[i])
 
         if distance > 0.0:
-            all_distances.append(distance)
+            current_epoch = int(epoch_column[i])
+            if current_epoch in epoch_distances.keys():
+                epoch_distances[current_epoch].append(distance)
+            else:
+                epoch_distances[current_epoch] = [distance]
 
-    out_of_trackbox_count = 0
-    for i in range(len(all_distances)):
-        if all_distances[i] < 500.0 or all_distances[i] > 900.0:
-            out_of_trackbox_count += 1
-    out_of_trackbox_ratio = out_of_trackbox_count / len(all_distances) * 100.0
+    epoch_summary = numpy.zeros(8).tolist()
+    for epoch in epoch_distances.keys():
+        epoch_summary[epoch - 1] = floatToStr(numpy.median(epoch_distances[epoch]))
 
-    return numpy.median(all_distances), out_of_trackbox_ratio
+    return epoch_summary
 
 def computeDistance(input_dir, output_file, jacobi = False):
 
     median_ditances = []
-    out_of_thebox_ratios = []
-    subjects = []
+    epochs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -77,12 +79,13 @@ def computeDistance(input_dir, output_file, jacobi = False):
                 print("Compute eye-screen distance data for subject (jacobi): " + subject)
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
-            subjects.append(subject)
-            median, out_of_trackbox = computeDistanceImpl(input_file, jacobi)
-            median_ditances.append(floatToStr(median))
-            out_of_thebox_ratios.append(floatToStr(out_of_trackbox))
+            for i in range(1,9):
+                epochs.append("subject_" + subject + "_" + str(i))
+
+            epoch_medians = computeDistanceImpl(input_file, jacobi)
+            median_ditances += epoch_medians
 
         break
 
-    distance_data = pandas.DataFrame({'subject' : subjects, 'median_distance_mm' : median_ditances, 'out_of_the_box_ratio' : out_of_thebox_ratios})
+    distance_data = pandas.DataFrame({'epoch' : epochs, 'median_distance_mm' : median_ditances})
     distance_data.to_csv(output_file, sep='\t', index=False)
