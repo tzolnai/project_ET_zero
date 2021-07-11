@@ -20,7 +20,7 @@ import os
 import pandas
 import copy
 import analyizer
-from utils import strToFloat, floatToStr, filter_run
+from utils import strToFloat, floatToStr, filter_run, calcRMS
 
 def computeHighFrequencies(jacobi_output_path, subject):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
@@ -38,8 +38,6 @@ def computeHighFrequencies(jacobi_output_path, subject):
     exclusion_high_count = 0
     inclusion_all_triplet_count = 0
     exclusion_all_triplet_count = 0
-    print("subject")
-    print(subject)
     for i in range(len(trial_column)):
         if filter_run(int(subject), test_type_column[i], int(run_column[i])):
             continue
@@ -163,13 +161,13 @@ def computeStimFrequencies(jacobi_output_path):
     return response_counts_inclusion, response_counts_exclusion
 
 def computeFilterCriteria(response_counts):
-    filter_criteria = 0
+    distances = []
     expected_count = 6
     for i in [1, 2, 3, 4]:
         for j in response_counts[i]:
-            filter_criteria += abs(expected_count - response_counts[i][j]) ** 2
+            distances.append(expected_count - response_counts[i][j])
 
-    return filter_criteria
+    return floatToStr(calcRMS(distances))
 
 def computeJacobiFilterCriteria(input_dir, output_file):
     jacobi_data = pandas.DataFrame(columns=['subject', 'filter_criteria_inclusion', 'filter_criteria_exclusion'])
