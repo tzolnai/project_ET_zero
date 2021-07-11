@@ -62,10 +62,8 @@ def computeRMSImpl(input):
     trial_column = data_table["trial"]
     block_column = data_table["block"]
     epoch_column = data_table["epoch"]
-    epoch_column = data_table["epoch"]
 
-    rmss = []
-    epoch_rmss= {}
+    epoch_rmss = {}
     for i in range(len(trial_column) - 1):
         if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
 
@@ -90,8 +88,10 @@ def computeRMSJacobiImpl(input):
 
     trial_column = data_table["trial"]
     trial_phase_column = data_table["trial_phase"]
+    test_type_column = data_table["test_type"]
+    run_column = data_table["run"]
 
-    rmss = []
+    run_rmss = {}
     for i in range(len(trial_column) - 1):
         if int(trial_column[i]) > 2:
 
@@ -99,14 +99,25 @@ def computeRMSJacobiImpl(input):
                 trial_phase_column[i + 1] == "after_reaction"): # end of fixation (100ms)
                 all_distances = clacDistancesForFixation(i - 11, i, data_table)
                 if len(all_distances) > 0:
-                    rmss.append(calcRMS(all_distances))
+                    current_run = int(run_column[i])
+                    if test_type_column[i] == "exclusion":
+                        current_run += 4
+                    new_RMS = calcRMS(all_distances)
+                    if current_run in run_rmss.keys():
+                        run_rmss[current_run].append(new_RMS)
+                    else:
+                        run_rmss[current_run] = [new_RMS]
 
-    return numpy.median(rmss)
+    run_summary = numpy.zeros(8).tolist()
+    for run in run_rmss.keys():
+        run_summary[run - 1] = floatToStr(numpy.median(run_rmss[run]))
+
+    return run_summary
 
 def computeRMS(input_dir, output_file, jacobi = False):
 
-    epoch_rmss = []
-    epochs = []
+    rmss = []
+    epochs_runs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -120,15 +131,18 @@ def computeRMS(input_dir, output_file, jacobi = False):
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
             for i in range(1,9):
-                epochs.append("subject_" + subject + "_" + str(i))
+                epochs_runs.append("subject_" + subject + "_" + str(i))
 
             if not jacobi:
                 RMS = computeRMSImpl(input_file)
             else:
                 RMS = computeRMSJacobiImpl(input_file)
-            epoch_rmss += RMS
+            rmss += RMS
 
         break
 
-    distance_data = pandas.DataFrame({'epoch' : epochs, 'RMS(S2S)_median' : epoch_rmss})
+    if not jacobi:
+        distance_data = pandas.DataFrame({'epoch' : epochs_runs, 'RMS(S2S)_median' : rmss})
+    else:
+        distance_data = pandas.DataFrame({'run' : epochs_runs, 'RMS(S2S)_median' : rmss})
     distance_data.to_csv(output_file, sep='\t', index=False)

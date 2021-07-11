@@ -59,12 +59,15 @@ def computeMissingDataRatioJacobiImpl(input):
     run_column = data_table["run"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
+    test_type_column = data_table["test_type"]
 
     run_all = {}
     run_missing = {}
     for i in range(len(trial_column)):
         if int(trial_column[i]) > 2:
             current_run = int(run_column[i])
+            if test_type_column[i] == "exclusion":
+                current_run += 4
             if current_run in run_all.keys():
                 run_all[current_run] += 1
             else:
@@ -76,16 +79,16 @@ def computeMissingDataRatioJacobiImpl(input):
                 else:
                     run_missing[current_run] = 1
 
-    run_summary = {}
+    run_summary = numpy.zeros(8).tolist()
     for run in run_all.keys():
-        run_summary[run] = (run_missing[run] / run_all[run]) * 100.0
+        run_summary[run - 1] = floatToStr((run_missing[run] / run_all[run]) * 100.0)
 
-    return max(run_summary.values())
+    return run_summary
 
 def computeMissingDataRatio(input_dir, output_file, jacobi = False):
 
     missing_data_ratios = []
-    epochs = []
+    epochs_runs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -99,7 +102,7 @@ def computeMissingDataRatio(input_dir, output_file, jacobi = False):
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
             for i in range(1,9):
-                epochs.append("subject_" + subject + "_" + str(i))
+                epochs_runs.append("subject_" + subject + "_" + str(i))
 
             if not jacobi:
                 result = computeMissingDataRatioImpl(input_file)
@@ -108,5 +111,8 @@ def computeMissingDataRatio(input_dir, output_file, jacobi = False):
             missing_data_ratios += result
 
         break
-    missing_data = pandas.DataFrame({'epoch' : epochs, 'missing_data_ratio' : missing_data_ratios})
+    if not jacobi:
+        missing_data = pandas.DataFrame({'epoch' : epochs_runs, 'missing_data_ratio' : missing_data_ratios})
+    else:
+        missing_data = pandas.DataFrame({'run' : epochs_runs, 'missing_data_ratio' : missing_data_ratios})
     missing_data.to_csv(output_file, sep='\t', index=False)
