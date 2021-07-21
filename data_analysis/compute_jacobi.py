@@ -20,14 +20,15 @@ import os
 import pandas
 import copy
 import analyizer
-from utils import strToFloat, floatToStr, filter_run
+from utils import strToFloat, floatToStr
 
-def computeHighFrequencies(jacobi_output_path, subject):
+all_triplet_count = 88
+
+def computeHighFrequencies(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
     response_column = data_table["response"]
     trial_column = data_table["trial"]
-    run_column = data_table["run"]
     test_type_column = data_table["test_type"]
     PCode_column = data_table["PCode"]
 
@@ -36,21 +37,9 @@ def computeHighFrequencies(jacobi_output_path, subject):
 
     inclusion_high_count = 0
     exclusion_high_count = 0
-    inclusion_all_triplet_count = 0
-    exclusion_all_triplet_count = 0
-    print("subject")
-    print(subject)
     for i in range(len(trial_column)):
-        if filter_run(int(subject), test_type_column[i], int(run_column[i])):
-            continue
-
         if int(trial_column[i]) > 2:
             assert(i > 1)
-            if test_type_column[i] == 'inclusion':
-                    inclusion_all_triplet_count += 1
-            else:
-                assert(test_type_column[i] == 'exclusion')
-                exclusion_all_triplet_count += 1
             if (str(response_column[i - 2]) + str(response_column[i])) in learning_sequence:
                 if test_type_column[i] == 'inclusion':
                     inclusion_high_count += 1
@@ -58,43 +47,35 @@ def computeHighFrequencies(jacobi_output_path, subject):
                     assert(test_type_column[i] == 'exclusion')
                     exclusion_high_count += 1
                 
-    return inclusion_high_count, exclusion_high_count, inclusion_all_triplet_count, exclusion_all_triplet_count
+    
+    return inclusion_high_count, exclusion_high_count
 
-def computeTrillFrequencies(jacobi_output_path, subject):
+def computeTrillFrequencies(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
     response_column = data_table["response"]
     trial_column = data_table["trial"]
-    run_column = data_table["run"]
     test_type_column = data_table["test_type"]
 
     inclusion_trill_count = 0
     exclusion_trill_count = 0
-    inclusion_all_triplet_count = 0
-    exclusion_all_triplet_count = 0
     for i in range(len(trial_column)):
-        if filter_run(int(subject), test_type_column[i], int(run_column[i])):
-            continue
-
         if int(trial_column[i]) > 2:
             assert(i > 1)
-            if test_type_column[i] == 'inclusion':
-                    inclusion_all_triplet_count += 1
-            else:
-                assert(test_type_column[i] == 'exclusion')
-                exclusion_all_triplet_count += 1
             if str(response_column[i - 2]) == str(response_column[i]):
                 if test_type_column[i] == 'inclusion':
                     inclusion_trill_count += 1
                 else:
                     assert(test_type_column[i] == 'exclusion')
                     exclusion_trill_count += 1
-
-    return inclusion_trill_count, exclusion_trill_count, inclusion_all_triplet_count, exclusion_all_triplet_count
+                
+    
+    return inclusion_trill_count, exclusion_trill_count
 
 def computeJacobiTestData(input_dir, output_file):
     jacobi_data = pandas.DataFrame(columns=['subject', 'inclusion_high_ratio', 'exclusion_high_ratio',
-                                                       'inclusion_trill_ratio', 'exclusion_trill_ratio'])
+                                                       'inclusion_trill_ratio', 'exclusion_trill_ratio',
+                                                       'inclusion_high_ratio_without_trills', 'exclusion_high_ratio_without_trills'])
 
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
@@ -104,35 +85,14 @@ def computeJacobiTestData(input_dir, output_file):
             print("Compute jacobi data for subject: " + str(subject))
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
-            inclusion_high_count, exclusion_high_count, inclusion_all_triplet_count1, exclusion_all_triplet_count1 = computeHighFrequencies(jacobi_output_path, subject)
-            inclusion_trill_count, exclusion_trill_count, inclusion_all_triplet_count2, exclusion_all_triplet_count2 = computeTrillFrequencies(jacobi_output_path, subject)
-            assert(inclusion_all_triplet_count1 == inclusion_all_triplet_count2)
-            assert(exclusion_all_triplet_count1 == exclusion_all_triplet_count2)
-
-            if inclusion_all_triplet_count1 == 0:
-                inclusion_high_ratio = float("nan")
-            else:
-                inclusion_high_ratio = floatToStr(inclusion_high_count / inclusion_all_triplet_count1 * 100)
-
-            if exclusion_all_triplet_count1 == 0:
-                exclusion_high_ratio = float("nan")
-            else:
-                exclusion_high_ratio = floatToStr(exclusion_high_count / exclusion_all_triplet_count1 * 100)
-
-            if inclusion_all_triplet_count2 == 0:
-                inclusion_trill_ratio = float("nan")
-            else:
-                inclusion_trill_ratio = floatToStr(inclusion_trill_count / inclusion_all_triplet_count2 * 100)
-
-            if exclusion_all_triplet_count2 == 0:
-                exclusion_trill_ratio = float("nan")
-            else:
-                exclusion_trill_ratio = floatToStr(exclusion_trill_count / exclusion_all_triplet_count2 * 100)
-
-            jacobi_data.loc[len(jacobi_data)] = [subject, inclusion_high_ratio,
-                                                          exclusion_high_ratio,
-                                                          inclusion_trill_ratio,
-                                                          exclusion_trill_ratio]
+            inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path)
+            inclusion_trill_count, exclusion_trill_count = computeTrillFrequencies(jacobi_output_path)
+            jacobi_data.loc[len(jacobi_data)] = [subject, floatToStr(inclusion_high_count / all_triplet_count * 100),
+                                                          floatToStr(exclusion_high_count / all_triplet_count * 100),
+                                                          floatToStr(inclusion_trill_count / all_triplet_count * 100),
+                                                          floatToStr(exclusion_trill_count / all_triplet_count * 100),
+                                                          floatToStr(inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100),
+                                                          floatToStr(exclusion_high_count / (all_triplet_count - exclusion_trill_count) * 100)]
 
         break
 

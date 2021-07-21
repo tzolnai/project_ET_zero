@@ -21,23 +21,25 @@ import pandas
 import numpy
 from utils import strToFloat, floatToStr
 
-def computeDistanceImpl(input):
+def computeDistanceImpl(input, jacobi):
     data_table = pandas.read_csv(input, sep='\t')
 
     trial_column = data_table["trial"]
     epoch_column = data_table["epoch"]
-    block_column = data_table["block"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
     left_eye_distance = data_table["left_eye_distance"]
     right_eye_distance = data_table["right_eye_distance"]
+
+    if not jacobi:
+        block_column = data_table["block"]
 
     epoch_distances = {}
     for i in range(len(trial_column)):
         if int(trial_column[i]) <= 2:
             continue
             
-        if int(block_column[i]) == 0: # calibration validation
+        if not jacobi and int(block_column[i]) == 0: # calibration validation
             continue
 
         distance = -1.0
@@ -61,49 +63,10 @@ def computeDistanceImpl(input):
 
     return epoch_summary
 
-def computeDistanceJacobiImpl(input):
-    data_table = pandas.read_csv(input, sep='\t')
-
-    trial_column = data_table["trial"]
-    run_column = data_table["run"]
-    left_gaze_validity = data_table["left_gaze_validity"]
-    right_gaze_validity = data_table["right_gaze_validity"]
-    left_eye_distance = data_table["left_eye_distance"]
-    right_eye_distance = data_table["right_eye_distance"]
-    test_type_column = data_table["test_type"]
-
-    run_distances = {}
-    for i in range(len(trial_column)):
-        if int(trial_column[i]) <= 2:
-            continue
-
-        distance = -1.0
-        if bool(left_gaze_validity[i]) and bool(right_gaze_validity[i]):
-            distance = (strToFloat(left_eye_distance[i]) + strToFloat(right_eye_distance[i])) / 2.0
-        elif bool(left_gaze_validity[i]):
-            distance = strToFloat(left_eye_distance[i])
-        elif bool(right_gaze_validity[i]):
-            distance = strToFloat(right_eye_distance[i])
-
-        if distance > 0.0:
-            current_run = int(run_column[i])
-            if test_type_column[i] == "exclusion":
-                current_run += 4
-            if current_run in run_distances.keys():
-                run_distances[current_run].append(distance)
-            else:
-                run_distances[current_run] = [distance]
-
-    run_summary = numpy.zeros(8).tolist()
-    for run in run_distances.keys():
-        run_summary[run - 1] = floatToStr(numpy.median(run_distances[run]))
-
-    return run_summary
-
 def computeDistance(input_dir, output_file, jacobi = False):
 
     median_ditances = []
-    epochs_runs = []
+    epochs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -117,18 +80,12 @@ def computeDistance(input_dir, output_file, jacobi = False):
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
             for i in range(1,9):
-                epochs_runs.append("subject_" + subject + "_" + str(i))
+                epochs.append("subject_" + subject + "_" + str(i))
 
-            if not jacobi:
-                epoch_medians = computeDistanceImpl(input_file)
-            else:
-                epoch_medians = computeDistanceJacobiImpl(input_file)
+            epoch_medians = computeDistanceImpl(input_file, jacobi)
             median_ditances += epoch_medians
 
         break
 
-    if not jacobi:
-        distance_data = pandas.DataFrame({'epoch' : epochs_runs, 'median_distance_mm' : median_ditances})
-    else:
-        distance_data = pandas.DataFrame({'run' : epochs_runs, 'median_distance_mm' : median_ditances})
+    distance_data = pandas.DataFrame({'epoch' : epochs, 'median_distance_mm' : median_ditances})
     distance_data.to_csv(output_file, sep='\t', index=False)

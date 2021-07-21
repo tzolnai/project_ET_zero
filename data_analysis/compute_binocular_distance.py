@@ -55,7 +55,7 @@ def computeBinocularDistanceImpl(input):
     epoch_column = data_table["epoch"]
 
     rmss = []
-    epoch_rmss = {}
+    epoch_rmss= {}
     for i in range(len(trial_column) - 1):
         if int(block_column[i]) > 0 and int(trial_column[i]) > 2:
             if trial_column[i] != trial_column[i + 1]: # end of trial -> 100 ms fixation
@@ -79,10 +79,8 @@ def computeBinocularDistanceJacobiImpl(input):
 
     trial_column = data_table["trial"]
     trial_phase_column = data_table["trial_phase"]
-    run_column = data_table["run"]
-    test_type_column = data_table["test_type"]
 
-    run_rmss = {}
+    rmss = []
     for i in range(len(trial_column) - 1):
         if int(trial_column[i]) > 2:
 
@@ -90,25 +88,14 @@ def computeBinocularDistanceJacobiImpl(input):
                 trial_phase_column[i + 1] == "after_reaction"): # end of fixation (100ms)
                 all_distances = clacDistancesForFixation(i - 11, i, data_table)
                 if len(all_distances) > 0:
-                    current_run = int(run_column[i])
-                    if test_type_column[i] == "exclusion":
-                        current_run += 4
-                    new_RMS = calcRMS(all_distances)
-                    if current_run in run_rmss.keys():
-                        run_rmss[current_run].append(new_RMS)
-                    else:
-                        run_rmss[current_run] = [new_RMS]
+                    rmss.append(calcRMS(all_distances))
 
-    run_summary = numpy.zeros(8).tolist()
-    for run in run_rmss.keys():
-        run_summary[run - 1] = floatToStr(numpy.median(run_rmss[run]))
-
-    return run_summary
+    return numpy.median(rmss)
 
 def computeBinocularDistance(input_dir, output_file, jacobi = False):
 
-    rmss = []
-    epochs_runs = []
+    epoch_rms = []
+    epochs = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -122,18 +109,15 @@ def computeBinocularDistance(input_dir, output_file, jacobi = False):
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
             for i in range(1,9):
-                epochs_runs.append("subject_" + subject + "_" + str(i))
+                epochs.append("subject_" + subject + "_" + str(i))
 
             if not jacobi:
                 result = computeBinocularDistanceImpl(input_file)
             else:
                 result = computeBinocularDistanceJacobiImpl(input_file)
-            rmss += result
+            epoch_rms += result
 
         break
 
-    if not jacobi:
-        binocular_distance_data = pandas.DataFrame({'epoch' : epochs_runs, 'RMS(E2E)_median' : rmss})
-    else:
-        binocular_distance_data = pandas.DataFrame({'run' : epochs_runs, 'RMS(E2E)_median' : rmss})
+    binocular_distance_data = pandas.DataFrame({'epoch' : epochs, 'RMS(E2E)_median' : epoch_rms})
     binocular_distance_data.to_csv(output_file, sep='\t', index=False)
