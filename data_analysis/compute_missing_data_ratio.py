@@ -56,36 +56,37 @@ def computeMissingDataRatioJacobiImpl(input):
     data_table = pandas.read_csv(input, sep='\t')
 
     trial_column = data_table["trial"]
-    run_column = data_table["run"]
+    test_type_column = data_table["test_type"]
     left_gaze_validity = data_table["left_gaze_validity"]
     right_gaze_validity = data_table["right_gaze_validity"]
 
     run_all = {}
     run_missing = {}
+    phase_all = {}
+    phase_missing = {}
     for i in range(len(trial_column)):
         if int(trial_column[i]) > 2:
-            current_run = int(run_column[i])
-            if current_run in run_all.keys():
-                run_all[current_run] += 1
+            test_type = test_type_column[i]
+            if test_type in phase_all.keys():
+                phase_all[test_type] += 1
             else:
-                run_all[current_run] = 1
+                phase_all[test_type] = 1
 
             if not bool(left_gaze_validity[i]) and not bool(right_gaze_validity[i]):
-                if current_run in run_missing.keys():
-                    run_missing[current_run] += 1
+                if test_type in phase_missing.keys():
+                    phase_missing[test_type] += 1
                 else:
-                    run_missing[current_run] = 1
+                    phase_missing[test_type] = 1
 
-    run_summary = {}
-    for run in run_all.keys():
-        run_summary[run] = (run_missing[run] / run_all[run]) * 100.0
+    inclusion_missing_data = phase_missing["inclusion"] / phase_all["inclusion"] * 100.0
+    exclusion_missing_data = phase_missing["exclusion"] / phase_all["exclusion"] * 100.0
 
-    return max(run_summary.values())
+    return floatToStr(inclusion_missing_data), floatToStr(exclusion_missing_data)
 
 def computeMissingDataRatio(input_dir, output_file, jacobi = False):
 
     missing_data_ratios = []
-    epochs = []
+    epochs_phases = []
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -94,19 +95,27 @@ def computeMissingDataRatio(input_dir, output_file, jacobi = False):
             if not jacobi:
                 print("Compute missing data ratio for subject(ASRT): " + subject)
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__log.txt')
+
+                for i in range(1,9):
+                    epochs_phases.append("subject_" + subject + "_" + str(i))
+
+                result = computeMissingDataRatioImpl(input_file)
+
+                missing_data_ratios += result
             else:
                 print("Compute missing data ratio for subject(jacobi): " + subject)
                 input_file = os.path.join(root, subject, 'subject_' + subject + '__jacobi_ET_log.txt')
 
-            for i in range(1,9):
-                epochs.append("subject_" + subject + "_" + str(i))
-
-            if not jacobi:
-                result = computeMissingDataRatioImpl(input_file)
-            else:
-                result = computeMissingDataRatioJacobiImpl(input_file)
-            missing_data_ratios += result
-
+                epochs_phases.append("subject_" + subject + "_inclusion")
+                epochs_phases.append("subject_" + subject + "_exclusion")
+   
+                inclusion_missing_data, exclusion_missing_data = computeMissingDataRatioJacobiImpl(input_file)
+                missing_data_ratios.append(inclusion_missing_data)
+                missing_data_ratios.append(exclusion_missing_data)
         break
-    missing_data = pandas.DataFrame({'epoch' : epochs, 'missing_data_ratio' : missing_data_ratios})
+
+    if not jacobi:
+        missing_data = pandas.DataFrame({'epoch' : epochs_phases, 'missing_data_ratio' : missing_data_ratios})
+    else:
+        missing_data = pandas.DataFrame({'phase' : epochs_phases, 'missing_data_ratio' : missing_data_ratios})
     missing_data.to_csv(output_file, sep='\t', index=False)
