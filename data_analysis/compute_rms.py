@@ -106,7 +106,7 @@ def computeRMSJacobiImpl(input):
                     else:
                         phase_rmss[test_type] = [calcRMS(all_distances)]
 
-    return floatToStr(numpy.median(phase_rmss["exclusion"])), floatToStr(numpy.median(phase_rmss["inclusion"]))
+    return floatToStr(numpy.median(phase_rmss["inclusion"])), floatToStr(numpy.median(phase_rmss["exclusion"]))
 
 def computeRMS(input_dir, output_file, jacobi = False):
 
@@ -134,13 +134,13 @@ def computeRMS(input_dir, output_file, jacobi = False):
                 epochs_phases.append("subject_" + subject + "_exclusion")
    
                 inclusion_median, exclusion_median = computeRMSJacobiImpl(input_file)
-                median_rms.append(inclusion_median)
-                median_rms.append(exclusion_median)
+                median_rmss.append(inclusion_median)
+                median_rmss.append(exclusion_median)
         break
 
     if not jacobi:
         distance_data = pandas.DataFrame({'epoch' : epochs_phases, 'RMS(S2S)_median' : median_rmss})
     else:
-        distance_data = pandas.DataFrame({'phases' : epochs_phases, 'RMS(S2S)_median' : median_rmss})
+        distance_data = pandas.DataFrame({'phase' : epochs_phases, 'RMS(S2S)_median' : median_rmss})
 
     distance_data.to_csv(output_file, sep='\t', index=False)

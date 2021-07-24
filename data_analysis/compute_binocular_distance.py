@@ -95,7 +95,7 @@ def computeBinocularDistanceJacobiImpl(input):
                     else:
                         phase_rmss[test_type] = [calcRMS(all_distances)]
 
-    return floatToStr(numpy.median(phase_rmss["exclusion"])), floatToStr(numpy.median(phase_rmss["inclusion"]))
+    return floatToStr(numpy.median(phase_rmss["inclusion"])), floatToStr(numpy.median(phase_rmss["exclusion"]))
 
 def computeBinocularDistance(input_dir, output_file, jacobi = False):
 
@@ -130,5 +130,5 @@ def computeBinocularDistance(input_dir, output_file, jacobi = False):
     if not jacobi:
         binocular_distance_data = pandas.DataFrame({'epoch' : epochs_phases, 'RMS(E2E)_median' : median_rms})
     else:
-        binocular_distance_data = pandas.DataFrame({'phases' : epochs_phases, 'RMS(E2E)_median' : median_rms})
+        binocular_distance_data = pandas.DataFrame({'phase' : epochs_phases, 'RMS(E2E)_median' : median_rms})
     binocular_distance_data.to_csv(output_file, sep='\t', index=False)

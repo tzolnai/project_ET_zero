@@ -91,7 +91,7 @@ def computeDistanceImplJacobi(input):
             else:
                 phase_distances[test_type] = [distance]
 
-    return floatToStr(numpy.median(phase_distances["exclusion"])), floatToStr(numpy.median(phase_distances["inclusion"]))
+    return floatToStr(numpy.median(phase_distances["inclusion"])), floatToStr(numpy.median(phase_distances["exclusion"]))
 
 def computeDistance(input_dir, output_file, jacobi = False):
     median_ditances = []
