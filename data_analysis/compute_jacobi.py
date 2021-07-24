@@ -20,7 +20,7 @@ import os
 import pandas
 import copy
 import analyizer
-from utils import strToFloat, floatToStr
+from utils import strToFloat, floatToStr, calcRMS
 
 all_triplet_count = 88
 
@@ -98,42 +98,48 @@ def computeJacobiTestData(input_dir, output_file):
 
     jacobi_data.to_csv(output_file, sep='\t', index=False)
 
-def computeStimFrequencies(jacobi_output_path):
+def computeFilterCriteria(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
     stimulus_column = data_table["response"]
     test_type_column = data_table["test_type"]
-    run_column = data_table["run"]
 
-    response_counts_inclusion = {}
-    for i in [1, 2, 3, 4]:
-        response_counts_inclusion[i] = {}
-        response_counts_inclusion[i][1] = 0
-        response_counts_inclusion[i][2] = 0
-        response_counts_inclusion[i][3] = 0
-        response_counts_inclusion[i][4] = 0
-    response_counts_exclusion = copy.deepcopy(response_counts_inclusion)
-    for i in range(len(stimulus_column)):
+    responses_8_inclusion = []
+    responses_8_exclusion = []
+
+    for i in range(0, len(stimulus_column), 8):
+        count_1 = 0
+        count_2 = 0
+        count_3 = 0
+        count_4 = 0
+        ref_count = 2
+
+        for j in range(i, i + 8):
+            if str(stimulus_column[j]) == "1":
+                count_1 += 1
+            elif str(stimulus_column[j]) == "2":
+                count_2 += 1
+            elif str(stimulus_column[j]) == "3":
+                count_3 += 1
+            elif str(stimulus_column[j]) == "4":
+                count_4 += 1
+
+        diffs = [abs(ref_count - count_1)]
+        diffs.append(abs(ref_count - count_2))
+        diffs.append(abs(ref_count - count_3))
+        diffs.append(abs(ref_count - count_4))
+        rms = calcRMS(diffs)
+
         if test_type_column[i] == 'inclusion':
-            response_counts_inclusion[int(run_column[i])][stimulus_column[i]] += 1
+            responses_8_inclusion.append(rms)
         else:
             assert(test_type_column[i] == 'exclusion')
-            response_counts_exclusion[int(run_column[i])][stimulus_column[i]] += 1
+            responses_8_exclusion.append(rms)
 
-    return response_counts_inclusion, response_counts_exclusion
-
-def computeFilterCriteria(response_counts):
-    filter_criteria = 0
-    expected_count = 6
-    for i in [1, 2, 3, 4]:
-        for j in response_counts[i]:
-            filter_criteria += abs(expected_count - response_counts[i][j]) ** 2
-
-    return filter_criteria
+    return floatToStr(sum(responses_8_inclusion)), floatToStr(sum(responses_8_exclusion))
 
 def computeJacobiFilterCriteria(input_dir, output_file):
     jacobi_data = pandas.DataFrame(columns=['subject', 'filter_criteria_inclusion', 'filter_criteria_exclusion'])
-
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -142,9 +148,7 @@ def computeJacobiFilterCriteria(input_dir, output_file):
             print("Compute jacobi filter data for subject: " + str(subject))
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
-            response_counts_inclusion, response_counts_exclusion = computeStimFrequencies(jacobi_output_path)
-            filter_criteria_inclusion = computeFilterCriteria(response_counts_inclusion)
-            filter_criteria_exclusion = computeFilterCriteria(response_counts_exclusion)
+            filter_criteria_inclusion, filter_criteria_exclusion = computeFilterCriteria(jacobi_output_path)
             jacobi_data.loc[len(jacobi_data)] = [subject, filter_criteria_inclusion, filter_criteria_exclusion]
 
         break
