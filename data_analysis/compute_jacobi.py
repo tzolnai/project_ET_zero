@@ -24,23 +24,22 @@ from utils import strToFloat, floatToStr, calcRMS
 
 all_triplet_count = 88
 
-def computeHighFrequencies(jacobi_output_path):
+def computeHighFrequencies(jacobi_output_path, sequence):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
     response_column = data_table["response"]
     trial_column = data_table["trial"]
     test_type_column = data_table["test_type"]
-    PCode_column = data_table["PCode"]
 
-    learning_sequence = str(PCode_column[0])
-    learning_sequence += learning_sequence[0]
+    tested_sequence = sequence
+    tested_sequence += sequence[0]
 
     inclusion_high_count = 0
     exclusion_high_count = 0
     for i in range(len(trial_column)):
         if int(trial_column[i]) > 2:
             assert(i > 1)
-            if (str(response_column[i - 2]) + str(response_column[i])) in learning_sequence:
+            if (str(response_column[i - 2]) + str(response_column[i])) in tested_sequence:
                 if test_type_column[i] == 'inclusion':
                     inclusion_high_count += 1
                 else:
@@ -49,6 +48,19 @@ def computeHighFrequencies(jacobi_output_path):
                 
     
     return inclusion_high_count, exclusion_high_count
+
+def computeOtherSeqsHighFrequencies(jacobi_output_path, sequence, subject):
+    sequences = [ "1234", "1243", "1324", "1342", "1423", "1432" ]
+    sequences.remove(sequence)
+
+    inclusion_high_counts = []
+    exclusion_high_counts = []
+    for seq in sequences:
+        inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path, seq, subject)
+        inclusion_high_counts.append(inclusion_high_count)
+        exclusion_high_counts.append(exclusion_high_count)
+
+    return numpy.mean(inclusion_high_counts), numpy.mean(exclusion_high_counts)
 
 def computeTrillFrequencies(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
@@ -74,6 +86,7 @@ def computeTrillFrequencies(jacobi_output_path):
 
 def computeJacobiTestData(input_dir, output_file):
     jacobi_data = pandas.DataFrame(columns=['subject', 'inclusion_high_ratio', 'exclusion_high_ratio',
+                                                       'inclusion_high_ratio_otherseqs', 'exclusion_high_ratio_otherseqs',
                                                        'inclusion_trill_ratio', 'exclusion_trill_ratio',
                                                        'inclusion_high_ratio_without_trills', 'exclusion_high_ratio_without_trills'])
 
@@ -85,10 +98,18 @@ def computeJacobiTestData(input_dir, output_file):
             print("Compute jacobi data for subject: " + str(subject))
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
-            inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path)
+
+            data_table = pandas.read_csv(jacobi_output_path, sep='\t')
+            learning_sequence = str(data_table["PCode"][0])
+            inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path, learning_sequence)
+
+            inclusion_high_count_others, exclusion_high_count_others = computeOtherSeqsHighFrequencies(jacobi_output_path, learning_sequence)
+
             inclusion_trill_count, exclusion_trill_count = computeTrillFrequencies(jacobi_output_path)
             jacobi_data.loc[len(jacobi_data)] = [subject, floatToStr(inclusion_high_count / all_triplet_count * 100),
                                                           floatToStr(exclusion_high_count / all_triplet_count * 100),
+                                                          floatToStr(inclusion_high_count_others / all_triplet_count * 100),
+                                                          floatToStr(exclusion_high_count_others / all_triplet_count * 100),
                                                           floatToStr(inclusion_trill_count / all_triplet_count * 100),
                                                           floatToStr(exclusion_trill_count / all_triplet_count * 100),
                                                           floatToStr(inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100),
