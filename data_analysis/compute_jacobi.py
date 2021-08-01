@@ -20,6 +20,7 @@ import os
 import pandas
 import copy
 import analyizer
+import numpy
 from utils import strToFloat, floatToStr, calcRMS
 
 all_triplet_count = 88
@@ -49,14 +50,14 @@ def computeHighFrequencies(jacobi_output_path, sequence):
     
     return inclusion_high_count, exclusion_high_count
 
-def computeOtherSeqsHighFrequencies(jacobi_output_path, sequence, subject):
+def computeOtherSeqsHighFrequencies(jacobi_output_path, sequence):
     sequences = [ "1234", "1243", "1324", "1342", "1423", "1432" ]
     sequences.remove(sequence)
 
     inclusion_high_counts = []
     exclusion_high_counts = []
     for seq in sequences:
-        inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path, seq, subject)
+        inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path, seq)
         inclusion_high_counts.append(inclusion_high_count)
         exclusion_high_counts.append(exclusion_high_count)
 
