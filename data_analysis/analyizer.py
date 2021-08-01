@@ -225,18 +225,6 @@ if __name__ == "__main__":
 
     validate_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
-    sequence_learning_dir = os.path.join(script_dir, 'data', 'sequence_learning')
-
-    compute_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
-
-    validate_sequence_learning(extended_trial_data_dir, sequence_learning_dir)
-
-    statistical_learning_dir = os.path.join(script_dir, 'data', 'statistical_learning')
-
-    compute_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
-
-    validate_statistical_learning(extended_trial_data_dir, statistical_learning_dir)
-
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
     compute_interference_data(extended_trial_data_dir, interference_dir)
@@ -280,10 +268,6 @@ if __name__ == "__main__":
     jacobi_binocular_distance_dir = os.path.join(script_dir, 'data', 'jacobi_binocular_distance_data')
 
     compute_binocular_distance(sys.argv[1], jacobi_binocular_distance_dir, True)
-
-    extreme_RT_dir = os.path.join(script_dir, 'data', 'extreme_RT_data')
-
-    compute_extreme_RT(extended_trial_data_dir, extreme_RT_dir)
 
     RMS_dir = os.path.join(script_dir, 'data', 'RMS')
 
