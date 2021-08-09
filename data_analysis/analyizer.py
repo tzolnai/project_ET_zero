@@ -211,68 +211,68 @@ if __name__ == "__main__":
 
     compute_trial_data(sys.argv[1], trial_data_dir)
 
-    validate_trial_data(sys.argv[1], trial_data_dir)
+    # validate_trial_data(sys.argv[1], trial_data_dir)
     
     extended_trial_data_dir = os.path.join(script_dir, 'data', 'trial_data_extended')
 
     extend_trial_data(trial_data_dir, extended_trial_data_dir)
     
-    validate_extended_trial_data(extended_trial_data_dir)
+    # validate_extended_trial_data(extended_trial_data_dir)
 
     implicit_learning_dir = os.path.join(script_dir, 'data', 'implicit_learning')
 
     compute_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
-    validate_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
+    # validate_implicit_learning(extended_trial_data_dir, implicit_learning_dir)
 
     interference_dir = os.path.join(script_dir, 'data', 'interference')
 
     compute_interference_data(extended_trial_data_dir, interference_dir)
 
-    validate_interference_data(extended_trial_data_dir, interference_dir)
+    # validate_interference_data(extended_trial_data_dir, interference_dir)
 
-    jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
+    # jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
-    compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+    # compute_jacobi_data(sys.argv[1], jacobi_result_dir)
 
-    validate_jacobi_data(sys.argv[1], jacobi_result_dir)
+    # validate_jacobi_data(sys.argv[1], jacobi_result_dir)
 
-    compute_jacobi_filter(sys.argv[1], jacobi_result_dir)
+    # compute_jacobi_filter(sys.argv[1], jacobi_result_dir)
 
     anticipatory_dir = os.path.join(script_dir, 'data', 'anticipatory_movements')
 
     compute_anticipatory_data(extended_trial_data_dir, anticipatory_dir)
 
-    validate_anticipatory_data(extended_trial_data_dir, anticipatory_dir)
+    #validate_anticipatory_data(extended_trial_data_dir, anticipatory_dir)
 
     missing_data_dir = os.path.join(script_dir, 'data', 'missing_data')
 
     compute_missing_data_ratio(sys.argv[1], missing_data_dir)
 
-    jacobi_missing_data_dir = os.path.join(script_dir, 'data', 'jacobi_missing_data')
+    #jacobi_missing_data_dir = os.path.join(script_dir, 'data', 'jacobi_missing_data')
 
-    compute_missing_data_ratio(sys.argv[1], jacobi_missing_data_dir, True)
+    #compute_missing_data_ratio(sys.argv[1], jacobi_missing_data_dir, True)
 
     distance_dir = os.path.join(script_dir, 'data', 'distance_data')
 
     compute_distance(sys.argv[1], distance_dir)
 
-    jacobi_distance_dir = os.path.join(script_dir, 'data', 'jacobi_distance_data')
+    #jacobi_distance_dir = os.path.join(script_dir, 'data', 'jacobi_distance_data')
 
-    compute_distance(sys.argv[1], jacobi_distance_dir, True)
+    #compute_distance(sys.argv[1], jacobi_distance_dir, True)
 
     binocular_distance_dir = os.path.join(script_dir, 'data', 'binocular_distance_data')
 
     compute_binocular_distance(sys.argv[1], binocular_distance_dir)
 
-    jacobi_binocular_distance_dir = os.path.join(script_dir, 'data', 'jacobi_binocular_distance_data')
+    #jacobi_binocular_distance_dir = os.path.join(script_dir, 'data', 'jacobi_binocular_distance_data')
 
-    compute_binocular_distance(sys.argv[1], jacobi_binocular_distance_dir, True)
+    #compute_binocular_distance(sys.argv[1], jacobi_binocular_distance_dir, True)
 
     RMS_dir = os.path.join(script_dir, 'data', 'RMS')
 
     compute_RMS(sys.argv[1], RMS_dir)
 
-    jacobi_RMS_dir = os.path.join(script_dir, 'data', 'jacobi_RMS')
+    #jacobi_RMS_dir = os.path.join(script_dir, 'data', 'jacobi_RMS')
 
-    compute_RMS(sys.argv[1], jacobi_RMS_dir, True)
+    #compute_RMS(sys.argv[1], jacobi_RMS_dir, True)
