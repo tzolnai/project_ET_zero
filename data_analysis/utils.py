@@ -75,6 +75,7 @@ def filter_epoch(subject_epoch_pair):
                                   (44, 4), # missing data: 18.28 %
                                   (44, 5), # missing data: 18.21 %
                                   (44, 7), # missing data: 21.07 %
+                                  (44, 8), # missing data: 22.27 %
                                   (47, 1), # eye-screen distance: 44.21 cm
                                   (47, 2), # eye-screen distance: 48.48 cm
                                   (47, 3), # eye-screen distance: 49.70 cm
