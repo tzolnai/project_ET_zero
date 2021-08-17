@@ -80,8 +80,8 @@ def computeAnticipationColumn(data_table):
 
     return anticipation_column
 
-def computeCorrectAnticipationColumn(data_table):
-    correct_anticipation_data = []
+def computeLearntAnticipationColumn(data_table):
+    learnt_anticipation_data = []
     stimulus_column = data_table["stimulus"]
     last_AOI_column = data_table["last_AOI_before_stimulus"]
 
@@ -91,15 +91,15 @@ def computeCorrectAnticipationColumn(data_table):
 
     for i in range(len(stimulus_column)):
         if last_AOI_column[i] == 'none' or i < 2:
-            correct_anticipation_data.append(False)
+            learnt_anticipation_data.append(False)
         elif int(last_AOI_column[i]) == int(stimulus_column[i - 1]):
-            correct_anticipation_data.append(False)
+            learnt_anticipation_data.append(False)
         elif str(stimulus_column[i - 2]) + str(last_AOI_column[i]) in learning_sequence:
-            correct_anticipation_data.append(True)
+            learnt_anticipation_data.append(True)
         else:
-            correct_anticipation_data.append(False)
+            learnt_anticipation_data.append(False)
 
-    return correct_anticipation_data
+    return learnt_anticipation_data
 
 def extendTrialData(input_file, output_file):
     data_table = pandas.read_csv(input_file, sep='\t')
@@ -122,11 +122,11 @@ def extendTrialData(input_file, output_file):
     # calculate whether anticipatory eye-movement was happened
     anticipation_data = computeAnticipationColumn(data_table)
     assert(len(anticipation_data) == len(data_table.index))
-    data_table["is_anticipation"] = anticipation_data
+    data_table["has_anticipation"] = anticipation_data
 
     # calculate whether correct anticipatory eye-movement was happened
-    correct_anticipation_data = computeCorrectAnticipationColumn(data_table)
-    assert(len(correct_anticipation_data) == len(data_table.index))
-    data_table["correct_anticipation"] = correct_anticipation_data
+    learnt_anticipation_data = computeLearntAnticipationColumn(data_table)
+    assert(len(learnt_anticipation_data) == len(data_table.index))
+    data_table["has_learnt_anticipation"] = learnt_anticipation_data
 
     data_table.to_csv(output_file, sep='\t', index=False)
