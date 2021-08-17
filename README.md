@@ -1,4 +1,4 @@
-# Project ET zero
+# Project ET Zero
 
 ASRT script used in projet ET zero.
 
@@ -42,6 +42,12 @@ This code is forked from this github repository: https://github.com/hallgatoemes
 The original codes' author is **Emese Szegedi-Hallgató** ([hallgatoemese](https://github.com/hallgatoemese))
 
 The code was rewritten and was extended with eye-tracker capabilities by **Tamás Zolnai** ([tzolnai](https://github.com/tzolnai))
+
+### Citation
+
+Project ET Zero Developers (2021). Project ET Zero Core (Version 0.1.0)[Computer software].
+
+For the year, you should use the release date of the used version.
 
 ### References
 
