@@ -23,30 +23,28 @@ from utils import strToFloat, floatToStr, filter_epoch
 def computeAnticipDataForOneSubject(input_file, subject):
     input_data_table = pandas.read_csv(input_file, sep='\t')
 
-    anticip_column = input_data_table["is_anticipation"]
-    correct_anticip_column = input_data_table["correct_anticipation"]
+    anticip_column = input_data_table["has_anticipation"]
+    correct_anticip_column = input_data_table["has_learnt_anticipation"]
     epoch_column = input_data_table["epoch"]
 
-    anticip_counts = []
-    correct_anticip_ratios = []
+    learnt_anticip_ratios = []
     all_aniticip = 0.0
-    correct_aniticip = 0.0
+    learnt_aniticip = 0.0
     current_epoch = epoch_column[0]
     for i in range(len(anticip_column) + 1):
         # end of the epoch -> calc summary data
         if i == len(anticip_column) or current_epoch != epoch_column[i]:
-            assert(correct_aniticip <= all_aniticip)
+            assert(learnt_aniticip <= all_aniticip)
 
-            correct_ratio = correct_aniticip / all_aniticip * 100.0
+            learnt_ratio = learnt_aniticip / all_aniticip * 100.0
 
             if filter_epoch((subject, int(current_epoch))):
-                correct_ratio = float('nan')
+                learnt_ratio = float('nan')
                 all_aniticip = float('nan')
 
-            anticip_counts.append(floatToStr(all_aniticip))
-            correct_anticip_ratios.append(floatToStr(correct_ratio))
+            learnt_anticip_ratios.append(floatToStr(learnt_ratio))
             all_aniticip = 0.0
-            correct_aniticip = 0.0
+            learnt_aniticip = 0.0
 
         if i == len(anticip_column):
             break
@@ -57,15 +55,14 @@ def computeAnticipDataForOneSubject(input_file, subject):
             all_aniticip += 1
 
         if str(correct_anticip_column[i]) == 'True':
-            correct_aniticip += 1
+            learnt_aniticip += 1
 
-    return anticip_counts, correct_anticip_ratios
+    return learnt_anticip_ratios
 
 def computeAnticipatoryData(input_dir, output_file):
-    anticip_data = pandas.DataFrame(columns=['subject', 'epoch_1_anticip_count', 'epoch_2_anticip_count', 'epoch_3_anticip_count', 'epoch_4_anticip_count',
-                                              'epoch_5_anticip_count', 'epoch_6_anticip_count', 'epoch_7_anticip_count', 'epoch_8_anticip_count',
-                                              'epoch_1_correct_anticip_ratio', 'epoch_2_correct_anticip_ratio', 'epoch_3_correct_anticip_ratio', 'epoch_4_correct_anticip_ratio',
-                                              'epoch_5_correct_anticip_ratio', 'epoch_6_correct_anticip_ratio', 'epoch_7_correct_anticip_ratio', 'epoch_8_correct_anticip_ratio'])
+    anticip_data = pandas.DataFrame(columns=['subject',
+                                              'epoch_1_learnt_anticip_ratio', 'epoch_2_learnt_anticip_ratio', 'epoch_3_learnt_anticip_ratio', 'epoch_4_learnt_anticip_ratio',
+                                              'epoch_5_learnt_anticip_ratio', 'epoch_6_learnt_anticip_ratio', 'epoch_7_learnt_anticip_ratio', 'epoch_8_learnt_anticip_ratio'])
 
     for root, dirs, files in os.walk(input_dir):
         for file in files:
@@ -75,8 +72,8 @@ def computeAnticipatoryData(input_dir, output_file):
 
             print("Compute anticipatory data for subject: " + str(subject))
 
-            anticip_counts, correct_anticip_ratios = computeAnticipDataForOneSubject(input_file, subject)
-            anticip_data.loc[len(anticip_data)] = [subject] + anticip_counts + correct_anticip_ratios
+            learnt_anticip_ratios = computeAnticipDataForOneSubject(input_file, subject)
+            anticip_data.loc[len(anticip_data)] = [subject] + learnt_anticip_ratios
         break
 
     anticip_data.to_csv(output_file, sep='\t', index=False)
