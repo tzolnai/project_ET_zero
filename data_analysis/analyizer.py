@@ -59,7 +59,7 @@ def compute_trial_data(input_dir, output_dir):
 
             print("Compute RT and anticipatory eye-movements data for subject: " + subject_dir)
             raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
-            RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.txt')
+            RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.csv')
             ctd.computeTrialData(raw_data_path, RT_data_path)
 
         break
@@ -72,7 +72,7 @@ def validate_trial_data(input_dir, output_dir):
 
             print("Validate RT and anticipatory eye-movements data for subject: " + subject_dir)
             raw_data_path = os.path.join(root, subject_dir, 'subject_' + subject_dir + '__log.txt')
-            RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.txt')
+            RT_data_path = os.path.join(output_dir, 'subject_' + subject_dir + '__trial_log.csv')
             vtd.validateTrialData(raw_data_path, RT_data_path)
 
         break
@@ -84,7 +84,7 @@ def extend_trial_data(input_dir, output_dir):
         for file in files:
 
             input_file = os.path.join(input_dir, file)
-            output_file = os.path.join(output_dir, os.path.splitext(file)[0] + '_extended.txt')
+            output_file = os.path.join(output_dir, os.path.splitext(file)[0] + '_extended.csv')
             ed.extendTrialData(input_file, output_file)
 
         break
@@ -102,99 +102,99 @@ def validate_extended_trial_data(input_dir):
 def compute_implicit_learning(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'implicit_learning.txt')
+    output_file = os.path.join(output_dir, 'implicit_learning_RT.csv')
     cl.computeImplicitLearning(input_dir, output_file)
 
 def validate_implicit_learning(input_dir, output_dir):
 
-    output_file = os.path.join(output_dir, 'implicit_learning.txt')
+    output_file = os.path.join(output_dir, 'implicit_learning_RT.csv')
     vl.validateImplicitLearning(input_dir, output_file)
 
 def compute_sequence_learning(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'sequence_learning.txt')
+    output_file = os.path.join(output_dir, 'sequence_learning.csv')
     cl.computeSequenceLearning(input_dir, output_file)
 
 def validate_sequence_learning(input_dir, output_dir):
 
-    output_file = os.path.join(output_dir, 'sequence_learning.txt')
+    output_file = os.path.join(output_dir, 'sequence_learning.csv')
     vl.validateSequenceLearning(input_dir, output_file)
 
 def compute_statistical_learning(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'statistical_learning.txt')
+    output_file = os.path.join(output_dir, 'statistical_learning.csv')
     cl.computeStatisticalLearning(input_dir, output_file)
 
 def validate_statistical_learning(input_dir, output_dir):
 
-    output_file = os.path.join(output_dir, 'statistical_learning.txt')
+    output_file = os.path.join(output_dir, 'statistical_learning.csv')
     vl.validateStatisticalLearning(input_dir, output_file)
 
 def compute_interference_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'interference.txt')
+    output_file = os.path.join(output_dir, 'interference_HL_LL_LH.csv')
     ci.computeInterferenceData(input_dir, output_file)
 
 def validate_interference_data(input_dir, output_dir):
-    output_file = os.path.join(output_dir, 'interference.txt')
+    output_file = os.path.join(output_dir, 'interference_HL_LL_LH.csv')
     vi.validateInterferenceData(input_dir, output_file)
 
 def compute_jacobi_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'jacobi_results.txt')
+    output_file = os.path.join(output_dir, 'jacobi_results.csv')
     cj.computeJacobiTestData(input_dir, output_file)
 
 def validate_jacobi_data(input_dir, output_dir):
-    output_file = os.path.join(output_dir, 'jacobi_results.txt')
+    output_file = os.path.join(output_dir, 'jacobi_results.csv')
     vj.validateJacobiTestData(input_dir, output_file)
 
 def compute_jacobi_filter(input_dir, output_dir):
-    output_file = os.path.join(output_dir, 'jacobi_filter.txt')
+    output_file = os.path.join(output_dir, 'jacobi_filter.csv')
     cj.computeJacobiFilterCriteria(input_dir, output_file)
 
 def compute_anticipatory_data(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'anticipatory_data.txt')
+    output_file = os.path.join(output_dir, 'anticipatory_data.csv')
     ca.computeAnticipatoryData(input_dir, output_file)
 
 def validate_anticipatory_data(input_dir, output_dir):
 
-    output_file = os.path.join(output_dir, 'anticipatory_data.txt')
+    output_file = os.path.join(output_dir, 'anticipatory_data.csv')
     va.validateAnticipatoryData(input_dir, output_file)
 
 def compute_missing_data_ratio(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'missing_data_ratio.txt')
+    output_file = os.path.join(output_dir, 'missing_data_ratio.csv')
     cmd.computeMissingDataRatio(input_dir, output_file, jacobi)
 
 def compute_distance(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'distance_data.txt')
+    output_file = os.path.join(output_dir, 'screen_eye_distance_data.csv')
     cd.computeDistance(input_dir, output_file, jacobi)
 
 def compute_binocular_distance(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'RMS(E2E)_data.txt')
+    output_file = os.path.join(output_dir, 'RMS(E2E)_data.csv')
     cbd.computeBinocularDistance(input_dir, output_file, jacobi)
 
 def compute_extreme_RT(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'extreme_RT_averages.txt')
+    output_file = os.path.join(output_dir, 'extreme_RT_averages.csv')
     cert.computeExtremeRTAverages(input_dir, output_file)
 
 def compute_RMS(input_dir, output_dir, jacobi = False):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'RMS(S2S)_data.txt')
+    output_file = os.path.join(output_dir, 'RMS(S2S)_data.csv')
     crms.computeRMS(input_dir, output_file, jacobi)
 
 if __name__ == "__main__":
