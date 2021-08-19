@@ -26,6 +26,8 @@ def computeAnticipDataForOneSubject(input_file, subject):
     anticip_column = input_data_table["has_anticipation"]
     correct_anticip_column = input_data_table["has_learnt_anticipation"]
     epoch_column = input_data_table["epoch"]
+    repetition_column = input_data_table["repetition"]
+    trill_column = input_data_table["trill"]
 
     learnt_anticip_ratios = []
     all_aniticip = 0.0
@@ -50,6 +52,9 @@ def computeAnticipDataForOneSubject(input_file, subject):
             break
 
         current_epoch = epoch_column[i]
+
+        if repetition_column[i] == True or trill_column[i] == True:
+            continue
 
         if str(anticip_column[i]) == 'True':
             all_aniticip += 1
