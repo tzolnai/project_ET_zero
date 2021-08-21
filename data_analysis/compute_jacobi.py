@@ -125,9 +125,10 @@ def computeFilterCriteria(jacobi_output_path):
 
     stimulus_column = data_table["response"]
     test_type_column = data_table["test_type"]
+    run_column = data_table["run"]
 
-    responses_8_inclusion = []
-    responses_8_exclusion = []
+    responses_8_inclusion = {}
+    responses_8_exclusion = {}
 
     for i in range(0, len(stimulus_column), 8):
         count_1 = 0
@@ -152,16 +153,32 @@ def computeFilterCriteria(jacobi_output_path):
         diffs.append(abs(ref_count - count_4))
         rms = calcRMS(diffs)
 
+        run = run_column[i]
         if test_type_column[i] == 'inclusion':
-            responses_8_inclusion.append(rms)
+            if run not in responses_8_inclusion.keys():
+                responses_8_inclusion[run] = [rms]
+            else:
+                responses_8_inclusion[run].append(rms)
         else:
             assert(test_type_column[i] == 'exclusion')
-            responses_8_exclusion.append(rms)
+            if run not in responses_8_exclusion.keys():
+                responses_8_exclusion[run] = [rms]
+            else:
+                responses_8_exclusion[run].append(rms)
 
-    return floatToStr(sum(responses_8_inclusion)), floatToStr(sum(responses_8_exclusion))
+    inclusion_filter = []
+    for run in responses_8_inclusion.keys():
+        inclusion_filter.append(floatToStr(sum(responses_8_inclusion[run])))
+
+    exclusion_filter = []
+    for run in responses_8_exclusion.keys():
+        exclusion_filter.append(floatToStr(sum(responses_8_exclusion[run])))
+
+
+    return inclusion_filter, exclusion_filter
 
 def computeJacobiFilterCriteria(input_dir, output_file):
-    jacobi_data = pandas.DataFrame(columns=['subject', 'filter_criteria_inclusion', 'filter_criteria_exclusion'])
+    jacobi_data = pandas.DataFrame(columns=['run', 'filter_criteria'])
     for root, dirs, files in os.walk(input_dir):
         for subject in dirs:
             if subject.startswith('.'):
@@ -171,7 +188,12 @@ def computeJacobiFilterCriteria(input_dir, output_file):
 
             jacobi_output_path = os.path.join(root, subject, 'subject_' + subject + '__jacobi_log.txt')
             filter_criteria_inclusion, filter_criteria_exclusion = computeFilterCriteria(jacobi_output_path)
-            jacobi_data.loc[len(jacobi_data)] = [subject, filter_criteria_inclusion, filter_criteria_exclusion]
+            for i in range(1,5):
+                run = "subject_" + subject + "_inclusion_" + str(i)
+                jacobi_data.loc[len(jacobi_data)] = run, filter_criteria_inclusion[i - 1]
+            for i in range(1,5):
+                run = "subject_" + subject + "_exclusion_" + str(i)
+                jacobi_data.loc[len(jacobi_data)] = run, filter_criteria_exclusion[i - 1]
 
         break
 
