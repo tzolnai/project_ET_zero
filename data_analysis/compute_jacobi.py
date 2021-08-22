@@ -23,8 +23,6 @@ import analyizer
 import numpy
 from utils import strToFloat, floatToStr, calcRMS
 
-all_triplet_count = 88
-
 def computeHighFrequencies(jacobi_output_path, sequence):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
@@ -50,19 +48,6 @@ def computeHighFrequencies(jacobi_output_path, sequence):
     
     return inclusion_high_count, exclusion_high_count
 
-def computeOtherSeqsHighFrequencies(jacobi_output_path, sequence):
-    sequences = [ "1234", "1243", "1324", "1342", "1423", "1432" ]
-    sequences.remove(sequence)
-
-    inclusion_high_counts = []
-    exclusion_high_counts = []
-    for seq in sequences:
-        inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path, seq)
-        inclusion_high_counts.append(inclusion_high_count)
-        exclusion_high_counts.append(exclusion_high_count)
-
-    return numpy.mean(inclusion_high_counts), numpy.mean(exclusion_high_counts)
-
 def computeTrillFrequencies(jacobi_output_path):
     data_table = pandas.read_csv(jacobi_output_path, sep='\t')
 
@@ -87,8 +72,6 @@ def computeTrillFrequencies(jacobi_output_path):
 
 def computeJacobiTestData(input_dir, output_file):
     jacobi_data = pandas.DataFrame(columns=['subject', 'inclusion_high_ratio', 'exclusion_high_ratio',
-                                                       'inclusion_high_ratio_otherseqs', 'exclusion_high_ratio_otherseqs',
-                                                       'inclusion_trill_ratio', 'exclusion_trill_ratio',
                                                        'inclusion_high_ratio_without_trills', 'exclusion_high_ratio_without_trills'])
 
     for root, dirs, files in os.walk(input_dir):
@@ -104,15 +87,11 @@ def computeJacobiTestData(input_dir, output_file):
             learning_sequence = str(data_table["PCode"][0])
             inclusion_high_count, exclusion_high_count = computeHighFrequencies(jacobi_output_path, learning_sequence)
 
-            inclusion_high_count_others, exclusion_high_count_others = computeOtherSeqsHighFrequencies(jacobi_output_path, learning_sequence)
-
             inclusion_trill_count, exclusion_trill_count = computeTrillFrequencies(jacobi_output_path)
+
+            all_triplet_count = 88
             jacobi_data.loc[len(jacobi_data)] = [subject, floatToStr(inclusion_high_count / all_triplet_count * 100),
                                                           floatToStr(exclusion_high_count / all_triplet_count * 100),
-                                                          floatToStr(inclusion_high_count_others / all_triplet_count * 100),
-                                                          floatToStr(exclusion_high_count_others / all_triplet_count * 100),
-                                                          floatToStr(inclusion_trill_count / all_triplet_count * 100),
-                                                          floatToStr(exclusion_trill_count / all_triplet_count * 100),
                                                           floatToStr(inclusion_high_count / (all_triplet_count - inclusion_trill_count) * 100),
                                                           floatToStr(exclusion_high_count / (all_triplet_count - exclusion_trill_count) * 100)]
 
