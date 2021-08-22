@@ -1,4 +1,4 @@
-This text file contains information about the data files can be found in this OSF repository.
+This text file contains information about the data files can be found in this repository.
 
 I. Trial level data
 1. Files like: subject_10__trial_log_extended.csv
@@ -174,7 +174,7 @@ II. Summary data files
     - epoch_7_low_high: Median reaction times of LH type trial in the seventh epoch (interference epoch).
 
 III. Data quality
-1. missing_data_ratios.csv / missing_data_ratios.xlsx
+1. missing_data_ratios.csv
     Overview:
     In this output file, we calculated the missing data ratio of all data samples. Missing data during the reaction time experiment can lead to noise
     in reaction times. To control the noise comming from fixation algorithm, we can control the level of data loss.
@@ -188,7 +188,7 @@ III. Data quality
     the eye-tracker returns with invalid state for both eyes inside sample. We calculate the ratio of these invalid / missing data
     compared to all eye-tracking samples of the epoch.
 
-2. RMS(S2S)_data.csv / RMS(S2S)_data.xlsx
+2. RMS(S2S)_data.csv
     Overview:
     We calculate eye-tracking precision with root mean square of sample-to-sample distances. We get all successive samples during fixations
     and calculate the distance of these samples, of the eye position they code. We got one fixation at the end of all trials of epochs. This
@@ -201,7 +201,7 @@ III. Data quality
 
     - RMS(S2S)_median: Calculated RMS values' median in the given epoch.
 
-3. screen_eye_distance_data.csv / screen_eye_distance_data.xlsx
+3. screen_eye_distance_data.csv
     Overview:
     The used eye-tracker has a trackbox, where the subject's head should be, so the eye-tracker can record eye-position data precisely.
     The eye-tracker we used allows 50 cm - 90 cm distance from the screen. We checked the actual distance we recorded during the
@@ -215,7 +215,7 @@ III. Data quality
     distance was 65 cm with the used eye-tracker. Median values close to 50 cm, means that the subject was outside of the offical
     trackbox durind recording.
 
-4. RMS(E2E)_data.csv / RMS(E2E)_data.xlsx
+4. RMS(E2E)_data.csv
     Overview:
     We calculate eye-tracking precision with root mean square of eye-to-eye distances. We get all samples during fixations and
     calculate the distance of these samples, of the eye position they code. We got one fixation at the end of all trials of epochs. This
@@ -227,3 +227,22 @@ III. Data quality
     in the following format: subject_X_Y, where X is the subject ID and Y is the epoch number (e.g. a number in [1,8] interval).
 
     - RMS(E2E)_median: Calculated RMS values' median in the given epoch.
+
+IV. Jacobi test data
+1. jacobi_results.csv
+    Overview:
+    We calculated high-probability triplets ratio of the generated responses, in this data file. We calculated the simply ratio according
+    to the standard evaluation of PDP test, then we calculated the same ratio excluding trills from the data. We did not divided the inclusion
+    and exclusion conidition to runs, but handled it in one piece. We counted the high-probability triplets of all responses in the two conditions
+    and calcualted the percentage value based on that.
+
+    Fields:
+    - subject: Identifier of the subject (e.g. 10, 28)
+
+    - inclusion_high_ratio: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the inclusion condition (96 responses, 88 generated triplets).
+
+    - exclusion_high_ratio: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the exclusion condition  (96 responses, 88 generated triplets).
+
+    - inclusion_high_ratio_without_trills: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the inclusion condition excluding trills.
+
+    - exclusion_high_ratio_without_trills: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the exclusion condition excluding trills.
