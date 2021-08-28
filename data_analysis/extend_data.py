@@ -37,7 +37,9 @@ def computeTrillColumn(data_table):
     trial_column = data_table["trial"]
 
     for i in range(len(stimulus_column)):
-        if trial_column[i] > 2 and stimulus_column[i] == stimulus_column[i - 2]:
+        if ( trial_column[i] > 2 and
+            stimulus_column[i] != stimulus_column[i - 1] and
+            stimulus_column[i] == stimulus_column[i - 2] ):
             trill_column.append(True)
         else:
             trill_column.append(False)
