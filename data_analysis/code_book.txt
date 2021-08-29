@@ -90,49 +90,49 @@ I. Trial level data
       and if the last_AOI_before_stimulus follows the sequence, then this value is also "True".
 
 II. Summary data files
-1. implicit_learning_RT.csv
+1. statistical_learning_RT.csv
     Overview:
-    We computed the reaction times in this data file, separately for high and low frequency trials. We computed this reaction times for all
+    We computed the reaction times in this data file, separately for high and low probability trials. We computed this reaction times for all
     subjects and for all epochs.
 
     Fields:
     - subject: Identifier of the subject (e.g. 10, 28)
 
-    - epoch_1_low: Median reaction times of low frequency trials in the first epoch.
+    - epoch_1_low: Median reaction times of low probability trials in the first epoch.
 
-    - epoch_2_low: Median reaction times of low frequency trials in the second epoch.
+    - epoch_2_low: Median reaction times of low probability trials in the second epoch.
 
-    - epoch_3_low: Median reaction times of low frequency trials in the third epoch.
+    - epoch_3_low: Median reaction times of low probability trials in the third epoch.
 
-    - epoch_4_low: Median reaction times of low frequency trials in the fourth epoch.
+    - epoch_4_low: Median reaction times of low probability trials in the fourth epoch.
 
-    - epoch_5_low: Median reaction times of low frequency trials in the fifth epoch.
+    - epoch_5_low: Median reaction times of low probability trials in the fifth epoch.
 
-    - epoch_6_low: Median reaction times of low frequency trials in the sixth epoch.
+    - epoch_6_low: Median reaction times of low probability trials in the sixth epoch.
 
-    - epoch_7_low: Median reaction times of low frequency trials in the seventh epoch.
+    - epoch_7_low: Median reaction times of low probability trials in the seventh epoch.
 
-    - epoch_8_low: Median reaction times of low frequency trials in the eighth epoch.
+    - epoch_8_low: Median reaction times of low probability trials in the eighth epoch.
 
-    - epoch_1_high: Median reaction times of high frequency trials in the first epoch.
+    - epoch_1_high: Median reaction times of high probability trials in the first epoch.
 
-    - epoch_2_high: Median reaction times of high frequency trials in the second epoch.
+    - epoch_2_high: Median reaction times of high probability trials in the second epoch.
 
-    - epoch_3_high: Median reaction times of high frequency trials in the third epoch.
+    - epoch_3_high: Median reaction times of high probability trials in the third epoch.
 
-    - epoch_4_high: Median reaction times of high frequency trials in the fourth epoch.
+    - epoch_4_high: Median reaction times of high probability trials in the fourth epoch.
 
-    - epoch_5_high: Median reaction times of high frequency trials in the fifth epoch.
+    - epoch_5_high: Median reaction times of high probability trials in the fifth epoch.
 
-    - epoch_6_high: Median reaction times of high frequency trials in the sixth epoch.
+    - epoch_6_high: Median reaction times of high probability trials in the sixth epoch.
 
-    - epoch_7_high: Median reaction times of high frequency trials in the seventh epoch.
+    - epoch_7_high: Median reaction times of high probability trials in the seventh epoch.
 
-    - epoch_8_high: Median reaction times of high frequency trials in the eighth epoch.
+    - epoch_8_high: Median reaction times of high probability trials in the eighth epoch.
 
 2. anticipatory_data.csv
     Overview:
-    This data file contains the learnt anticipation's count and percentage for the different epochs of all subjects.
+    This data file contains the learnt anticipation's percentage for the different epochs of all subjects.
 
     Fields:
     - subject: Identifier of the subject (e.g. 10, 28)
@@ -156,22 +156,22 @@ II. Summary data files
 3. interference_HL_LL_LH.csv
     Overview:
     We calculated the affect of both sequences during the interference epoch (epoch 7). We've got the reaction times for
-    low and high frequency trials both based on the learning and the interference sequence. In this file we calculated
+    low and high probability trials both based on the learning and the interference sequence. In this file we calculated
     the median reaction time for LL, HL and LH trials.
-        - LL: Low frequency trial according to both sequences.
-        - LH: This trial is low frequency trial using the learning sequence, but a high frequency triplet according to
+        - LL: Low probability trial according to both sequences.
+        - LH: This trial is low probability trial using the learning sequence, but a high probability triplet according to
               the interference sequence.
-        - HL: This trial is high frequency trial using the learning sequence, but a low frequency triplet according to
+        - HL: This trial is high probability trial using the learning sequence, but a low probability triplet according to
               the interference sequence.
 
     Fields:
     - subject: Identifier of the subject (e.g. 10, 28)
 
-    - epoch_7_high_low: Median reaction times of HL type trial in the seventh epoch (interference epoch).
+    - epoch_7_high_low: Median reaction times of HL type trials in the seventh epoch (interference epoch).
 
-    - epoch_7_low_low: Median reaction times of LL type trial in the seventh epoch (interference epoch).
+    - epoch_7_low_low: Median reaction times of LL type trials in the seventh epoch (interference epoch).
 
-    - epoch_7_low_high: Median reaction times of LH type trial in the seventh epoch (interference epoch).
+    - epoch_7_low_high: Median reaction times of LH type trials in the seventh epoch (interference epoch).
 
 III. Data quality
 1. missing_data_ratios.csv
@@ -185,7 +185,7 @@ III. Data quality
     (e.g. a number in [1,8] interval).
 
     - missing_data_ratio: Percentage of missing data inside the given epoch of the given subject. We call missing data when
-    the eye-tracker returns with invalid state for both eyes inside sample. We calculate the ratio of these invalid / missing data
+    the eye-tracker returns with invalid state for both eyes inside a sample. We calculate the ratio of these invalid / missing data
     compared to all eye-tracking samples of the epoch.
 
 2. RMS(S2S)_data.csv
@@ -212,15 +212,15 @@ III. Data quality
     in the following format: subject_X_Y, where X is the subject ID and Y is the epoch number (e.g. a number in [1,8] interval).
 
     - median_distance_mm: Meadian distance of all samples recorded during the given epoch. These values are in mm unit. The ideal
-    distance was 65 cm with the used eye-tracker. Median values close to 50 cm, means that the subject was outside of the offical
-    trackbox durind recording.
+    distance was 65 cm with the used eye-tracker. Median values close to 50 cm, means that around half of the data was recorded
+    outside of the offical trackbox.
 
 4. RMS(E2E)_data.csv
     Overview:
     We calculate eye-tracking precision with root mean square of eye-to-eye distances. We get all samples during fixations and
-    calculate the distance of these samples, of the eye position they code. We got one fixation at the end of all trials of epochs. This
-    is 12 samples. We calculate eye position distances of all these samples (16 distances) in view angle, compute RMS statistic from these distances
-    and finally compute the median value of these RMS values inside every epoch.
+    calculate the distance of the two eye in these samples. We got one fixation at the end of all trials of epochs. This
+    is 12 samples. We calculate eye position distances of all these samples (16 distances) in view angle, compute RMS statistic
+    from these distances and finally compute the median value of these RMS values inside every epoch.
 
     Fields:
     - epoch: Identifier of the epoch we calculated the RMS values for. This identifier contains a subject ID and an epoch number
@@ -231,10 +231,11 @@ III. Data quality
 IV. Jacobi test data
 1. jacobi_results.csv
     Overview:
-    We calculated high-probability triplets ratio of the generated responses, in this data file. We calculated the simply ratio according
-    to the standard evaluation of PDP test, then we calculated the same ratio excluding trills from the data. We did not divided the inclusion
-    and exclusion conidition to runs, but handled it in one piece. We counted the high-probability triplets of all responses in the two conditions
-    and calcualted the percentage value based on that.
+    We calculated high-probability triplets' ratio of the generated responses, in this data file. We calculated the simple ratio according
+    to the standard evaluation of PDP test, then we calculated the same ratio excluding palindromes from the data. Palindrome means a tripelt
+    where the first and third item of a triplet is the same. e.g. 121, 111) We did not divided the inclusion and exclusion conidition to runs,
+    but handled it in one piece. We counted the high-probability triplets of all responses in the two conditions and calcualted the percentage
+    value based on that.
 
     Fields:
     - subject: Identifier of the subject (e.g. 10, 28)
@@ -243,6 +244,7 @@ IV. Jacobi test data
 
     - exclusion_high_ratio: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the exclusion condition  (96 responses, 88 generated triplets).
 
-    - inclusion_high_ratio_without_trills: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the inclusion condition excluding trills.
+    - inclusion_high_ratio_without_palindromes: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the inclusion condition excluding palindromes
+      (palindrome means a tripelt where the first and third item of a triplet is the same. e.g. 121, 111, etc).
 
-    - exclusion_high_ratio_without_trills: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the exclusion condition excluding trills.
+    - exclusion_high_ratio_without_palindromes: Percentage of high-probability triplets (of the learnt sequence) between all triplets of the exclusion condition excluding palindromes.
