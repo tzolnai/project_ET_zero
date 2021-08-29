@@ -231,9 +231,9 @@ if __name__ == "__main__":
 
     # validate_interference_data(extended_trial_data_dir, interference_dir)
 
-    # jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
+    jacobi_result_dir = os.path.join(script_dir, 'data', 'jacobi_test')
 
-    # compute_jacobi_data(sys.argv[1], jacobi_result_dir)
+    compute_jacobi_data(sys.argv[1], jacobi_result_dir)
 
     # validate_jacobi_data(sys.argv[1], jacobi_result_dir)
 
