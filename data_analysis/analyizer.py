@@ -102,12 +102,12 @@ def validate_extended_trial_data(input_dir):
 def compute_implicit_learning(input_dir, output_dir):
     setupOutputDir(output_dir)
 
-    output_file = os.path.join(output_dir, 'implicit_learning_RT.csv')
+    output_file = os.path.join(output_dir, 'statistical_learning_RT.csv')
     cl.computeImplicitLearning(input_dir, output_file)
 
 def validate_implicit_learning(input_dir, output_dir):
 
-    output_file = os.path.join(output_dir, 'implicit_learning_RT.csv')
+    output_file = os.path.join(output_dir, 'statistical_learning_RT.csv')
     vl.validateImplicitLearning(input_dir, output_file)
 
 def compute_sequence_learning(input_dir, output_dir):
