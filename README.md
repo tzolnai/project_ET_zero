@@ -45,9 +45,12 @@ The code was rewritten and was extended with eye-tracker capabilities by **Tamá
 
 ### Citation
 
-Project ET Zero Developers (2021). Project ET Zero (Version 0.1.1)[Computer software].
+Project ET Zero Developers (2021). Project ET Zero (Version 0.1.1) [Computer software].
 
-For the year, you should use the release date of the used version.
+### Example data
+
+Recorded data by this experiment script (2021):
+https://osf.io/wu8a6/
 
 ### References
 
