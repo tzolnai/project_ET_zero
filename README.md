@@ -2,7 +2,7 @@
 
 ASRT script used in projet ET zero.
 
-The core ASRT scirpt is implemented here:
+The core ASRT script is implemented here:
 https://github.com/tzolnai/asrt_core
 
 ### Prerequisites
