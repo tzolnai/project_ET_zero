@@ -49,8 +49,12 @@ Project ET Zero Developers (2021). Project ET Zero (Version 0.1.1) [Computer sof
 
 ### Example data
 
-Recorded data by this experiment script (2021):
+Recorded data by this experiment script (2022):
 https://osf.io/wu8a6/
+
+### Study conducted based on this script 
+
+* [Zolnai, T., Dávid, D., Pesthy, O., Nemeth, M., Kiss, M., Nagy, M., & Nemeth, D. (2022). Measuring statistical learning by eye-tracking. Experimental Results, 3, E10. doi:10.1017/exp.2022.8](https://www.cambridge.org/core/journals/experimental-results/article/measuring-statistical-learning-by-eyetracking/03CE0A705EAB7708AB087554A74A29F1)
 
 ### References
 
