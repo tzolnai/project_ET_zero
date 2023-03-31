@@ -1,6 +1,6 @@
 # Project ET Zero
 
-ASRT script used in projet ET zero.
+A script used for testing learning in an oculomotor activated ASRT experiment design.
 
 The core ASRT script is implemented here:
 https://github.com/tzolnai/asrt_core
