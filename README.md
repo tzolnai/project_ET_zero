@@ -43,6 +43,10 @@ The original codes' author is **Emese Szegedi-Hallgató** ([hallgatoemese](https
 
 The code was rewritten and was extended with eye-tracker capabilities by **Tamás Zolnai** ([tzolnai](https://github.com/tzolnai))
 
+### Citation
+
+Project ET Zero Developers (2021). Project ET Zero (Version 0.1.1) [Computer software].
+
 ### Example data
 
 Recorded data by this experiment script (2022):
