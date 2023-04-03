@@ -45,7 +45,7 @@ The code was rewritten and was extended with eye-tracker capabilities by **Tamá
 
 ### Citation
 
-Project ET Zero Developers (2021). Project ET Zero (Version 0.1.1) [Computer software].
+Project ET Zero Developers (2021). Project ET Zero (Version 0.1.1) [Source code].
 
 ### Example data
 
