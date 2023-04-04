@@ -37,7 +37,7 @@ When instruction file is in place you can run the script by `python asrt.py` com
 
 Maintainer: **Tamás Zolnai** ([tzolnai](https://github.com/tzolnai))
 
-This code is forked from this github repository: https://github.com/hallgatoemese/asrt.
+This code is forked from this github repository: https://github.com/tzolnai/asrt_core.
 
 The original codes' author is **Emese Szegedi-Hallgató** ([hallgatoemese](https://github.com/hallgatoemese))
 
